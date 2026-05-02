@@ -1,0 +1,1208 @@
+{
+  "@@locale": "ar",
+
+  "appName": "\u0646\u0650\u0640\u0633\u064e\u0640\u0628",
+  "@appName": {
+    "description": "The app name displayed in splash, about, and header areas"
+  },
+  "appDescription": "\u062d\u0644\u0648\u0644 \u062a\u0645\u0648\u064a\u0644\u064a\u0629 \u0630\u0643\u064a\u0629",
+  "@appDescription": {
+    "description": "Short app tagline shown on splash screen"
+  },
+
+  "splashLoading": "\u062c\u0627\u0631\u064d \u0627\u0644\u062a\u062d\u0645\u064a\u0644...",
+  "@splashLoading": {
+    "description": "Loading indicator text on the splash screen"
+  },
+
+  "loginTitle": "\u0645\u0631\u062d\u0628\u0627\u064b \u0628\u0643",
+  "@loginTitle": {
+    "description": "Welcome title on the login screen"
+  },
+  "loginSubtitle": "\u0633\u062c\u0651\u0644 \u062f\u062e\u0648\u0644\u0643 \u0644\u0644\u0645\u062a\u0627\u0628\u0639\u0629",
+  "@loginSubtitle": {
+    "description": "Subtitle prompt below the login title"
+  },
+  "loginWithGoogle": "\u0627\u0644\u0645\u062a\u0627\u0628\u0639\u0629 \u0645\u0639 Google",
+  "@loginWithGoogle": {
+    "description": "Google sign-in button label"
+  },
+  "loginWithApple": "\u0627\u0644\u0645\u062a\u0627\u0628\u0639\u0629 \u0645\u0639 Apple",
+  "@loginWithApple": {
+    "description": "Apple sign-in button label"
+  },
+  "browseAsGuest": "\u062a\u0635\u0641\u062d \u0643\u0632\u0627\u0626\u0631",
+  "@browseAsGuest": {
+    "description": "Button to continue without signing in"
+  },
+  "termsText": "\u0628\u0627\u0644\u0645\u062a\u0627\u0628\u0639\u0629\u060c \u0623\u0646\u062a \u062a\u0648\u0627\u0641\u0642 \u0639\u0644\u0649 \u0634\u0631\u0648\u0637 \u0627\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0648 \u0633\u064a\u0627\u0633\u0629 \u0627\u0644\u062e\u0635\u0648\u0635\u064a\u0629",
+  "@termsText": {
+    "description": "Terms and privacy policy agreement text at bottom of login"
+  },
+  "orText": "\u0623\u0648",
+  "@orText": {
+    "description": "Divider text between login methods and guest browsing"
+  },
+
+  "homeGreeting": "\u0623\u0647\u0644\u0627\u064b \u0628\u0643 {name}",
+  "@homeGreeting": {
+    "description": "Greeting shown on the home screen header with user name",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "\u0639\u0628\u062f\u0627\u0644\u0644\u0647"
+      }
+    }
+  },
+  "homeHeroTitle": "\u062d\u0644\u0648\u0644 \u062a\u0645\u0648\u064a\u0644\u064a\u0629 \u0630\u0643\u064a\u0629",
+  "@homeHeroTitle": {
+    "description": "Main hero card title on the home screen"
+  },
+  "homeHeroSubtitle": "\u0627\u0643\u062a\u0634\u0641 \u0645\u0646\u062a\u062c\u0627\u062a\u0646\u0627 \u0627\u0644\u062a\u0645\u0648\u064a\u0644\u064a\u0629 \u0627\u0644\u0645\u062a\u0646\u0648\u0639\u0629 \u0628\u0623\u0641\u0636\u0644 \u0627\u0644\u0634\u0631\u0648\u0637",
+  "@homeHeroSubtitle": {
+    "description": "Subtitle under the hero card title"
+  },
+  "homeHeroCta": "\u0627\u0633\u062a\u0639\u0631\u0636 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a",
+  "@homeHeroCta": {
+    "description": "Call-to-action button on the hero card"
+  },
+  "quickActionsTitle": "\u062e\u062f\u0645\u0627\u062a \u0633\u0631\u064a\u0639\u0629",
+  "@quickActionsTitle": {
+    "description": "Section title above the quick action buttons"
+  },
+  "quickActionProducts": "\u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a",
+  "@quickActionProducts": {
+    "description": "Quick action button label for products"
+  },
+  "quickActionRequests": "\u0637\u0644\u0628\u0627\u062a\u064a",
+  "@quickActionRequests": {
+    "description": "Quick action button label for my requests"
+  },
+  "quickActionContact": "\u062a\u0648\u0627\u0635\u0644",
+  "@quickActionContact": {
+    "description": "Quick action button label for contact"
+  },
+  "featuredProductsTitle": "\u0645\u0646\u062a\u062c\u0627\u062a \u0645\u0645\u064a\u0632\u0629",
+  "@featuredProductsTitle": {
+    "description": "Section title for featured products on the home screen"
+  },
+  "viewAll": "\u0639\u0631\u0636 \u0627\u0644\u0643\u0644",
+  "@viewAll": {
+    "description": "Link text to view all items in a section"
+  },
+
+  "productsTitle": "\u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u062a\u0645\u0648\u064a\u0644\u064a\u0629",
+  "@productsTitle": {
+    "description": "Title of the products list screen"
+  },
+  "productsSubtitle": "\u0627\u062e\u062a\u0631 \u0627\u0644\u0645\u0646\u062a\u062c \u0627\u0644\u062a\u0645\u0648\u064a\u0644\u064a \u0627\u0644\u0645\u0646\u0627\u0633\u0628 \u0644\u0627\u062d\u062a\u064a\u0627\u062c\u0627\u062a\u0643",
+  "@productsSubtitle": {
+    "description": "Subtitle under the products screen title"
+  },
+  "productDetailsTitle": "\u062a\u0641\u0627\u0635\u064a\u0644 \u0627\u0644\u0645\u0646\u062a\u062c",
+  "@productDetailsTitle": {
+    "description": "Title for the product detail screen"
+  },
+  "subProductDetailsTitle": "\u062a\u0641\u0627\u0635\u064a\u0644 \u0627\u0644\u0645\u0646\u062a\u062c \u0627\u0644\u0641\u0631\u0639\u064a",
+  "@subProductDetailsTitle": {
+    "description": "Title for the sub-product detail screen"
+  },
+  "availableOptions": "\u0627\u0644\u062e\u064a\u0627\u0631\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629",
+  "@availableOptions": {
+    "description": "Section title for sub-product options on product detail"
+  },
+  "applyForFinancing": "\u0637\u0644\u0628 \u0627\u0644\u062a\u0645\u0648\u064a\u0644",
+  "@applyForFinancing": {
+    "description": "CTA button to apply for a financing product"
+  },
+  "amount": "\u0645\u0628\u0644\u063a \u0627\u0644\u062a\u0645\u0648\u064a\u0644",
+  "@amount": {
+    "description": "Label for the financing amount field"
+  },
+  "period": "\u0645\u062f\u0629 \u0627\u0644\u0633\u062f\u0627\u062f",
+  "@period": {
+    "description": "Label for the repayment period field"
+  },
+  "profitRate": "\u0646\u0633\u0628\u0629 \u0627\u0644\u0623\u0631\u0628\u0627\u062d",
+  "@profitRate": {
+    "description": "Label for the profit rate field"
+  },
+  "features": "\u0627\u0644\u0645\u0645\u064a\u0632\u0627\u062a",
+  "@features": {
+    "description": "Section title for product features list"
+  },
+  "productDescription": "\u0648\u0635\u0641 \u0627\u0644\u0645\u0646\u062a\u062c",
+  "@productDescription": {
+    "description": "Section title for product description"
+  },
+  "featureSharia": "\u0645\u062a\u0648\u0627\u0641\u0642 \u0645\u0639 \u0623\u062d\u0643\u0627\u0645 \u0627\u0644\u0634\u0631\u064a\u0639\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0629",
+  "@featureSharia": {
+    "description": "Feature item: Sharia compliant"
+  },
+  "featureFastProcess": "\u0625\u062c\u0631\u0627\u0621\u0627\u062a \u0633\u0631\u064a\u0639\u0629 \u0648\u0633\u0647\u0644\u0629",
+  "@featureFastProcess": {
+    "description": "Feature item: fast and easy procedures"
+  },
+  "featureFlexiblePayments": "\u0623\u0642\u0633\u0627\u0637 \u0645\u064a\u0633\u0631\u0629 \u0648\u0645\u0631\u0646\u0629",
+  "@featureFlexiblePayments": {
+    "description": "Feature item: flexible installments"
+  },
+  "featureCustomerService": "\u062e\u062f\u0645\u0629 \u0639\u0645\u0644\u0627\u0621 \u0645\u062a\u0645\u064a\u0632\u0629",
+  "@featureCustomerService": {
+    "description": "Feature item: excellent customer service"
+  },
+
+  "applyTitle": "\u0637\u0644\u0628 \u0627\u0644\u062a\u0645\u0648\u064a\u0644",
+  "@applyTitle": {
+    "description": "Title of the apply/application screen"
+  },
+  "step1Title": "\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0634\u062e\u0635\u064a\u0629",
+  "@step1Title": {
+    "description": "Step 1 title in the application form: Personal Information"
+  },
+  "step2Title": "\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0639\u0645\u0644",
+  "@step2Title": {
+    "description": "Step 2 title in the application form: Employment Information"
+  },
+  "step3Title": "\u0627\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a",
+  "@step3Title": {
+    "description": "Step 3 title in the application form: Documents"
+  },
+  "step4Title": "\u0627\u0644\u062a\u0623\u0643\u064a\u062f",
+  "@step4Title": {
+    "description": "Step 4 title in the application form: Confirmation"
+  },
+  "fullName": "\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644",
+  "@fullName": {
+    "description": "Label for the full name input field"
+  },
+  "fullNameHint": "\u0623\u062f\u062e\u0644 \u0627\u0633\u0645\u0643 \u0627\u0644\u0643\u0627\u0645\u0644",
+  "@fullNameHint": {
+    "description": "Hint text for the full name input field"
+  },
+  "nationalId": "\u0631\u0642\u0645 \u0627\u0644\u0647\u0648\u064a\u0629",
+  "@nationalId": {
+    "description": "Label for the national ID input field"
+  },
+  "nationalIdHint": "\u0623\u062f\u062e\u0644 \u0631\u0642\u0645 \u0627\u0644\u0647\u0648\u064a\u0629 \u0627\u0644\u0648\u0637\u0646\u064a\u0629",
+  "@nationalIdHint": {
+    "description": "Hint text for the national ID input field"
+  },
+  "dateOfBirth": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0645\u064a\u0644\u0627\u062f",
+  "@dateOfBirth": {
+    "description": "Label for the date of birth input field"
+  },
+  "dateOfBirthHint": "\u064a\u0648\u0645 / \u0634\u0647\u0631 / \u0633\u0646\u0629",
+  "@dateOfBirthHint": {
+    "description": "Hint text for the date of birth input field"
+  },
+  "phoneNumber": "\u0631\u0642\u0645 \u0627\u0644\u062c\u0648\u0627\u0644",
+  "@phoneNumber": {
+    "description": "Label for the phone number input field"
+  },
+  "phoneNumberHint": "05XXXXXXXX",
+  "@phoneNumberHint": {
+    "description": "Hint text for the phone number input field"
+  },
+  "employer": "\u062c\u0647\u0629 \u0627\u0644\u0639\u0645\u0644",
+  "@employer": {
+    "description": "Label for the employer input field"
+  },
+  "employerHint": "\u0627\u0633\u0645 \u062c\u0647\u0629 \u0627\u0644\u0639\u0645\u0644",
+  "@employerHint": {
+    "description": "Hint text for the employer input field"
+  },
+  "monthlySalary": "\u0627\u0644\u0631\u0627\u062a\u0628 \u0627\u0644\u0634\u0647\u0631\u064a",
+  "@monthlySalary": {
+    "description": "Label for the monthly salary input field"
+  },
+  "monthlySalaryHint": "\u0645\u0628\u0644\u063a \u0627\u0644\u0631\u0627\u062a\u0628",
+  "@monthlySalaryHint": {
+    "description": "Hint text for the monthly salary input field"
+  },
+  "yearsOfService": "\u0645\u062f\u0629 \u0627\u0644\u062e\u062f\u0645\u0629",
+  "@yearsOfService": {
+    "description": "Label for the years of service input field"
+  },
+  "yearsOfServiceHint": "\u0639\u062f\u062f \u0633\u0646\u0648\u0627\u062a \u0627\u0644\u062e\u062f\u0645\u0629",
+  "@yearsOfServiceHint": {
+    "description": "Hint text for the years of service input field"
+  },
+  "employmentSector": "\u0627\u0644\u0642\u0637\u0627\u0639",
+  "@employmentSector": {
+    "description": "Label for the employment sector selection"
+  },
+  "government": "\u062d\u0643\u0648\u0645\u064a",
+  "@government": {
+    "description": "Employment sector option: government"
+  },
+  "privateSector": "\u062e\u0627\u0635",
+  "@privateSector": {
+    "description": "Employment sector option: private"
+  },
+  "military": "\u0639\u0633\u0643\u0631\u064a",
+  "@military": {
+    "description": "Employment sector option: military"
+  },
+  "uploadId": "\u0635\u0648\u0631\u0629 \u0627\u0644\u0647\u0648\u064a\u0629 \u0627\u0644\u0648\u0637\u0646\u064a\u0629",
+  "@uploadId": {
+    "description": "Document upload label: national ID photo"
+  },
+  "uploadSalary": "\u062a\u0639\u0631\u064a\u0641 \u0628\u0627\u0644\u0631\u0627\u062a\u0628",
+  "@uploadSalary": {
+    "description": "Document upload label: salary certificate"
+  },
+  "uploadBankStatement": "\u0643\u0634\u0641 \u062d\u0633\u0627\u0628 \u0628\u0646\u0643\u064a",
+  "@uploadBankStatement": {
+    "description": "Document upload label: bank statement"
+  },
+  "uploadHint": "\u0627\u0636\u063a\u0637 \u0644\u0644\u0631\u0641\u0639 \u0623\u0648 \u0627\u0633\u062d\u0628 \u0627\u0644\u0645\u0644\u0641",
+  "@uploadHint": {
+    "description": "Hint text shown under upload areas"
+  },
+  "next": "\u0627\u0644\u062a\u0627\u0644\u064a",
+  "@next": {
+    "description": "Next button label in multi-step form"
+  },
+  "previous": "\u0627\u0644\u0633\u0627\u0628\u0642",
+  "@previous": {
+    "description": "Previous button label in multi-step form"
+  },
+  "submit": "\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0637\u0644\u0628",
+  "@submit": {
+    "description": "Submit button label on the final step"
+  },
+  "submitting": "\u062c\u0627\u0631\u064d \u0627\u0644\u0625\u0631\u0633\u0627\u0644...",
+  "@submitting": {
+    "description": "Loading state text while the application is being submitted"
+  },
+  "applicationSubmitted": "\u062a\u0645 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0637\u0644\u0628 \u0628\u0646\u062c\u0627\u062d",
+  "@applicationSubmitted": {
+    "description": "Success message after application submission"
+  },
+  "confirmationSummary": "\u0645\u0631\u0627\u062c\u0639\u0629 \u0627\u0644\u0637\u0644\u0628",
+  "@confirmationSummary": {
+    "description": "Title for the confirmation/review step"
+  },
+  "confirmationHint": "\u062a\u0623\u0643\u062f \u0645\u0646 \u0635\u062d\u0629 \u062c\u0645\u064a\u0639 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0642\u0628\u0644 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0637\u0644\u0628",
+  "@confirmationHint": {
+    "description": "Instructional text on the confirmation step"
+  },
+  "confirmationProduct": "\u0627\u0644\u0645\u0646\u062a\u062c",
+  "@confirmationProduct": {
+    "description": "Label for product name in confirmation summary"
+  },
+  "confirmationFinancingType": "\u0646\u0648\u0639 \u0627\u0644\u062a\u0645\u0648\u064a\u0644",
+  "@confirmationFinancingType": {
+    "description": "Label for financing type in confirmation summary"
+  },
+  "confirmationMaxAmount": "\u0627\u0644\u062d\u062f \u0627\u0644\u0623\u0642\u0635\u0649",
+  "@confirmationMaxAmount": {
+    "description": "Label for maximum amount in confirmation summary"
+  },
+  "confirmationPeriod": "\u0627\u0644\u0645\u062f\u0629",
+  "@confirmationPeriod": {
+    "description": "Label for period in confirmation summary"
+  },
+
+  "myRequestsTitle": "\u0637\u0644\u0628\u0627\u062a\u064a",
+  "@myRequestsTitle": {
+    "description": "Title of the my requests screen"
+  },
+  "noRequests": "\u0644\u0627 \u062a\u0648\u062c\u062f \u0637\u0644\u0628\u0627\u062a \u062d\u0627\u0644\u064a\u0627\u064b",
+  "@noRequests": {
+    "description": "Empty state message when no requests exist"
+  },
+  "requestStatus": "\u062d\u0627\u0644\u0629 \u0627\u0644\u0637\u0644\u0628",
+  "@requestStatus": {
+    "description": "Label for request status"
+  },
+  "underReview": "\u0642\u064a\u062f \u0627\u0644\u0645\u0631\u0627\u062c\u0639\u0629",
+  "@underReview": {
+    "description": "Request status: under review"
+  },
+  "approved": "\u062a\u0645\u062a \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "@approved": {
+    "description": "Request status: approved"
+  },
+  "rejected": "\u0645\u0631\u0641\u0648\u0636",
+  "@rejected": {
+    "description": "Request status: rejected"
+  },
+
+  "profileTitle": "\u062d\u0633\u0627\u0628\u064a",
+  "@profileTitle": {
+    "description": "Title of the profile screen"
+  },
+  "myRequests": "\u0637\u0644\u0628\u0627\u062a\u064a",
+  "@myRequests": {
+    "description": "Profile menu item to navigate to my requests"
+  },
+  "settings": "\u0627\u0644\u0625\u0639\u062f\u0627\u062f\u0627\u062a",
+  "@settings": {
+    "description": "Profile menu item for settings"
+  },
+  "editDetails": "تعديل البيانات",
+  "@editDetails": {
+    "description": "Profile menu item for editing account details"
+  },
+  "changePassword": "تغيير كلمة المرور",
+  "@changePassword": {
+    "description": "Profile menu item for changing password"
+  },
+  "aboutApp": "\u0639\u0646 \u0627\u0644\u062a\u0637\u0628\u064a\u0642",
+  "@aboutApp": {
+    "description": "Profile menu item for about the app"
+  },
+  "logout": "\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062e\u0631\u0648\u062c",
+  "@logout": {
+    "description": "Logout button label"
+  },
+  "logoutConfirmTitle": "\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062e\u0631\u0648\u062c",
+  "@logoutConfirmTitle": {
+    "description": "Title of the logout confirmation dialog"
+  },
+  "logoutConfirmMessage": "\u0647\u0644 \u0623\u0646\u062a \u0645\u062a\u0623\u0643\u062f \u0645\u0646 \u0631\u063a\u0628\u062a\u0643 \u0641\u064a \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062e\u0631\u0648\u062c\u061f",
+  "@logoutConfirmMessage": {
+    "description": "Confirmation message in the logout dialog"
+  },
+  "cancel": "\u0625\u0644\u063a\u0627\u0621",
+  "@cancel": {
+    "description": "Cancel button label used in dialogs"
+  },
+  "confirm": "\u062a\u0623\u0643\u064a\u062f",
+  "@confirm": {
+    "description": "Confirm button label used in dialogs"
+  },
+  "guest": "\u0632\u0627\u0626\u0631",
+  "@guest": {
+    "description": "Display name for unauthenticated users"
+  },
+  "guestAccount": "\u0632\u0627\u0626\u0631 \u062d\u0633\u0627\u0628",
+  "@guestAccount": {
+    "description": "Badge text for guest login method"
+  },
+
+  "aboutTitle": "\u0639\u0646 \u0646\u0650\u0633\u064e\u0628",
+  "@aboutTitle": {
+    "description": "Title of the about screen"
+  },
+  "aboutDescription": "\u062a\u0637\u0628\u064a\u0642 \u0646\u0650\u0633\u064e\u0628 \u0647\u0648 \u0645\u0646\u0635\u0629 \u0645\u062a\u0643\u0627\u0645\u0644\u0629 \u0644\u0639\u0631\u0636 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u062a\u0645\u0648\u064a\u0644\u064a\u0629 \u0628\u0634\u0643\u0644 \u0645\u0646\u0638\u0645 \u0648\u0633\u0647\u0644\u060c \u064a\u062a\u064a\u062d \u0644\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646 \u0627\u0633\u062a\u0639\u0631\u0627\u0636 \u0648\u0645\u0642\u0627\u0631\u0646\u0629 \u0627\u0644\u062d\u0644\u0648\u0644 \u0627\u0644\u062a\u0645\u0648\u064a\u0644\u064a\u0629 \u0627\u0644\u0645\u062a\u0646\u0648\u0639\u0629 \u0648\u0627\u062e\u062a\u064a\u0627\u0631 \u0627\u0644\u0623\u0646\u0633\u0628 \u0644\u0627\u062d\u062a\u064a\u0627\u062c\u0627\u062a\u0647\u0645.",
+  "@aboutDescription": {
+    "description": "Full description of the app on the about screen"
+  },
+  "aboutVersion": "\u0627\u0644\u0625\u0635\u062f\u0627\u0631 {version}",
+  "@aboutVersion": {
+    "description": "Version label with version number",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+  "aboutIdeaTitle": "\u0641\u0643\u0631\u0629 \u0627\u0644\u062a\u0637\u0628\u064a\u0642",
+  "@aboutIdeaTitle": {
+    "description": "Section title for the app idea on the about screen"
+  },
+  "ourServices": "\u062e\u062f\u0645\u0627\u062a\u0646\u0627",
+  "@ourServices": {
+    "description": "Section title for services on the about screen"
+  },
+  "ourAdvantages": "\u0627\u0644\u0645\u0632\u0627\u064a\u0627",
+  "@ourAdvantages": {
+    "description": "Section title for advantages on the about screen"
+  },
+  "advantageSecurity": "\u0623\u0645\u0627\u0646 \u0648\u062e\u0635\u0648\u0635\u064a\u0629 \u0639\u0627\u0644\u064a\u0629",
+  "@advantageSecurity": {
+    "description": "Advantage: high security and privacy"
+  },
+  "advantageSpeed": "\u0633\u0631\u0639\u0629 \u0641\u064a \u0627\u0644\u0625\u062c\u0631\u0627\u0621\u0627\u062a",
+  "@advantageSpeed": {
+    "description": "Advantage: fast procedures"
+  },
+  "advantageUx": "\u062a\u062c\u0631\u0628\u0629 \u0645\u0633\u062a\u062e\u062f\u0645 \u0633\u0644\u0633\u0629",
+  "@advantageUx": {
+    "description": "Advantage: smooth user experience"
+  },
+  "advantageSharia": "\u0645\u062a\u0648\u0627\u0641\u0642 \u0645\u0639 \u0627\u0644\u0634\u0631\u064a\u0639\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0629",
+  "@advantageSharia": {
+    "description": "Advantage: Sharia compliant"
+  },
+
+  "contactTitle": "\u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627",
+  "@contactTitle": {
+    "description": "Title of the contact screen"
+  },
+  "contactSubtitle": "\u0627\u062e\u062a\u0631 \u0648\u0633\u064a\u0644\u0629 \u0627\u0644\u062a\u0648\u0627\u0635\u0644 \u0627\u0644\u0645\u0641\u0636\u0644\u0629 \u0644\u062f\u064a\u0643",
+  "@contactSubtitle": {
+    "description": "Subtitle text on the contact screen"
+  },
+  "contactHeader": "\u0646\u0633\u0639\u062f \u0628\u062a\u0648\u0627\u0635\u0644\u0643",
+  "@contactHeader": {
+    "description": "Header greeting on the contact screen"
+  },
+  "whatsapp": "\u0648\u0627\u062a\u0633\u0627\u0628",
+  "@whatsapp": {
+    "description": "Contact method label: WhatsApp"
+  },
+  "email": "\u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a",
+  "@email": {
+    "description": "Contact method label: email"
+  },
+  "twitter": "\u062a\u0648\u064a\u062a\u0631 / X",
+  "@twitter": {
+    "description": "Contact method label: Twitter/X"
+  },
+  "linkedin": "\u0644\u064a\u0646\u0643\u062f\u0625\u0646",
+  "@linkedin": {
+    "description": "Contact method label: LinkedIn"
+  },
+  "website": "\u0627\u0644\u0645\u0648\u0642\u0639 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a",
+  "@website": {
+    "description": "Contact method label: website"
+  },
+
+  "developerTitle": "\u0639\u0646 \u0627\u0644\u0645\u0637\u0648\u0631",
+  "@developerTitle": {
+    "description": "Title of the developer screen"
+  },
+  "developedBy": "\u0645\u0637\u0648\u0631 \u062a\u0637\u0628\u064a\u0642\u0627\u062a \u0627\u0644\u062c\u0648\u0627\u0644",
+  "@developedBy": {
+    "description": "Developer subtitle/role description"
+  },
+
+  "errorOccurred": "\u062d\u062f\u062b \u062e\u0637\u0623",
+  "@errorOccurred": {
+    "description": "Generic error message title"
+  },
+  "retry": "\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629",
+  "@retry": {
+    "description": "Retry button label"
+  },
+  "loading": "\u062c\u0627\u0631\u064d \u0627\u0644\u062a\u062d\u0645\u064a\u0644...",
+  "@loading": {
+    "description": "General loading indicator text"
+  },
+  "noData": "\u0644\u0627 \u062a\u0648\u062c\u062f \u0628\u064a\u0627\u0646\u0627\u062a",
+  "@noData": {
+    "description": "Empty state message when no data is available"
+  },
+  "backButton": "\u0631\u062c\u0648\u0639",
+  "@backButton": {
+    "description": "Accessible label for the back navigation button"
+  },
+
+  "navHome": "\u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629",
+  "@navHome": {
+    "description": "Bottom navigation label for the home tab"
+  },
+  "navSettings": "\u0627\u0644\u0625\u0639\u062f\u0627\u062f\u0627\u062a",
+  "@navSettings": {
+    "description": "Bottom navigation label for the settings tab"
+  },
+  "navProducts": "\u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a",
+  "@navProducts": {
+    "description": "Bottom navigation label for the products tab"
+  },
+  "navAbout": "\u0639\u0646 \u0646\u0633\u0628",
+  "@navAbout": {
+    "description": "Bottom navigation label for the about tab"
+  },
+  "navProfile": "\u062d\u0633\u0627\u0628\u064a",
+  "@navProfile": {
+    "description": "Bottom navigation label for the profile tab"
+  },
+
+  "appLogo": "\u0646",
+  "@appLogo": {
+    "description": "App logo character displayed on splash and login screens"
+  },
+  "servicePersonalFinancing": "\u0627\u0644\u062a\u0645\u0648\u064a\u0644 \u0627\u0644\u0634\u062e\u0635\u064a",
+  "@servicePersonalFinancing": {
+    "description": "Service name: personal financing"
+  },
+  "serviceRealEstateFinancing": "\u0627\u0644\u062a\u0645\u0648\u064a\u0644 \u0627\u0644\u0639\u0642\u0627\u0631\u064a",
+  "@serviceRealEstateFinancing": {
+    "description": "Service name: real estate financing"
+  },
+  "serviceLeaseFinancing": "\u0627\u0644\u062a\u0645\u0648\u064a\u0644 \u0627\u0644\u062a\u0623\u062c\u064a\u0631\u064a",
+  "@serviceLeaseFinancing": {
+    "description": "Service name: lease financing"
+  },
+  "servicePosFinancing": "\u062a\u0645\u0648\u064a\u0644 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+  "@servicePosFinancing": {
+    "description": "Service name: POS financing"
+  },
+  "serviceKhairat": "\u0628\u0631\u0646\u0627\u0645\u062c \u062e\u064a\u0631\u0627\u062a",
+  "@serviceKhairat": {
+    "description": "Service name: Khairat program"
+  },
+  "devInfoTitle": "\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u062a\u0637\u0648\u064a\u0631",
+  "@devInfoTitle": {
+    "description": "Section title for development information"
+  },
+  "devPlatform": "\u0627\u0644\u0645\u0646\u0635\u0629",
+  "@devPlatform": {
+    "description": "Label for platform in developer info"
+  },
+  "devVersion": "\u0627\u0644\u0625\u0635\u062f\u0627\u0631",
+  "@devVersion": {
+    "description": "Label for version in developer info"
+  },
+  "devArchitecture": "\u0627\u0644\u0628\u0646\u064a\u0629",
+  "@devArchitecture": {
+    "description": "Label for architecture in developer info"
+  },
+  "documentsAttachedCount": "\u0639\u062f\u062f \u0627\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a \u0627\u0644\u0645\u0631\u0641\u0642\u0629",
+  "@documentsAttachedCount": {
+    "description": "Label for documents attached count in confirmation step"
+  },
+  "invalidProductId": "\u0645\u0639\u0631\u0651\u0641 \u0627\u0644\u0645\u0646\u062a\u062c \u063a\u064a\u0631 \u0635\u0627\u0644\u062d",
+  "@invalidProductId": {
+    "description": "Error message for invalid product ID"
+  },
+  "productNotFound": "\u0627\u0644\u0645\u0646\u062a\u062c \u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f",
+  "@productNotFound": {
+    "description": "Error message when product is not found"
+  },
+  "subProductNotFound": "\u0627\u0644\u0645\u0646\u062a\u062c \u0627\u0644\u0641\u0631\u0639\u064a \u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f",
+  "@subProductNotFound": {
+    "description": "Error message when sub-product is not found"
+  },
+
+  "loginButton": "تسجيل الدخول",
+  "@loginButton": {
+    "description": "Login form submit button label"
+  },
+  "registerButton": "إنشاء حساب",
+  "@registerButton": {
+    "description": "Register form submit button label"
+  },
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "@dontHaveAccount": {
+    "description": "Text before register link on login page"
+  },
+  "alreadyHaveAccount": "لديك حساب بالفعل؟",
+  "@alreadyHaveAccount": {
+    "description": "Text before login link on register page"
+  },
+  "registerTitle": "إنشاء حساب جديد",
+  "@registerTitle": {
+    "description": "Title on the register page header"
+  },
+  "registerSubtitle": "أنشئ حسابك للمتابعة",
+  "@registerSubtitle": {
+    "description": "Subtitle on the register page header"
+  },
+  "forgotPasswordTitle": "استعادة كلمة المرور",
+  "@forgotPasswordTitle": {
+    "description": "Title on the forgot password page"
+  },
+  "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني لإرسال رابط الاستعادة",
+  "@forgotPasswordSubtitle": {
+    "description": "Subtitle on forgot password page"
+  },
+  "sendResetLink": "إرسال رابط الاستعادة",
+  "@sendResetLink": {
+    "description": "Send reset link button label"
+  },
+  "resetLinkSent": "تم إرسال رابط الاستعادة بنجاح",
+  "@resetLinkSent": {
+    "description": "Success message after reset link is sent"
+  },
+  "emailLabel": "البريد الإلكتروني",
+  "@emailLabel": {
+    "description": "Label for email text field"
+  },
+  "emailHint": "أدخل بريدك الإلكتروني",
+  "@emailHint": {
+    "description": "Hint for email text field"
+  },
+  "passwordLabel": "كلمة المرور",
+  "@passwordLabel": {
+    "description": "Label for password text field"
+  },
+  "passwordHint": "أدخل كلمة المرور",
+  "@passwordHint": {
+    "description": "Hint for password text field"
+  },
+  "displayNameLabel": "الاسم",
+  "@displayNameLabel": {
+    "description": "Label for display name text field"
+  },
+  "displayNameHint": "أدخل اسمك",
+  "@displayNameHint": {
+    "description": "Hint for display name text field"
+  },
+  "authProviderLabel": "طريقة الدخول",
+  "@authProviderLabel": {
+    "description": "Label for auth provider column"
+  },
+  "roleLabel": "الدور",
+  "@roleLabel": {
+    "description": "Label for role column"
+  },
+  "createdAtLabel": "تاريخ الإنشاء",
+  "@createdAtLabel": {
+    "description": "Label for created at column"
+  },
+  "lastLoginLabel": "آخر دخول",
+  "@lastLoginLabel": {
+    "description": "Label for last login column"
+  },
+  "orLoginWith": "أو سجّل دخولك باستخدام",
+  "@orLoginWith": {
+    "description": "Divider text between form and social buttons"
+  },
+  "register": "سجّل",
+  "@register": {
+    "description": "Register link text short form"
+  },
+  "login": "سجّل دخولك",
+  "@login": {
+    "description": "Login link text short form"
+  },
+  "termsPrefix": "بالمتابعة، أنت توافق على",
+  "@termsPrefix": {
+    "description": "Text before terms of use link"
+  },
+  "termsOfUse": "شروط الاستخدام",
+  "@termsOfUse": {
+    "description": "Terms of use link text"
+  },
+  "termsAnd": "و",
+  "@termsAnd": {
+    "description": "Conjunction between terms and privacy"
+  },
+  "privacyPolicy": "سياسة الخصوصية",
+  "@privacyPolicy": {
+    "description": "Privacy policy link text"
+  },
+
+  "themeMode": "المظهر",
+  "@themeMode": {
+    "description": "Profile menu item for changing theme mode"
+  },
+  "themeModeLight": "فاتح",
+  "@themeModeLight": {
+    "description": "Light theme option label"
+  },
+  "themeModeDark": "داكن",
+  "@themeModeDark": {
+    "description": "Dark theme option label"
+  },
+  "themeModeSystem": "تلقائي",
+  "@themeModeSystem": {
+    "description": "System theme option label"
+  },
+  "language": "اللغة",
+  "@language": {
+    "description": "Profile menu item for changing language"
+  },
+  "languageArabic": "العربية",
+  "@languageArabic": {
+    "description": "Arabic language option label"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option label"
+  },
+
+  "onboardingBadge": "مرحباً بك في Nesab",
+  "@onboardingBadge": {
+    "description": "Welcome badge text on onboarding page 1"
+  },
+  "onboardingTitle1Line1": "بوابتك الأولى",
+  "@onboardingTitle1Line1": {
+    "description": "Onboarding page 1 heading line 1"
+  },
+  "onboardingTitle1Line2": "للحلول التمويلية",
+  "@onboardingTitle1Line2": {
+    "description": "Onboarding page 1 heading line 2 (emerald accent)"
+  },
+  "onboardingDesc1": "استعرض وقارن أفضل المنتجات التمويلية الشخصية والعقارية في المملكة بكل شفافية وموثوقية.",
+  "@onboardingDesc1": {
+    "description": "Onboarding page 1 description paragraph"
+  },
+  "onboardingNext": "التالي",
+  "@onboardingNext": {
+    "description": "Next button on onboarding page 1"
+  },
+  "onboardingTitle2Line1": "خيارات متنوعة،",
+  "@onboardingTitle2Line1": {
+    "description": "Onboarding page 2 heading line 1"
+  },
+  "onboardingTitle2Line2": "قرار واحد ذكي",
+  "@onboardingTitle2Line2": {
+    "description": "Onboarding page 2 heading line 2 (emerald accent)"
+  },
+  "onboardingDesc2": "من القروض الشخصية إلى تمويل المنازل ونقاط البيع. نجمع لك كل الخيارات لتختار الأنسب لاحتياجك.",
+  "@onboardingDesc2": {
+    "description": "Onboarding page 2 description paragraph"
+  },
+  "onboardingStart": "ابدأ الآن",
+  "@onboardingStart": {
+    "description": "Start button on onboarding page 2"
+  },
+  "onboardingSkip": "تخطي",
+  "@onboardingSkip": {
+    "description": "Skip button on onboarding page 2"
+  },
+  "onboardingRealEstate": "التمويل العقاري",
+  "@onboardingRealEstate": {
+    "description": "Real estate financing card title on onboarding"
+  },
+  "onboardingRealEstateDesc": "خيارات تملك واستثمار",
+  "@onboardingRealEstateDesc": {
+    "description": "Real estate financing card subtitle on onboarding"
+  },
+  "onboardingPersonal": "التمويل الشخصي",
+  "@onboardingPersonal": {
+    "description": "Personal financing card title on onboarding"
+  },
+  "onboardingPersonalDesc": "سيولة نقدية فورية",
+  "@onboardingPersonalDesc": {
+    "description": "Personal financing card subtitle on onboarding"
+  },
+  "onboardingPos": "نقاط البيع",
+  "@onboardingPos": {
+    "description": "POS card title on onboarding"
+  },
+  "onboardingPosDesc": "حلول للمتاجر والأعمال",
+  "@onboardingPosDesc": {
+    "description": "POS card subtitle on onboarding"
+  },
+  "onboardingLease": "التمويل التأجيري",
+  "@onboardingLease": {
+    "description": "Lease financing circle label on onboarding"
+  },
+  "onboardingLeaseDesc": "إيجار ينتهي بالتملك",
+  "@onboardingLeaseDesc": {
+    "description": "Lease financing circle subtitle on onboarding"
+  },
+
+  "paywallTitle": "نِـسَـب",
+  "@paywallTitle": {
+    "description": "Paywall title (app name part)"
+  },
+  "paywallTitleAccent": "بلس +",
+  "@paywallTitleAccent": {
+    "description": "Paywall title accent part (gold colored)"
+  },
+  "paywallSubtitle": "ترقية حصرية لفرص تمويلية أفضل",
+  "@paywallSubtitle": {
+    "description": "Paywall subtitle text"
+  },
+  "paywallBenefit1Title": "أولوية المعالجة",
+  "@paywallBenefit1Title": {
+    "description": "Paywall benefit 1 title"
+  },
+  "paywallBenefit1Desc": "يتم رفع طلبك ومعالجته بشكل فوري قبل الآخرين.",
+  "@paywallBenefit1Desc": {
+    "description": "Paywall benefit 1 description"
+  },
+  "paywallBenefit2Title": "نسب ربح حصرية",
+  "@paywallBenefit2Title": {
+    "description": "Paywall benefit 2 title"
+  },
+  "paywallBenefit2Desc": "عروض خاصة وهوامش ربح أقل حصرياً للأعضاء.",
+  "@paywallBenefit2Desc": {
+    "description": "Paywall benefit 2 description"
+  },
+  "paywallBenefit3Title": "مستشار مالي خاص",
+  "@paywallBenefit3Title": {
+    "description": "Paywall benefit 3 title"
+  },
+  "paywallBenefit3Desc": "تواصل مباشر مع خبير مالي لمساعدتك في اتخاذ القرار.",
+  "@paywallBenefit3Desc": {
+    "description": "Paywall benefit 3 description"
+  },
+  "paywallSocialProof": "انضم إلى +1500 مستفيد مميز",
+  "@paywallSocialProof": {
+    "description": "Paywall social proof text"
+  },
+  "paywallOffer": "عرض محدود: خصم 50% لأول مرة",
+  "@paywallOffer": {
+    "description": "Paywall limited offer badge text"
+  },
+  "paywallCta": "اشترك بـ 99 ريال / سنوياً",
+  "@paywallCta": {
+    "description": "Paywall CTA button text"
+  },
+  "paywallOldPrice": "كان 199 ريال",
+  "@paywallOldPrice": {
+    "description": "Paywall strikethrough old price"
+  },
+  "paywallCancel": "يمكنك إلغاء الاشتراك في أي وقت من إعدادات الحساب",
+  "@paywallCancel": {
+    "description": "Paywall cancellation disclaimer"
+  },
+
+  "continueWithEmail": "التسجيل بالبريد الإلكتروني",
+  "@continueWithEmail": {
+    "description": "Email sign up button label on login screen"
+  },
+  "signIn": "تسجيل الدخول",
+  "@signIn": {
+    "description": "Sign in button label on login screen"
+  },
+
+  "validationEmailRequired": "البريد الإلكتروني مطلوب",
+  "@validationEmailRequired": {
+    "description": "Validation error when email is empty"
+  },
+  "validationEmailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+  "@validationEmailInvalid": {
+    "description": "Validation error when email format is invalid"
+  },
+  "validationPasswordRequired": "كلمة المرور مطلوبة",
+  "@validationPasswordRequired": {
+    "description": "Validation error when password is empty"
+  },
+  "validationPasswordTooShort": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+  "@validationPasswordTooShort": {
+    "description": "Validation error when password is too short"
+  },
+  "validationNameRequired": "الاسم مطلوب",
+  "@validationNameRequired": {
+    "description": "Validation error when name is empty"
+  },
+  "validationNameTooShort": "الاسم يجب أن يكون حرفين على الأقل",
+  "@validationNameTooShort": {
+    "description": "Validation error when name is too short"
+  },
+  "validationFieldRequired": "هذا الحقل مطلوب",
+  "@validationFieldRequired": {
+    "description": "Generic validation error for required fields"
+  },
+
+  "homeSelectService": "اختر الخدمة للمتابعة",
+  "@homeSelectService": {
+    "description": "Subtitle under the quick access section on home screen"
+  },
+  "servicePersonalFinancingDesc": "حلول تمويلية شخصية",
+  "@servicePersonalFinancingDesc": {
+    "description": "Short description for personal financing category card"
+  },
+  "serviceRealEstateFinancingDesc": "تمويل عقاري ميسّر",
+  "@serviceRealEstateFinancingDesc": {
+    "description": "Short description for real estate financing category card"
+  },
+  "serviceLeaseFinancingDesc": "إيجار منتهٍ بالتملك",
+  "@serviceLeaseFinancingDesc": {
+    "description": "Short description for lease financing category card"
+  },
+  "servicePosFinancingDesc": "حلول أجهزة نقاط البيع",
+  "@servicePosFinancingDesc": {
+    "description": "Short description for POS financing category card"
+  },
+  "serviceKhairatDesc": "التبرعات والعطاء",
+  "@serviceKhairatDesc": {
+    "description": "Short description for Khairat charity category card"
+  },
+  "serviceTools": "الأدوات",
+  "@serviceTools": {
+    "description": "Service name for tools/settings category card"
+  },
+  "serviceToolsDesc": "الإعدادات والتفضيلات",
+  "@serviceToolsDesc": {
+    "description": "Short description for tools/settings category card"
+  },
+
+  "categoryNotFound": "الفئة غير موجودة",
+  "@categoryNotFound": {
+    "description": "Error shown when a category type is invalid"
+  },
+
+  "subPersonalFinanceQuick": "التمويل الشخصي المختصر",
+  "subPersonalFinanceQuickDesc": "تمويل سريع بإجراءات مبسطة للاحتياجات العاجلة",
+  "subPersonalFinancePlus": "التمويل الشخصي - بلص",
+  "subPersonalFinancePlusDesc": "تمويل بمزايا إضافية وحدود أعلى",
+  "subDebtPurchase": "تمويل شراء المديونية",
+  "subDebtPurchaseDesc": "نقل مديونيتك من جهة تمويلية أخرى بشروط أفضل",
+
+  "subRealEstate": "التمويل العقاري",
+  "subRealEstateDesc": "تمويل لشراء عقار سكني أو استثماري",
+  "subRealEstatePlus": "التمويل العقاري - بلص",
+  "subRealEstatePlusDesc": "تمويل عقاري بمميزات حصرية وأرباح تنافسية",
+
+  "subLeasing": "التمويل التأجيري",
+  "subLeasingDesc": "تمويل بنظام الإجارة المنتهية بالتمليك",
+  "subLeasingPlus": "التمويل التأجيري - بلص",
+  "subLeasingPlusDesc": "تمويل تأجيري بمزايا إضافية وشروط ميسرة",
+
+  "subPos": "تمويل نقاط البيع",
+  "subPosDesc": "تمويل مخصص لتطوير أعمالك عبر نقاط البيع",
+
+  "subCharity": "حساب خيرات",
+  "subCharityDesc": "حساب ادخاري بعوائد مجزية ومتوافق مع الشريعة",
+
+  "subToolsDateConvert": "تحويل التاريخ",
+  "subToolsDateConvertDesc": "تحويل بين التاريخ الهجري والميلادي",
+  "subToolsAgeCalc": "حساب العمر",
+  "subToolsAgeCalcDesc": "حساب العمر بالتاريخ الهجري والميلادي",
+  "subToolsDeductions": "معرفة الاستقطاعات",
+  "subToolsDeductionsDesc": "حساب صافي الراتب بعد الاستقطاعات",
+
+  "adminLoginTitle": "لوحة تحكم المشرف",
+  "adminLoginSubtitle": "سجّل الدخول لإدارة اللوحة",
+  "usersTitle": "المستخدمون",
+  "toolsTitle": "الأدوات",
+  "dashboardTitle": "لوحة التحكم",
+  "pageOf": "صفحة {current} من {total}",
+  "@pageOf": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "rowsPerPage": "صفوف لكل صفحة",
+  "search": "بحث",
+
+  "managersTitle": "المديرون",
+  "managersSubtitle": "عرض وإدارة مديري اللوحة.",
+  "managersEmpty": "لا يوجد مديرون بعد. انقر \"إضافة مدير\" لإنشاء واحد.",
+  "addManagerButton": "إضافة مدير",
+  "createAdminsTitle": "إنشاء مدير",
+  "createAdminsSubtitle": "إضافة مدير جديد بالبريد الإلكتروني وكلمة المرور والدور.",
+  "createAdminButton": "إنشاء مدير",
+  "createAdminSuccess": "تم إنشاء المدير بنجاح.",
+  "deleteManagerButton": "حذف",
+  "deleteManagerConfirmTitle": "حذف المدير",
+  "deleteManagerConfirmMessage": "هل أنت متأكد من حذف {name}؟ سيتم إزالة صلاحيات الدخول.",
+  "@deleteManagerConfirmMessage": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "deleteManagerSuccess": "تم حذف المدير بنجاح.",
+  "deleteManagerError": "فشل في حذف المدير.",
+  "roleLabel": "الدور",
+  "roleAdmin": "مسؤول",
+  "roleUser": "مستخدم",
+
+  "categoriesTitle": "الفئات",
+  "categoriesSubtitle": "إدارة الفئات والفئات الفرعية.",
+  "addCategory": "إضافة فئة",
+  "addSubCategory": "إضافة فئة فرعية",
+  "categoryArabicName": "الاسم بالعربية",
+  "categoryEnglishName": "الاسم بالإنجليزية",
+  "categoryImage": "الصورة",
+  "pickImage": "اختر من الجهاز",
+  "categoryImageRequired": "الصورة مطلوبة",
+  "categorySaved": "تم حفظ الفئة",
+  "categoryTitleSize": "حجم العنوان",
+  "categoryImageWidth": "عرض الصورة (0–1)",
+  "categoryImageHeight": "ارتفاع الصورة (0–1)",
+  "categoryOpacity": "الشفافية (0–1)",
+  "categoryCalculatorType": "الحاسبة / الأداة",
+  "categoryCalculatorTypeHint": "اختر الحاسبة أو الأداة",
+
+  "extractionFailureLogsTitle": "سجلات فشل الاستخراج",
+  "extractionFailureLogsSubtitle": "صفحات المنتجات التي لم يُعرض فيها زر الإضافة للسلة.",
+  "extractionFailureLogsUrl": "الرابط",
+  "extractionFailureLogsMarketplace": "السوق",
+  "extractionFailureLogsTitleFound": "العنوان",
+  "extractionFailureLogsPriceFound": "السعر",
+  "extractionFailureLogsColorFound": "اللون",
+  "extractionFailureLogsSizeFound": "المقاس",
+  "extractionFailureLogsCreatedAt": "التاريخ",
+  "extractionFailureLogsYes": "نعم",
+  "extractionFailureLogsNo": "لا",
+
+  "calculatorsTitle": "الحاسبات المالية",
+  "calculatorsSubtitle": "احسب خيارات التمويل والأهلية",
+  "calcPersonalFinance": "التمويل الشخصي (PLAS)",
+  "calcPersonalFinanceDesc": "حساب التمويل الشخصي بالتفاصيل الكاملة",
+  "calcPersonalFinanceQuick": "التمويل الشخصي المختصر",
+  "calcPersonalFinanceQuickDesc": "حاسبة تمويل شخصي مبسطة",
+  "calcDebtPurchase": "شراء مديونية",
+  "calcDebtPurchaseDesc": "نقل المديونية من بنك آخر",
+  "calcRealEstate": "التمويل العقاري",
+  "calcRealEstateDesc": "تمويل عقاري مع حساب المدة المتاحة تلقائياً",
+  "calcRealEstatePlus": "التمويل العقاري بلص (2 في 1)",
+  "calcRealEstatePlusDesc": "تمويل عقاري مع تمويل شخصي",
+  "calcLeasingRegular": "التأجيري (تاجيري)",
+  "calcLeasingRegularDesc": "حاسبة التمويل التأجيري للسيارات",
+  "calcLeasingMicro": "التأجيري مايكرو",
+  "calcLeasingMicroDesc": "حساب أقصى سعر سيارة ممكن",
+  "calcLeasingAutoCalcMaxCar": "حساب تلقائي اقصى سعر سيارة للعميل",
+  "calcLeasingCarPriceZeroHint": "وضع صفر في خانة سعر السيارة",
+  "calcResultCostOfTerm": "كلفة الأجل",
+  "calcLeasingAsPercent": "نسبة مئوية من قيمة السيارة",
+  "calcLeasingAsAmount": "مبلغ (ريال)",
+  "calcInputAdminFees": "الرسوم الإدارية (ريال)",
+  "calcInputLicensePlateFees": "رسوم اللوحات (ريال)",
+  "calcResultLicensePlateFees": "رسوم اللوحات",
+  "calcPosFinancing": "تمويل نقاط البيع",
+  "calcPosFinancingDesc": "حاسبة تمويل نقاط البيع للأعمال",
+  "calcKhairat": "حساب خيرات",
+  "calcKhairatDesc": "حاسبة أرباح حساب الادخار",
+  "calcProtectionSavings": "الحماية والادخار",
+  "calcProtectionSavingsDesc": "جدول التأمين والاستثمار",
+  "calcAgeCalculator": "حاسبة العمر",
+  "calcAgeCalculatorDesc": "حساب العمر من تاريخ الميلاد",
+  "calcDateConverter": "تحويل التاريخ",
+  "calcDateConverterDesc": "تحويل بين الهجري والميلادي",
+  "calcDeductions": "حاسبة الاستقطاعات",
+  "calcDeductionsDesc": "عرض تفصيل الاستقطاعات من الراتب",
+  "calcBankFees": "الرسوم البنكية",
+  "calcBankFeesDesc": "مقارنة الرسوم البنكية وفق تعليمات ساما",
+
+  "calcInputSalary": "الراتب الشهري (ريال)",
+  "calcInputEmploymentType": "الوضع الوظيفي",
+  "calcInputSector": "القطاع الوظيفي",
+  "calcInputDateOfBirth": "تاريخ الميلاد",
+  "calcInputProfitRate": "هامش الربح",
+  "calcInputDuration": "مدة التمويل",
+  "calcInputDurationYears": "المدة (سنوات)",
+  "calcInputCreditCardAhli": "مجموع حدود بطاقات الاهلي الائتمانية",
+  "calcInputCreditCardOther": "مجموع حدود بطاقات البنوك الاخرى الائتمانية",
+  "calcInputHasRealEstate": "هل يوجد تمويل عقاري؟",
+  "calcInputMilitaryRank": "الرتبة العسكرية",
+  "calcInputOtherBankDebt": "المديونية في البنك الآخر (ريال)",
+  "calcInputCarPrice": "سعر السيارة (ريال)",
+  "calcInputDownPayment": "الدفعة الأولى",
+  "calcInputCustomerType": "نوع العميل",
+  "calcInputSegment": "الشريحة",
+  "calcInputHasPersonalLoan": "هل لديه تمويل شخصي؟",
+  "calcInputPersonalLoanPayment": "قسط التمويل الشخصي",
+  "calcInputHasOtherDeductions": "هل لديه استقطاعات أخرى؟",
+  "calcInputOtherDeductions": "مبلغ الاستقطاعات الأخرى",
+  "calcInputExistingObligations": "الالتزامات الشهرية الحالية",
+  "calcInputPersonalFinanceObligation": "التزامات التمويل الشخصي",
+  "calcInputLeasingCreditObligation": "تمويل تاجيري او بطاقات الائتمان",
+  "calcInputRealEstateObligation": "تمويل عقاري",
+  "calcInputRealEstatePayment": "قسط التمويل العقاري",
+  "calcInputRemainingInstallments": "الأقساط المتبقية للتمويل الشخصي",
+  "calcInputBusinessType": "نوع المنشأة",
+  "calcInputBusinessActivity": "نشاط المنشأة",
+  "calcInputAnnualSales": "مبيعات سنوية (ريال)",
+  "calcInputBusinessAge": "عمر المنشأة",
+  "calcInputPosPeriod": "فترة تشغيل نقاط البيع",
+  "calcInputMonthlyTransactions": "عدد العمليات الشهرية",
+  "calcInputLoanAmount": "مبلغ التمويل (ريال)",
+  "calcInputLoanAmountOptional": "مبلغ التمويل - اختياري (ريال)",
+  "calcHintSpecificAmount": "مبلغ محدد",
+  "calcInputDepositAmount": "مبلغ الإيداع (ريال)",
+  "calcInputPeriod": "فترة الاستثمار",
+  "calcInputSubscriptionAmount": "مبلغ الاشتراك (ريال)",
+  "calcInputReturnRate": "هامش ربح العائد",
+  "calcInputCoverageAmount": "مبلغ التغطية (ريال)",
+  "calcInputProgramDuration": "مدة البرنامج (سنوات)",
+  "calcInputInvestmentStrategy": "برنامج الاستثمار",
+  "calcInputHousingSubsidy": "الدعم السكني",
+  "calcInputHasEtezaz": "اعتزاز",
+  "calcInputOtherObligations": "التزامات اخرى",
+  "calcInputRemainingLoanDuration": "المدة المتبقية من القرض",
+  "calcInputSpecificREAmount": "مبلغ تمويل عقاري محدد",
+  "calcInputREDurationMonths": "مدة التمويل العقاري (بالأشهر)",
+  "calcAutoFromRetirement": "تلقائي (حسب سن التقاعد)",
+  "calcInputRequestedAmount": "المبلغ المطلوب (ريال)",
+  "calcInputGregorianDate": "التاريخ الميلادي",
+  "calcInputHijriDate": "التاريخ الهجري",
+
+  "calcResultTitle": "نتائج الحساب",
+  "calcResultEligible": "مؤهل للتمويل",
+  "calcResultNotEligible": "غير مؤهل",
+  "calcResultDeductionRatio": "نسبة الاستقطاع",
+  "calcResultMonthlyInstallment": "القسط الشهري",
+  "calcResultTotalFinancing": "إجمالي التمويل",
+  "calcResultApprovalAmount": "مبلغ الموافقة",
+  "calcResultAdminFees": "مبلغ الرسوم الادارية (0.5%)",
+  "calcResultVat": "الضريبة",
+  "calcResultTotalFees": "إجمالي الرسوم",
+  "calcResultNetAmount": "صافي مبلغ التمويل بعد استقطاع الرسوم",
+  "calcResultBankProfit": "إجمالي الربح الخاص بالبنك",
+  "calcResultNetAfterAll": "صافي مبلغ التمويل بعد خصم كل الرسوم",
+  "calcResultMaxAvailableMonths": "أقصى مدة متاحة",
+  "calcResultDebtAtOtherBank": "المديونية في البنك الآخر",
+  "calcResultNetAfterDebt": "صافي مبلغ تمويل العميل بعد خصم مديونية البنك الآخر",
+  "calcResultAdminFeesIncludingTax": "الرسوم الإدارية شامل الضريبة",
+  "calcResultMaxREAmount": "أقصى مبلغ عقاري",
+  "calcResultMonthlyDuringPL": "القسط الشهري ( 1 ) خلال مدة القسط الشخصي",
+  "calcResultMonthlyAfterPL": "القسط الشهري ( 2 ) بعد انتهاء القسط الشخصي",
+  "calcResultLoanAmount": "مبلغ التمويل",
+  "calcResultDuration": "المدة",
+  "calcResultProfitAmount": "مبلغ الربح",
+  "calcResultTotalWithProfit": "الإجمالي مع الأرباح",
+  "calcResultAdminAppraisalFees": "رسوم إدارية وتقييم",
+  "calcResultHousingSubsidy": "الدعم السكني",
+  "calcResultGrandTotal": "الإجمالي الكلي",
+  "calcResultFinanceDurationMonths": "مدة التمويل ( بالأشهر )",
+  "calcResultAvailableDurationYears": "المدة المتاحة للعميل",
+  "calcYear": "سنة",
+  "calcResultAdminAppraisalIncludingTax": "الرسوم الإدارية والتقييم شاملة الضريبة",
+  "calcResultBankProfitRE": "ارباح البنك",
+  "calcResultFinalAmountWithSupport": "المبلغ النهائي + ( الدعم السكني / اعتزاز ) ان وجد",
+  "calcInputPersonalLoanIfAny": "قسط التمويل الشخصي",
+  "calcResultInsurance": "التأمين",
+  "calcResultDownPayment": "الدفعة الأولى",
+  "calcResultLastPayment": "الدفعة الأخيرة ",
+  "calcResultFinancedAmount": "مبلغ التمويل",
+  "calcResultAPR": "معدل النسبة السنوية",
+  "calcResultTotalPaid": "الإجمالي المدفوع",
+  "calcResultActualRatio": "نسبة الاستقطاع الفعلية",
+  "calcResultRequiredDP": "مبلغ الدفعة الأولى المطلوبة",
+  "calcResultDecision": "القرار",
+  "calcResultAvailableForCar": "المتاح لتمويل السيارة",
+  "calcResultEffectiveCarPrice": "سعر السيارة الفعلي",
+  "calcResultTotalReturn": "إجمالي العائد",
+  "calcResultProfit": "الأرباح",
+  "calcResultMinDeposit": "الحد الأدنى للإيداع",
+  "calcResultCashValue": "القيمة النقدية",
+  "calcResultSurrenderValue": "قيمة الاسترداد",
+  "calcResultDeathBenefit": "منفعة الوفاة",
+  "calcResultCoverageAmount": "مبلغ التغطية",
+  "calcResultReturnRate": "نسبة العائد السنوي",
+  "calcResultFinalBenefit": "المنفعة آخر المدة",
+  "calcResultYear": "السنة",
+  "calcResultProjectionTable": "الجدول السنوي",
+  "calcResultAgeYears": "العمر (سنوات)",
+  "calcResultAgeMonths": "العمر (أشهر)",
+  "calcResultAgeDays": "العمر (أيام)",
+  "calcResultAmountAt33": "تمويل شخصي (33.33%)",
+  "calcResultAmountAt45": "تمويل تاجيري او بطاقات الائتمان (45%)",
+  "calcResultAmountAt55or65": "تمويل عقاري (55%/65%)",
+  "calcResultRemaining": "المتبقي من الراتب",
+  "calcResultApplicable": "هل ينطبق؟",
+  "calcResultHijriDate": "التاريخ الهجري",
+  "calcResultGregorianDate": "التاريخ الميلادي",
+
+  "calcSalaryClient": "عميل رواتب",
+  "calcNonSalaryClient": "غير رواتب",
+  "calcYes": "نعم",
+  "calcNo": "لا",
+  "calcRealEstateNone": "لا يوجد",
+  "calcRealEstateHas": "يوجد",
+  "calcCalculate": "احسب",
+  "calcReset": "إعادة ضبط",
+  "calcSar": "ريال",
+  "calcMonth": "شهر",
+  "calcMonths": "أشهر",
+  "calcApproved": "مقبول",
+  "calcIncreaseDownPayment": "ارفع الدفعة الأولى",
+  "calcAllConditionsMet": "جميع الشروط مستوفاة",
+  "calcConvertToHijri": "تحويل إلى هجري",
+  "calcConvertToGregorian": "تحويل إلى ميلادي",
+
+  "aiSettings": "إعدادات الذكاء الاصطناعي",
+  "aiSettingsSubtitle": "إدارة مفتاح Claude AI للمساعد الذكي.",
+  "aiApiKeyLabel": "مفتاح Claude API",
+  "aiApiKeyHint": "أدخل مفتاح Claude API (sk-ant-...)",
+  "aiApiKeyNotConfigured": "لم يتم تهيئة مفتاح API بعد.",
+  "aiApiKeySaved": "تم حفظ مفتاح API بنجاح.",
+  "aiApiKeyDeleted": "تم حذف مفتاح API بنجاح.",
+  "aiApiKeyDeleteConfirmTitle": "حذف مفتاح API",
+  "aiApiKeyDeleteConfirmMessage": "هل أنت متأكد من حذف مفتاح API؟ ستتوقف ميزة الدردشة الذكية عن العمل.",
+  "aiApiKeyInvalid": "يجب أن يبدأ مفتاح API بـ sk-ant-",
+  "aiApiKeyRequired": "مفتاح API مطلوب",
+  "save": "حفظ",
+  "update": "تحديث",
+  "delete": "حذف"
+}

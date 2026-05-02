@@ -1,0 +1,27 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // هل المستخدم مسجل دخول؟
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // هل المستخدم Admin؟
+    function isAdmin() {
+      return isSignedIn() &&
+        firestore.exists(/databases/(default)/documents/managers/$(request.auth.uid));
+    }
+
+    /* ================= CATEGORY IMAGES ================= */
+
+    match /categories/{categoryId}/{fileName} {
+
+      // القراءة لكل المستخدمين المسجلين
+      allow read: if isSignedIn();
+
+      // الرفع والتعديل والحذف للمدير فقط
+      allow write: if isAdmin();
+    }
+  }
+}

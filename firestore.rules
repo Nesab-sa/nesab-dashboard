@@ -46,6 +46,34 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    /* ===================== APP CONFIG (page gallery, splash, onboarding…) ===================== */
+    match /app_config/{docId} {
+      // التطبيق يقرأ الإعدادات (splash, pages, etc.)
+      allow read: if isSignedIn();
+      // الكتابة للمدير فقط
+      allow write: if isAdmin();
+    }
+
+    /* ===================== PAGE BLOCKS (block content per page) ===================== */
+    match /page_blocks/{pageId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    /* ===================== AI CONFIG ===================== */
+    match /ai_config/{docId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    /* ===================== BANK RATES / PROFIT MARGINS ===================== */
+    match /bank_rates/{docId} {
+      // التطبيق يقرأ هوامش الربح لعرضها
+      allow read: if isSignedIn();
+      // الكتابة للمدير أو Cloud Functions فقط
+      allow write: if isAdmin();
+    }
+
     /* ===================== BLOCKED COLLECTIONS ===================== */
     match /settings/{docId} {
       allow read, write: if false;

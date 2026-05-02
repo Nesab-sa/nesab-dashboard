@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
@@ -20,6 +21,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
   bool _loading = true;
   bool _saving = false;
   bool _saved = false;
+  bool _triggering = false;
   String? _error;
 
   ProfitMarginsConfig? _config;
@@ -73,6 +75,23 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
       setState(() => _error = e.toString());
     } finally {
       setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _triggerGrok() async {
+    setState(() { _triggering = true; _error = null; });
+    try {
+      final callable = FirebaseFunctions.instanceFor(region: 'us-central1')
+          .httpsCallable('triggerProfitMarginsUpdate');
+      await callable.call();
+      // Reload data to reflect new values
+      await _load();
+    } on FirebaseFunctionsException catch (e) {
+      setState(() => _error = 'خطأ من Grok: ${e.message}');
+    } catch (e) {
+      setState(() => _error = e.toString());
+    } finally {
+      setState(() => _triggering = false);
     }
   }
 
@@ -420,7 +439,35 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                     ),
                     const SizedBox(height: AppDimensions.spacingLg),
 
-                    // Save button
+                    // Grok trigger button
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: (_triggering || _saving) ? null : _triggerGrok,
+                        icon: _triggering
+                            ? const SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.auto_awesome_rounded, size: 18),
+                        label: Text(
+                          _triggering ? 'جارٍ الاستعلام من Grok…' : 'تحديث عبر Grok الآن',
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.blue,
+                          side: BorderSide(color: AppColors.blue),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.spacingMd),
+
+                    // Save button (manual edits)
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -441,7 +488,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                                 child: CircularProgressIndicator(
                                     strokeWidth: 2, color: Colors.white),
                               )
-                            : const Text('حفظ التعديلات',
+                            : const Text('حفظ التعديلات اليدوية',
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600)),

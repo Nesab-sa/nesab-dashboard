@@ -46,6 +46,25 @@ List<_PageItem> _defaults() => [
   const _PageItem(id:'home',           nameAr:'الصفحة الرئيسية',     nameEn:'Home',            order:5),
   const _PageItem(id:'profile',        nameAr:'الملف الشخصي',        nameEn:'Profile',         order:6),
   const _PageItem(id:'settings',       nameAr:'الإعدادات',           nameEn:'Settings',        order:7),
+  // ── Web calculator pages (control visibility on nesab.sa) ──
+  const _PageItem(id:'shakhsi-mukhtasar', nameAr:'التمويل الشخصي',     nameEn:'Personal Finance',   order:10),
+  const _PageItem(id:'shakhsi-plus',      nameAr:'الشخصي بلص',         nameEn:'Personal Plus',      order:11),
+  const _PageItem(id:'shira-madyoniya',   nameAr:'شراء مديونية',       nameEn:'Debt Purchase',      order:12),
+  const _PageItem(id:'tajiri-aadi',       nameAr:'التمويل التأجيري',   nameEn:'Leasing Finance',    order:13),
+  const _PageItem(id:'tajiri-makro',      nameAr:'التأجيري بلص',       nameEn:'Leasing Plus',       order:14),
+  const _PageItem(id:'aqari-aadi',        nameAr:'التمويل العقاري',    nameEn:'Real Estate',        order:15),
+  const _PageItem(id:'aqari-plus',        nameAr:'العقاري بلص',        nameEn:'Real Estate Plus',   order:16),
+  const _PageItem(id:'niqat-albay',       nameAr:'نقاط البيع',         nameEn:'POS Finance',        order:17),
+  const _PageItem(id:'himaya-iddikhar',   nameAr:'الحماية والادخار',   nameEn:'Protection & Savings',order:18),
+  const _PageItem(id:'khayrat',           nameAr:'خيرات — الودائع',    nameEn:'Deposits',           order:19),
+  const _PageItem(id:'nisbat-alistiqtaa', nameAr:'نسب الاستقطاع',      nameEn:'Deduction Ratios',   order:20),
+  const _PageItem(id:'istiqtaa-naam-la',  nameAr:'الاستقطاع المتاح',   nameEn:'Available Deduction',order:21),
+  const _PageItem(id:'hasibat-alumr',     nameAr:'حاسبة العمر',        nameEn:'Age Calculator',     order:22),
+  const _PageItem(id:'tahwil-altarikh',   nameAr:'تحويل التاريخ',      nameEn:'Date Converter',     order:23),
+  const _PageItem(id:'alrusum-albankiya', nameAr:'الرسوم البنكية',     nameEn:'Bank Fees',          order:24),
+  const _PageItem(id:'tahwil-alumla',     nameAr:'تحويل العملات',      nameEn:'Currency Converter', order:25),
+  const _PageItem(id:'asham-saudia',      nameAr:'الأسهم السعودية',    nameEn:'Saudi Stocks',       order:26),
+  const _PageItem(id:'hawawem-arbach',    nameAr:'هوامش الربح',        nameEn:'Profit Margins',     order:27),
 ];
 
 IconData _pageIcon(String id) {
@@ -57,8 +76,26 @@ IconData _pageIcon(String id) {
     case 'forgot_password': return Icons.lock_reset_rounded;
     case 'home':            return Icons.home_rounded;
     case 'profile':         return Icons.person_rounded;
-    case 'settings':        return Icons.settings_rounded;
-    default:                return Icons.web_rounded;
+    case 'settings':            return Icons.settings_rounded;
+    case 'shakhsi-mukhtasar':   return Icons.person_rounded;
+    case 'shakhsi-plus':        return Icons.person_add_rounded;
+    case 'shira-madyoniya':     return Icons.account_balance_wallet_rounded;
+    case 'tajiri-aadi':         return Icons.directions_car_rounded;
+    case 'tajiri-makro':        return Icons.directions_car_filled_rounded;
+    case 'aqari-aadi':          return Icons.home_rounded;
+    case 'aqari-plus':          return Icons.home_work_rounded;
+    case 'niqat-albay':         return Icons.point_of_sale_rounded;
+    case 'himaya-iddikhar':     return Icons.shield_rounded;
+    case 'khayrat':             return Icons.savings_rounded;
+    case 'nisbat-alistiqtaa':   return Icons.percent_rounded;
+    case 'istiqtaa-naam-la':    return Icons.calculate_rounded;
+    case 'hasibat-alumr':       return Icons.cake_rounded;
+    case 'tahwil-altarikh':     return Icons.calendar_today_rounded;
+    case 'alrusum-albankiya':   return Icons.account_balance_rounded;
+    case 'tahwil-alumla':       return Icons.currency_exchange_rounded;
+    case 'asham-saudia':        return Icons.show_chart_rounded;
+    case 'hawawem-arbach':      return Icons.bar_chart_rounded;
+    default:                    return Icons.web_rounded;
   }
 }
 

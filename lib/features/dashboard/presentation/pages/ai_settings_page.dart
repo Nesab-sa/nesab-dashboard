@@ -19,10 +19,8 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
   String? _error;
   bool _saved = false;
 
-  // Fields
-  bool _enabled = true;
-  String _provider = 'grok';
-  String _model = 'grok-3-mini';
+  // ── Nesab-AI (PHP chat backend) ──────────────────────────────────────────
+  bool _nesabAiEnabled = true;
   final _systemPromptController = TextEditingController();
 
   // Per-page placement
@@ -52,6 +50,9 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
     'settings': 'الإعدادات',
   };
 
+  // ── Grok AI (profit margins scheduler) ──────────────────────────────────
+  String _grokModel = 'grok-3';
+
   @override
   void initState() {
     super.initState();
@@ -71,10 +72,9 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
       if (doc.exists) {
         final d = doc.data()!;
         setState(() {
-          _enabled = d['enabled'] as bool? ?? true;
-          _provider = d['provider'] as String? ?? 'grok';
-          _model = d['model'] as String? ?? 'grok-3-mini';
+          _nesabAiEnabled = d['enabled'] as bool? ?? true;
           _systemPromptController.text = d['systemPrompt'] as String? ?? '';
+          _grokModel = d['grokModel'] as String? ?? 'grok-3';
           final pages = d['pages'] as Map<String, dynamic>?;
           if (pages != null) {
             for (final k in _pageEnabled.keys) {
@@ -96,11 +96,15 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
     setState(() { _saving = true; _saved = false; _error = null; });
     try {
       await _firestore.doc(_docPath).set({
-        'enabled': _enabled,
-        'provider': _provider,
-        'model': _model,
+        // Nesab-AI fields
+        'enabled': _nesabAiEnabled,
         'systemPrompt': _systemPromptController.text.trim(),
         'pages': Map<String, dynamic>.from(_pageEnabled),
+        // Grok fields
+        'grokModel': _grokModel,
+        // Legacy compat with chat.php reads
+        'provider': 'nesab-ai',
+        'model': 'nesab-ai',
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       setState(() { _saved = true; });
@@ -134,18 +138,15 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header
+
+                    // ── Header ───────────────────────────────────────────────
                     Row(
                       children: [
                         Icon(Icons.smart_toy_rounded, color: AppColors.blue, size: 28),
                         const SizedBox(width: AppDimensions.spacingMd),
                         Text(
                           'إعدادات الذكاء الاصطناعي',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: textPrimary,
-                          ),
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textPrimary),
                         ),
                         const Spacer(),
                         if (_saved)
@@ -166,6 +167,32 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                           ),
                       ],
                     ),
+                    const SizedBox(height: AppDimensions.spacingMd),
+
+                    // Architecture info banner
+                    Container(
+                      padding: const EdgeInsets.all(AppDimensions.spacingMd),
+                      decoration: BoxDecoration(
+                        color: AppColors.blue.withOpacity(0.06),
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                        border: Border.all(color: AppColors.blue.withOpacity(0.18)),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.info_outline_rounded, color: AppColors.blue, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'المنصة تستخدم نظامَي ذكاء اصطناعي منفصلَين:\n'
+                              '• Nesab-AI — المساعد المحادثاتي الظاهر في التطبيق (PHP backend على api.nesab.sa)\n'
+                              '• Grok AI — يُحدّث هوامش الربح تلقائياً كل يوم الساعة 10:00 صباحاً',
+                              style: TextStyle(color: textPrimary, fontSize: 12, height: 1.6),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: AppDimensions.spacingLg),
 
                     if (_error != null)
@@ -180,99 +207,38 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                         child: Text(_error!, style: TextStyle(color: AppColors.error)),
                       ),
 
-                    // ── Section: General ──────────────────────────────────────
+                    // ═══════════════════════════════════════════════════════
+                    // SECTION 1 — Nesab-AI (chat assistant)
+                    // ═══════════════════════════════════════════════════════
+                    _SectionHeader(
+                      icon: Icons.chat_bubble_outline_rounded,
+                      label: 'Nesab-AI — المساعد المحادثاتي',
+                      sublabel: 'يعمل عبر api.nesab.sa/Nesab.Ai/chat.php',
+                      textPrimary: textPrimary,
+                      textSecondary: textSecondary,
+                      accentColor: AppColors.blue,
+                    ),
+                    const SizedBox(height: AppDimensions.spacingMd),
+
                     _SectionCard(
                       cardColor: cardColor,
                       borderColor: borderColor,
-                      title: 'الإعدادات العامة',
+                      title: 'تفعيل المساعد',
                       titleColor: textPrimary,
-                      child: Column(
-                        children: [
-                          _SettingRow(
-                            label: 'تفعيل الذكاء الاصطناعي',
-                            subtitle: 'تشغيل أو إيقاف خدمة AI في التطبيق',
-                            textPrimary: textPrimary,
-                            textSecondary: textSecondary,
-                            trailing: Switch(
-                              value: _enabled,
-                              activeColor: AppColors.blue,
-                              onChanged: (v) => setState(() => _enabled = v),
-                            ),
-                          ),
-                          Divider(height: 1, color: borderColor),
-                          const SizedBox(height: AppDimensions.spacingMd),
-                          // Provider selector
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('مزود الذكاء الاصطناعي', style: TextStyle(color: textPrimary, fontWeight: FontWeight.w600)),
-                                    const SizedBox(height: 4),
-                                    Text('اختر المزود الذي يتم استخدام مفتاحه من Secret Manager', style: TextStyle(color: textSecondary, fontSize: 12)),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: AppDimensions.spacingMd),
-                              DropdownButton<String>(
-                                value: _provider,
-                                dropdownColor: cardColor,
-                                style: TextStyle(color: textPrimary),
-                                items: const [
-                                  DropdownMenuItem(value: 'grok', child: Text('xAI Grok')),
-                                  DropdownMenuItem(value: 'openai', child: Text('OpenAI')),
-                                ],
-                                onChanged: (v) {
-                                  if (v == null) return;
-                                  setState(() {
-                                    _provider = v;
-                                    _model = v == 'grok' ? 'grok-3-mini' : 'gpt-4o-mini';
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: AppDimensions.spacingMd),
-                          // Model
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('النموذج', style: TextStyle(color: textPrimary, fontWeight: FontWeight.w600)),
-                                    const SizedBox(height: 4),
-                                    Text('اسم النموذج المستخدم في API', style: TextStyle(color: textSecondary, fontSize: 12)),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: AppDimensions.spacingMd),
-                              DropdownButton<String>(
-                                value: _model,
-                                dropdownColor: cardColor,
-                                style: TextStyle(color: textPrimary),
-                                items: _provider == 'grok'
-                                    ? const [
-                                        DropdownMenuItem(value: 'grok-3-mini', child: Text('grok-3-mini')),
-                                        DropdownMenuItem(value: 'grok-3', child: Text('grok-3')),
-                                        DropdownMenuItem(value: 'grok-2', child: Text('grok-2')),
-                                      ]
-                                    : const [
-                                        DropdownMenuItem(value: 'gpt-4o-mini', child: Text('gpt-4o-mini')),
-                                        DropdownMenuItem(value: 'gpt-4o', child: Text('gpt-4o')),
-                                        DropdownMenuItem(value: 'gpt-4-turbo', child: Text('gpt-4-turbo')),
-                                      ],
-                                onChanged: (v) { if (v != null) setState(() => _model = v); },
-                              ),
-                            ],
-                          ),
-                        ],
+                      child: _SettingRow(
+                        label: 'تشغيل Nesab-AI في التطبيق',
+                        subtitle: 'تشغيل أو إيقاف زر المحادثة في واجهة المستخدم',
+                        textPrimary: textPrimary,
+                        textSecondary: textSecondary,
+                        trailing: Switch(
+                          value: _nesabAiEnabled,
+                          activeColor: AppColors.blue,
+                          onChanged: (v) => setState(() => _nesabAiEnabled = v),
+                        ),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.spacingMd),
 
-                    // ── Section: System Prompt ────────────────────────────────
                     _SectionCard(
                       cardColor: cardColor,
                       borderColor: borderColor,
@@ -282,7 +248,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'التعليمات الأساسية للذكاء الاصطناعي. يُرسل هذا النص في بداية كل محادثة.',
+                            'التعليمات الأساسية للمساعد. يُرسل في بداية كل محادثة عبر chat.php.',
                             style: TextStyle(color: textSecondary, fontSize: 13),
                           ),
                           const SizedBox(height: AppDimensions.spacingMd),
@@ -310,11 +276,10 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                     ),
                     const SizedBox(height: AppDimensions.spacingMd),
 
-                    // ── Section: Per-page placement ───────────────────────────
                     _SectionCard(
                       cardColor: cardColor,
                       borderColor: borderColor,
-                      title: 'ظهور AI في صفحات التطبيق',
+                      title: 'ظهور Nesab-AI في صفحات التطبيق',
                       titleColor: textPrimary,
                       child: Column(
                         children: _pageEnabled.entries.map((entry) {
@@ -339,6 +304,66 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                     ),
                     const SizedBox(height: AppDimensions.spacingLg),
 
+                    // ═══════════════════════════════════════════════════════
+                    // SECTION 2 — Grok AI (profit margins)
+                    // ═══════════════════════════════════════════════════════
+                    _SectionHeader(
+                      icon: Icons.auto_awesome_rounded,
+                      label: 'Grok AI — تحديث هوامش الربح',
+                      sublabel: 'مهمة يومية تلقائية عبر Cloud Functions',
+                      textPrimary: textPrimary,
+                      textSecondary: textSecondary,
+                      accentColor: const Color(0xFF7C3AED),
+                    ),
+                    const SizedBox(height: AppDimensions.spacingMd),
+
+                    _SectionCard(
+                      cardColor: cardColor,
+                      borderColor: borderColor,
+                      title: 'نموذج Grok',
+                      titleColor: textPrimary,
+                      child: Column(
+                        children: [
+                          _SettingRow(
+                            label: 'نموذج الاستعلام اليومي',
+                            subtitle: 'يُستخدم في مهمة updateProfitMargins والتحديث اليدوي من صفحة هوامش الربح',
+                            textPrimary: textPrimary,
+                            textSecondary: textSecondary,
+                            trailing: DropdownButton<String>(
+                              value: _grokModel,
+                              dropdownColor: cardColor,
+                              style: TextStyle(color: textPrimary),
+                              items: const [
+                                DropdownMenuItem(value: 'grok-3', child: Text('grok-3')),
+                                DropdownMenuItem(value: 'grok-3-mini', child: Text('grok-3-mini')),
+                                DropdownMenuItem(value: 'grok-2', child: Text('grok-2')),
+                              ],
+                              onChanged: (v) { if (v != null) setState(() => _grokModel = v); },
+                            ),
+                          ),
+                          Divider(height: 1, color: borderColor),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              children: [
+                                Icon(Icons.schedule_rounded, color: textSecondary, size: 16),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'الجدول: يومياً الساعة 10:00 صباحاً (07:00 UTC)\n'
+                                    'المهمة: updateProfitMargins في Cloud Functions\n'
+                                    'يحفظ النتيجة في Firestore → bank_rates/profit_margins',
+                                    style: TextStyle(color: textSecondary, fontSize: 12, height: 1.6),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.spacingLg),
+
                     // Save button
                     SizedBox(
                       width: double.infinity,
@@ -354,8 +379,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                         ),
                         child: _saving
                             ? const SizedBox(
-                                height: 20,
-                                width: 20,
+                                height: 20, width: 20,
                                 child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                               )
                             : const Text('حفظ الإعدادات', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
@@ -369,6 +393,52 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
     );
   }
 }
+
+// ─── Section header ───────────────────────────────────────────────────────────
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({
+    required this.icon,
+    required this.label,
+    required this.sublabel,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.accentColor,
+  });
+
+  final IconData icon;
+  final String label;
+  final String sublabel;
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: accentColor.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: accentColor, size: 20),
+        ),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: TextStyle(color: textPrimary, fontWeight: FontWeight.bold, fontSize: 15)),
+            Text(sublabel, style: TextStyle(color: textSecondary, fontSize: 11)),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Section card ─────────────────────────────────────────────────────────────
 
 class _SectionCard extends StatelessWidget {
   const _SectionCard({
@@ -405,6 +475,8 @@ class _SectionCard extends StatelessWidget {
     );
   }
 }
+
+// ─── Setting row ──────────────────────────────────────────────────────────────
 
 class _SettingRow extends StatelessWidget {
   const _SettingRow({

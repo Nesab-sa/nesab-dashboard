@@ -384,3 +384,152 @@ export const updateProfitMargins = functions
       functions.logger.error("updateProfitMargins: Firestore write failed", e);
     }
   });
+
+// ─── Manual trigger for profit margins update (callable from dashboard) ───────
+
+export const triggerProfitMarginsUpdate = functions.region("us-central1").https.onCall(
+  async (_data: unknown, context: functions.https.CallableContext) => {
+    // Must be signed-in manager
+    if (!context.auth) {
+      throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
+    }
+    const uid = context.auth.uid;
+    const managerDoc = await firestore.collection(MANAGERS_COLLECTION).doc(uid).get();
+    if (!managerDoc.exists) {
+      throw new functions.https.HttpsError("permission-denied", "Managers only.");
+    }
+
+    functions.logger.info("triggerProfitMarginsUpdate: manual run by", uid);
+
+    let apiKey: string;
+    try {
+      apiKey = await getSecret("GROK_API_KEY");
+    } catch (e) {
+      throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
+    }
+
+    const requestBody = JSON.stringify({
+      model: "grok-3",
+      messages: [{ role: "user", content: PROFIT_MARGIN_PROMPT }],
+      max_tokens: 2048,
+      temperature: 0.2,
+    });
+
+    const options: https.RequestOptions = {
+      hostname: "api.x.ai",
+      path: "/v1/chat/completions",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Length": Buffer.byteLength(requestBody),
+      },
+    };
+
+    let rawResponse: string;
+    try {
+      rawResponse = await httpsPost(options, requestBody);
+    } catch (e) {
+      throw new functions.https.HttpsError("internal", "فشل الاتصال بـ Grok API.");
+    }
+
+    let parsed: Record<string, unknown>;
+    try {
+      const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
+      const choices = apiResponse.choices as Array<{ message: { content: string } }>;
+      const content = choices?.[0]?.message?.content ?? "";
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new functions.https.HttpsError("internal", "لم يُرجع Grok بيانات JSON صالحة.");
+      }
+      parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
+    } catch (e) {
+      if (e instanceof functions.https.HttpsError) throw e;
+      throw new functions.https.HttpsError("internal", "فشل تحليل رد Grok.");
+    }
+
+    await firestore.doc("bank_rates/profit_margins").set({
+      banks: parsed.banks ?? [],
+      aiSummary: parsed.summary ?? "",
+      lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+      updatedBy: "grok-manual",
+    }, { merge: true });
+
+    return { success: true, summary: parsed.summary ?? "" };
+  }
+);
+// ─── Manual trigger for profit margins update (callable from dashboard) ───────
+
+export const triggerProfitMarginsUpdate = functions.region("us-central1").https.onCall(
+  async (_data: unknown, context: functions.https.CallableContext) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
+    }
+    const uid = context.auth.uid;
+    const managerDoc = await firestore.collection(MANAGERS_COLLECTION).doc(uid).get();
+    if (!managerDoc.exists) {
+      throw new functions.https.HttpsError("permission-denied", "Managers only.");
+    }
+
+    functions.logger.info("triggerProfitMarginsUpdate: manual run by", uid);
+
+    let apiKey: string;
+    try {
+      apiKey = await getSecret("GROK_API_KEY");
+    } catch (e) {
+      throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
+    }
+
+    const requestBody = JSON.stringify({
+      model: "grok-3",
+      messages: [{ role: "user", content: PROFIT_MARGIN_PROMPT }],
+      max_tokens: 2048,
+      temperature: 0.2,
+    });
+
+    const options: https.RequestOptions = {
+      hostname: "api.x.ai",
+      path: "/v1/chat/completions",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Length": Buffer.byteLength(requestBody),
+      },
+    };
+
+    let rawResponse: string;
+    try {
+      rawResponse = await httpsPost(options, requestBody);
+    } catch (e) {
+      throw new functions.https.HttpsError("internal", "فشل الاتصال بـ Grok API.");
+    }
+
+    let parsed: Record<string, unknown>;
+    try {
+      const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
+      const choices = apiResponse.choices as Array<{ message: { content: string } }>;
+      const content = choices?.[0]?.message?.content ?? "";
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new functions.https.HttpsError("internal", "لم يُرجع Grok بيانات JSON صالحة.");
+      }
+      parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
+    } catch (e) {
+      if (e instanceof functions.https.HttpsError) throw e;
+      throw new functions.https.HttpsError("internal", "فشل تحليل رد Grok.");
+    }
+
+    await firestore.doc("bank_rates/profit_margins").set({
+      banks: parsed.banks ?? [],
+      aiSummary: parsed.summary ?? "",
+      lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+      updatedBy: "grok-manual",
+    }, { merge: true });
+
+    return { success: true, summary: parsed.summary ?? "" };
+  }
+);
+y: parsed.summary ?? "" };
+  }
+);

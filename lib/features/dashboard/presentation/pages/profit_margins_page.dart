@@ -1,3 +1,5 @@
+import 'dart:math' show min, max;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,46 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
 import 'package:nesab_dashboard/features/dashboard/data/models/profit_margin_model.dart';
+
+// ─────────────────────────────────────────────
+// تعريف الفئات والمنتجات (ثابتة)
+// ─────────────────────────────────────────────
+
+class _ProductDef {
+  final String key;
+  final String label;
+  const _ProductDef(this.key, this.label);
+}
+
+class _CategoryDef {
+  final String title;
+  final IconData icon;
+  final List<_ProductDef> products;
+  const _CategoryDef(this.title, this.icon, this.products);
+}
+
+const _categories = <_CategoryDef>[
+  _CategoryDef('التمويل الشخصي', Icons.person_rounded, [
+    _ProductDef('personalBasic', 'شخصي عادي'),
+    _ProductDef('personalSpecial', 'مخصص'),
+  ]),
+  _CategoryDef('التمويل العقاري المدعوم', Icons.home_work_rounded, [
+    _ProductDef('realEstateSupportedProgram', 'برنامج سكني'),
+    _ProductDef('realEstateSupportedMinistry', 'وزارة الإسكان'),
+  ]),
+  _CategoryDef('التمويل العقاري الاعتيادي', Icons.apartment_rounded, [
+    _ProductDef('realEstateCommercial', 'تجاري'),
+    _ProductDef('realEstateResident', 'مقيم'),
+  ]),
+  _CategoryDef('التمويل التأجيري', Icons.directions_car_rounded, [
+    _ProductDef('leasingVehicles', 'سيارات'),
+    _ProductDef('leasingEquipment', 'معدات'),
+  ]),
+];
+
+// ─────────────────────────────────────────────
+// الصفحة الرئيسية
+// ─────────────────────────────────────────────
 
 class ProfitMarginsPage extends StatefulWidget {
   const ProfitMarginsPage({super.key});
@@ -33,6 +75,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     _load();
   }
 
+  // ── تحميل ────────────────────────────────────────
+
   Future<void> _load() async {
     setState(() {
       _loading = true;
@@ -53,6 +97,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
       setState(() => _loading = false);
     }
   }
+
+  // ── حفظ يدوي ─────────────────────────────────────
 
   Future<void> _save() async {
     setState(() {
@@ -78,13 +124,17 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     }
   }
 
+  // ── تحديث Grok ───────────────────────────────────
+
   Future<void> _triggerGrok() async {
-    setState(() { _triggering = true; _error = null; });
+    setState(() {
+      _triggering = true;
+      _error = null;
+    });
     try {
       final callable = FirebaseFunctions.instanceFor(region: 'us-central1')
           .httpsCallable('triggerProfitMarginsUpdate');
       await callable.call();
-      // Reload data to reflect new values
       await _load();
     } on FirebaseFunctionsException catch (e) {
       setState(() => _error = 'خطأ من Grok: ${e.message}');
@@ -95,22 +145,40 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     }
   }
 
-  void _editMargin(int bankIndex, String product) {
-    final bank = _banks[bankIndex];
-    ProductMargin current;
-    switch (product) {
-      case 'personal':
-        current = bank.personal;
-        break;
-      case 'realEstate':
-        current = bank.realEstate;
-        break;
-      default:
-        current = bank.leasing;
-    }
+  // ── لون الخلية بناءً على الترتيب ─────────────────
 
-    final minCtrl = TextEditingController(text: current.min.toString());
-    final maxCtrl = TextEditingController(text: current.max.toString());
+  /// أقل min = أخضر، أعلى min = أحمر
+  Color? _cellColor(String productKey, int bankIndex) {
+    final bank = _banks[bankIndex];
+    final margin = bank.product(productKey);
+    if (!margin.available) return null;
+
+    final availableMins = _banks
+        .where((b) => b.product(productKey).available)
+        .map((b) => b.product(productKey).min)
+        .toList();
+
+    if (availableMins.length < 2) return null;
+
+    final globalMin = availableMins.reduce(min);
+    final globalMax = availableMins.reduce(max);
+    if (globalMin == globalMax) return null;
+
+    if (margin.min == globalMin) return Colors.green.withOpacity(0.15);
+    if (margin.min == globalMax) return Colors.red.withOpacity(0.15);
+    return null;
+  }
+
+  // ── تعديل هامش ───────────────────────────────────
+
+  void _editMarginDialog(int bankIndex, String productKey, String productLabel) {
+    final bank = _banks[bankIndex];
+    final current = bank.product(productKey);
+
+    final minCtrl =
+        TextEditingController(text: current.available ? current.min.toString() : '');
+    final maxCtrl =
+        TextEditingController(text: current.available ? current.max.toString() : '');
     bool available = current.available;
 
     showDialog(
@@ -119,23 +187,10 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
         final isDark = Theme.of(ctx).brightness == Brightness.dark;
         final cardColor =
             isDark ? AppColors.dashboardCard : AppColors.lightModeCard;
-        final textPrimary = isDark
-            ? AppColors.dashboardTextPrimary
-            : AppColors.lightModeTextPrimary;
+        final textPrimary =
+            isDark ? AppColors.dashboardTextPrimary : AppColors.lightModeTextPrimary;
         final borderColor =
             isDark ? AppColors.dashboardBorder : AppColors.lightModeBorder;
-
-        String productLabel;
-        switch (product) {
-          case 'personal':
-            productLabel = 'شخصي';
-            break;
-          case 'realEstate':
-            productLabel = 'عقاري';
-            break;
-          default:
-            productLabel = 'تأجيري';
-        }
 
         return StatefulBuilder(
           builder: (ctx, setDialogState) => Directionality(
@@ -144,17 +199,15 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
               backgroundColor: cardColor,
               title: Text(
                 '${bank.bankName} — $productLabel',
-                style:
-                    TextStyle(color: textPrimary, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: textPrimary, fontWeight: FontWeight.bold, fontSize: 16),
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _buildMarginField(
-                      'الحد الأدنى %', minCtrl, textPrimary, borderColor),
+                  _marginField('الحد الأدنى %', minCtrl, textPrimary, borderColor),
                   const SizedBox(height: 12),
-                  _buildMarginField(
-                      'الحد الأقصى %', maxCtrl, textPrimary, borderColor),
+                  _marginField('الحد الأقصى %', maxCtrl, textPrimary, borderColor),
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -163,8 +216,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                       Switch(
                         value: available,
                         activeColor: AppColors.blue,
-                        onChanged: (v) =>
-                            setDialogState(() => available = v),
+                        onChanged: (v) => setDialogState(() => available = v),
                       ),
                     ],
                   ),
@@ -174,33 +226,24 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),
                   child: Text('إلغاء',
-                      style: TextStyle(color: AppColors.dashboardTextSecondary)),
+                      style:
+                          TextStyle(color: AppColors.dashboardTextSecondary)),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.blue,
                       foregroundColor: Colors.white),
                   onPressed: () {
-                    final min =
+                    final minVal =
                         double.tryParse(minCtrl.text.trim()) ?? current.min;
-                    final max =
+                    final maxVal =
                         double.tryParse(maxCtrl.text.trim()) ?? current.max;
-                    final updated = ProductMargin(
-                        min: min, max: max, available: available);
                     setState(() {
-                      switch (product) {
-                        case 'personal':
-                          _banks[bankIndex] =
-                              bank.copyWith(personal: updated);
-                          break;
-                        case 'realEstate':
-                          _banks[bankIndex] =
-                              bank.copyWith(realEstate: updated);
-                          break;
-                        default:
-                          _banks[bankIndex] =
-                              bank.copyWith(leasing: updated);
-                      }
+                      _banks[bankIndex] = bank.withProduct(
+                        productKey,
+                        ProductMargin(
+                            min: minVal, max: maxVal, available: available),
+                      );
                     });
                     Navigator.pop(ctx);
                   },
@@ -214,12 +257,11 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     );
   }
 
-  Widget _buildMarginField(String label, TextEditingController ctrl,
+  Widget _marginField(String label, TextEditingController ctrl,
       Color textColor, Color borderColor) {
     return TextField(
       controller: ctrl,
-      keyboardType:
-          const TextInputType.numberWithOptions(decimal: true),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
       style: TextStyle(color: textColor),
       decoration: InputDecoration(
         labelText: label,
@@ -239,18 +281,346 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     );
   }
 
+  // ── إضافة بنك ────────────────────────────────────
+
+  void _addBankDialog() {
+    final nameCtrl = TextEditingController();
+    final idCtrl = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        final isDark = Theme.of(ctx).brightness == Brightness.dark;
+        final cardColor =
+            isDark ? AppColors.dashboardCard : AppColors.lightModeCard;
+        final textPrimary =
+            isDark ? AppColors.dashboardTextPrimary : AppColors.lightModeTextPrimary;
+        final borderColor =
+            isDark ? AppColors.dashboardBorder : AppColors.lightModeBorder;
+
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            backgroundColor: cardColor,
+            title: Text('إضافة بنك جديد',
+                style: TextStyle(
+                    color: textPrimary, fontWeight: FontWeight.bold)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _marginField('اسم البنك', nameCtrl, textPrimary, borderColor),
+                const SizedBox(height: 12),
+                _marginField('معرّف البنك (بالإنجليزية)', idCtrl, textPrimary,
+                    borderColor),
+                const SizedBox(height: 8),
+                Text(
+                  'مثال: mybank — يُستخدم داخلياً فقط',
+                  style: TextStyle(
+                      color: AppColors.dashboardTextSecondary, fontSize: 11),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: Text('إلغاء',
+                    style:
+                        TextStyle(color: AppColors.dashboardTextSecondary)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.blue,
+                    foregroundColor: Colors.white),
+                onPressed: () {
+                  final name = nameCtrl.text.trim();
+                  final id = idCtrl.text.trim().replaceAll(' ', '_');
+                  if (name.isEmpty || id.isEmpty) return;
+                  // إنشاء منتجات افتراضية لكل المنتجات المعرّفة
+                  final defaultProducts = <String, ProductMargin>{};
+                  for (final cat in _categories) {
+                    for (final prod in cat.products) {
+                      defaultProducts[prod.key] =
+                          const ProductMargin(min: 0, max: 0, available: false);
+                    }
+                  }
+                  setState(() {
+                    _banks.add(BankProfitMargin(
+                      bankId: id,
+                      bankName: name,
+                      products: defaultProducts,
+                    ));
+                  });
+                  Navigator.pop(ctx);
+                },
+                child: const Text('إضافة'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // ── حذف بنك ──────────────────────────────────────
+
+  void _confirmDeleteBank(int index) {
+    final bank = _banks[index];
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        final isDark = Theme.of(ctx).brightness == Brightness.dark;
+        final cardColor =
+            isDark ? AppColors.dashboardCard : AppColors.lightModeCard;
+        final textPrimary =
+            isDark ? AppColors.dashboardTextPrimary : AppColors.lightModeTextPrimary;
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            backgroundColor: cardColor,
+            title: Text('حذف ${bank.bankName}؟',
+                style: TextStyle(color: textPrimary, fontWeight: FontWeight.bold)),
+            content: Text(
+              'سيُحذف هذا البنك من جميع الفئات. هل أنت متأكد؟',
+              style: TextStyle(color: AppColors.dashboardTextSecondary),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: Text('إلغاء',
+                    style:
+                        TextStyle(color: AppColors.dashboardTextSecondary)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    foregroundColor: Colors.white),
+                onPressed: () {
+                  setState(() => _banks.removeAt(index));
+                  Navigator.pop(ctx);
+                },
+                child: const Text('حذف'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // ── بناء بطاقة فئة ───────────────────────────────
+
+  Widget _buildCategoryCard(
+    _CategoryDef category, {
+    required bool isDark,
+    required Color cardColor,
+    required Color textPrimary,
+    required Color textSecondary,
+    required Color borderColor,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppDimensions.spacingMd),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        border: Border.all(color: borderColor),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // رأس الفئة
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? AppColors.dashboardBg
+                  : AppColors.lightModeBg,
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(AppDimensions.radiusLg)),
+              border: Border(bottom: BorderSide(color: borderColor)),
+            ),
+            child: Row(
+              children: [
+                Icon(category.icon, color: AppColors.blue, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  category.title,
+                  style: TextStyle(
+                      color: textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          // رأس الجدول
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: borderColor, width: 0.8)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Text('البنك',
+                      style: TextStyle(
+                          color: textSecondary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600)),
+                ),
+                for (final product in category.products)
+                  Expanded(
+                    flex: 2,
+                    child: Text(product.label,
+                        style: TextStyle(
+                            color: textSecondary,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center),
+                  ),
+                const SizedBox(width: 32), // مكان زر الحذف
+              ],
+            ),
+          ),
+          // صفوف البنوك
+          ..._banks.asMap().entries.map((entry) {
+            final i = entry.key;
+            final bank = entry.value;
+            final isLast = i == _banks.length - 1;
+            return _buildBankRow(
+              bank,
+              i,
+              category,
+              isLast,
+              textPrimary,
+              textSecondary,
+              borderColor,
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  // ── صف بنك داخل الفئة ────────────────────────────
+
+  Widget _buildBankRow(
+    BankProfitMargin bank,
+    int bankIndex,
+    _CategoryDef category,
+    bool isLast,
+    Color textPrimary,
+    Color textSecondary,
+    Color borderColor,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        border: isLast
+            ? null
+            : Border(bottom: BorderSide(color: borderColor, width: 0.5)),
+      ),
+      child: Row(
+        children: [
+          // اسم البنك
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+              child: Text(
+                bank.bankName,
+                style: TextStyle(
+                    color: textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
+          // خلايا المنتجات
+          for (final product in category.products)
+            Expanded(
+              flex: 2,
+              child: _buildColoredCell(
+                  bank, bankIndex, product.key, product.label,
+                  textPrimary, textSecondary),
+            ),
+          // زر الحذف (صغير)
+          SizedBox(
+            width: 32,
+            child: IconButton(
+              icon: Icon(Icons.delete_outline,
+                  size: 15, color: textSecondary.withOpacity(0.4)),
+              onPressed: () => _confirmDeleteBank(bankIndex),
+              padding: EdgeInsets.zero,
+              tooltip: 'حذف البنك',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── خلية ملوّنة ───────────────────────────────────
+
+  Widget _buildColoredCell(
+    BankProfitMargin bank,
+    int bankIndex,
+    String productKey,
+    String productLabel,
+    Color textPrimary,
+    Color textSecondary,
+  ) {
+    final margin = bank.product(productKey);
+    final bgColor = _cellColor(productKey, bankIndex);
+
+    return GestureDetector(
+      onTap: () => _editMarginDialog(bankIndex, productKey, productLabel),
+      child: Container(
+        color: bgColor,
+        padding:
+            const EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+        child: Center(
+          child: margin.available
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${margin.min}% – ${margin.max}%',
+                      style: TextStyle(
+                          color: textPrimary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 2),
+                    Icon(Icons.edit, size: 10, color: textSecondary),
+                  ],
+                )
+              : Text(
+                  'غير متاح',
+                  style:
+                      TextStyle(color: textSecondary, fontSize: 10),
+                ),
+        ),
+      ),
+    );
+  }
+
+  // ── build ─────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = isDark ? AppColors.dashboardBg : AppColors.lightModeBg;
+    final bgColor =
+        isDark ? AppColors.dashboardBg : AppColors.lightModeBg;
     final cardColor =
         isDark ? AppColors.dashboardCard : AppColors.lightModeCard;
-    final textPrimary = isDark
-        ? AppColors.dashboardTextPrimary
-        : AppColors.lightModeTextPrimary;
-    final textSecondary = isDark
-        ? AppColors.dashboardTextSecondary
-        : AppColors.lightModeTextSecondary;
+    final textPrimary =
+        isDark ? AppColors.dashboardTextPrimary : AppColors.lightModeTextPrimary;
+    final textSecondary =
+        isDark ? AppColors.dashboardTextSecondary : AppColors.lightModeTextSecondary;
     final borderColor =
         isDark ? AppColors.dashboardBorder : AppColors.lightModeBorder;
 
@@ -265,31 +635,73 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header
+                    // ─── الرأس ───────────────────────────────────
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Icon(Icons.bar_chart_rounded,
                             color: AppColors.blue, size: 28),
                         const SizedBox(width: AppDimensions.spacingMd),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'هوامش الربح',
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: textPrimary),
-                            ),
-                            if (_config?.lastUpdated != null)
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Text(
-                                'آخر تحديث: ${DateFormat('dd/MM/yyyy – hh:mm a', 'ar').format(_config!.lastUpdated!.toLocal())}  •  ${_config!.updatedBy == 'grok-scheduled' ? 'تلقائي بواسطة Grok' : 'يدوي'}',
+                                'هوامش الربح',
                                 style: TextStyle(
-                                    color: textSecondary, fontSize: 12),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: textPrimary),
                               ),
-                          ],
+                              if (_config?.lastUpdated != null) ...[
+                                const SizedBox(height: 3),
+                                Row(
+                                  children: [
+                                    Icon(Icons.access_time,
+                                        size: 13,
+                                        color: textSecondary),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'آخر تحديث: ${DateFormat('dd/MM/yyyy – hh:mm a', 'ar').format(_config!.lastUpdated!.toLocal())}',
+                                      style: TextStyle(
+                                          color: textSecondary,
+                                          fontSize: 12),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 7, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: _config!.updatedBy
+                                                .startsWith('grok')
+                                            ? AppColors.blue.withOpacity(0.1)
+                                            : AppColors.success
+                                                .withOpacity(0.1),
+                                        borderRadius:
+                                            BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        _config!.updatedBy
+                                                .startsWith('grok')
+                                            ? 'تلقائي بواسطة Grok'
+                                            : 'يدوي',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: _config!.updatedBy
+                                                  .startsWith('grok')
+                                              ? AppColors.blue
+                                              : AppColors.success,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
-                        const Spacer(),
+                        // مؤشر الحفظ
                         if (_saved)
                           Container(
                             padding: const EdgeInsets.symmetric(
@@ -298,7 +710,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                               color: AppColors.success.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                  color: AppColors.success.withOpacity(0.3)),
+                                  color:
+                                      AppColors.success.withOpacity(0.3)),
                             ),
                             child: Row(
                               children: [
@@ -316,16 +729,17 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                     ),
                     const SizedBox(height: AppDimensions.spacingMd),
 
-                    // AI Summary
+                    // ─── ملخص AI ─────────────────────────────────
                     if (_config?.aiSummary.isNotEmpty == true)
                       Container(
                         margin: const EdgeInsets.only(
                             bottom: AppDimensions.spacingMd),
-                        padding: const EdgeInsets.all(AppDimensions.spacingMd),
+                        padding:
+                            const EdgeInsets.all(AppDimensions.spacingMd),
                         decoration: BoxDecoration(
                           color: AppColors.blue.withOpacity(0.07),
-                          borderRadius:
-                              BorderRadius.circular(AppDimensions.radiusMd),
+                          borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusMd),
                           border: Border.all(
                               color: AppColors.blue.withOpacity(0.2)),
                         ),
@@ -346,15 +760,17 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                         ),
                       ),
 
+                    // ─── خطأ ─────────────────────────────────────
                     if (_error != null)
                       Container(
                         margin: const EdgeInsets.only(
                             bottom: AppDimensions.spacingMd),
-                        padding: const EdgeInsets.all(AppDimensions.spacingMd),
+                        padding:
+                            const EdgeInsets.all(AppDimensions.spacingMd),
                         decoration: BoxDecoration(
                           color: AppColors.error.withOpacity(0.1),
-                          borderRadius:
-                              BorderRadius.circular(AppDimensions.radiusMd),
+                          borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusMd),
                           border: Border.all(
                               color: AppColors.error.withOpacity(0.3)),
                         ),
@@ -362,64 +778,65 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                             style: TextStyle(color: AppColors.error)),
                       ),
 
-                    // Table
+                    // ─── مفتاح الألوان ────────────────────────────
                     Container(
-                      decoration: BoxDecoration(
-                        color: cardColor,
-                        borderRadius:
-                            BorderRadius.circular(AppDimensions.radiusLg),
-                        border: Border.all(color: borderColor),
-                      ),
-                      child: Column(
-                        children: [
-                          // Table header
-                          Container(
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? AppColors.dashboardBg
-                                  : AppColors.lightModeBg,
-                              borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(AppDimensions.radiusLg)),
-                            ),
-                            child: _TableRow(
-                              isHeader: true,
-                              bankName: 'البنك',
-                              personal: 'شخصي',
-                              realEstate: 'عقاري',
-                              leasing: 'تأجيري',
-                              textColor: textSecondary,
-                              borderColor: borderColor,
-                            ),
-                          ),
-                          // Bank rows
-                          ..._banks.asMap().entries.map((entry) {
-                            final i = entry.key;
-                            final bank = entry.value;
-                            final isLast = i == _banks.length - 1;
-                            return _BankRow(
-                              bank: bank,
-                              textPrimary: textPrimary,
-                              textSecondary: textSecondary,
-                              borderColor: borderColor,
-                              isLast: isLast,
-                              onEditPersonal: () => _editMargin(i, 'personal'),
-                              onEditRealEstate: () =>
-                                  _editMargin(i, 'realEstate'),
-                              onEditLeasing: () => _editMargin(i, 'leasing'),
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: AppDimensions.spacingLg),
-
-                    // Info box
-                    Container(
-                      padding: const EdgeInsets.all(AppDimensions.spacingMd),
+                      margin: const EdgeInsets.only(
+                          bottom: AppDimensions.spacingMd),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
                         color: cardColor,
                         borderRadius:
                             BorderRadius.circular(AppDimensions.radiusMd),
+                        border: Border.all(color: borderColor),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _colorLegend(Colors.green, 'أقل هامش'),
+                          const SizedBox(width: 16),
+                          _colorLegend(Colors.red, 'أعلى هامش'),
+                          const Spacer(),
+                          // زر إضافة بنك
+                          OutlinedButton.icon(
+                            onPressed: _addBankDialog,
+                            icon: const Icon(Icons.add, size: 16),
+                            label: const Text('إضافة بنك',
+                                style: TextStyle(fontSize: 13)),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.blue,
+                              side: BorderSide(color: AppColors.blue),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    AppDimensions.radiusMd),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // ─── بطاقات الفئات ────────────────────────────
+                    for (final cat in _categories)
+                      _buildCategoryCard(
+                        cat,
+                        isDark: isDark,
+                        cardColor: cardColor,
+                        textPrimary: textPrimary,
+                        textSecondary: textSecondary,
+                        borderColor: borderColor,
+                      ),
+
+                    // ─── صندوق معلومات ────────────────────────────
+                    Container(
+                      padding:
+                          const EdgeInsets.all(AppDimensions.spacingMd),
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusMd),
                         border: Border.all(color: borderColor),
                       ),
                       child: Row(
@@ -430,44 +847,53 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                           Expanded(
                             child: Text(
                               'يتم تحديث هوامش الربح تلقائياً يومياً الساعة 10:00 صباحاً بواسطة Grok AI. يمكنك التعديل اليدوي من هذه الصفحة.',
-                              style:
-                                  TextStyle(color: textSecondary, fontSize: 12),
+                              style: TextStyle(
+                                  color: textSecondary, fontSize: 12),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: AppDimensions.spacingLg),
+                    const SizedBox(height: AppDimensions.spacingMd),
 
-                    // Grok trigger button
+                    // ─── زر Grok ─────────────────────────────────
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton.icon(
-                        onPressed: (_triggering || _saving) ? null : _triggerGrok,
+                        onPressed: (_triggering || _saving)
+                            ? null
+                            : _triggerGrok,
                         icon: _triggering
                             ? const SizedBox(
                                 height: 16,
                                 width: 16,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 2),
                               )
-                            : const Icon(Icons.auto_awesome_rounded, size: 18),
+                            : const Icon(Icons.auto_awesome_rounded,
+                                size: 18),
                         label: Text(
-                          _triggering ? 'جارٍ الاستعلام من Grok…' : 'تحديث عبر Grok الآن',
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                          _triggering
+                              ? 'جارٍ الاستعلام من Grok…'
+                              : 'تحديث عبر Grok الآن',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w600),
                         ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.blue,
                           side: BorderSide(color: AppColors.blue),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                            borderRadius: BorderRadius.circular(
+                                AppDimensions.radiusMd),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.spacingMd),
 
-                    // Save button (manual edits)
+                    // ─── زر الحفظ اليدوي ──────────────────────────
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -475,7 +901,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.blue,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 AppDimensions.radiusMd),
@@ -486,7 +913,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                                 height: 20,
                                 width: 20,
                                 child: CircularProgressIndicator(
-                                    strokeWidth: 2, color: Colors.white),
+                                    strokeWidth: 2,
+                                    color: Colors.white),
                               )
                             : const Text('حفظ التعديلات اليدوية',
                                 style: TextStyle(
@@ -501,158 +929,24 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
       ),
     );
   }
-}
 
-class _TableRow extends StatelessWidget {
-  const _TableRow({
-    required this.isHeader,
-    required this.bankName,
-    required this.personal,
-    required this.realEstate,
-    required this.leasing,
-    required this.textColor,
-    required this.borderColor,
-  });
-
-  final bool isHeader;
-  final String bankName;
-  final String personal;
-  final String realEstate;
-  final String leasing;
-  final Color textColor;
-  final Color borderColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final style = TextStyle(
-      color: textColor,
-      fontSize: isHeader ? 12 : 13,
-      fontWeight: isHeader ? FontWeight.w600 : FontWeight.normal,
-    );
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: borderColor, width: 1)),
-      ),
-      child: Row(
-        children: [
-          Expanded(flex: 3, child: Text(bankName, style: style)),
-          Expanded(flex: 2, child: Text(personal, style: style, textAlign: TextAlign.center)),
-          Expanded(flex: 2, child: Text(realEstate, style: style, textAlign: TextAlign.center)),
-          Expanded(flex: 2, child: Text(leasing, style: style, textAlign: TextAlign.center)),
-        ],
-      ),
-    );
-  }
-}
-
-class _BankRow extends StatelessWidget {
-  const _BankRow({
-    required this.bank,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.borderColor,
-    required this.isLast,
-    required this.onEditPersonal,
-    required this.onEditRealEstate,
-    required this.onEditLeasing,
-  });
-
-  final BankProfitMargin bank;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color borderColor;
-  final bool isLast;
-  final VoidCallback onEditPersonal;
-  final VoidCallback onEditRealEstate;
-  final VoidCallback onEditLeasing;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        border: isLast
-            ? null
-            : Border(bottom: BorderSide(color: borderColor, width: 1)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Text(bank.bankName,
-                style: TextStyle(
-                    color: textPrimary, fontWeight: FontWeight.w500)),
+  Widget _colorLegend(Color color, String label) {
+    return Row(
+      children: [
+        Container(
+          width: 14,
+          height: 14,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.25),
+            border: Border.all(color: color.withOpacity(0.6)),
+            borderRadius: BorderRadius.circular(3),
           ),
-          Expanded(
-            flex: 2,
-            child: _MarginCell(
-              margin: bank.personal,
-              textPrimary: textPrimary,
-              textSecondary: textSecondary,
-              onTap: onEditPersonal,
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: _MarginCell(
-              margin: bank.realEstate,
-              textPrimary: textPrimary,
-              textSecondary: textSecondary,
-              onTap: onEditRealEstate,
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: _MarginCell(
-              margin: bank.leasing,
-              textPrimary: textPrimary,
-              textSecondary: textSecondary,
-              onTap: onEditLeasing,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _MarginCell extends StatelessWidget {
-  const _MarginCell({
-    required this.margin,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.onTap,
-  });
-
-  final ProductMargin margin;
-  final Color textPrimary;
-  final Color textSecondary;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Center(
-        child: margin.available
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${margin.min}% – ${margin.max}%',
-                    style: TextStyle(
-                        color: textPrimary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
-                  ),
-                  Icon(Icons.edit, size: 11, color: textSecondary),
-                ],
-              )
-            : Text('غير متاح',
-                style: TextStyle(color: textSecondary, fontSize: 12)),
-      ),
+        ),
+        const SizedBox(width: 5),
+        Text(label,
+            style: TextStyle(
+                color: AppColors.dashboardTextSecondary, fontSize: 11)),
+      ],
     );
   }
 }

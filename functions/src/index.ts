@@ -182,10 +182,30 @@ export const aiChatProxy = functions.region("us-central1").https.onCall(
       throw new functions.https.HttpsError("failed-precondition", "خدمة الذكاء الاصطناعي غير مفعلة حالياً.");
     }
 
+    // Check if message is about profit margins and fetch relevant data
+    let enrichedSystemPrompt = aiConfig.systemPrompt;
+    const marginKeywords = /هامش|ربح|معدل|سعر|نسبة|margin|rate|profit|percentage/i;
+
+    if (marginKeywords.test(message)) {
+      try {
+        const marginsDoc = await firestore.doc("bank_rates/profit_margins").get();
+        if (marginsDoc.exists) {
+          const marginsData = marginsDoc.data() as Record<string, unknown>;
+          const summary = marginsData?.aiSummary as string | undefined;
+          if (summary) {
+            enrichedSystemPrompt += `\n\nملخص هوامش الربح الحالية:\n${summary}`;
+          }
+        }
+      } catch (e) {
+        functions.logger.warn("Could not load profit margins data", e);
+        // Continue without margin data
+      }
+    }
+
     // Build messages array
     const systemContent = pageContext
-      ? `${aiConfig.systemPrompt}\n\nالصفحة الحالية: ${pageContext}`
-      : aiConfig.systemPrompt;
+      ? `${enrichedSystemPrompt}\n\nالصفحة الحالية: ${pageContext}`
+      : enrichedSystemPrompt;
 
     const messages: ChatMessage[] = [
       { role: "system", content: systemContent },

@@ -42,6 +42,7 @@ class _ToolsPageState extends State<ToolsPage> {
           nameAr: d['arabicName']?.toString() ?? '',
           nameEn: d['englishName']?.toString() ?? '',
           imageUrl: d['imageUrl']?.toString() ?? '',
+          description: d['description']?.toString() ?? '',
           link: d['calculatorLink']?.toString() ?? '',
           calculatorType: d['calculatorType']?.toString() ?? '',
           order: (d['orderNumber'] as num?)?.toInt() ?? 99,
@@ -79,7 +80,9 @@ class _ToolsPageState extends State<ToolsPage> {
       'arabicName': updated.nameAr,
       'englishName': updated.nameEn,
       'imageUrl': updated.imageUrl,
+      'description': updated.description,
       'calculatorLink': updated.link,
+      'calculatorType': updated.calculatorType,
       'isActive': updated.isActive,
       'orderNumber': updated.order,
     }, SetOptions(merge: true));
@@ -392,7 +395,7 @@ class _ToolEditPanel extends StatefulWidget {
 }
 
 class _ToolEditPanelState extends State<_ToolEditPanel> {
-  late final TextEditingController _arCtrl, _enCtrl, _descCtrl, _linkCtrl;
+  late final TextEditingController _arCtrl, _enCtrl, _descCtrl, _linkCtrl, _typeCtrl;
   late bool _isActive;
   Uint8List? _newImageBytes;
   bool _saving = false;
@@ -404,11 +407,12 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
     _enCtrl = TextEditingController(text: widget.tool.nameEn);
     _descCtrl = TextEditingController(text: widget.tool.description);
     _linkCtrl = TextEditingController(text: widget.tool.link);
+    _typeCtrl = TextEditingController(text: widget.tool.calculatorType);
     _isActive = widget.tool.isActive;
   }
 
   @override
-  void dispose() { _arCtrl.dispose(); _enCtrl.dispose(); _descCtrl.dispose(); _linkCtrl.dispose(); super.dispose(); }
+  void dispose() { _arCtrl.dispose(); _enCtrl.dispose(); _descCtrl.dispose(); _linkCtrl.dispose(); _typeCtrl.dispose(); super.dispose(); }
 
   Future<void> _pickImage() async {
     final p = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 1024, maxHeight: 1024, imageQuality: 85);
@@ -433,6 +437,7 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
         imageUrl: imgUrl,
         description: _descCtrl.text.trim(),
         link: _linkCtrl.text.trim(),
+        calculatorType: _typeCtrl.text.trim(),
         isActive: _isActive,
       ));
       if (mounted) {
@@ -511,6 +516,7 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
                 _tf('اسم الأداة (عربي) *', _arCtrl, dir: TextDirection.rtl),
                 _tf('Tool Name (English)', _enCtrl),
                 _tf('الوصف (اختياري)', _descCtrl, dir: TextDirection.rtl, maxLines: 3),
+                _tf('نوع الآلة الحاسبة (اختياري)', _typeCtrl, dir: TextDirection.rtl),
                 _tf('الرابط / Deep Link (اختياري)', _linkCtrl),
                 SwitchListTile(
                   title: const Text('الأداة مفعّلة'),

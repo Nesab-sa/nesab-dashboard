@@ -16,14 +16,21 @@ class UsersRepository {
     _cachedUsers = null;
   }
 
+  Future<List<UserModel>> _getAll({bool forceRefresh = false}) async {
+    if (forceRefresh || _cachedUsers == null) {
+      _cachedUsers = await _datasource.getUsers();
+    }
+    return _cachedUsers!;
+  }
+
   Future<Either<Failure, List<UserModel>>> getUsers({
     required int page,
     required int pageSize,
     String? search,
+    bool forceRefresh = false,
   }) async {
     try {
-      final all = _cachedUsers ?? await _datasource.getUsers();
-      _cachedUsers ??= all;
+      final all = await _getAll(forceRefresh: forceRefresh);
 
       var filtered = all;
       if (search != null && search.trim().isNotEmpty) {
@@ -36,6 +43,7 @@ class UsersRepository {
             )
             .toList();
       }
+
       final start = (page - 1) * pageSize;
       final end = (start + pageSize).clamp(0, filtered.length);
       return right(filtered.sublist(start, end));
@@ -44,20 +52,24 @@ class UsersRepository {
     }
   }
 
-  Future<Either<Failure, int>> getTotalCount({String? search}) async {
+  Future<Either<Failure, int>> getTotalCount({
+    String? search,
+    bool forceRefresh = false,
+  }) async {
     try {
-      final all = _cachedUsers ?? await _datasource.getUsers();
-      _cachedUsers ??= all;
+      final all = await _getAll(forceRefresh: forceRefresh);
 
       if (search != null && search.trim().isNotEmpty) {
         final term = search.trim().toLowerCase();
-        return right(all
-            .where(
-              (u) =>
-                  u.name.toLowerCase().contains(term) ||
-                  u.email.toLowerCase().contains(term),
-            )
-            .length);
+        return right(
+          all
+              .where(
+                (u) =>
+                    u.name.toLowerCase().contains(term) ||
+                    u.email.toLowerCase().contains(term),
+              )
+              .length,
+        );
       }
       return right(all.length);
     } catch (e) {

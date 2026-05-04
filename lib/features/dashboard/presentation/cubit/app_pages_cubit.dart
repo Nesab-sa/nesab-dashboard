@@ -60,7 +60,11 @@ class AppPagesCubit extends Cubit<AppPagesState> {
       await _repo.saveOnboardingSlide(slide);
       final updated = [...state.slides];
       final idx = updated.indexWhere((s) => s.id == slide.id);
-      if (idx >= 0) updated[idx] = slide; else updated.add(slide);
+      if (idx >= 0) {
+        updated[idx] = slide;
+      } else {
+        updated.add(slide);
+      }
       updated.sort((a, b) => a.order.compareTo(b.order));
       emit(state.copyWith(status: AppPagesStatus.loaded, slides: updated, saved: true));
     } catch (e) {

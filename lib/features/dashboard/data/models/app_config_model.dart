@@ -1,5 +1,6 @@
 /// Models for controlling all 9 app pages from the dashboard.
 /// Each model maps to a Firestore document under the `app_config` collection.
+library;
 
 // ─── Splash ───────────────────────────────────────────────────────────────────
 

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,13 @@ import 'package:nesab_dashboard/firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  FirebaseAuth.instance.authStateChanges().listen((user) {
+    // ignore: avoid_print
+    print('CURRENT UID: ${user?.uid}');
+    // ignore: avoid_print
+    print('CURRENT EMAIL: ${user?.email}');
+  });
 
   final prefs = await SharedPreferences.getInstance();
 

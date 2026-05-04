@@ -327,7 +327,7 @@ class _CategoryFormPanelState extends State<CategoryFormPanel> {
 
   Widget _buildCalculatorTypeDropdown() {
     return DropdownButtonFormField<CalculatorType?>(
-      value: _selectedCalculatorType,
+      initialValue: _selectedCalculatorType,
       decoration: const InputDecoration(labelText: 'Calculator Type'),
       items: [
         const DropdownMenuItem(value: null, child: Text('None')),
@@ -344,7 +344,7 @@ class _CategoryFormPanelState extends State<CategoryFormPanel> {
 
   Widget _buildParentCategoryDropdown() {
     return DropdownButtonFormField<String?>(
-      value: _selectedParentId,
+      initialValue: _selectedParentId,
       decoration: const InputDecoration(labelText: 'Parent Category *'),
       items: widget.topLevel.map((cat) {
         return DropdownMenuItem<String?>(

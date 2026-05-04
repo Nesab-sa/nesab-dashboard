@@ -34,37 +34,26 @@ class _ToolsPageState extends State<ToolsPage> {
   Future<void> _load() async {
     setState(() => _loading = true);
     try {
-      final doc = await _firestore.doc('app_config/tools_v2').get();
-      if (doc.exists) {
-        final list = doc.data()?['tools'] as List<dynamic>? ?? [];
-        final loaded = list
-            .map((e) => ToolItem.fromMap(e as Map<String, dynamic>))
-            .toList()
-          ..sort((a, b) => a.order.compareTo(b.order));
-        // Merge: ensure all built-in defaults exist
-        final ids = loaded.map((t) => t.id).toSet();
-        final merged = [...loaded];
-        for (final def in defaultBuiltInTools()) {
-          if (!ids.contains(def.id)) {
-            merged.add(def.copyWith(order: merged.length));
-          }
-        }
-        setState(() { _tools = merged; _loading = false; });
-      } else {
-        // First load — seed with defaults
-        final defaults = defaultBuiltInTools();
-        setState(() { _tools = defaults; _loading = false; });
-        await _persist();
-      }
+      final snap = await _firestore.collection('categories').get();
+      final loaded = snap.docs.map((doc) {
+        final d = doc.data();
+        return ToolItem(
+          id: doc.id,
+          nameAr: d['arabicName']?.toString() ?? '',
+          nameEn: d['englishName']?.toString() ?? '',
+          imageUrl: d['imageUrl']?.toString() ?? '',
+          link: d['calculatorLink']?.toString() ?? '',
+          calculatorType: d['calculatorType']?.toString() ?? '',
+          order: (d['orderNumber'] as num?)?.toInt() ?? 99,
+          isActive: d['isActive'] as bool? ?? true,
+          isBuiltIn: true,
+        );
+      }).toList()
+        ..sort((a, b) => a.order.compareTo(b.order));
+      setState(() { _tools = loaded; _loading = false; });
     } catch (_) {
-      setState(() { _tools = defaultBuiltInTools(); _loading = false; });
+      setState(() { _loading = false; });
     }
-  }
-
-  Future<void> _persist() async {
-    await _firestore.doc('app_config/tools_v2').set({
-      'tools': _tools.map((t) => t.toMap()).toList(),
-    });
   }
 
   Future<String?> _uploadImage(Uint8List bytes, String toolId) async {
@@ -86,7 +75,14 @@ class _ToolsPageState extends State<ToolsPage> {
       setState(() => _tools.add(updated));
     }
     if (_selectedTool?.id == updated.id) setState(() => _selectedTool = updated);
-    await _persist();
+    await _firestore.doc('categories/${updated.id}').set({
+      'arabicName': updated.nameAr,
+      'englishName': updated.nameEn,
+      'imageUrl': updated.imageUrl,
+      'calculatorLink': updated.link,
+      'isActive': updated.isActive,
+      'orderNumber': updated.order,
+    }, SetOptions(merge: true));
   }
 
   Future<void> _deleteTool(ToolItem tool) async {
@@ -107,7 +103,7 @@ class _ToolsPageState extends State<ToolsPage> {
         _tools.removeWhere((t) => t.id == tool.id);
         if (_selectedTool?.id == tool.id) _selectedTool = null;
       });
-      await _persist();
+      await _firestore.doc('categories/${tool.id}').delete();
     }
   }
 
@@ -133,15 +129,23 @@ class _ToolsPageState extends State<ToolsPage> {
       ),
     );
     if (ok == true && arCtrl.text.trim().isNotEmpty) {
+      final ref = await _firestore.collection('categories').add({
+        'arabicName': arCtrl.text.trim(),
+        'englishName': enCtrl.text.trim(),
+        'imageUrl': '',
+        'calculatorLink': '',
+        'calculatorType': '',
+        'isActive': true,
+        'orderNumber': _tools.length,
+      });
       final newTool = ToolItem(
-        id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
+        id: ref.id,
         nameAr: arCtrl.text.trim(),
         nameEn: enCtrl.text.trim(),
         order: _tools.length,
         isBuiltIn: false,
       );
-      await _saveTool(newTool);
-      setState(() => _selectedTool = newTool);
+      setState(() { _tools.add(newTool); _selectedTool = newTool; });
     }
   }
 
@@ -294,7 +298,7 @@ class _ToolCardState extends State<_ToolCard> {
                         colors: [AppColors.blue.withValues(alpha: 0.15), AppColors.blue.withValues(alpha: 0.05)],
                       ),
                     ),
-                    child: Center(child: Icon(toolIcon(widget.tool.id), size: 48, color: AppColors.blue.withValues(alpha: 0.6))),
+                    child: Center(child: Icon(toolIcon(widget.tool.id, widget.tool.calculatorType), size: 48, color: AppColors.blue.withValues(alpha: 0.6))),
                   ),
                 // Bottom gradient + name
                 Positioned(
@@ -451,7 +455,7 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
           decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor))),
           child: Row(
             children: [
-              Icon(toolIcon(widget.tool.id), size: 18, color: AppColors.blue),
+              Icon(toolIcon(widget.tool.id, widget.tool.calculatorType), size: 18, color: AppColors.blue),
               const SizedBox(width: 8),
               Expanded(child: Text(widget.tool.nameAr, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold))),
               if (widget.tool.isBuiltIn)
@@ -495,7 +499,7 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
                               ])
                             : Center(
                                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                  Icon(toolIcon(widget.tool.id), size: 48, color: AppColors.blue.withValues(alpha: 0.5)),
+                                  Icon(toolIcon(widget.tool.id, widget.tool.calculatorType), size: 48, color: AppColors.blue.withValues(alpha: 0.5)),
                                   const SizedBox(height: 8),
                                   const Text('اضغط لإضافة صورة'),
                                 ]),
@@ -512,7 +516,7 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
                   title: const Text('الأداة مفعّلة'),
                   value: _isActive,
                   onChanged: (v) => setState(() => _isActive = v),
-                  activeColor: AppColors.blue,
+                  activeThumbColor: AppColors.blue,
                   contentPadding: EdgeInsets.zero,
                 ),
                 const SizedBox(height: AppDimensions.spacingMd),

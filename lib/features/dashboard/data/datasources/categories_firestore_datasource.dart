@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:nesab_dashboard/features/calculators/data/models/calculator_type.dart';
 
@@ -33,7 +32,7 @@ class CategoriesFirestoreDatasource {
     final doc = await _firestore.collection(categoriesCollection).doc(id).get();
     if (!doc.exists || doc.data() == null) return null;
     return CategoryModel.fromFirestore(
-      doc as DocumentSnapshot<Map<String, dynamic>>,
+      doc,
     );
   }
 

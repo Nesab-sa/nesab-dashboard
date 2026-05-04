@@ -2,12 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // 🔑 Check if user is logged in
     function isSignedIn() {
       return request.auth != null;
     }
 
-    // 👑 Check if user is admin (manager)
     function isAdmin() {
       return isSignedIn() &&
         exists(/databases/$(database)/documents/managers/$(request.auth.uid));
@@ -15,48 +13,43 @@ service cloud.firestore {
 
     /* ===================== MANAGERS ===================== */
     match /managers/{userId} {
-
-      // المدير يقدر يقرأ كل المدراء (dashboard)
       allow read: if isAdmin();
-
-      // لا أحد يكتب من التطبيق (يتم من Firebase console فقط)
       allow write: if false;
     }
 
     /* ===================== CATEGORIES ===================== */
     match /categories/{categoryId} {
-
-      // القراءة متاحة لكل المستخدمين المسجلين
       allow read: if isSignedIn();
-
-      // الكتابة للمدير فقط
       allow create, update, delete: if isAdmin();
     }
 
     /* ===================== USERS ===================== */
     match /users/{userId} {
-
-      // المستخدم يقرأ نفسه
-      allow read: if isSignedIn() && request.auth.uid == userId;
-
-      // المدير يقرأ أي مستخدم
+      // المدير يقرأ الجميع
       allow read: if isAdmin();
 
-      // لا نسمح بالكتابة حالياً
+      // المستخدم يقرأ نفسه فقط
+      allow read: if isSignedIn() && request.auth.uid == userId;
+
       allow write: if false;
     }
 
-    /* ===================== APP CONFIG (page gallery, splash, onboarding…) ===================== */
+    /* ===================== APP CONFIG ===================== */
     match /app_config/{docId} {
-      // التطبيق يقرأ الإعدادات (splash, pages, etc.)
-      allow read: if isSignedIn();
-      // الكتابة للمدير فقط
+      // مهم: مفتوح للقراءة عشان التطبيق + الداشبورد
+      allow read: if true;
       allow write: if isAdmin();
+
+      // الـ subcollections (مثل onboarding/slides)
+      match /{subCol}/{subDoc} {
+        allow read: if true;
+        allow write: if isAdmin();
+      }
     }
 
-    /* ===================== PAGE BLOCKS (block content per page) ===================== */
+    /* ===================== PAGE BLOCKS ===================== */
     match /page_blocks/{pageId} {
-      allow read: if isSignedIn();
+      allow read: if true;
       allow write: if isAdmin();
     }
 
@@ -66,15 +59,28 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    /* ===================== BANK RATES / PROFIT MARGINS ===================== */
+    /* ===================== BANK RATES ===================== */
     match /bank_rates/{docId} {
-      // التطبيق يقرأ هوامش الربح لعرضها
-      allow read: if isSignedIn();
-      // الكتابة للمدير أو Cloud Functions فقط
+      // مهم: مفتوح عشان Grok + التطبيق
+      allow read: if true;
       allow write: if isAdmin();
     }
 
-    /* ===================== BLOCKED COLLECTIONS ===================== */
+    /* ===================== APP NOTIFICATIONS ===================== */
+    match /app_notifications/{notifId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+
+      match /acknowledgments/{userId} {
+        // المستخدم يقدر يقرأ موافقته فقط، الادمن يقرأ الكل
+        allow read: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+        // المستخدم يقدر يكتب موافقة لنفسه فقط
+        allow create: if isSignedIn() && request.auth.uid == userId;
+        allow update, delete: if false;
+      }
+    }
+
+    /* ===================== BLOCKED ===================== */
     match /settings/{docId} {
       allow read, write: if false;
     }

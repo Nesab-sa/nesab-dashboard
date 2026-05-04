@@ -6,7 +6,6 @@ import 'package:nesab_dashboard/core/extensions/context_extensions.dart';
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
 import 'package:nesab_dashboard/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:nesab_dashboard/features/auth/presentation/cubit/auth_state.dart';
 import 'package:nesab_dashboard/core/localization/cubit/locale_cubit.dart';
 import 'package:nesab_dashboard/core/localization/cubit/locale_state.dart';
 import 'package:nesab_dashboard/core/theme/cubit/theme_cubit.dart';

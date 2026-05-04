@@ -160,7 +160,7 @@ class Logo extends StatelessWidget {
           const LogoImage(),
           if (expanded) ...[
             const SizedBox(width: AppDimensions.spacingMd),
-            Expanded(
+            const Expanded(
               child: LogoText(),
             ),
           ],
@@ -357,4 +357,17 @@ class NavItemIcon extends StatelessWidget {
                 ),
                 child: Text(
                   '$badge',
-                  style: const TextSty
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}

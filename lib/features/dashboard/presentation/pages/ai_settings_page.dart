@@ -232,7 +232,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                         textSecondary: textSecondary,
                         trailing: Switch(
                           value: _nesabAiEnabled,
-                          activeColor: AppColors.blue,
+                          activeThumbColor: AppColors.blue,
                           onChanged: (v) => setState(() => _nesabAiEnabled = v),
                         ),
                       ),
@@ -292,7 +292,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                                 textSecondary: textSecondary,
                                 trailing: Switch(
                                   value: entry.value,
-                                  activeColor: AppColors.blue,
+                                  activeThumbColor: AppColors.blue,
                                   onChanged: (v) => setState(() => _pageEnabled[entry.key] = v),
                                 ),
                               ),

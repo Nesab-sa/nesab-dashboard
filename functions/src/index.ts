@@ -1,4 +1,5 @@
 import * as functions from "firebase-functions/v1";
+import { defineSecret } from "firebase-functions/params";
 import * as admin from "firebase-admin";
 import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import * as https from "https";
@@ -10,13 +11,63 @@ const firestore = admin.firestore();
 
 const MANAGERS_COLLECTION = "managers";
 
-type ManagerRole = "admin" ;
+type ManagerRole = "admin";
 
 interface CreateAdminData {
   email?: string;
   password?: string;
   displayName?: string;
   role?: string;
+}
+
+const secretClient = new SecretManagerServiceClient();
+
+const grokApiKey = defineSecret("GROK_API_KEY");
+
+async function getSecret(secretName: string): Promise<string> {
+  const projectId = process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT || "";
+  const name = `projects/${projectId}/secrets/${secretName}/versions/latest`;
+  const [version] = await secretClient.accessSecretVersion({ name });
+  const payload = version.payload?.data;
+  if (!payload) throw new Error(`Secret ${secretName} is empty`);
+  return typeof payload === "string" ? payload : Buffer.from(payload).toString("utf8");
+}
+
+function httpsPost(options: https.RequestOptions, body: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const req = https.request(options, (res) => {
+      let data = "";
+      res.on("data", (chunk) => (data += chunk));
+      res.on("end", () => {
+        if (res.statusCode && res.statusCode >= 400) {
+          reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+        } else {
+          resolve(data);
+        }
+      });
+    });
+    req.on("error", reject);
+    req.write(body);
+    req.end();
+  });
+}
+
+interface ChatMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+interface AiChatData {
+  message?: string;
+  pageContext?: string;
+  conversationHistory?: ChatMessage[];
+}
+
+interface AiConfig {
+  provider: "grok" | "openai";
+  model: string;
+  systemPrompt: string;
+  enabled: boolean;
 }
 
 /** Verifies the caller is authenticated and has admin role. */
@@ -87,54 +138,6 @@ export const createAdmin = functions.region("us-central1").https.onCall(
   }
 );
 
-// ─── AI Chat Proxy ────────────────────────────────────────────────────────────
-
-const secretClient = new SecretManagerServiceClient();
-
-async function getSecret(secretName: string): Promise<string> {
-  const projectId = process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT || "";
-  const name = `projects/${projectId}/secrets/${secretName}/versions/latest`;
-  const [version] = await secretClient.accessSecretVersion({ name });
-  const payload = version.payload?.data;
-  if (!payload) throw new Error(`Secret ${secretName} is empty`);
-  return typeof payload === "string" ? payload : Buffer.from(payload).toString("utf8");
-}
-
-function httpsPost(options: https.RequestOptions, body: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
-      let data = "";
-      res.on("data", (chunk) => (data += chunk));
-      res.on("end", () => resolve(data));
-    });
-    req.on("error", reject);
-    req.write(body);
-    req.end();
-  });
-}
-
-interface ChatMessage {
-  role: "user" | "assistant" | "system";
-  content: string;
-}
-
-interface AiChatData {
-  message?: string;
-  pageContext?: string;
-  conversationHistory?: ChatMessage[];
-}
-
-interface AiConfig {
-  provider: "grok" | "openai";
-  model: string;
-  systemPrompt: string;
-  enabled: boolean;
-}
-
-const DEFAULT_SYSTEM_PROMPT = `أنت مساعد مالي ذكي لمنصة نِسب، منصة أدوات مالية سعودية متخصصة.
-تساعد المستخدمين في فهم الحسابات المالية، قروض السيارات، التمويل العقاري، والمسائل المالية الشخصية.
-أجب دائماً بالعربية بأسلوب احترافي وموثوق. لا تقدم توصيات استثمارية محددة.`;
-
 /** AI Chat Proxy - supports Grok (xAI) and OpenAI */
 export const aiChatProxy = functions.region("us-central1").https.onCall(
   async (data: AiChatData, context: functions.https.CallableContext) => {
@@ -156,7 +159,7 @@ export const aiChatProxy = functions.region("us-central1").https.onCall(
     let aiConfig: AiConfig = {
       provider: "grok",
       model: "grok-3-mini",
-      systemPrompt: DEFAULT_SYSTEM_PROMPT,
+      systemPrompt: "Your default system prompt here.",
       enabled: true,
     };
 
@@ -224,7 +227,25 @@ export const aiChatProxy = functions.region("us-central1").https.onCall(
       };
 
       const responseText = await httpsPost(options, requestBody);
-      const parsed = JSON.parse(responseText);
+
+      // تنظيف الرد: إزالة Markdown، كلمة "json"، والمسافات الزائدة
+      let cleaned = responseText
+        .replace(/^\s*```(?:json)?/i, "") // إزالة ``` أو ```json في البداية
+        .replace(/```$/g, "")            // إزالة ``` في النهاية
+        .replace(/^\s*json\s*:/i, "")    // إزالة "json:" في البداية
+        .trim();
+
+      // محاولة التحويل إلى JSON مع معالجة الأخطاء
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch (e) {
+        functions.logger.error("Grok returned invalid JSON", { responseText, cleaned });
+        throw new functions.https.HttpsError(
+          "internal",
+          "خطأ من Grok: لم يُرجع Grok بيانات JSON صالحة"
+        );
+      }
 
       if (parsed.error) {
         functions.logger.error("AI provider error", parsed.error);
@@ -290,7 +311,8 @@ const SAUDI_BANKS = [
   "بنك البلاد", "بنك الاستثمار السعودي", "البنك الخليجي الدولي",
 ];
 
-// المنتجات الثمانية مع المعرّفات والأسماء
+// ─── المنتجات الثمانية مع المعرّفات والأسماء ────────────────────────────────
+
 const PRODUCT_KEYS = [
   { key: "personalBasic",               label: "تمويل شخصي عادي" },
   { key: "personalSpecial",             label: "تمويل شخصي مخصص" },
@@ -301,6 +323,8 @@ const PRODUCT_KEYS = [
   { key: "leasingVehicles",             label: "تمويل تأجيري – سيارات" },
   { key: "leasingEquipment",            label: "تمويل تأجيري – معدات" },
 ];
+
+// ─── Prompt لجلب هوامش الربح عبر الذكاء الاصطناعي ────────────────────────────
 
 const PROFIT_MARGIN_PROMPT = `أنت محلل مالي متخصص في السوق السعودي.
 ابحث عن هوامش الربح الحالية للبنوك السعودية التالية لثمانية منتجات تمويلية.
@@ -334,18 +358,19 @@ ${PRODUCT_KEYS.map((p, i) => (i + 1) + ". " + p.key + " (" + p.label + ")").join
 إذا لم يقدم بنك منتجاً معيناً، ضع available: false وقيم min/max = 0.
 استخدم أحدث المعلومات المتاحة. لا تُضف أي نص خارج JSON.`;
 
+// ─── Scheduled: تحديث هوامش الربح يومياً 10:00 صباحاً بتوقيت الرياض (07:00 UTC) ──
+
 export const updateProfitMargins = functions
   .region("us-central1")
+  .runWith({ secrets: ["GROK_API_KEY"] })
   .pubsub.schedule("0 7 * * *")
   .timeZone("UTC")
   .onRun(async () => {
     functions.logger.info("updateProfitMargins: starting daily run");
 
-    let apiKey: string;
-    try {
-      apiKey = await getSecret("GROK_API_KEY");
-    } catch (e) {
-      functions.logger.error("updateProfitMargins: failed to get GROK_API_KEY", e);
+    const apiKey = grokApiKey.value();
+    if (!apiKey) {
+      functions.logger.error("updateProfitMargins: GROK_API_KEY is not set");
       return;
     }
 
@@ -383,7 +408,6 @@ export const updateProfitMargins = functions
       const choices = apiResponse.choices as Array<{ message: { content: string } }>;
       const content = choices?.[0]?.message?.content ?? "";
 
-      // Extract JSON from response (handle markdown code blocks)
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
         functions.logger.error("updateProfitMargins: no JSON found in response", content);
@@ -408,11 +432,8 @@ export const updateProfitMargins = functions
     }
   });
 
-// ─── Manual trigger for profit margins update (callable from dashboard) ───────
-
-export const triggerProfitMarginsUpdate = functions.region("us-central1").https.onCall(
+export const triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["GROK_API_KEY"] }).https.onCall(
   async (_data: unknown, context: functions.https.CallableContext) => {
-    // Must be signed-in manager
     if (!context.auth) {
       throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
     }
@@ -424,10 +445,8 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").https.
 
     functions.logger.info("triggerProfitMarginsUpdate: manual run by", uid);
 
-    let apiKey: string;
-    try {
-      apiKey = await getSecret("GROK_API_KEY");
-    } catch (e) {
+    const apiKey = grokApiKey.value();
+    if (!apiKey) {
       throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
     }
 
@@ -453,7 +472,9 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").https.
     try {
       rawResponse = await httpsPost(options, requestBody);
     } catch (e) {
-      throw new functions.https.HttpsError("internal", "فشل الاتصال بـ Grok API.");
+      const errMsg = e instanceof Error ? e.message : String(e);
+      functions.logger.error("triggerProfitMarginsUpdate: Grok API call failed", { error: errMsg, keyLength: apiKey?.length ?? 0 });
+      throw new functions.https.HttpsError("internal", `فشل الاتصال بـ Grok API: ${errMsg}`);
     }
 
     let parsed: Record<string, unknown>;
@@ -471,13 +492,164 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").https.
       throw new functions.https.HttpsError("internal", "فشل تحليل رد Grok.");
     }
 
-    await firestore.doc("bank_rates/profit_margins").set({
-      banks: parsed.banks ?? [],
-      aiSummary: parsed.summary ?? "",
-      lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
-      updatedBy: "grok-manual",
-    }, { merge: true });
+    try {
+      await firestore.doc("bank_rates/profit_margins").set({
+        banks: parsed.banks ?? [],
+        aiSummary: parsed.summary ?? "",
+        lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+        updatedBy: "grok-manual",
+      }, { merge: true });
+    } catch (e) {
+      throw new functions.https.HttpsError("internal", "فشل حفظ البيانات في Firestore.");
+    }
 
     return { success: true, summary: parsed.summary ?? "" };
+  }
+);
+
+// ─── Auto-create Firestore user doc on Auth signup ────────────────────────────
+export const onUserCreated = functions
+  .region("us-central1")
+  .auth.user()
+  .onCreate(async (user) => {
+    const providerId = user.providerData[0]?.providerId ?? "password";
+    let provider = "email";
+    if (providerId.includes("google")) provider = "google";
+    else if (providerId.includes("apple")) provider = "apple";
+    else if (providerId.includes("password")) provider = "email";
+
+    try {
+      await firestore.collection("users").doc(user.uid).set({
+        email: user.email ?? "",
+        displayName: user.displayName ?? "",
+        provider,
+        providerId,
+        createdAt: admin.firestore.Timestamp.fromDate(new Date(user.metadata.creationTime)),
+      }, { merge: true });
+    } catch (e) {
+      functions.logger.error("onUserCreated: failed to create Firestore doc", e);
+    }
+  });
+
+// ─── Sync Auth users → Firestore users collection ─────────────────────────────
+export const syncAuthUsers = functions.region("us-central1").https.onCall(
+  async (_data: unknown, context: functions.https.CallableContext) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
+    }
+    const callerUid = context.auth.uid;
+    const managerDoc = await firestore.collection(MANAGERS_COLLECTION).doc(callerUid).get();
+    if (!managerDoc.exists) {
+      throw new functions.https.HttpsError("permission-denied", "Managers only.");
+    }
+
+    let nextPageToken: string | undefined;
+    let created = 0;
+    let updated = 0;
+    let total = 0;
+
+    do {
+      const result = await auth.listUsers(1000, nextPageToken);
+      for (const u of result.users) {
+        total++;
+        const providerId = u.providerData[0]?.providerId ?? "password";
+        let provider = "email";
+        if (providerId.includes("google")) provider = "google";
+        else if (providerId.includes("apple")) provider = "apple";
+        else if (providerId.includes("password")) provider = "email";
+
+        const docRef = firestore.collection("users").doc(u.uid);
+        const existing = await docRef.get();
+        const baseData = {
+          email: u.email ?? "",
+          displayName: u.displayName ?? "",
+          provider,
+          providerId,
+          createdAt: admin.firestore.Timestamp.fromDate(new Date(u.metadata.creationTime)),
+        };
+        if (!existing.exists) {
+          await docRef.set(baseData);
+          created++;
+        } else {
+          await docRef.set({ provider, providerId }, { merge: true });
+          updated++;
+        }
+      }
+      nextPageToken = result.pageToken;
+    } while (nextPageToken);
+
+    return { success: true, total, created, updated };
+  }
+);
+
+// ─── Send FCM push when a new notification is created ─────────────────────────
+export const sendNotificationPush = functions
+  .region("us-central1")
+  .firestore.document("app_notifications/{notifId}")
+  .onCreate(async (snap, context) => {
+    const data = snap.data();
+    if (!data) return;
+
+    const title = (data.title as string) ?? "";
+    const message = (data.message as string) ?? "";
+    const isMandatory = (data.isMandatory as boolean) ?? false;
+    const notifId = context.params.notifId;
+
+    // Collect FCM tokens from users collection
+    const usersSnap = await firestore.collection("users").get();
+    const tokens: string[] = [];
+    usersSnap.forEach((doc) => {
+      const t = doc.data().fcmToken;
+      if (typeof t === "string" && t.length > 0) tokens.push(t);
+    });
+
+    if (tokens.length === 0) {
+      functions.logger.info("sendNotificationPush: no tokens");
+      return;
+    }
+
+    // FCM allows max 500 tokens per multicast call
+    const chunks: string[][] = [];
+    for (let i = 0; i < tokens.length; i += 500) {
+      chunks.push(tokens.slice(i, i + 500));
+    }
+
+    let totalSent = 0;
+    let totalFailed = 0;
+    for (const chunk of chunks) {
+      const res = await admin.messaging().sendEachForMulticast({
+        tokens: chunk,
+        notification: { title, body: message },
+        data: {
+          notifId,
+          isMandatory: isMandatory ? "true" : "false",
+        },
+        android: { priority: "high" },
+        apns: { payload: { aps: { sound: "default", contentAvailable: true } } },
+      });
+      totalSent += res.successCount;
+      totalFailed += res.failureCount;
+    }
+    functions.logger.info(`sendNotificationPush: sent=${totalSent} failed=${totalFailed}`);
+  });
+
+// ─── Acknowledge notification (called from mobile app) ────────────────────────
+export const acknowledgeNotification = functions.region("us-central1").https.onCall(
+  async (data: { notifId?: string }, context: functions.https.CallableContext) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError("unauthenticated", "Sign in required.");
+    }
+    const notifId = data.notifId;
+    if (!notifId) {
+      throw new functions.https.HttpsError("invalid-argument", "notifId is required.");
+    }
+    const uid = context.auth.uid;
+    await firestore
+      .doc(`app_notifications/${notifId}/acknowledgments/${uid}`)
+      .set({
+        acknowledgedAt: admin.firestore.FieldValue.serverTimestamp(),
+        uid,
+      });
+    return { success: true };
   }
 );

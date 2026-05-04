@@ -14,6 +14,7 @@ class _NotificationMsg {
   final String message;
   final bool isMandatory;
   final String mandatoryText;
+  final String attachmentUrl;
   final bool isActive;
   final DateTime? createdAt;
 
@@ -23,6 +24,7 @@ class _NotificationMsg {
     required this.message,
     this.isMandatory = false,
     this.mandatoryText = '',
+    this.attachmentUrl = '',
     this.isActive = true,
     this.createdAt,
   });
@@ -33,6 +35,7 @@ class _NotificationMsg {
         'message': message,
         'isMandatory': isMandatory,
         'mandatoryText': mandatoryText,
+        'attachmentUrl': attachmentUrl,
         'isActive': isActive,
         'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
       };
@@ -45,6 +48,7 @@ class _NotificationMsg {
       message: d['message']?.toString() ?? '',
       isMandatory: d['isMandatory'] as bool? ?? false,
       mandatoryText: d['mandatoryText']?.toString() ?? '',
+      attachmentUrl: d['attachmentUrl']?.toString() ?? '',
       isActive: d['isActive'] as bool? ?? true,
       createdAt: d['createdAt'] is Timestamp ? (d['createdAt'] as Timestamp).toDate() : null,
     );
@@ -67,6 +71,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   final _titleCtrl = TextEditingController();
   final _messageCtrl = TextEditingController();
   final _mandatoryTextCtrl = TextEditingController();
+  final _attachmentCtrl = TextEditingController();
 
   bool _isMandatory = false;
   bool _sending = false;
@@ -85,6 +90,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _titleCtrl.dispose();
     _messageCtrl.dispose();
     _mandatoryTextCtrl.dispose();
+    _attachmentCtrl.dispose();
     super.dispose();
   }
 
@@ -136,6 +142,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         message: message,
         isMandatory: _isMandatory,
         mandatoryText: _isMandatory ? _mandatoryTextCtrl.text.trim() : '',
+        attachmentUrl: _attachmentCtrl.text.trim(),
         isActive: true,
         createdAt: DateTime.now(),
       );
@@ -157,6 +164,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       _titleCtrl.clear();
       _messageCtrl.clear();
       _mandatoryTextCtrl.clear();
+      _attachmentCtrl.clear();
       setState(() => _isMandatory = false);
 
       _snack('✅ تم إرسال الإشعار بنجاح');
@@ -346,6 +354,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               if (_isMandatory) ...[
                                 const SizedBox(height: AppDimensions.spacingMd),
                                 _buildField('نص الرسالة الإجبارية *', _mandatoryTextCtrl, maxLines: 3),
+                                const SizedBox(height: AppDimensions.spacingMd),
+                                _buildField('رابط المرفق (اختياري — PDF أو صورة)', _attachmentCtrl),
                               ],
                             ],
                           ),
@@ -417,7 +427,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               )
                             : ListView.separated(
                                 itemCount: _history.length,
-                                separatorBuilder: (_, __) => const SizedBox(height: AppDimensions.spacingSm),
+                                separatorBuilder: (_, _) => const SizedBox(height: AppDimensions.spacingSm),
                                 itemBuilder: (ctx, i) => _NotifRow(
                                   msg: _history[i],
                                   isDark: isDark,
@@ -560,6 +570,25 @@ class _NotifRow extends StatelessWidget {
                   Icon(Icons.access_time_rounded, size: 11, color: Colors.grey.withValues(alpha: 0.5)),
                   const SizedBox(width: 4),
                   Text(dateStr, style: TextStyle(fontSize: 11, color: Colors.grey.withValues(alpha: 0.6))),
+                  const SizedBox(width: 12),
+                  Icon(Icons.check_circle_outline, size: 11, color: AppColors.success.withValues(alpha: 0.7)),
+                  const SizedBox(width: 4),
+                  FutureBuilder<AggregateQuerySnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('app_notifications')
+                        .doc(msg.id)
+                        .collection('acknowledgments')
+                        .count()
+                        .get(),
+                    builder: (ctx, snap) {
+                      final n = snap.data?.count ?? 0;
+                      return Text('$n موافقة',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: AppColors.success.withValues(alpha: 0.8),
+                              fontWeight: FontWeight.w600));
+                    },
+                  ),
                 ]),
               ],
             ),

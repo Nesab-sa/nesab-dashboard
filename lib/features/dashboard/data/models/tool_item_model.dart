@@ -10,6 +10,7 @@ class ToolItem {
   final String imageUrl;
   final String description;
   final String link;
+  final String calculatorType;
   final bool isActive;
   final int order;
   final bool isBuiltIn;
@@ -21,6 +22,7 @@ class ToolItem {
     this.imageUrl = '',
     this.description = '',
     this.link = '',
+    this.calculatorType = '',
     this.isActive = true,
     this.order = 0,
     this.isBuiltIn = false,
@@ -32,6 +34,7 @@ class ToolItem {
     String? imageUrl,
     String? description,
     String? link,
+    String? calculatorType,
     bool? isActive,
     int? order,
   }) =>
@@ -42,6 +45,7 @@ class ToolItem {
         imageUrl: imageUrl ?? this.imageUrl,
         description: description ?? this.description,
         link: link ?? this.link,
+        calculatorType: calculatorType ?? this.calculatorType,
         isActive: isActive ?? this.isActive,
         order: order ?? this.order,
         isBuiltIn: isBuiltIn,
@@ -54,6 +58,7 @@ class ToolItem {
         'imageUrl': imageUrl,
         'description': description,
         'link': link,
+        'calculatorType': calculatorType,
         'isActive': isActive,
         'order': order,
         'isBuiltIn': isBuiltIn,
@@ -66,6 +71,7 @@ class ToolItem {
         imageUrl: d['imageUrl']?.toString() ?? '',
         description: d['description']?.toString() ?? '',
         link: d['link']?.toString() ?? '',
+        calculatorType: d['calculatorType']?.toString() ?? '',
         isActive: d['isActive'] as bool? ?? true,
         order: d['order'] as int? ?? 99,
         isBuiltIn: d['isBuiltIn'] as bool? ?? false,
@@ -90,8 +96,31 @@ List<ToolItem> defaultBuiltInTools() => [
       const ToolItem(id: 'bank_fees',               nameAr: 'الرسوم البنكية',            nameEn: 'Bank Fees',               isBuiltIn: true, order: 13),
     ];
 
-/// Fallback icon per tool id
-IconData toolIcon(String id) {
+/// Icon based on calculatorType string (from Firestore categories)
+IconData? _iconFromCalculatorType(String type) {
+  final t = type.toLowerCase();
+  if (t.contains('shakhsi') || t.contains('personal') || t.contains('madyoni')) return Icons.person_rounded;
+  if (t.contains('aqari') || t.contains('real_estate') || t.contains('real-estate')) return Icons.home_work_rounded;
+  if (t.contains('tajiri') || t.contains('leas')) return Icons.directions_car_rounded;
+  if (t.contains('pos') || t.contains('niqat')) return Icons.point_of_sale_rounded;
+  if (t.contains('himaya') || t.contains('protect') || t.contains('savings')) return Icons.shield_rounded;
+  if (t.contains('khayrat') || t.contains('khairat') || t.contains('deposit')) return Icons.savings_rounded;
+  if (t.contains('umr') || t.contains('age')) return Icons.cake_rounded;
+  if (t.contains('tarikh') || t.contains('date')) return Icons.calendar_today_rounded;
+  if (t.contains('rusoom') || t.contains('fees') || t.contains('bank_fee')) return Icons.account_balance_rounded;
+  if (t.contains('umla') || t.contains('currency')) return Icons.currency_exchange_rounded;
+  if (t.contains('asham') || t.contains('stock')) return Icons.show_chart_rounded;
+  if (t.contains('hawamish') || t.contains('margin')) return Icons.bar_chart_rounded;
+  if (t.contains('istiqtaa') || t.contains('deduc')) return Icons.percent_rounded;
+  return null;
+}
+
+/// Fallback icon per tool id or calculatorType
+IconData toolIcon(String id, [String calculatorType = '']) {
+  if (calculatorType.isNotEmpty) {
+    final icon = _iconFromCalculatorType(calculatorType);
+    if (icon != null) return icon;
+  }
   switch (id) {
     case 'personal_finance':
     case 'personal_finance_quick': return Icons.person_rounded;
@@ -107,6 +136,6 @@ IconData toolIcon(String id) {
     case 'date_converter':         return Icons.calendar_today_rounded;
     case 'deductions':             return Icons.calculate_rounded;
     case 'bank_fees':              return Icons.account_balance_rounded;
-    default:                       return Icons.build_rounded;
+    default:                       return Icons.calculate_rounded;
   }
 }

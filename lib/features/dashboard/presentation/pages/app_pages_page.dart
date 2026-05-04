@@ -19,55 +19,37 @@ import 'package:nesab_dashboard/shared/widgets/app_image.dart';
 // ─── Page Gallery model ───────────────────────────────────────────────────────
 
 class _PageItem {
-  final String id, nameAr, nameEn, imageUrl;
+  final String id, nameAr, nameEn, imageUrl, link, calculatorType;
   final bool isActive, isBuiltIn;
   final int order;
-  const _PageItem({required this.id, required this.nameAr, required this.nameEn,
-    this.imageUrl = '', this.isActive = true, this.isBuiltIn = true, this.order = 0});
-  _PageItem copyWith({String? nameAr, String? nameEn, String? imageUrl, bool? isActive, int? order}) =>
-      _PageItem(id: id, nameAr: nameAr ?? this.nameAr, nameEn: nameEn ?? this.nameEn,
-        imageUrl: imageUrl ?? this.imageUrl, isActive: isActive ?? this.isActive,
-        isBuiltIn: isBuiltIn, order: order ?? this.order);
-  Map<String, dynamic> toMap() => {'id': id, 'nameAr': nameAr, 'nameEn': nameEn,
-    'imageUrl': imageUrl, 'isActive': isActive, 'isBuiltIn': isBuiltIn, 'order': order};
+  const _PageItem({
+    required this.id, required this.nameAr, required this.nameEn,
+    this.imageUrl = '', this.link = '', this.calculatorType = '',
+    this.isActive = true, this.isBuiltIn = true, this.order = 0,
+  });
+  _PageItem copyWith({String? nameAr, String? nameEn, String? imageUrl, String? link, bool? isActive, int? order}) =>
+      _PageItem(
+        id: id, nameAr: nameAr ?? this.nameAr, nameEn: nameEn ?? this.nameEn,
+        imageUrl: imageUrl ?? this.imageUrl, link: link ?? this.link,
+        calculatorType: calculatorType, isActive: isActive ?? this.isActive,
+        isBuiltIn: isBuiltIn, order: order ?? this.order,
+      );
+  Map<String, dynamic> toMap() => {
+    'id': id, 'nameAr': nameAr, 'nameEn': nameEn, 'imageUrl': imageUrl,
+    'link': link, 'calculatorType': calculatorType,
+    'isActive': isActive, 'isBuiltIn': isBuiltIn, 'order': order,
+  };
   factory _PageItem.fromMap(Map<String, dynamic> d) => _PageItem(
     id: d['id']?.toString() ?? '', nameAr: d['nameAr']?.toString() ?? '',
     nameEn: d['nameEn']?.toString() ?? '', imageUrl: d['imageUrl']?.toString() ?? '',
+    link: d['link']?.toString() ?? '', calculatorType: d['calculatorType']?.toString() ?? '',
     isActive: d['isActive'] as bool? ?? true, isBuiltIn: d['isBuiltIn'] as bool? ?? false,
-    order: d['order'] as int? ?? 99);
+    order: d['order'] as int? ?? 99,
+  );
 }
 
-List<_PageItem> _defaults() => [
-  const _PageItem(id:'splash',         nameAr:'صفحة البداية',        nameEn:'Splash',          order:0),
-  const _PageItem(id:'onboarding',     nameAr:'شاشات التعريف',       nameEn:'Onboarding',      order:1),
-  const _PageItem(id:'login',          nameAr:'صفحة الدخول',         nameEn:'Login',           order:2),
-  const _PageItem(id:'register',       nameAr:'صفحة التسجيل',        nameEn:'Register',        order:3),
-  const _PageItem(id:'forgot_password',nameAr:'نسيت كلمة المرور',    nameEn:'Forgot Password', order:4),
-  const _PageItem(id:'home',           nameAr:'الصفحة الرئيسية',     nameEn:'Home',            order:5),
-  const _PageItem(id:'profile',        nameAr:'الملف الشخصي',        nameEn:'Profile',         order:6),
-  const _PageItem(id:'settings',       nameAr:'الإعدادات',           nameEn:'Settings',        order:7),
-  // ── Web calculator pages (control visibility on nesab.sa) ──
-  const _PageItem(id:'shakhsi-mukhtasar', nameAr:'التمويل الشخصي',     nameEn:'Personal Finance',   order:10),
-  const _PageItem(id:'shakhsi-plus',      nameAr:'الشخصي بلص',         nameEn:'Personal Plus',      order:11),
-  const _PageItem(id:'shira-madyoniya',   nameAr:'شراء مديونية',       nameEn:'Debt Purchase',      order:12),
-  const _PageItem(id:'tajiri-aadi',       nameAr:'التمويل التأجيري',   nameEn:'Leasing Finance',    order:13),
-  const _PageItem(id:'tajiri-makro',      nameAr:'التأجيري بلص',       nameEn:'Leasing Plus',       order:14),
-  const _PageItem(id:'aqari-aadi',        nameAr:'التمويل العقاري',    nameEn:'Real Estate',        order:15),
-  const _PageItem(id:'aqari-plus',        nameAr:'العقاري بلص',        nameEn:'Real Estate Plus',   order:16),
-  const _PageItem(id:'niqat-albay',       nameAr:'نقاط البيع',         nameEn:'POS Finance',        order:17),
-  const _PageItem(id:'himaya-iddikhar',   nameAr:'الحماية والادخار',   nameEn:'Protection & Savings',order:18),
-  const _PageItem(id:'khayrat',           nameAr:'خيرات — الودائع',    nameEn:'Deposits',           order:19),
-  const _PageItem(id:'nisbat-alistiqtaa', nameAr:'نسب الاستقطاع',      nameEn:'Deduction Ratios',   order:20),
-  const _PageItem(id:'istiqtaa-naam-la',  nameAr:'الاستقطاع المتاح',   nameEn:'Available Deduction',order:21),
-  const _PageItem(id:'hasibat-alumr',     nameAr:'حاسبة العمر',        nameEn:'Age Calculator',     order:22),
-  const _PageItem(id:'tahwil-altarikh',   nameAr:'تحويل التاريخ',      nameEn:'Date Converter',     order:23),
-  const _PageItem(id:'alrusum-albankiya', nameAr:'الرسوم البنكية',     nameEn:'Bank Fees',          order:24),
-  const _PageItem(id:'tahwil-alumla',     nameAr:'تحويل العملات',      nameEn:'Currency Converter', order:25),
-  const _PageItem(id:'asham-saudia',      nameAr:'الأسهم السعودية',    nameEn:'Saudi Stocks',       order:26),
-  const _PageItem(id:'hawawem-arbach',    nameAr:'هوامش الربح',        nameEn:'Profit Margins',     order:27),
-];
-
-IconData _pageIcon(String id) {
+IconData _pageIcon(String id, [String calculatorType = '', String arabicName = '']) {
+  // Built-in screen ids
   switch (id) {
     case 'splash':          return Icons.play_circle_outline;
     case 'onboarding':      return Icons.swipe_rounded;
@@ -76,27 +58,40 @@ IconData _pageIcon(String id) {
     case 'forgot_password': return Icons.lock_reset_rounded;
     case 'home':            return Icons.home_rounded;
     case 'profile':         return Icons.person_rounded;
-    case 'settings':            return Icons.settings_rounded;
-    case 'shakhsi-mukhtasar':   return Icons.person_rounded;
-    case 'shakhsi-plus':        return Icons.person_add_rounded;
-    case 'shira-madyoniya':     return Icons.account_balance_wallet_rounded;
-    case 'tajiri-aadi':         return Icons.directions_car_rounded;
-    case 'tajiri-makro':        return Icons.directions_car_filled_rounded;
-    case 'aqari-aadi':          return Icons.home_rounded;
-    case 'aqari-plus':          return Icons.home_work_rounded;
-    case 'niqat-albay':         return Icons.point_of_sale_rounded;
-    case 'himaya-iddikhar':     return Icons.shield_rounded;
-    case 'khayrat':             return Icons.savings_rounded;
-    case 'nisbat-alistiqtaa':   return Icons.percent_rounded;
-    case 'istiqtaa-naam-la':    return Icons.calculate_rounded;
-    case 'hasibat-alumr':       return Icons.cake_rounded;
-    case 'tahwil-altarikh':     return Icons.calendar_today_rounded;
-    case 'alrusum-albankiya':   return Icons.account_balance_rounded;
-    case 'tahwil-alumla':       return Icons.currency_exchange_rounded;
-    case 'asham-saudia':        return Icons.show_chart_rounded;
-    case 'hawawem-arbach':      return Icons.bar_chart_rounded;
-    default:                    return Icons.web_rounded;
+    case 'settings':        return Icons.settings_rounded;
   }
+  // From calculatorType
+  if (calculatorType.isNotEmpty) {
+    final t = calculatorType.toLowerCase();
+    if (t.contains('shakhsi') || t.contains('personal') || t.contains('madyoni')) return Icons.person_rounded;
+    if (t.contains('aqari') || t.contains('real')) return Icons.home_work_rounded;
+    if (t.contains('tajiri') || t.contains('leas')) return Icons.directions_car_rounded;
+    if (t.contains('pos') || t.contains('niqat')) return Icons.point_of_sale_rounded;
+    if (t.contains('himaya') || t.contains('protect')) return Icons.shield_rounded;
+    if (t.contains('khayrat') || t.contains('khairat')) return Icons.savings_rounded;
+    if (t.contains('umr') || t.contains('age')) return Icons.cake_rounded;
+    if (t.contains('tarikh') || t.contains('date')) return Icons.calendar_today_rounded;
+    if (t.contains('rusoom') || t.contains('fees')) return Icons.account_balance_rounded;
+    if (t.contains('umla') || t.contains('currency')) return Icons.currency_exchange_rounded;
+    if (t.contains('asham') || t.contains('stock')) return Icons.show_chart_rounded;
+    if (t.contains('hawamish') || t.contains('margin')) return Icons.bar_chart_rounded;
+    if (t.contains('istiqtaa') || t.contains('deduc')) return Icons.percent_rounded;
+  }
+  // From arabicName
+  if (arabicName.contains('شخصي') || arabicName.contains('مديونية')) return Icons.person_rounded;
+  if (arabicName.contains('عقاري')) return Icons.home_work_rounded;
+  if (arabicName.contains('تأجيري')) return Icons.directions_car_rounded;
+  if (arabicName.contains('نقاط البيع')) return Icons.point_of_sale_rounded;
+  if (arabicName.contains('حماية') || arabicName.contains('ادخار')) return Icons.shield_rounded;
+  if (arabicName.contains('خيرات') || arabicName.contains('وديعة')) return Icons.savings_rounded;
+  if (arabicName.contains('عمر')) return Icons.cake_rounded;
+  if (arabicName.contains('تاريخ')) return Icons.calendar_today_rounded;
+  if (arabicName.contains('رسوم')) return Icons.account_balance_rounded;
+  if (arabicName.contains('عملة')) return Icons.currency_exchange_rounded;
+  if (arabicName.contains('أسهم') || arabicName.contains('سهم')) return Icons.show_chart_rounded;
+  if (arabicName.contains('هامش') || arabicName.contains('ربح')) return Icons.bar_chart_rounded;
+  if (arabicName.contains('استقطاع')) return Icons.percent_rounded;
+  return Icons.calculate_rounded;
 }
 
 IconData _blockIcon(String type) {
@@ -140,13 +135,13 @@ class _AppPagesViewState extends State<_AppPagesView> {
   // ── Level 1 state ──
   List<_PageItem> _pages = [];
   bool _loadingPages = true;
-  _PageItem? _editingPage;   // right panel (visual + config edit)
+  _PageItem? _editingPage;
 
   // ── Level 2 state (drill-in) ──
-  _PageItem? _viewingPage;   // which page is "open"
+  _PageItem? _viewingPage;
   List<PageBlock> _blocks = [];
   bool _loadingBlocks = false;
-  PageBlock? _editingBlock;  // right panel (block editor)
+  PageBlock? _editingBlock;
 
   @override
   void initState() { super.initState(); _loadPages(); }
@@ -156,33 +151,44 @@ class _AppPagesViewState extends State<_AppPagesView> {
   Future<void> _loadPages() async {
     setState(() => _loadingPages = true);
     try {
-      final doc = await _fs.doc('app_config/page_gallery').get();
-      final saved = <String, _PageItem>{};
-      if (doc.exists) {
-        for (final item in (doc.data()?['pages'] as List<dynamic>? ?? [])) {
-          final p = _PageItem.fromMap(item as Map<String, dynamic>);
-          saved[p.id] = p;
-        }
-      }
-      final merged = _defaults().map((d) => saved[d.id] ?? d).toList();
-      for (final s in saved.values) { if (!s.isBuiltIn) merged.add(s); }
-      merged.sort((a, b) => a.order.compareTo(b.order));
-      setState(() { _pages = merged; _loadingPages = false; });
+      final snap = await _fs.collection('categories').get();
+      final loaded = snap.docs.map((doc) {
+        final d = doc.data();
+        return _PageItem(
+          id: doc.id,
+          nameAr: d['arabicName']?.toString() ?? '',
+          nameEn: d['englishName']?.toString() ?? '',
+          imageUrl: d['imageUrl']?.toString() ?? '',
+          link: d['calculatorLink']?.toString() ?? '',
+          calculatorType: d['calculatorType']?.toString() ?? '',
+          isActive: d['isActive'] as bool? ?? true,
+          order: (d['orderNumber'] as num?)?.toInt() ?? 99,
+          isBuiltIn: true,
+        );
+      }).toList()
+        ..sort((a, b) => a.order.compareTo(b.order));
+      setState(() { _pages = loaded; _loadingPages = false; });
     } catch (_) {
-      setState(() { _pages = _defaults(); _loadingPages = false; });
+      setState(() { _pages = []; _loadingPages = false; });
     }
-  }
-
-  Future<void> _savePages() async {
-    await _fs.doc('app_config/page_gallery').set({'pages': _pages.map((p) => p.toMap()).toList()});
   }
 
   Future<void> _updatePage(_PageItem updated) async {
     final idx = _pages.indexWhere((p) => p.id == updated.id);
-    if (idx >= 0) setState(() => _pages[idx] = updated);
-    else setState(() => _pages.add(updated));
+    if (idx >= 0) {
+      setState(() => _pages[idx] = updated);
+    } else {
+      setState(() => _pages.add(updated));
+    }
     if (_editingPage?.id == updated.id) setState(() => _editingPage = updated);
-    await _savePages();
+    await _fs.doc('categories/${updated.id}').set({
+      'arabicName': updated.nameAr,
+      'englishName': updated.nameEn,
+      'imageUrl': updated.imageUrl,
+      'isActive': updated.isActive,
+      'orderNumber': updated.order,
+      'calculatorLink': updated.link,
+    }, SetOptions(merge: true));
   }
 
   Future<void> _deletePage(_PageItem page) async {
@@ -193,15 +199,25 @@ class _AppPagesViewState extends State<_AppPagesView> {
         _pages.removeWhere((p) => p.id == page.id);
         if (_editingPage?.id == page.id) _editingPage = null;
       });
-      await _savePages();
+      await _fs.doc('categories/${page.id}').delete();
     }
   }
 
   Future<void> _addPage(String nameAr, String nameEn) async {
-    final p = _PageItem(id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
-      nameAr: nameAr, nameEn: nameEn, isBuiltIn: false, order: _pages.length);
+    final ref = await _fs.collection('categories').add({
+      'arabicName': nameAr,
+      'englishName': nameEn,
+      'imageUrl': '',
+      'calculatorLink': '',
+      'calculatorType': '',
+      'isActive': true,
+      'orderNumber': _pages.length,
+    });
+    final p = _PageItem(
+      id: ref.id, nameAr: nameAr, nameEn: nameEn,
+      isBuiltIn: false, order: _pages.length,
+    );
     setState(() { _pages.add(p); _editingPage = p; });
-    await _savePages();
   }
 
   // ── Blocks (Level 2) ─────────────────────────────────────────────────────
@@ -227,8 +243,11 @@ class _AppPagesViewState extends State<_AppPagesView> {
 
   Future<void> _saveBlock(PageBlock updated) async {
     final idx = _blocks.indexWhere((b) => b.id == updated.id);
-    if (idx >= 0) setState(() => _blocks[idx] = updated);
-    else setState(() => _blocks.add(updated));
+    if (idx >= 0) {
+      setState(() => _blocks[idx] = updated);
+    } else {
+      setState(() => _blocks.add(updated));
+    }
     if (_editingBlock?.id == updated.id) setState(() => _editingBlock = updated);
     await _saveBlocks();
   }
@@ -304,10 +323,14 @@ class _AppPagesViewState extends State<_AppPagesView> {
   Widget build(BuildContext context) {
     return BlocListener<AppPagesCubit, AppPagesState>(
       listener: (context, state) {
-        if (state.saved) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        if (state.saved) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('✅ تم الحفظ'), backgroundColor: AppColors.success, duration: Duration(seconds: 2)));
-        if (state.status == AppPagesStatus.error) ScaffoldMessenger.of(context).showSnackBar(
+        }
+        if (state.status == AppPagesStatus.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(state.errorMessage ?? 'خطأ'), backgroundColor: AppColors.error));
+        }
       },
       child: _viewingPage == null ? _buildLevel1() : _buildLevel2(),
     );
@@ -328,6 +351,12 @@ class _AppPagesViewState extends State<_AppPagesView> {
             const FaIcon(FontAwesomeIcons.mobileScreen, size: 18),
             const SizedBox(width: 10),
             Text('صفحات التطبيق', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(width: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(color: AppColors.blue.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12)),
+              child: Text('${_pages.length} صفحة', style: const TextStyle(fontSize: 12, color: AppColors.blue)),
+            ),
             const Spacer(),
             FilledButton.icon(onPressed: _showAddPageDialog, icon: const Icon(Icons.add, size: 18), label: const Text('إضافة صفحة')),
           ]),
@@ -395,7 +424,7 @@ class _AppPagesViewState extends State<_AppPagesView> {
               child: Text('صفحات التطبيق', style: TextStyle(color: AppColors.blue.withValues(alpha: 0.7), fontSize: 14)),
             ),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 6), child: Icon(Icons.chevron_right, size: 18)),
-            Icon(_pageIcon(page.id), size: 16),
+            Icon(_pageIcon(page.id, page.calculatorType, page.nameAr), size: 16),
             const SizedBox(width: 6),
             Text(page.nameAr, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
             const Spacer(),
@@ -509,7 +538,10 @@ class _PageCardState extends State<_PageCard> {
             else Container(
               decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight,
                 colors: [AppColors.blue.withValues(alpha: 0.15), AppColors.blue.withValues(alpha: 0.05)])),
-              child: Center(child: Icon(_pageIcon(widget.page.id), size: 52, color: AppColors.blue.withValues(alpha: 0.6))),
+              child: Center(child: Icon(
+                _pageIcon(widget.page.id, widget.page.calculatorType, widget.page.nameAr),
+                size: 52, color: AppColors.blue.withValues(alpha: 0.6),
+              )),
             ),
             // Bottom name
             Positioned(left: 0, right: 0, bottom: 0,
@@ -532,7 +564,6 @@ class _PageCardState extends State<_PageCard> {
             if (_hovered) Positioned.fill(child: Container(
               color: Colors.black.withValues(alpha: 0.45),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                // View contents button
                 GestureDetector(
                   onTap: widget.onView,
                   child: Container(
@@ -547,7 +578,6 @@ class _PageCardState extends State<_PageCard> {
                   ),
                 ),
                 const SizedBox(height: 6),
-                // Edit settings button
                 GestureDetector(
                   onTap: widget.onEdit,
                   child: Container(
@@ -677,7 +707,7 @@ class _BlockCardState extends State<_BlockCard> {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Page Edit Panel (visual + page configs)
+// Page Edit Panel
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _PageEditPanel extends StatefulWidget {
@@ -690,7 +720,7 @@ class _PageEditPanel extends StatefulWidget {
 }
 
 class _PageEditPanelState extends State<_PageEditPanel> {
-  late final TextEditingController _arC, _enC;
+  late final TextEditingController _arC, _enC, _linkC, _orderC;
   late bool _active;
   Uint8List? _imgBytes;
   bool _saving = false;
@@ -700,9 +730,11 @@ class _PageEditPanelState extends State<_PageEditPanel> {
     super.initState();
     _arC = TextEditingController(text: widget.page.nameAr);
     _enC = TextEditingController(text: widget.page.nameEn);
+    _linkC = TextEditingController(text: widget.page.link);
+    _orderC = TextEditingController(text: widget.page.order.toString());
     _active = widget.page.isActive;
   }
-  @override void dispose() { _arC.dispose(); _enC.dispose(); super.dispose(); }
+  @override void dispose() { _arC.dispose(); _enC.dispose(); _linkC.dispose(); _orderC.dispose(); super.dispose(); }
 
   Future<void> _pickImg() async {
     final p = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 1024, maxHeight: 1024, imageQuality: 85);
@@ -719,17 +751,23 @@ class _PageEditPanelState extends State<_PageEditPanel> {
       }
       await widget.onSaved(widget.page.copyWith(
         nameAr: _arC.text.trim().isEmpty ? widget.page.nameAr : _arC.text.trim(),
-        nameEn: _enC.text.trim(), imageUrl: url, isActive: _active));
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('✅ تم حفظ المظهر'), backgroundColor: AppColors.success, duration: Duration(seconds: 2)));
+        nameEn: _enC.text.trim(),
+        imageUrl: url,
+        isActive: _active,
+        link: _linkC.text.trim(),
+        order: int.tryParse(_orderC.text) ?? widget.page.order,
+      ));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('✅ تم الحفظ'), backgroundColor: AppColors.success, duration: Duration(seconds: 2)));
+      }
     } finally { if (mounted) setState(() => _saving = false); }
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      _panelHeader(context, _pageIcon(widget.page.id), widget.page.nameAr, widget.onClose,
-        badge: widget.page.isBuiltIn ? null : null),
+      _panelHeader(context, _pageIcon(widget.page.id, widget.page.calculatorType, widget.page.nameAr), widget.page.nameAr, widget.onClose),
       Expanded(child: BlocBuilder<AppPagesCubit, AppPagesState>(
         builder: (context, state) {
           if (state.status == AppPagesStatus.loading) return const Center(child: CircularProgressIndicator());
@@ -738,7 +776,6 @@ class _PageEditPanelState extends State<_PageEditPanel> {
             child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
               _secHeader(context, 'المظهر والصورة', Icons.image_rounded),
               const SizedBox(height: 12),
-              // Image
               GestureDetector(onTap: _pickImg,
                 child: Container(height: 150,
                   decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -756,41 +793,21 @@ class _PageEditPanelState extends State<_PageEditPanel> {
               const SizedBox(height: 12),
               _tf('اسم الصفحة (عربي)', _arC, dir: TextDirection.rtl),
               _tf('Page Name (English)', _enC),
+              _tf('الرابط / calculatorLink', _linkC),
+              _tf('الترتيب', _orderC, keyboardType: TextInputType.number),
               SwitchListTile(title: const Text('الصفحة مفعّلة'), value: _active,
-                onChanged: (v) => setState(() => _active = v), activeColor: AppColors.blue, contentPadding: EdgeInsets.zero),
+                onChanged: (v) => setState(() => _active = v), activeThumbColor: AppColors.blue, contentPadding: EdgeInsets.zero),
               FilledButton.icon(
                 onPressed: _saving ? null : _saveVisual,
                 icon: _saving ? const SizedBox(width:14,height:14,child:CircularProgressIndicator(strokeWidth:2,color:Colors.white))
                   : const FaIcon(FontAwesomeIcons.floppyDisk, size:13),
-                label: const Text('حفظ المظهر'),
+                label: const Text('حفظ التغييرات'),
               ),
-              if (widget.page.isBuiltIn) ...[
-                const SizedBox(height: AppDimensions.spacingLg),
-                const Divider(),
-                const SizedBox(height: AppDimensions.spacingMd),
-                _secHeader(context, 'إعدادات الصفحة', Icons.tune_rounded),
-                const SizedBox(height: 12),
-                _pageForm(context, state),
-              ],
             ]),
           );
         },
       )),
     ]);
-  }
-
-  Widget _pageForm(BuildContext context, AppPagesState s) {
-    switch (widget.page.id) {
-      case 'splash':          return _SplashForm(config: s.splash);
-      case 'onboarding':      return _OnboardingForm(slides: s.slides);
-      case 'login':           return _LoginForm(config: s.login);
-      case 'register':        return _RegisterForm(config: s.register);
-      case 'forgot_password': return _ForgotPasswordForm(config: s.forgotPassword);
-      case 'home':            return _HomeForm(config: s.home);
-      case 'profile':         return _ProfileForm(config: s.profile);
-      case 'settings':        return _SettingsForm(config: s.settings);
-      default:                return const SizedBox.shrink();
-    }
   }
 }
 
@@ -849,8 +866,10 @@ class _BlockEditPanelState extends State<_BlockEditPanel> {
         imageUrl: url, link: _linkC.text.trim(), content: _contentC.text.trim(),
         subtitle: _subtitleC.text.trim(), isActive: _active,
         order: int.tryParse(_orderC.text) ?? widget.block.order));
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('✅ تم الحفظ'), backgroundColor: AppColors.success, duration: Duration(seconds: 2)));
+      }
     } finally { if (mounted) setState(() => _saving = false); }
   }
 
@@ -885,7 +904,6 @@ class _BlockEditPanelState extends State<_BlockEditPanel> {
           const Divider(),
           const SizedBox(height: AppDimensions.spacingMd),
 
-          // Image (for banner/card/image types)
           if (['banner','card','image'].contains(_type)) ...[
             _secHeader(context, 'الصورة', Icons.image_rounded),
             const SizedBox(height: 10),
@@ -906,7 +924,6 @@ class _BlockEditPanelState extends State<_BlockEditPanel> {
             const SizedBox(height: 12),
           ],
 
-          // Name fields (not for spacer)
           if (_type != 'spacer') ...[
             _secHeader(context, 'النص والمحتوى', Icons.text_fields_rounded),
             const SizedBox(height: 10),
@@ -918,15 +935,13 @@ class _BlockEditPanelState extends State<_BlockEditPanel> {
               _tf('المحتوى النصي', _contentC, dir: TextDirection.rtl, maxLines: 4),
           ],
 
-          // Link
           if (_type != 'spacer' && _type != 'text') ...[
             _tf('الرابط / Deep Link', _linkC),
           ],
 
-          // Order + Active
           _tf('الترتيب', _orderC, keyboardType: TextInputType.number),
           SwitchListTile(title: const Text('البلوك مفعّل'), value: _active,
-            onChanged: (v) => setState(() => _active = v), activeColor: AppColors.blue, contentPadding: EdgeInsets.zero),
+            onChanged: (v) => setState(() => _active = v), activeThumbColor: AppColors.blue, contentPadding: EdgeInsets.zero),
 
           const SizedBox(height: AppDimensions.spacingMd),
           FilledButton.icon(
@@ -945,7 +960,7 @@ class _BlockEditPanelState extends State<_BlockEditPanel> {
 // Shared helpers
 // ═══════════════════════════════════════════════════════════════════════════
 
-Widget _panelHeader(BuildContext context, IconData icon, String title, VoidCallback onClose, {String? badge}) =>
+Widget _panelHeader(BuildContext context, IconData icon, String title, VoidCallback onClose) =>
     Container(
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacingLg, vertical: AppDimensions.spacingMd),
       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor))),
@@ -986,7 +1001,7 @@ Widget _saveBtn(BuildContext context, VoidCallback onSave, AppPagesStatus status
 
 Widget _swTile(String label, bool val, ValueChanged<bool> onChanged) =>
     SwitchListTile(title: Text(label, style: const TextStyle(fontSize: 13)),
-      value: val, onChanged: onChanged, activeColor: AppColors.blue,
+      value: val, onChanged: onChanged, activeThumbColor: AppColors.blue,
       contentPadding: EdgeInsets.zero, dense: true);
 
 class _SmallBadge extends StatelessWidget {
@@ -1000,7 +1015,7 @@ class _SmallBadge extends StatelessWidget {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Page-specific config forms (same as before, compact)
+// Page-specific config forms (unchanged)
 // ═══════════════════════════════════════════════════════════════════════════
 
 // ── Splash ───────────────────────────────────────────────────────────────────
@@ -1163,7 +1178,7 @@ class _HomeFormState extends State<_HomeForm> {
       _tf('العنوان الفرعي (عربي)', _sAr, dir: TextDirection.rtl),
       _tf('Subtitle (English)', _sEn),
       Padding(padding: const EdgeInsets.only(bottom: 10),
-        child: DropdownButtonFormField<String>(value: _vm,
+        child: DropdownButtonFormField<String>(initialValue: _vm,
           decoration: const InputDecoration(labelText: 'طريقة العرض', border: OutlineInputBorder(), isDense: true),
           items: const [DropdownMenuItem(value:'grid', child: Text('شبكة')), DropdownMenuItem(value:'list', child: Text('قائمة'))],
           onChanged: (v) { if (v != null) setState(() => _vm = v); })),

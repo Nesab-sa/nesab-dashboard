@@ -19,7 +19,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
   String? _error;
   bool _saved = false;
 
-  // ── Nesab-AI (PHP chat backend) ──────────────────────────────────────────
+  // ── Grok AI (PHP chat backend) ──────────────────────────────────────────
   bool _nesabAiEnabled = true;
   final _systemPromptController = TextEditingController();
 
@@ -51,7 +51,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
   };
 
   // ── Grok AI (profit margins scheduler) ──────────────────────────────────
-  String _grokModel = 'grok-3';
+  String _grokModel = 'grok-4.20-reasoning';
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
         setState(() {
           _nesabAiEnabled = d['enabled'] as bool? ?? true;
           _systemPromptController.text = d['systemPrompt'] as String? ?? '';
-          _grokModel = d['grokModel'] as String? ?? 'grok-3';
+          _grokModel = d['grokModel'] as String? ?? 'grok-4.20-reasoning';
           final pages = d['pages'] as Map<String, dynamic>?;
           if (pages != null) {
             for (final k in _pageEnabled.keys) {
@@ -96,15 +96,15 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
     setState(() { _saving = true; _saved = false; _error = null; });
     try {
       await _firestore.doc(_docPath).set({
-        // Nesab-AI fields
+        // Grok AI fields
         'enabled': _nesabAiEnabled,
         'systemPrompt': _systemPromptController.text.trim(),
         'pages': Map<String, dynamic>.from(_pageEnabled),
         // Grok fields
         'grokModel': _grokModel,
         // Legacy compat with chat.php reads
-        'provider': 'nesab-ai',
-        'model': 'nesab-ai',
+        'provider': 'grok',
+        'model': 'grok',
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       setState(() { _saved = true; });
@@ -185,8 +185,8 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                           Expanded(
                             child: Text(
                               'المنصة تستخدم نظامَي ذكاء اصطناعي منفصلَين:\n'
-                              '• Nesab-AI — المساعد المحادثاتي الظاهر في التطبيق (PHP backend على api.nesab.sa)\n'
-                              '• Grok AI — يُحدّث هوامش الربح تلقائياً كل يوم الساعة 10:00 صباحاً',
+                              '• Grok AI — المساعد المحادثاتي الظاهر في التطبيق\n'
+                              '• Grok AI — يُحدّث هوامش الربح تلقائياً كل يوم الساعة 9:30 صباحاً',
                               style: TextStyle(color: textPrimary, fontSize: 12, height: 1.6),
                             ),
                           ),
@@ -208,12 +208,12 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                       ),
 
                     // ═══════════════════════════════════════════════════════
-                    // SECTION 1 — Nesab-AI (chat assistant)
+                    // SECTION 1 — Grok AI (chat assistant)
                     // ═══════════════════════════════════════════════════════
                     _SectionHeader(
                       icon: Icons.chat_bubble_outline_rounded,
-                      label: 'Nesab-AI — المساعد المحادثاتي',
-                      sublabel: 'يعمل عبر api.nesab.sa/Nesab.Ai/chat.php',
+                      label: 'Grok AI — المساعد المحادثاتي',
+                      sublabel: 'يعمل عبر xAI API (api.x.ai)',
                       textPrimary: textPrimary,
                       textSecondary: textSecondary,
                       accentColor: AppColors.blue,
@@ -226,7 +226,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                       title: 'تفعيل المساعد',
                       titleColor: textPrimary,
                       child: _SettingRow(
-                        label: 'تشغيل Nesab-AI في التطبيق',
+                        label: 'تشغيل Grok AI في التطبيق',
                         subtitle: 'تشغيل أو إيقاف زر المحادثة في واجهة المستخدم',
                         textPrimary: textPrimary,
                         textSecondary: textSecondary,
@@ -279,7 +279,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                     _SectionCard(
                       cardColor: cardColor,
                       borderColor: borderColor,
-                      title: 'ظهور Nesab-AI في صفحات التطبيق',
+                      title: 'ظهور Grok AI في صفحات التطبيق',
                       titleColor: textPrimary,
                       child: Column(
                         children: _pageEnabled.entries.map((entry) {
@@ -334,9 +334,9 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                               dropdownColor: cardColor,
                               style: TextStyle(color: textPrimary),
                               items: const [
-                                DropdownMenuItem(value: 'grok-3', child: Text('grok-3')),
+                                DropdownMenuItem(value: 'grok-4.20-reasoning', child: Text('grok-4.20-reasoning')),
+                                DropdownMenuItem(value: 'grok-4.1-fast', child: Text('grok-4.1-fast')),
                                 DropdownMenuItem(value: 'grok-3-mini', child: Text('grok-3-mini')),
-                                DropdownMenuItem(value: 'grok-2', child: Text('grok-2')),
                               ],
                               onChanged: (v) { if (v != null) setState(() => _grokModel = v); },
                             ),
@@ -350,7 +350,7 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    'الجدول: يومياً الساعة 10:00 صباحاً (07:00 UTC)\n'
+                                    'الجدول: يومياً الساعة 9:30 صباحاً (06:30 UTC)\n'
                                     'المهمة: updateProfitMargins في Cloud Functions\n'
                                     'يحفظ النتيجة في Firestore → bank_rates/profit_margins',
                                     style: TextStyle(color: textSecondary, fontSize: 12, height: 1.6),

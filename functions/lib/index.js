@@ -35,7 +35,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.acknowledgeNotification = exports.sendNotificationPush = exports.syncAuthUsers = exports.onUserCreated = exports.triggerProfitMarginsUpdate = exports.updateProfitMargins = exports.deleteManager = exports.aiChatProxy = exports.createAdmin = void 0;
 const functions = __importStar(require("firebase-functions/v1"));
-const params_1 = require("firebase-functions/params");
 const admin = __importStar(require("firebase-admin"));
 const secret_manager_1 = require("@google-cloud/secret-manager");
 const https = __importStar(require("https"));
@@ -44,7 +43,6 @@ const auth = admin.auth();
 const firestore = admin.firestore();
 const MANAGERS_COLLECTION = "managers";
 const secretClient = new secret_manager_1.SecretManagerServiceClient();
-const grokApiKey = (0, params_1.defineSecret)("GROK_API_KEY");
 async function getSecret(secretName) {
     const projectId = process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT || "";
     const name = `projects/${projectId}/secrets/${secretName}/versions/latest`;
@@ -130,7 +128,7 @@ exports.createAdmin = functions.region("us-central1").https.onCall(async (data, 
         throw new functions.https.HttpsError("internal", message);
     }
 });
-/** AI Chat Proxy - supports Grok (xAI) and OpenAI */
+/** AI Chat Proxy - Grok AI (xAI) */
 exports.aiChatProxy = functions.region("us-central1").https.onCall(async (data, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError("unauthenticated", "يجب تسجيل الدخول.");
@@ -146,7 +144,7 @@ exports.aiChatProxy = functions.region("us-central1").https.onCall(async (data, 
     // Load AI config from Firestore
     let aiConfig = {
         provider: "grok",
-        model: "grok-3-mini",
+        model: "grok-4.1-fast",
         systemPrompt: "Your default system prompt here.",
         enabled: true,
     };
@@ -203,22 +201,10 @@ exports.aiChatProxy = functions.region("us-central1").https.onCall(async (data, 
         temperature: 0.7,
     });
     try {
-        let apiKey;
-        let hostname;
-        let path;
-        if (aiConfig.provider === "grok") {
-            apiKey = await getSecret("GROK_API_KEY");
-            hostname = "api.x.ai";
-            path = "/v1/chat/completions";
-        }
-        else {
-            apiKey = await getSecret("OPENAI_API_KEY");
-            hostname = "api.openai.com";
-            path = "/v1/chat/completions";
-        }
+        const apiKey = await getSecret("XAI_API_KEY");
         const options = {
-            hostname,
-            path,
+            hostname: "api.x.ai",
+            path: "/v1/chat/completions",
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -340,18 +326,21 @@ ${PRODUCT_KEYS.map((p, i) => (i + 1) + ". " + p.key + " (" + p.label + ")").join
 // ─── Scheduled: تحديث هوامش الربح يومياً 10:00 صباحاً بتوقيت الرياض (07:00 UTC) ──
 exports.updateProfitMargins = functions
     .region("us-central1")
-    .runWith({ secrets: ["GROK_API_KEY"] })
+    .runWith({ secrets: ["XAI_API_KEY"] })
     .pubsub.schedule("0 7 * * *")
     .timeZone("UTC")
     .onRun(async () => {
     functions.logger.info("updateProfitMargins: starting daily run");
-    const apiKey = grokApiKey.value();
-    if (!apiKey) {
-        functions.logger.error("updateProfitMargins: GROK_API_KEY is not set");
+    let apiKey;
+    try {
+        apiKey = await getSecret("XAI_API_KEY");
+    }
+    catch (e) {
+        functions.logger.error("updateProfitMargins: XAI_API_KEY is not set", e);
         return;
     }
     const requestBody = JSON.stringify({
-        model: "grok-3",
+        model: "grok-4.1-fast",
         messages: [
             { role: "user", content: PROFIT_MARGIN_PROMPT },
         ],
@@ -415,12 +404,15 @@ exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ s
         throw new functions.https.HttpsError("permission-denied", "Managers only.");
     }
     functions.logger.info("triggerProfitMarginsUpdate: manual run by", uid);
-    const apiKey = grokApiKey.value();
-    if (!apiKey) {
+    let apiKey;
+    try {
+        apiKey = await getSecret("XAI_API_KEY");
+    }
+    catch (e) {
         throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
     }
     const requestBody = JSON.stringify({
-        model: "grok-3",
+        model: "grok-4.1-fast",
         messages: [{ role: "user", content: PROFIT_MARGIN_PROMPT }],
         max_tokens: 2048,
         temperature: 0.2,

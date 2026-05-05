@@ -1,5 +1,4 @@
 import * as functions from "firebase-functions/v1";
-import { defineSecret } from "firebase-functions/params";
 import * as admin from "firebase-admin";
 import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import * as https from "https";
@@ -21,8 +20,6 @@ interface CreateAdminData {
 }
 
 const secretClient = new SecretManagerServiceClient();
-
-const grokApiKey = defineSecret("GROK_API_KEY");
 
 async function getSecret(secretName: string): Promise<string> {
   const projectId = process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT || "";
@@ -64,7 +61,7 @@ interface AiChatData {
 }
 
 interface AiConfig {
-  provider: "grok" | "openai";
+  provider: "grok";
   model: string;
   systemPrompt: string;
   enabled: boolean;
@@ -138,7 +135,7 @@ export const createAdmin = functions.region("us-central1").https.onCall(
   }
 );
 
-/** AI Chat Proxy - supports Grok (xAI) and OpenAI */
+/** AI Chat Proxy - Grok AI (xAI) */
 export const aiChatProxy = functions.region("us-central1").https.onCall(
   async (data: AiChatData, context: functions.https.CallableContext) => {
     if (!context.auth) {
@@ -158,7 +155,7 @@ export const aiChatProxy = functions.region("us-central1").https.onCall(
     // Load AI config from Firestore
     let aiConfig: AiConfig = {
       provider: "grok",
-      model: "grok-3-mini",
+      model: "grok-4.1-fast",
       systemPrompt: "Your default system prompt here.",
       enabled: true,
     };
@@ -221,23 +218,11 @@ export const aiChatProxy = functions.region("us-central1").https.onCall(
     });
 
     try {
-      let apiKey: string;
-      let hostname: string;
-      let path: string;
-
-      if (aiConfig.provider === "grok") {
-        apiKey = await getSecret("GROK_API_KEY");
-        hostname = "api.x.ai";
-        path = "/v1/chat/completions";
-      } else {
-        apiKey = await getSecret("OPENAI_API_KEY");
-        hostname = "api.openai.com";
-        path = "/v1/chat/completions";
-      }
+      const apiKey = await getSecret("XAI_API_KEY");
 
       const options: https.RequestOptions = {
-        hostname,
-        path,
+        hostname: "api.x.ai",
+        path: "/v1/chat/completions",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -382,20 +367,22 @@ ${PRODUCT_KEYS.map((p, i) => (i + 1) + ". " + p.key + " (" + p.label + ")").join
 
 export const updateProfitMargins = functions
   .region("us-central1")
-  .runWith({ secrets: ["GROK_API_KEY"] })
+  .runWith({ secrets: ["XAI_API_KEY"] })
   .pubsub.schedule("0 7 * * *")
   .timeZone("UTC")
   .onRun(async () => {
     functions.logger.info("updateProfitMargins: starting daily run");
 
-    const apiKey = grokApiKey.value();
-    if (!apiKey) {
-      functions.logger.error("updateProfitMargins: GROK_API_KEY is not set");
+    let apiKey: string;
+    try {
+      apiKey = await getSecret("XAI_API_KEY");
+    } catch (e) {
+      functions.logger.error("updateProfitMargins: XAI_API_KEY is not set", e);
       return;
     }
 
     const requestBody = JSON.stringify({
-      model: "grok-3",
+      model: "grok-4.1-fast",
       messages: [
         { role: "user", content: PROFIT_MARGIN_PROMPT },
       ],
@@ -465,13 +452,15 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").runWit
 
     functions.logger.info("triggerProfitMarginsUpdate: manual run by", uid);
 
-    const apiKey = grokApiKey.value();
-    if (!apiKey) {
+    let apiKey: string;
+    try {
+      apiKey = await getSecret("XAI_API_KEY");
+    } catch (e) {
       throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
     }
 
     const requestBody = JSON.stringify({
-      model: "grok-3",
+      model: "grok-4.1-fast",
       messages: [{ role: "user", content: PROFIT_MARGIN_PROMPT }],
       max_tokens: 2048,
       temperature: 0.2,

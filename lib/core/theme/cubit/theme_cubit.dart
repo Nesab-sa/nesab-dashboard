@@ -14,8 +14,7 @@ class ThemeCubit extends Cubit<ThemeState> {
     final mode = switch (value) {
       'light' => ThemeMode.light,
       'dark' => ThemeMode.dark,
-      'system' => ThemeMode.system,
-      _ => ThemeMode.light,
+      _ => ThemeMode.dark,
     };
     emit(ThemeState(themeMode: mode));
   }
@@ -26,11 +25,9 @@ class ThemeCubit extends Cubit<ThemeState> {
   }
 
   Future<void> toggleTheme() async {
-    final next = switch (state.themeMode) {
-      ThemeMode.system => ThemeMode.light,
-      ThemeMode.light => ThemeMode.dark,
-      ThemeMode.dark => ThemeMode.system,
-    };
+    final next = state.themeMode == ThemeMode.dark
+        ? ThemeMode.light
+        : ThemeMode.dark;
     await setTheme(next);
   }
 }

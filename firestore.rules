@@ -1,96 +1,12 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isAdmin() {
-      return isSignedIn() &&
-        exists(/databases/$(database)/documents/managers/$(request.auth.uid));
-    }
-
-    /* ===================== MANAGERS ===================== */
-    match /managers/{userId} {
-      allow read: if isAdmin();
-      allow write: if false;
-    }
-
-    /* ===================== CATEGORIES ===================== */
-    match /categories/{categoryId} {
-      allow read: if isSignedIn();
-      allow create, update, delete: if isAdmin();
-    }
-
-    /* ===================== USERS ===================== */
     match /users/{userId} {
-      // المدير يقرأ الجميع
-      allow read: if isAdmin();
-
-      // المستخدم يقرأ نفسه فقط
-      allow read: if isSignedIn() && request.auth.uid == userId;
-
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /categories/{categoryId} {
+      allow read: if true;
       allow write: if false;
-    }
-
-    /* ===================== APP CONFIG ===================== */
-    match /app_config/{docId} {
-      // مهم: مفتوح للقراءة عشان التطبيق + الداشبورد
-      allow read: if true;
-      allow write: if isAdmin();
-
-      // الـ subcollections (مثل onboarding/slides)
-      match /{subCol}/{subDoc} {
-        allow read: if true;
-        allow write: if isAdmin();
-      }
-    }
-
-    /* ===================== PAGE BLOCKS ===================== */
-    match /page_blocks/{pageId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    /* ===================== AI CONFIG ===================== */
-    match /ai_config/{docId} {
-      allow read: if isAdmin();
-      allow write: if isAdmin();
-    }
-
-    /* ===================== BANK RATES ===================== */
-    match /bank_rates/{docId} {
-      // مهم: مفتوح عشان Grok + التطبيق
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    /* ===================== APP NOTIFICATIONS ===================== */
-    match /app_notifications/{notifId} {
-      allow read: if isSignedIn();
-      allow write: if isAdmin();
-
-      match /acknowledgments/{userId} {
-        // المستخدم يقدر يقرأ موافقته فقط، الادمن يقرأ الكل
-        allow read: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
-        // المستخدم يقدر يكتب موافقة لنفسه فقط
-        allow create: if isSignedIn() && request.auth.uid == userId;
-        allow update, delete: if false;
-      }
-    }
-
-    /* ===================== BLOCKED ===================== */
-    match /settings/{docId} {
-      allow read, write: if false;
-    }
-
-    match /rate_limits/{userId}/{document=**} {
-      allow read, write: if false;
-    }
-
-    match /rate_limits_web/{ipKey}/{document=**} {
-      allow read, write: if false;
     }
   }
 }

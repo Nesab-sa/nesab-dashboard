@@ -67,8 +67,8 @@ abstract class AppLocalizations {
 
   final String localeName;
 
-  static AppLocalizations? of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
@@ -98,2891 +98,4583 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
-  /// No description provided for @appName.
+  /// The app name displayed in splash, about, and header areas
   ///
-  /// In en, this message translates to:
-  /// **'Nesab'**
+  /// In ar, this message translates to:
+  /// **'نِـسَـب'**
   String get appName;
 
-  /// No description provided for @appDescription.
+  /// Short app tagline shown on splash screen
   ///
-  /// In en, this message translates to:
-  /// **'Smart Financing Solutions'**
+  /// In ar, this message translates to:
+  /// **'حلول تمويلية ذكية'**
   String get appDescription;
 
-  /// No description provided for @splashLoading.
+  /// Loading indicator text on the splash screen
   ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
+  /// In ar, this message translates to:
+  /// **'جارٍ التحميل...'**
   String get splashLoading;
 
-  /// No description provided for @loginTitle.
+  /// Welcome title on the login screen
   ///
-  /// In en, this message translates to:
-  /// **'Welcome'**
+  /// In ar, this message translates to:
+  /// **'مرحباً بك'**
   String get loginTitle;
 
-  /// No description provided for @loginSubtitle.
+  /// Subtitle prompt below the login title
   ///
-  /// In en, this message translates to:
-  /// **'Sign in to continue'**
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك للمتابعة'**
   String get loginSubtitle;
 
-  /// No description provided for @loginWithGoogle.
+  /// Google sign-in button label
   ///
-  /// In en, this message translates to:
-  /// **'Continue with Google'**
+  /// In ar, this message translates to:
+  /// **'المتابعة مع Google'**
   String get loginWithGoogle;
 
-  /// No description provided for @loginWithApple.
+  /// Apple sign-in button label
   ///
-  /// In en, this message translates to:
-  /// **'Continue with Apple'**
+  /// In ar, this message translates to:
+  /// **'المتابعة مع Apple'**
   String get loginWithApple;
 
-  /// No description provided for @browseAsGuest.
+  /// Button to continue without signing in
   ///
-  /// In en, this message translates to:
-  /// **'Browse as Guest'**
+  /// In ar, this message translates to:
+  /// **'تصفح كزائر'**
   String get browseAsGuest;
 
-  /// No description provided for @termsText.
+  /// Terms and privacy policy agreement text at bottom of login
   ///
-  /// In en, this message translates to:
-  /// **'By continuing, you agree to the Terms of Use and Privacy Policy'**
+  /// In ar, this message translates to:
+  /// **'بالمتابعة، أنت توافق على شروط الاستخدام و سياسة الخصوصية'**
   String get termsText;
 
-  /// No description provided for @orText.
+  /// Divider text between login methods and guest browsing
   ///
-  /// In en, this message translates to:
-  /// **'or'**
+  /// In ar, this message translates to:
+  /// **'أو'**
   String get orText;
 
-  /// No description provided for @homeGreeting.
+  /// Greeting shown on the home screen header with user name
   ///
-  /// In en, this message translates to:
-  /// **'Welcome {name}'**
+  /// In ar, this message translates to:
+  /// **'أهلاً بك {name}'**
   String homeGreeting(String name);
 
-  /// No description provided for @homeHeroTitle.
+  /// Main hero card title on the home screen
   ///
-  /// In en, this message translates to:
-  /// **'Smart Financing Solutions'**
+  /// In ar, this message translates to:
+  /// **'حلول تمويلية ذكية'**
   String get homeHeroTitle;
 
-  /// No description provided for @homeHeroSubtitle.
+  /// Subtitle under the hero card title
   ///
-  /// In en, this message translates to:
-  /// **'Discover our diverse financing products with the best terms'**
+  /// In ar, this message translates to:
+  /// **'اكتشف منتجاتنا التمويلية المتنوعة بأفضل الشروط'**
   String get homeHeroSubtitle;
 
-  /// No description provided for @homeHeroCta.
+  /// Call-to-action button on the hero card
   ///
-  /// In en, this message translates to:
-  /// **'Browse Products'**
+  /// In ar, this message translates to:
+  /// **'استعرض المنتجات'**
   String get homeHeroCta;
 
-  /// No description provided for @quickActionsTitle.
+  /// Section title above the quick action buttons
   ///
-  /// In en, this message translates to:
-  /// **'Quick Services'**
+  /// In ar, this message translates to:
+  /// **'خدمات سريعة'**
   String get quickActionsTitle;
 
-  /// No description provided for @quickActionProducts.
+  /// Quick action button label for products
   ///
-  /// In en, this message translates to:
-  /// **'Products'**
+  /// In ar, this message translates to:
+  /// **'المنتجات'**
   String get quickActionProducts;
 
-  /// No description provided for @quickActionRequests.
+  /// Quick action button label for my requests
   ///
-  /// In en, this message translates to:
-  /// **'My Requests'**
+  /// In ar, this message translates to:
+  /// **'طلباتي'**
   String get quickActionRequests;
 
-  /// No description provided for @quickActionContact.
+  /// Quick action button label for contact
   ///
-  /// In en, this message translates to:
-  /// **'Contact'**
+  /// In ar, this message translates to:
+  /// **'تواصل'**
   String get quickActionContact;
 
-  /// No description provided for @featuredProductsTitle.
+  /// Section title for featured products on the home screen
   ///
-  /// In en, this message translates to:
-  /// **'Featured Products'**
+  /// In ar, this message translates to:
+  /// **'منتجات مميزة'**
   String get featuredProductsTitle;
 
-  /// No description provided for @viewAll.
+  /// Link text to view all items in a section
   ///
-  /// In en, this message translates to:
-  /// **'View All'**
+  /// In ar, this message translates to:
+  /// **'عرض الكل'**
   String get viewAll;
 
-  /// No description provided for @productsTitle.
+  /// Title of the products list screen
   ///
-  /// In en, this message translates to:
-  /// **'Financing Products'**
+  /// In ar, this message translates to:
+  /// **'المنتجات التمويلية'**
   String get productsTitle;
 
-  /// No description provided for @productsSubtitle.
+  /// Subtitle under the products screen title
   ///
-  /// In en, this message translates to:
-  /// **'Choose the financing product that suits your needs'**
+  /// In ar, this message translates to:
+  /// **'اختر المنتج التمويلي المناسب لاحتياجاتك'**
   String get productsSubtitle;
 
-  /// No description provided for @productDetailsTitle.
+  /// Title for the product detail screen
   ///
-  /// In en, this message translates to:
-  /// **'Product Details'**
+  /// In ar, this message translates to:
+  /// **'تفاصيل المنتج'**
   String get productDetailsTitle;
 
-  /// No description provided for @subProductDetailsTitle.
+  /// Title for the sub-product detail screen
   ///
-  /// In en, this message translates to:
-  /// **'Sub-Product Details'**
+  /// In ar, this message translates to:
+  /// **'تفاصيل المنتج الفرعي'**
   String get subProductDetailsTitle;
 
-  /// No description provided for @availableOptions.
+  /// Section title for sub-product options on product detail
   ///
-  /// In en, this message translates to:
-  /// **'Available Options'**
+  /// In ar, this message translates to:
+  /// **'الخيارات المتاحة'**
   String get availableOptions;
 
-  /// No description provided for @applyForFinancing.
+  /// CTA button to apply for a financing product
   ///
-  /// In en, this message translates to:
-  /// **'Apply for Financing'**
+  /// In ar, this message translates to:
+  /// **'طلب التمويل'**
   String get applyForFinancing;
 
-  /// No description provided for @amount.
+  /// Label for the financing amount field
   ///
-  /// In en, this message translates to:
-  /// **'Financing Amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ التمويل'**
   String get amount;
 
-  /// No description provided for @period.
+  /// Label for the repayment period field
   ///
-  /// In en, this message translates to:
-  /// **'Repayment Period'**
+  /// In ar, this message translates to:
+  /// **'مدة السداد'**
   String get period;
 
-  /// No description provided for @profitRate.
+  /// Label for the profit rate field
   ///
-  /// In en, this message translates to:
-  /// **'Profit Rate'**
+  /// In ar, this message translates to:
+  /// **'نسبة الأرباح'**
   String get profitRate;
 
-  /// No description provided for @features.
+  /// Features section title
   ///
-  /// In en, this message translates to:
-  /// **'Features'**
+  /// In ar, this message translates to:
+  /// **'المزايا'**
   String get features;
 
-  /// No description provided for @productDescription.
+  /// Section title for product description
   ///
-  /// In en, this message translates to:
-  /// **'Product Description'**
+  /// In ar, this message translates to:
+  /// **'وصف المنتج'**
   String get productDescription;
 
-  /// No description provided for @featureSharia.
+  /// Feature item: Sharia compliant
   ///
-  /// In en, this message translates to:
-  /// **'Sharia compliant'**
+  /// In ar, this message translates to:
+  /// **'متوافق مع أحكام الشريعة الإسلامية'**
   String get featureSharia;
 
-  /// No description provided for @featureFastProcess.
+  /// Feature item: fast and easy procedures
   ///
-  /// In en, this message translates to:
-  /// **'Fast and easy procedures'**
+  /// In ar, this message translates to:
+  /// **'إجراءات سريعة وسهلة'**
   String get featureFastProcess;
 
-  /// No description provided for @featureFlexiblePayments.
+  /// Feature item: flexible installments
   ///
-  /// In en, this message translates to:
-  /// **'Flexible installments'**
+  /// In ar, this message translates to:
+  /// **'أقساط ميسرة ومرنة'**
   String get featureFlexiblePayments;
 
-  /// No description provided for @featureCustomerService.
+  /// Feature item: excellent customer service
   ///
-  /// In en, this message translates to:
-  /// **'Excellent customer service'**
+  /// In ar, this message translates to:
+  /// **'خدمة عملاء متميزة'**
   String get featureCustomerService;
 
-  /// No description provided for @applyTitle.
+  /// Title of the apply/application screen
   ///
-  /// In en, this message translates to:
-  /// **'Apply for Financing'**
+  /// In ar, this message translates to:
+  /// **'طلب التمويل'**
   String get applyTitle;
 
-  /// No description provided for @step1Title.
+  /// Step 1 title in the application form: Personal Information
   ///
-  /// In en, this message translates to:
-  /// **'Personal Information'**
+  /// In ar, this message translates to:
+  /// **'المعلومات الشخصية'**
   String get step1Title;
 
-  /// No description provided for @step2Title.
+  /// Step 2 title in the application form: Employment Information
   ///
-  /// In en, this message translates to:
-  /// **'Employment Information'**
+  /// In ar, this message translates to:
+  /// **'معلومات العمل'**
   String get step2Title;
 
-  /// No description provided for @step3Title.
+  /// Step 3 title in the application form: Documents
   ///
-  /// In en, this message translates to:
-  /// **'Documents'**
+  /// In ar, this message translates to:
+  /// **'المستندات'**
   String get step3Title;
 
-  /// No description provided for @step4Title.
+  /// Step 4 title in the application form: Confirmation
   ///
-  /// In en, this message translates to:
-  /// **'Confirmation'**
+  /// In ar, this message translates to:
+  /// **'التأكيد'**
   String get step4Title;
 
-  /// No description provided for @fullName.
+  /// Label for the full name input field
   ///
-  /// In en, this message translates to:
-  /// **'Full Name'**
+  /// In ar, this message translates to:
+  /// **'الاسم الكامل'**
   String get fullName;
 
-  /// No description provided for @fullNameHint.
+  /// Hint text for the full name input field
   ///
-  /// In en, this message translates to:
-  /// **'Enter your full name'**
+  /// In ar, this message translates to:
+  /// **'أدخل اسمك الكامل'**
   String get fullNameHint;
 
-  /// No description provided for @nationalId.
+  /// Label for the national ID input field
   ///
-  /// In en, this message translates to:
-  /// **'National ID'**
+  /// In ar, this message translates to:
+  /// **'رقم الهوية'**
   String get nationalId;
 
-  /// No description provided for @nationalIdHint.
+  /// Hint text for the national ID input field
   ///
-  /// In en, this message translates to:
-  /// **'Enter your national ID number'**
+  /// In ar, this message translates to:
+  /// **'أدخل رقم الهوية الوطنية'**
   String get nationalIdHint;
 
-  /// No description provided for @dateOfBirth.
+  /// Label for the date of birth input field
   ///
-  /// In en, this message translates to:
-  /// **'Date of Birth'**
+  /// In ar, this message translates to:
+  /// **'تاريخ الميلاد'**
   String get dateOfBirth;
 
-  /// No description provided for @dateOfBirthHint.
+  /// Hint text for the date of birth input field
   ///
-  /// In en, this message translates to:
-  /// **'DD / MM / YYYY'**
+  /// In ar, this message translates to:
+  /// **'يوم / شهر / سنة'**
   String get dateOfBirthHint;
 
-  /// No description provided for @phoneNumber.
+  /// Label for the phone number input field
   ///
-  /// In en, this message translates to:
-  /// **'Phone Number'**
+  /// In ar, this message translates to:
+  /// **'رقم الجوال'**
   String get phoneNumber;
 
-  /// No description provided for @phoneNumberHint.
+  /// Hint text for the phone number input field
   ///
-  /// In en, this message translates to:
+  /// In ar, this message translates to:
   /// **'05XXXXXXXX'**
   String get phoneNumberHint;
 
-  /// No description provided for @employer.
+  /// Label for the employer input field
   ///
-  /// In en, this message translates to:
-  /// **'Employer'**
+  /// In ar, this message translates to:
+  /// **'جهة العمل'**
   String get employer;
 
-  /// No description provided for @employerHint.
+  /// Hint text for the employer input field
   ///
-  /// In en, this message translates to:
-  /// **'Employer name'**
+  /// In ar, this message translates to:
+  /// **'اسم جهة العمل'**
   String get employerHint;
 
-  /// No description provided for @monthlySalary.
+  /// Label for the monthly salary input field
   ///
-  /// In en, this message translates to:
-  /// **'Monthly Salary'**
+  /// In ar, this message translates to:
+  /// **'الراتب الشهري'**
   String get monthlySalary;
 
-  /// No description provided for @monthlySalaryHint.
+  /// Hint text for the monthly salary input field
   ///
-  /// In en, this message translates to:
-  /// **'Salary amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ الراتب'**
   String get monthlySalaryHint;
 
-  /// No description provided for @yearsOfService.
+  /// Label for the years of service input field
   ///
-  /// In en, this message translates to:
-  /// **'Years of Service'**
+  /// In ar, this message translates to:
+  /// **'مدة الخدمة'**
   String get yearsOfService;
 
-  /// No description provided for @yearsOfServiceHint.
+  /// Hint text for the years of service input field
   ///
-  /// In en, this message translates to:
-  /// **'Number of years of service'**
+  /// In ar, this message translates to:
+  /// **'عدد سنوات الخدمة'**
   String get yearsOfServiceHint;
 
-  /// No description provided for @employmentSector.
+  /// Label for the employment sector selection
   ///
-  /// In en, this message translates to:
-  /// **'Sector'**
+  /// In ar, this message translates to:
+  /// **'القطاع'**
   String get employmentSector;
 
-  /// No description provided for @government.
+  /// Employment sector option: government
   ///
-  /// In en, this message translates to:
-  /// **'Government'**
+  /// In ar, this message translates to:
+  /// **'حكومي'**
   String get government;
 
-  /// No description provided for @privateSector.
+  /// Employment sector option: private
   ///
-  /// In en, this message translates to:
-  /// **'Private'**
+  /// In ar, this message translates to:
+  /// **'خاص'**
   String get privateSector;
 
-  /// No description provided for @military.
+  /// Employment sector option: military
   ///
-  /// In en, this message translates to:
-  /// **'Military'**
+  /// In ar, this message translates to:
+  /// **'عسكري'**
   String get military;
 
-  /// No description provided for @uploadId.
+  /// Document upload label: national ID photo
   ///
-  /// In en, this message translates to:
-  /// **'National ID Photo'**
+  /// In ar, this message translates to:
+  /// **'صورة الهوية الوطنية'**
   String get uploadId;
 
-  /// No description provided for @uploadSalary.
+  /// Document upload label: salary certificate
   ///
-  /// In en, this message translates to:
-  /// **'Salary Certificate'**
+  /// In ar, this message translates to:
+  /// **'تعريف بالراتب'**
   String get uploadSalary;
 
-  /// No description provided for @uploadBankStatement.
+  /// Document upload label: bank statement
   ///
-  /// In en, this message translates to:
-  /// **'Bank Statement'**
+  /// In ar, this message translates to:
+  /// **'كشف حساب بنكي'**
   String get uploadBankStatement;
 
-  /// No description provided for @uploadHint.
+  /// Hint text shown under upload areas
   ///
-  /// In en, this message translates to:
-  /// **'Tap to upload or drag the file'**
+  /// In ar, this message translates to:
+  /// **'اضغط للرفع أو اسحب الملف'**
   String get uploadHint;
 
-  /// No description provided for @next.
+  /// Next button label in multi-step form
   ///
-  /// In en, this message translates to:
-  /// **'Next'**
+  /// In ar, this message translates to:
+  /// **'التالي'**
   String get next;
 
-  /// No description provided for @previous.
+  /// Previous button label in multi-step form
   ///
-  /// In en, this message translates to:
-  /// **'Previous'**
+  /// In ar, this message translates to:
+  /// **'السابق'**
   String get previous;
 
-  /// No description provided for @submit.
+  /// Submit button label on the final step
   ///
-  /// In en, this message translates to:
-  /// **'Submit Application'**
+  /// In ar, this message translates to:
+  /// **'إرسال الطلب'**
   String get submit;
 
-  /// No description provided for @submitting.
+  /// Loading state text while the application is being submitted
   ///
-  /// In en, this message translates to:
-  /// **'Submitting...'**
+  /// In ar, this message translates to:
+  /// **'جارٍ الإرسال...'**
   String get submitting;
 
-  /// No description provided for @applicationSubmitted.
+  /// Success message after application submission
   ///
-  /// In en, this message translates to:
-  /// **'Application submitted successfully'**
+  /// In ar, this message translates to:
+  /// **'تم إرسال الطلب بنجاح'**
   String get applicationSubmitted;
 
-  /// No description provided for @confirmationSummary.
+  /// Title for the confirmation/review step
   ///
-  /// In en, this message translates to:
-  /// **'Review Application'**
+  /// In ar, this message translates to:
+  /// **'مراجعة الطلب'**
   String get confirmationSummary;
 
-  /// No description provided for @confirmationHint.
+  /// Instructional text on the confirmation step
   ///
-  /// In en, this message translates to:
-  /// **'Please verify all information before submitting'**
+  /// In ar, this message translates to:
+  /// **'تأكد من صحة جميع البيانات قبل إرسال الطلب'**
   String get confirmationHint;
 
-  /// No description provided for @confirmationProduct.
+  /// Label for product name in confirmation summary
   ///
-  /// In en, this message translates to:
-  /// **'Product'**
+  /// In ar, this message translates to:
+  /// **'المنتج'**
   String get confirmationProduct;
 
-  /// No description provided for @confirmationFinancingType.
+  /// Label for financing type in confirmation summary
   ///
-  /// In en, this message translates to:
-  /// **'Financing Type'**
+  /// In ar, this message translates to:
+  /// **'نوع التمويل'**
   String get confirmationFinancingType;
 
-  /// No description provided for @confirmationMaxAmount.
+  /// Label for maximum amount in confirmation summary
   ///
-  /// In en, this message translates to:
-  /// **'Maximum Amount'**
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى'**
   String get confirmationMaxAmount;
 
-  /// No description provided for @confirmationPeriod.
+  /// Label for period in confirmation summary
   ///
-  /// In en, this message translates to:
-  /// **'Period'**
+  /// In ar, this message translates to:
+  /// **'المدة'**
   String get confirmationPeriod;
 
-  /// No description provided for @myRequestsTitle.
+  /// Title of the my requests screen
   ///
-  /// In en, this message translates to:
-  /// **'My Requests'**
+  /// In ar, this message translates to:
+  /// **'طلباتي'**
   String get myRequestsTitle;
 
-  /// No description provided for @noRequests.
+  /// Empty state message when no requests exist
   ///
-  /// In en, this message translates to:
-  /// **'No requests at this time'**
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات حالياً'**
   String get noRequests;
 
-  /// No description provided for @requestStatus.
+  /// Label for request status
   ///
-  /// In en, this message translates to:
-  /// **'Request Status'**
+  /// In ar, this message translates to:
+  /// **'حالة الطلب'**
   String get requestStatus;
 
-  /// No description provided for @underReview.
+  /// Request status: under review
   ///
-  /// In en, this message translates to:
-  /// **'Under Review'**
+  /// In ar, this message translates to:
+  /// **'قيد المراجعة'**
   String get underReview;
 
-  /// No description provided for @approved.
+  /// Request status: approved
   ///
-  /// In en, this message translates to:
-  /// **'Approved'**
+  /// In ar, this message translates to:
+  /// **'تمت الموافقة'**
   String get approved;
 
-  /// No description provided for @rejected.
+  /// Request status: rejected
   ///
-  /// In en, this message translates to:
-  /// **'Rejected'**
+  /// In ar, this message translates to:
+  /// **'مرفوض'**
   String get rejected;
 
-  /// No description provided for @profileTitle.
+  /// Title of the profile screen
   ///
-  /// In en, this message translates to:
-  /// **'My Account'**
+  /// In ar, this message translates to:
+  /// **'حسابي'**
   String get profileTitle;
 
-  /// No description provided for @myRequests.
+  /// Profile menu item to navigate to my requests
   ///
-  /// In en, this message translates to:
-  /// **'My Requests'**
+  /// In ar, this message translates to:
+  /// **'طلباتي'**
   String get myRequests;
 
-  /// No description provided for @settings.
+  /// Profile menu item for settings
   ///
-  /// In en, this message translates to:
-  /// **'Settings'**
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
   String get settings;
 
-  /// No description provided for @editDetails.
+  /// Profile menu item for editing account details
   ///
-  /// In en, this message translates to:
-  /// **'Edit Details'**
+  /// In ar, this message translates to:
+  /// **'تعديل البيانات'**
   String get editDetails;
 
-  /// No description provided for @changePassword.
+  /// Profile menu item for changing password
   ///
-  /// In en, this message translates to:
-  /// **'Change Password'**
+  /// In ar, this message translates to:
+  /// **'تغيير كلمة المرور'**
   String get changePassword;
 
-  /// No description provided for @aboutApp.
+  /// Profile menu item for about the app
   ///
-  /// In en, this message translates to:
-  /// **'About the App'**
+  /// In ar, this message translates to:
+  /// **'عن التطبيق'**
   String get aboutApp;
 
-  /// No description provided for @logout.
+  /// Logout button label
   ///
-  /// In en, this message translates to:
-  /// **'Logout'**
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
   String get logout;
 
-  /// No description provided for @logoutConfirmTitle.
+  /// Title of the logout confirmation dialog
   ///
-  /// In en, this message translates to:
-  /// **'Logout'**
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
   String get logoutConfirmTitle;
 
-  /// No description provided for @logoutConfirmMessage.
+  /// Confirmation message in the logout dialog
   ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to logout?'**
+  /// In ar, this message translates to:
+  /// **'هل أنت متأكد من رغبتك في تسجيل الخروج؟'**
   String get logoutConfirmMessage;
 
-  /// No description provided for @cancel.
+  /// Delete account menu item label
   ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
+  /// In ar, this message translates to:
+  /// **'حذف الحساب'**
+  String get deleteAccount;
+
+  /// Title of the delete account confirmation dialog
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الحساب'**
+  String get deleteAccountTitle;
+
+  /// Confirmation message in the delete account dialog
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم حذف حسابك وجميع بياناتك نهائياً ولا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من المتابعة؟'**
+  String get deleteAccountMessage;
+
+  /// Destructive confirm button label in the delete account dialog
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف نهائي'**
+  String get deleteAccountConfirm;
+
+  /// Cancel button label used in dialogs
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
   String get cancel;
 
-  /// No description provided for @confirm.
+  /// Confirm button label used in dialogs
   ///
-  /// In en, this message translates to:
-  /// **'Confirm'**
+  /// In ar, this message translates to:
+  /// **'تأكيد'**
   String get confirm;
 
-  /// No description provided for @guest.
+  /// Display name for unauthenticated users
   ///
-  /// In en, this message translates to:
-  /// **'Guest'**
+  /// In ar, this message translates to:
+  /// **'زائر'**
   String get guest;
 
-  /// No description provided for @guestAccount.
+  /// Badge text for guest login method
   ///
-  /// In en, this message translates to:
-  /// **'Guest account'**
+  /// In ar, this message translates to:
+  /// **'زائر حساب'**
   String get guestAccount;
 
-  /// No description provided for @aboutTitle.
+  /// Title of the about screen
   ///
-  /// In en, this message translates to:
-  /// **'About Nesab'**
+  /// In ar, this message translates to:
+  /// **'عن نِسَب'**
   String get aboutTitle;
 
-  /// No description provided for @aboutDescription.
+  /// Full description of the app on the about screen
   ///
-  /// In en, this message translates to:
-  /// **'Nesab is a comprehensive platform for displaying financing products in an organized and easy way, allowing users to browse and compare diverse financing solutions and choose the most suitable for their needs.'**
+  /// In ar, this message translates to:
+  /// **'تطبيق نِسَب هو منصة متكاملة لعرض المنتجات التمويلية بشكل منظم وسهل، يتيح للمستخدمين استعراض ومقارنة الحلول التمويلية المتنوعة واختيار الأنسب لاحتياجاتهم.'**
   String get aboutDescription;
 
-  /// No description provided for @aboutVersion.
+  /// Version label with version number
   ///
-  /// In en, this message translates to:
-  /// **'Version {version}'**
+  /// In ar, this message translates to:
+  /// **'الإصدار {version}'**
   String aboutVersion(String version);
 
-  /// No description provided for @aboutIdeaTitle.
+  /// Section title for the app idea on the about screen
   ///
-  /// In en, this message translates to:
-  /// **'App Concept'**
+  /// In ar, this message translates to:
+  /// **'فكرة التطبيق'**
   String get aboutIdeaTitle;
 
-  /// No description provided for @ourServices.
+  /// Section title for services on the about screen
   ///
-  /// In en, this message translates to:
-  /// **'Our Services'**
+  /// In ar, this message translates to:
+  /// **'خدماتنا'**
   String get ourServices;
 
-  /// No description provided for @ourAdvantages.
+  /// Section title for advantages on the about screen
   ///
-  /// In en, this message translates to:
-  /// **'Advantages'**
+  /// In ar, this message translates to:
+  /// **'المزايا'**
   String get ourAdvantages;
 
-  /// No description provided for @advantageSecurity.
+  /// Advantage: high security and privacy
   ///
-  /// In en, this message translates to:
-  /// **'High security and privacy'**
+  /// In ar, this message translates to:
+  /// **'أمان وخصوصية عالية'**
   String get advantageSecurity;
 
-  /// No description provided for @advantageSpeed.
+  /// Advantage: fast procedures
   ///
-  /// In en, this message translates to:
-  /// **'Fast procedures'**
+  /// In ar, this message translates to:
+  /// **'سرعة في الإجراءات'**
   String get advantageSpeed;
 
-  /// No description provided for @advantageUx.
+  /// Advantage: smooth user experience
   ///
-  /// In en, this message translates to:
-  /// **'Smooth user experience'**
+  /// In ar, this message translates to:
+  /// **'تجربة مستخدم سلسة'**
   String get advantageUx;
 
-  /// No description provided for @advantageSharia.
+  /// Advantage: Sharia compliant
   ///
-  /// In en, this message translates to:
-  /// **'Sharia compliant'**
+  /// In ar, this message translates to:
+  /// **'متوافق مع الشريعة الإسلامية'**
   String get advantageSharia;
 
-  /// No description provided for @contactTitle.
+  /// Title of the contact screen
   ///
-  /// In en, this message translates to:
-  /// **'Contact Us'**
+  /// In ar, this message translates to:
+  /// **'تواصل معنا'**
   String get contactTitle;
 
-  /// No description provided for @contactSubtitle.
+  /// Subtitle text on the contact screen
   ///
-  /// In en, this message translates to:
-  /// **'Choose your preferred contact method'**
+  /// In ar, this message translates to:
+  /// **'اختر وسيلة التواصل المفضلة لديك'**
   String get contactSubtitle;
 
-  /// No description provided for @contactHeader.
+  /// Header greeting on the contact screen
   ///
-  /// In en, this message translates to:
-  /// **'We are happy to hear from you'**
+  /// In ar, this message translates to:
+  /// **'نسعد بتواصلك'**
   String get contactHeader;
 
-  /// No description provided for @whatsapp.
+  /// Contact method label: WhatsApp
   ///
-  /// In en, this message translates to:
-  /// **'WhatsApp'**
+  /// In ar, this message translates to:
+  /// **'واتساب'**
   String get whatsapp;
 
-  /// No description provided for @email.
+  /// Contact method label: email
   ///
-  /// In en, this message translates to:
-  /// **'Email'**
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
   String get email;
 
-  /// No description provided for @twitter.
+  /// Contact method label: Twitter/X
   ///
-  /// In en, this message translates to:
-  /// **'Twitter / X'**
+  /// In ar, this message translates to:
+  /// **'تويتر / X'**
   String get twitter;
 
-  /// No description provided for @linkedin.
+  /// Contact method label: LinkedIn
   ///
-  /// In en, this message translates to:
-  /// **'LinkedIn'**
+  /// In ar, this message translates to:
+  /// **'لينكدإن'**
   String get linkedin;
 
-  /// No description provided for @website.
+  /// Contact method label: website
   ///
-  /// In en, this message translates to:
-  /// **'Website'**
+  /// In ar, this message translates to:
+  /// **'الموقع الإلكتروني'**
   String get website;
 
-  /// No description provided for @developerTitle.
+  /// Title of the developer screen
   ///
-  /// In en, this message translates to:
-  /// **'About the Developer'**
+  /// In ar, this message translates to:
+  /// **'عن المطور'**
   String get developerTitle;
 
-  /// No description provided for @developedBy.
+  /// Developer subtitle/role description
   ///
-  /// In en, this message translates to:
-  /// **'Mobile App Developer'**
+  /// In ar, this message translates to:
+  /// **'مطور تطبيقات الجوال'**
   String get developedBy;
 
-  /// No description provided for @errorOccurred.
+  /// Generic error message title
   ///
-  /// In en, this message translates to:
-  /// **'An error occurred'**
+  /// In ar, this message translates to:
+  /// **'حدث خطأ'**
   String get errorOccurred;
 
-  /// No description provided for @retry.
+  /// Retry button label
   ///
-  /// In en, this message translates to:
-  /// **'Retry'**
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
   String get retry;
 
-  /// No description provided for @loading.
+  /// General loading indicator text
   ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
+  /// In ar, this message translates to:
+  /// **'جارٍ التحميل...'**
   String get loading;
 
-  /// No description provided for @noData.
+  /// Empty state message when no data is available
   ///
-  /// In en, this message translates to:
-  /// **'No data available'**
+  /// In ar, this message translates to:
+  /// **'لا توجد بيانات'**
   String get noData;
 
-  /// No description provided for @backButton.
+  /// Accessible label for the back navigation button
   ///
-  /// In en, this message translates to:
-  /// **'Back'**
+  /// In ar, this message translates to:
+  /// **'رجوع'**
   String get backButton;
 
-  /// No description provided for @navHome.
+  /// Bottom navigation label for the home tab
   ///
-  /// In en, this message translates to:
-  /// **'Home'**
+  /// In ar, this message translates to:
+  /// **'الرئيسية'**
   String get navHome;
 
-  /// No description provided for @navSettings.
+  /// Bottom navigation label for the settings tab
   ///
-  /// In en, this message translates to:
-  /// **'Settings'**
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
   String get navSettings;
 
-  /// No description provided for @navProducts.
+  /// Bottom navigation label for the products tab
   ///
-  /// In en, this message translates to:
-  /// **'Products'**
+  /// In ar, this message translates to:
+  /// **'المنتجات'**
   String get navProducts;
 
-  /// No description provided for @navAbout.
+  /// Bottom navigation label for the about tab
   ///
-  /// In en, this message translates to:
-  /// **'About Nesab'**
+  /// In ar, this message translates to:
+  /// **'عن نسب'**
   String get navAbout;
 
-  /// No description provided for @navProfile.
+  /// Bottom navigation label for the profile tab
   ///
-  /// In en, this message translates to:
-  /// **'My Account'**
+  /// In ar, this message translates to:
+  /// **'حسابي'**
   String get navProfile;
 
-  /// No description provided for @appLogo.
+  /// App logo character displayed on splash and login screens
   ///
-  /// In en, this message translates to:
+  /// In ar, this message translates to:
   /// **'ن'**
   String get appLogo;
 
-  /// No description provided for @servicePersonalFinancing.
+  /// Service name: personal financing
   ///
-  /// In en, this message translates to:
-  /// **'Personal Financing'**
+  /// In ar, this message translates to:
+  /// **'التمويل الشخصي'**
   String get servicePersonalFinancing;
 
-  /// No description provided for @serviceRealEstateFinancing.
+  /// Service name: real estate financing
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate Financing'**
+  /// In ar, this message translates to:
+  /// **'التمويل العقاري'**
   String get serviceRealEstateFinancing;
 
-  /// No description provided for @serviceLeaseFinancing.
+  /// Service name: lease financing
   ///
-  /// In en, this message translates to:
-  /// **'Lease Financing'**
+  /// In ar, this message translates to:
+  /// **'التمويل التأجيري'**
   String get serviceLeaseFinancing;
 
-  /// No description provided for @servicePosFinancing.
+  /// Service name: POS financing
   ///
-  /// In en, this message translates to:
-  /// **'POS Financing'**
+  /// In ar, this message translates to:
+  /// **'تمويل نقاط البيع'**
   String get servicePosFinancing;
 
-  /// No description provided for @serviceKhairat.
+  /// Service name: Khairat program
   ///
-  /// In en, this message translates to:
-  /// **'Khairat Program'**
+  /// In ar, this message translates to:
+  /// **'برنامج خيرات'**
   String get serviceKhairat;
 
-  /// No description provided for @devInfoTitle.
+  /// Section title for development information
   ///
-  /// In en, this message translates to:
-  /// **'Development Info'**
+  /// In ar, this message translates to:
+  /// **'معلومات التطوير'**
   String get devInfoTitle;
 
-  /// No description provided for @devPlatform.
+  /// Label for platform in developer info
   ///
-  /// In en, this message translates to:
-  /// **'Platform'**
+  /// In ar, this message translates to:
+  /// **'المنصة'**
   String get devPlatform;
 
-  /// No description provided for @devVersion.
+  /// Label for version in developer info
   ///
-  /// In en, this message translates to:
-  /// **'Version'**
+  /// In ar, this message translates to:
+  /// **'الإصدار'**
   String get devVersion;
 
-  /// No description provided for @devArchitecture.
+  /// Label for architecture in developer info
   ///
-  /// In en, this message translates to:
-  /// **'Architecture'**
+  /// In ar, this message translates to:
+  /// **'البنية'**
   String get devArchitecture;
 
-  /// No description provided for @documentsAttachedCount.
+  /// Label for documents attached count in confirmation step
   ///
-  /// In en, this message translates to:
-  /// **'Documents attached'**
+  /// In ar, this message translates to:
+  /// **'عدد المستندات المرفقة'**
   String get documentsAttachedCount;
 
-  /// No description provided for @invalidProductId.
+  /// Error message for invalid product ID
   ///
-  /// In en, this message translates to:
-  /// **'Invalid product ID'**
+  /// In ar, this message translates to:
+  /// **'معرّف المنتج غير صالح'**
   String get invalidProductId;
 
-  /// No description provided for @productNotFound.
+  /// Error message when product is not found
   ///
-  /// In en, this message translates to:
-  /// **'Product not found'**
+  /// In ar, this message translates to:
+  /// **'المنتج غير موجود'**
   String get productNotFound;
 
-  /// No description provided for @subProductNotFound.
+  /// Error message when sub-product is not found
   ///
-  /// In en, this message translates to:
-  /// **'Sub-product not found'**
+  /// In ar, this message translates to:
+  /// **'المنتج الفرعي غير موجود'**
   String get subProductNotFound;
 
-  /// No description provided for @loginButton.
+  /// Login form submit button label
   ///
-  /// In en, this message translates to:
-  /// **'Login'**
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول'**
   String get loginButton;
 
-  /// No description provided for @registerButton.
+  /// Register form submit button label
   ///
-  /// In en, this message translates to:
-  /// **'Create Account'**
+  /// In ar, this message translates to:
+  /// **'إنشاء حساب'**
   String get registerButton;
 
-  /// No description provided for @forgotPassword.
+  /// Forgot password link text
   ///
-  /// In en, this message translates to:
-  /// **'Forgot password?'**
+  /// In ar, this message translates to:
+  /// **'نسيت كلمة المرور؟'**
   String get forgotPassword;
 
-  /// No description provided for @dontHaveAccount.
+  /// Text before register link on login page
   ///
-  /// In en, this message translates to:
-  /// **'Don\'t have an account?'**
+  /// In ar, this message translates to:
+  /// **'ليس لديك حساب؟'**
   String get dontHaveAccount;
 
-  /// No description provided for @alreadyHaveAccount.
+  /// Text before login link on register page
   ///
-  /// In en, this message translates to:
-  /// **'Already have an account?'**
+  /// In ar, this message translates to:
+  /// **'لديك حساب بالفعل؟'**
   String get alreadyHaveAccount;
 
-  /// No description provided for @registerTitle.
+  /// Title on the register page header
   ///
-  /// In en, this message translates to:
-  /// **'Create Account'**
+  /// In ar, this message translates to:
+  /// **'إنشاء حساب جديد'**
   String get registerTitle;
 
-  /// No description provided for @registerSubtitle.
+  /// Subtitle on the register page header
   ///
-  /// In en, this message translates to:
-  /// **'Create your account to continue'**
+  /// In ar, this message translates to:
+  /// **'أنشئ حسابك للمتابعة'**
   String get registerSubtitle;
 
-  /// No description provided for @forgotPasswordTitle.
+  /// Title on the forgot password page
   ///
-  /// In en, this message translates to:
-  /// **'Reset Password'**
+  /// In ar, this message translates to:
+  /// **'استعادة كلمة المرور'**
   String get forgotPasswordTitle;
 
-  /// No description provided for @forgotPasswordSubtitle.
+  /// Subtitle on forgot password page
   ///
-  /// In en, this message translates to:
-  /// **'Enter your email to receive a reset link'**
+  /// In ar, this message translates to:
+  /// **'أدخل بريدك الإلكتروني لإرسال رابط الاستعادة'**
   String get forgotPasswordSubtitle;
 
-  /// No description provided for @sendResetLink.
+  /// Send reset link button label
   ///
-  /// In en, this message translates to:
-  /// **'Send Reset Link'**
+  /// In ar, this message translates to:
+  /// **'إرسال رابط الاستعادة'**
   String get sendResetLink;
 
-  /// No description provided for @resetLinkSent.
+  /// Success message after reset link is sent
   ///
-  /// In en, this message translates to:
-  /// **'Reset link sent successfully'**
+  /// In ar, this message translates to:
+  /// **'تم إرسال رابط الاستعادة بنجاح'**
   String get resetLinkSent;
 
-  /// No description provided for @emailLabel.
+  /// Label for email text field
   ///
-  /// In en, this message translates to:
-  /// **'Email'**
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
   String get emailLabel;
 
-  /// No description provided for @emailHint.
+  /// Hint for email text field
   ///
-  /// In en, this message translates to:
-  /// **'Enter your email'**
+  /// In ar, this message translates to:
+  /// **'أدخل بريدك الإلكتروني'**
   String get emailHint;
 
-  /// No description provided for @passwordLabel.
+  /// Label for password text field
   ///
-  /// In en, this message translates to:
-  /// **'Password'**
+  /// In ar, this message translates to:
+  /// **'كلمة المرور'**
   String get passwordLabel;
 
-  /// No description provided for @passwordHint.
+  /// Hint for password text field
   ///
-  /// In en, this message translates to:
-  /// **'Enter your password'**
+  /// In ar, this message translates to:
+  /// **'أدخل كلمة المرور'**
   String get passwordHint;
 
-  /// No description provided for @displayNameLabel.
+  /// Label for display name text field
   ///
-  /// In en, this message translates to:
-  /// **'Name'**
+  /// In ar, this message translates to:
+  /// **'الاسم'**
   String get displayNameLabel;
 
-  /// No description provided for @displayNameHint.
+  /// Hint for display name text field
   ///
-  /// In en, this message translates to:
-  /// **'Enter your name'**
+  /// In ar, this message translates to:
+  /// **'أدخل اسمك'**
   String get displayNameHint;
 
-  /// No description provided for @authProviderLabel.
+  /// Divider text between form and social buttons
   ///
-  /// In en, this message translates to:
-  /// **'Auth Provider'**
-  String get authProviderLabel;
-
-  /// No description provided for @roleLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Role'**
-  String get roleLabel;
-
-  /// No description provided for @createdAtLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Created'**
-  String get createdAtLabel;
-
-  /// No description provided for @lastLoginLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Last Login'**
-  String get lastLoginLabel;
-
-  /// No description provided for @orLoginWith.
-  ///
-  /// In en, this message translates to:
-  /// **'or sign in with'**
+  /// In ar, this message translates to:
+  /// **'أو سجّل دخولك باستخدام'**
   String get orLoginWith;
 
-  /// No description provided for @register.
+  /// Register link text short form
   ///
-  /// In en, this message translates to:
-  /// **'Register'**
+  /// In ar, this message translates to:
+  /// **'سجّل'**
   String get register;
 
-  /// No description provided for @login.
+  /// Login link text short form
   ///
-  /// In en, this message translates to:
-  /// **'Sign in'**
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك'**
   String get login;
 
-  /// No description provided for @termsPrefix.
+  /// Text before terms of use link
   ///
-  /// In en, this message translates to:
-  /// **'By continuing, you agree to the'**
+  /// In ar, this message translates to:
+  /// **'بالمتابعة، أنت توافق على'**
   String get termsPrefix;
 
-  /// No description provided for @termsOfUse.
+  /// Terms of use link text
   ///
-  /// In en, this message translates to:
-  /// **'Terms of Use'**
+  /// In ar, this message translates to:
+  /// **'شروط الاستخدام'**
   String get termsOfUse;
 
-  /// No description provided for @termsAnd.
+  /// Conjunction between terms and privacy
   ///
-  /// In en, this message translates to:
-  /// **'and'**
+  /// In ar, this message translates to:
+  /// **'و'**
   String get termsAnd;
 
-  /// No description provided for @privacyPolicy.
+  /// Privacy policy link text
   ///
-  /// In en, this message translates to:
-  /// **'Privacy Policy'**
+  /// In ar, this message translates to:
+  /// **'سياسة الخصوصية'**
   String get privacyPolicy;
 
-  /// No description provided for @themeMode.
+  /// Profile menu item for changing theme mode
   ///
-  /// In en, this message translates to:
-  /// **'Appearance'**
+  /// In ar, this message translates to:
+  /// **'المظهر'**
   String get themeMode;
 
-  /// No description provided for @themeModeLight.
+  /// Light theme option label
   ///
-  /// In en, this message translates to:
-  /// **'Light'**
+  /// In ar, this message translates to:
+  /// **'فاتح'**
   String get themeModeLight;
 
-  /// No description provided for @themeModeDark.
+  /// Dark theme option label
   ///
-  /// In en, this message translates to:
-  /// **'Dark'**
+  /// In ar, this message translates to:
+  /// **'داكن'**
   String get themeModeDark;
 
-  /// No description provided for @themeModeSystem.
+  /// System theme option label
   ///
-  /// In en, this message translates to:
-  /// **'Auto'**
+  /// In ar, this message translates to:
+  /// **'تلقائي'**
   String get themeModeSystem;
 
-  /// No description provided for @language.
+  /// Profile menu item for changing language
   ///
-  /// In en, this message translates to:
-  /// **'Language'**
+  /// In ar, this message translates to:
+  /// **'اللغة'**
   String get language;
 
-  /// No description provided for @languageArabic.
+  /// Arabic language option label
   ///
-  /// In en, this message translates to:
+  /// In ar, this message translates to:
   /// **'العربية'**
   String get languageArabic;
 
-  /// No description provided for @languageEnglish.
+  /// English language option label
   ///
-  /// In en, this message translates to:
+  /// In ar, this message translates to:
   /// **'English'**
   String get languageEnglish;
 
-  /// No description provided for @onboardingBadge.
+  /// Welcome badge text on onboarding page 1
   ///
-  /// In en, this message translates to:
-  /// **'Welcome to Nesab'**
+  /// In ar, this message translates to:
+  /// **'مرحباً بك في Nesab'**
   String get onboardingBadge;
 
-  /// No description provided for @onboardingTitle1Line1.
+  /// Onboarding page 1 heading line 1
   ///
-  /// In en, this message translates to:
-  /// **'Your First Gateway'**
+  /// In ar, this message translates to:
+  /// **'بوابتك الأولى'**
   String get onboardingTitle1Line1;
 
-  /// No description provided for @onboardingTitle1Line2.
+  /// Onboarding page 1 heading line 2 (emerald accent)
   ///
-  /// In en, this message translates to:
-  /// **'to Financing Solutions'**
+  /// In ar, this message translates to:
+  /// **'للحلول التمويلية'**
   String get onboardingTitle1Line2;
 
-  /// No description provided for @onboardingDesc1.
+  /// Onboarding page 1 description paragraph
   ///
-  /// In en, this message translates to:
-  /// **'Browse and compare the best personal and real estate financing products in the Kingdom with full transparency and reliability.'**
+  /// In ar, this message translates to:
+  /// **'استعرض وقارن أفضل المنتجات التمويلية الشخصية والعقارية في المملكة بكل شفافية وموثوقية.'**
   String get onboardingDesc1;
 
-  /// No description provided for @onboardingNext.
+  /// Next button on onboarding page 1
   ///
-  /// In en, this message translates to:
-  /// **'Next'**
+  /// In ar, this message translates to:
+  /// **'التالي'**
   String get onboardingNext;
 
-  /// No description provided for @onboardingTitle2Line1.
+  /// Onboarding page 2 heading line 1
   ///
-  /// In en, this message translates to:
-  /// **'Diverse Options,'**
+  /// In ar, this message translates to:
+  /// **'خيارات متنوعة،'**
   String get onboardingTitle2Line1;
 
-  /// No description provided for @onboardingTitle2Line2.
+  /// Onboarding page 2 heading line 2 (emerald accent)
   ///
-  /// In en, this message translates to:
-  /// **'One Smart Decision'**
+  /// In ar, this message translates to:
+  /// **'قرار واحد ذكي'**
   String get onboardingTitle2Line2;
 
-  /// No description provided for @onboardingDesc2.
+  /// Onboarding page 2 description paragraph
   ///
-  /// In en, this message translates to:
-  /// **'From personal loans to home financing and POS. We gather all options so you can choose what suits your needs.'**
+  /// In ar, this message translates to:
+  /// **'من القروض الشخصية إلى تمويل المنازل ونقاط البيع. نجمع لك كل الخيارات لتختار الأنسب لاحتياجك.'**
   String get onboardingDesc2;
 
-  /// No description provided for @onboardingStart.
+  /// Start button on onboarding page 2
   ///
-  /// In en, this message translates to:
-  /// **'Start Now'**
+  /// In ar, this message translates to:
+  /// **'ابدأ الآن'**
   String get onboardingStart;
 
-  /// No description provided for @onboardingSkip.
+  /// Skip button on onboarding page 2
   ///
-  /// In en, this message translates to:
-  /// **'Skip'**
+  /// In ar, this message translates to:
+  /// **'تخطي'**
   String get onboardingSkip;
 
-  /// No description provided for @onboardingRealEstate.
+  /// Real estate financing card title on onboarding
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate Financing'**
+  /// In ar, this message translates to:
+  /// **'التمويل العقاري'**
   String get onboardingRealEstate;
 
-  /// No description provided for @onboardingRealEstateDesc.
+  /// Real estate financing card subtitle on onboarding
   ///
-  /// In en, this message translates to:
-  /// **'Ownership and investment options'**
+  /// In ar, this message translates to:
+  /// **'خيارات تملك واستثمار'**
   String get onboardingRealEstateDesc;
 
-  /// No description provided for @onboardingPersonal.
+  /// Personal financing card title on onboarding
   ///
-  /// In en, this message translates to:
-  /// **'Personal Financing'**
+  /// In ar, this message translates to:
+  /// **'التمويل الشخصي'**
   String get onboardingPersonal;
 
-  /// No description provided for @onboardingPersonalDesc.
+  /// Personal financing card subtitle on onboarding
   ///
-  /// In en, this message translates to:
-  /// **'Instant cash liquidity'**
+  /// In ar, this message translates to:
+  /// **'سيولة نقدية فورية'**
   String get onboardingPersonalDesc;
 
-  /// No description provided for @onboardingPos.
+  /// POS card title on onboarding
   ///
-  /// In en, this message translates to:
-  /// **'Point of Sale'**
+  /// In ar, this message translates to:
+  /// **'نقاط البيع'**
   String get onboardingPos;
 
-  /// No description provided for @onboardingPosDesc.
+  /// POS card subtitle on onboarding
   ///
-  /// In en, this message translates to:
-  /// **'Solutions for shops and businesses'**
+  /// In ar, this message translates to:
+  /// **'حلول للمتاجر والأعمال'**
   String get onboardingPosDesc;
 
-  /// No description provided for @onboardingLease.
+  /// Lease financing circle label on onboarding
   ///
-  /// In en, this message translates to:
-  /// **'Lease Financing'**
+  /// In ar, this message translates to:
+  /// **'التمويل التأجيري'**
   String get onboardingLease;
 
-  /// No description provided for @onboardingLeaseDesc.
+  /// Lease financing circle subtitle on onboarding
   ///
-  /// In en, this message translates to:
-  /// **'Lease-to-own options'**
+  /// In ar, this message translates to:
+  /// **'إيجار ينتهي بالتملك'**
   String get onboardingLeaseDesc;
 
-  /// No description provided for @paywallTitle.
+  /// Paywall title (app name part)
   ///
-  /// In en, this message translates to:
-  /// **'Nesab'**
+  /// In ar, this message translates to:
+  /// **'نِـسَـب'**
   String get paywallTitle;
 
-  /// No description provided for @paywallTitleAccent.
+  /// Paywall title accent part (gold colored)
   ///
-  /// In en, this message translates to:
-  /// **'Plus +'**
+  /// In ar, this message translates to:
+  /// **'بلس +'**
   String get paywallTitleAccent;
 
-  /// No description provided for @paywallSubtitle.
+  /// Paywall subtitle text
   ///
-  /// In en, this message translates to:
-  /// **'Exclusive upgrade for better financing opportunities'**
+  /// In ar, this message translates to:
+  /// **'ترقية حصرية لفرص تمويلية أفضل'**
   String get paywallSubtitle;
 
-  /// No description provided for @paywallBenefit1Title.
+  /// Paywall benefit 1 title
   ///
-  /// In en, this message translates to:
-  /// **'Priority Processing'**
+  /// In ar, this message translates to:
+  /// **'أولوية المعالجة'**
   String get paywallBenefit1Title;
 
-  /// No description provided for @paywallBenefit1Desc.
+  /// Paywall benefit 1 description
   ///
-  /// In en, this message translates to:
-  /// **'Your application is submitted and processed immediately before others.'**
+  /// In ar, this message translates to:
+  /// **'يتم رفع طلبك ومعالجته بشكل فوري قبل الآخرين.'**
   String get paywallBenefit1Desc;
 
-  /// No description provided for @paywallBenefit2Title.
+  /// Paywall benefit 2 title
   ///
-  /// In en, this message translates to:
-  /// **'Exclusive Profit Rates'**
+  /// In ar, this message translates to:
+  /// **'نسب ربح حصرية'**
   String get paywallBenefit2Title;
 
-  /// No description provided for @paywallBenefit2Desc.
+  /// Paywall benefit 2 description
   ///
-  /// In en, this message translates to:
-  /// **'Special offers and lower profit margins exclusively for members.'**
+  /// In ar, this message translates to:
+  /// **'عروض خاصة وهوامش ربح أقل حصرياً للأعضاء.'**
   String get paywallBenefit2Desc;
 
-  /// No description provided for @paywallBenefit3Title.
+  /// Paywall benefit 3 title
   ///
-  /// In en, this message translates to:
-  /// **'Personal Financial Advisor'**
+  /// In ar, this message translates to:
+  /// **'مستشار مالي خاص'**
   String get paywallBenefit3Title;
 
-  /// No description provided for @paywallBenefit3Desc.
+  /// Paywall benefit 3 description
   ///
-  /// In en, this message translates to:
-  /// **'Direct communication with a financial expert to help you make decisions.'**
+  /// In ar, this message translates to:
+  /// **'تواصل مباشر مع خبير مالي لمساعدتك في اتخاذ القرار.'**
   String get paywallBenefit3Desc;
 
-  /// No description provided for @paywallSocialProof.
+  /// Paywall social proof text
   ///
-  /// In en, this message translates to:
-  /// **'Join 1500+ distinguished beneficiaries'**
+  /// In ar, this message translates to:
+  /// **'انضم إلى +1500 مستفيد مميز'**
   String get paywallSocialProof;
 
-  /// No description provided for @paywallOffer.
+  /// Paywall limited offer badge text
   ///
-  /// In en, this message translates to:
-  /// **'Limited offer: 50% off for first time'**
+  /// In ar, this message translates to:
+  /// **'عرض محدود: خصم 50% لأول مرة'**
   String get paywallOffer;
 
-  /// No description provided for @paywallCta.
+  /// Paywall CTA button text
   ///
-  /// In en, this message translates to:
-  /// **'Subscribe for 99 SAR / yearly'**
+  /// In ar, this message translates to:
+  /// **'اشترك بـ 99 ريال / سنوياً'**
   String get paywallCta;
 
-  /// No description provided for @paywallOldPrice.
+  /// Paywall strikethrough old price
   ///
-  /// In en, this message translates to:
-  /// **'Was 199 SAR'**
+  /// In ar, this message translates to:
+  /// **'كان 199 ريال'**
   String get paywallOldPrice;
 
-  /// No description provided for @paywallCancel.
+  /// Paywall cancellation disclaimer
   ///
-  /// In en, this message translates to:
-  /// **'You can cancel anytime from account settings'**
+  /// In ar, this message translates to:
+  /// **'يمكنك إلغاء الاشتراك في أي وقت من إعدادات الحساب'**
   String get paywallCancel;
 
-  /// No description provided for @continueWithEmail.
+  /// Email sign up button label on login screen
   ///
-  /// In en, this message translates to:
-  /// **'Sign up with Email'**
+  /// In ar, this message translates to:
+  /// **'التسجيل بالبريد الإلكتروني'**
   String get continueWithEmail;
 
-  /// No description provided for @signIn.
+  /// Sign in button label on login screen
   ///
-  /// In en, this message translates to:
-  /// **'Sign in'**
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول'**
   String get signIn;
 
-  /// No description provided for @validationEmailRequired.
+  /// Validation error when email is empty
   ///
-  /// In en, this message translates to:
-  /// **'Email is required'**
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني مطلوب'**
   String get validationEmailRequired;
 
-  /// No description provided for @validationEmailInvalid.
+  /// Validation error when email format is invalid
   ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email'**
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال بريد إلكتروني صحيح'**
   String get validationEmailInvalid;
 
-  /// No description provided for @validationPasswordRequired.
+  /// Validation error when password is empty
   ///
-  /// In en, this message translates to:
-  /// **'Password is required'**
+  /// In ar, this message translates to:
+  /// **'كلمة المرور مطلوبة'**
   String get validationPasswordRequired;
 
-  /// No description provided for @validationPasswordTooShort.
+  /// Validation error when password is too short
   ///
-  /// In en, this message translates to:
-  /// **'Password must be at least 6 characters'**
+  /// In ar, this message translates to:
+  /// **'كلمة المرور يجب أن تكون 6 أحرف على الأقل'**
   String get validationPasswordTooShort;
 
-  /// No description provided for @validationNameRequired.
+  /// Validation error when name is empty
   ///
-  /// In en, this message translates to:
-  /// **'Name is required'**
+  /// In ar, this message translates to:
+  /// **'الاسم مطلوب'**
   String get validationNameRequired;
 
-  /// No description provided for @validationNameTooShort.
+  /// Validation error when name is too short
   ///
-  /// In en, this message translates to:
-  /// **'Name must be at least 2 characters'**
+  /// In ar, this message translates to:
+  /// **'الاسم يجب أن يكون حرفين على الأقل'**
   String get validationNameTooShort;
 
-  /// No description provided for @validationFieldRequired.
+  /// Generic validation error for required fields
   ///
-  /// In en, this message translates to:
-  /// **'This field is required'**
+  /// In ar, this message translates to:
+  /// **'هذا الحقل مطلوب'**
   String get validationFieldRequired;
 
-  /// No description provided for @homeSelectService.
+  /// Subtitle under the quick access section on home screen
   ///
-  /// In en, this message translates to:
-  /// **'Select a service to continue'**
+  /// In ar, this message translates to:
+  /// **'اختر الخدمة للمتابعة'**
   String get homeSelectService;
 
-  /// No description provided for @servicePersonalFinancingDesc.
+  /// Short description for personal financing category card
   ///
-  /// In en, this message translates to:
-  /// **'Personal financing solutions'**
+  /// In ar, this message translates to:
+  /// **'حلول تمويلية شخصية'**
   String get servicePersonalFinancingDesc;
 
-  /// No description provided for @serviceRealEstateFinancingDesc.
+  /// Short description for real estate financing category card
   ///
-  /// In en, this message translates to:
-  /// **'Affordable home financing'**
+  /// In ar, this message translates to:
+  /// **'تمويل عقاري ميسّر'**
   String get serviceRealEstateFinancingDesc;
 
-  /// No description provided for @serviceLeaseFinancingDesc.
+  /// Short description for lease financing category card
   ///
-  /// In en, this message translates to:
-  /// **'Lease-to-own financing'**
+  /// In ar, this message translates to:
+  /// **'إيجار منتهٍ بالتملك'**
   String get serviceLeaseFinancingDesc;
 
-  /// No description provided for @servicePosFinancingDesc.
+  /// Short description for POS financing category card
   ///
-  /// In en, this message translates to:
-  /// **'POS terminal solutions'**
+  /// In ar, this message translates to:
+  /// **'حلول أجهزة نقاط البيع'**
   String get servicePosFinancingDesc;
 
-  /// No description provided for @serviceKhairatDesc.
+  /// Short description for Khairat charity category card
   ///
-  /// In en, this message translates to:
-  /// **'Donations & giving'**
+  /// In ar, this message translates to:
+  /// **'التبرعات والعطاء'**
   String get serviceKhairatDesc;
 
-  /// No description provided for @serviceTools.
+  /// Service name for tools/settings category card
   ///
-  /// In en, this message translates to:
-  /// **'Tools'**
+  /// In ar, this message translates to:
+  /// **'الأدوات'**
   String get serviceTools;
 
-  /// No description provided for @serviceToolsDesc.
+  /// Short description for tools/settings category card
   ///
-  /// In en, this message translates to:
-  /// **'Settings & preferences'**
+  /// In ar, this message translates to:
+  /// **'الإعدادات والتفضيلات'**
   String get serviceToolsDesc;
 
-  /// No description provided for @categoryNotFound.
+  /// Error shown when a category type is invalid
   ///
-  /// In en, this message translates to:
-  /// **'Category not found'**
+  /// In ar, this message translates to:
+  /// **'الفئة غير موجودة'**
   String get categoryNotFound;
 
   /// No description provided for @subPersonalFinanceQuick.
   ///
-  /// In en, this message translates to:
-  /// **'Quick Personal Finance'**
+  /// In ar, this message translates to:
+  /// **'التمويل الشخصي المختصر'**
   String get subPersonalFinanceQuick;
 
   /// No description provided for @subPersonalFinanceQuickDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Fast financing with simplified procedures'**
+  /// In ar, this message translates to:
+  /// **'تمويل سريع بإجراءات مبسطة للاحتياجات العاجلة'**
   String get subPersonalFinanceQuickDesc;
 
   /// No description provided for @subPersonalFinancePlus.
   ///
-  /// In en, this message translates to:
-  /// **'Personal Finance Plus'**
+  /// In ar, this message translates to:
+  /// **'التمويل الشخصي - بلص'**
   String get subPersonalFinancePlus;
 
   /// No description provided for @subPersonalFinancePlusDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Financing with extra benefits and higher limits'**
+  /// In ar, this message translates to:
+  /// **'تمويل بمزايا إضافية وحدود أعلى'**
   String get subPersonalFinancePlusDesc;
 
   /// No description provided for @subDebtPurchase.
   ///
-  /// In en, this message translates to:
-  /// **'Debt Purchase Financing'**
+  /// In ar, this message translates to:
+  /// **'تمويل شراء المديونية'**
   String get subDebtPurchase;
 
   /// No description provided for @subDebtPurchaseDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Transfer your debt from another provider with better terms'**
+  /// In ar, this message translates to:
+  /// **'نقل مديونيتك من جهة تمويلية أخرى بشروط أفضل'**
   String get subDebtPurchaseDesc;
 
   /// No description provided for @subRealEstate.
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate Financing'**
+  /// In ar, this message translates to:
+  /// **'التمويل العقاري'**
   String get subRealEstate;
 
   /// No description provided for @subRealEstateDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Financing for residential or investment property'**
+  /// In ar, this message translates to:
+  /// **'تمويل لشراء عقار سكني أو استثماري'**
   String get subRealEstateDesc;
 
   /// No description provided for @subRealEstatePlus.
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate Plus'**
+  /// In ar, this message translates to:
+  /// **'التمويل العقاري - بلص'**
   String get subRealEstatePlus;
 
   /// No description provided for @subRealEstatePlusDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Premium real estate financing with exclusive benefits'**
+  /// In ar, this message translates to:
+  /// **'تمويل عقاري بمميزات حصرية وأرباح تنافسية'**
   String get subRealEstatePlusDesc;
 
   /// No description provided for @subLeasing.
   ///
-  /// In en, this message translates to:
-  /// **'Lease Financing'**
+  /// In ar, this message translates to:
+  /// **'التمويل التأجيري'**
   String get subLeasing;
 
   /// No description provided for @subLeasingDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Lease-to-own financing arrangement'**
+  /// In ar, this message translates to:
+  /// **'تمويل بنظام الإجارة المنتهية بالتمليك'**
   String get subLeasingDesc;
 
   /// No description provided for @subLeasingPlus.
   ///
-  /// In en, this message translates to:
-  /// **'Lease Financing Plus'**
+  /// In ar, this message translates to:
+  /// **'التمويل التأجيري - بلص'**
   String get subLeasingPlus;
 
   /// No description provided for @subLeasingPlusDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Lease financing with extra benefits and flexible terms'**
+  /// In ar, this message translates to:
+  /// **'تمويل تأجيري بمزايا إضافية وشروط ميسرة'**
   String get subLeasingPlusDesc;
 
   /// No description provided for @subPos.
   ///
-  /// In en, this message translates to:
-  /// **'POS Financing'**
+  /// In ar, this message translates to:
+  /// **'تمويل نقاط البيع'**
   String get subPos;
 
   /// No description provided for @subPosDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Financing to grow your business through POS terminals'**
+  /// In ar, this message translates to:
+  /// **'تمويل مخصص لتطوير أعمالك عبر نقاط البيع'**
   String get subPosDesc;
 
   /// No description provided for @subCharity.
   ///
-  /// In en, this message translates to:
-  /// **'Khairat Account'**
+  /// In ar, this message translates to:
+  /// **'حساب خيرات'**
   String get subCharity;
 
   /// No description provided for @subCharityDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Savings account with competitive returns, Sharia-compliant'**
+  /// In ar, this message translates to:
+  /// **'حساب ادخاري بعوائد مجزية ومتوافق مع الشريعة'**
   String get subCharityDesc;
 
   /// No description provided for @subToolsDateConvert.
   ///
-  /// In en, this message translates to:
-  /// **'Date Converter'**
+  /// In ar, this message translates to:
+  /// **'تحويل التاريخ'**
   String get subToolsDateConvert;
 
   /// No description provided for @subToolsDateConvertDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Convert between Hijri and Gregorian dates'**
+  /// In ar, this message translates to:
+  /// **'تحويل بين التاريخ الهجري والميلادي'**
   String get subToolsDateConvertDesc;
 
   /// No description provided for @subToolsAgeCalc.
   ///
-  /// In en, this message translates to:
-  /// **'Age Calculator'**
+  /// In ar, this message translates to:
+  /// **'حساب العمر'**
   String get subToolsAgeCalc;
 
   /// No description provided for @subToolsAgeCalcDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Calculate age in Hijri and Gregorian'**
+  /// In ar, this message translates to:
+  /// **'حساب العمر بالتاريخ الهجري والميلادي'**
   String get subToolsAgeCalcDesc;
 
   /// No description provided for @subToolsDeductions.
   ///
-  /// In en, this message translates to:
-  /// **'Deductions Calculator'**
+  /// In ar, this message translates to:
+  /// **'معرفة الاستقطاعات'**
   String get subToolsDeductions;
 
   /// No description provided for @subToolsDeductionsDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Calculate net salary after deductions'**
+  /// In ar, this message translates to:
+  /// **'حساب صافي الراتب بعد الاستقطاعات'**
   String get subToolsDeductionsDesc;
 
-  /// No description provided for @adminLoginTitle.
+  /// Success message after profile update
   ///
-  /// In en, this message translates to:
-  /// **'Admin Dashboard'**
-  String get adminLoginTitle;
+  /// In ar, this message translates to:
+  /// **'تم تحديث البيانات بنجاح'**
+  String get profileUpdated;
 
-  /// No description provided for @adminLoginSubtitle.
+  /// Save changes button label
   ///
-  /// In en, this message translates to:
-  /// **'Sign in to manage the dashboard'**
-  String get adminLoginSubtitle;
+  /// In ar, this message translates to:
+  /// **'حفظ التغييرات'**
+  String get saveChanges;
 
-  /// No description provided for @usersTitle.
+  /// No description provided for @profileWebsite.
   ///
-  /// In en, this message translates to:
-  /// **'Users'**
-  String get usersTitle;
+  /// In ar, this message translates to:
+  /// **'موقع الويب'**
+  String get profileWebsite;
 
-  /// No description provided for @toolsTitle.
+  /// No description provided for @profileUploadSignature.
   ///
-  /// In en, this message translates to:
-  /// **'Tools'**
-  String get toolsTitle;
+  /// In ar, this message translates to:
+  /// **'ارفع توقيعك'**
+  String get profileUploadSignature;
 
-  /// No description provided for @dashboardTitle.
+  /// No description provided for @authProviderGoogle.
   ///
-  /// In en, this message translates to:
-  /// **'Dashboard'**
-  String get dashboardTitle;
+  /// In ar, this message translates to:
+  /// **'حساب Google'**
+  String get authProviderGoogle;
 
-  /// No description provided for @pageOf.
+  /// No description provided for @authProviderApple.
   ///
-  /// In en, this message translates to:
-  /// **'Page {current} of {total}'**
-  String pageOf(int current, int total);
+  /// In ar, this message translates to:
+  /// **'حساب Apple'**
+  String get authProviderApple;
 
-  /// No description provided for @rowsPerPage.
+  /// No description provided for @authProviderEmail.
   ///
-  /// In en, this message translates to:
-  /// **'Rows per page'**
-  String get rowsPerPage;
-
-  /// No description provided for @search.
-  ///
-  /// In en, this message translates to:
-  /// **'Search'**
-  String get search;
-
-  /// No description provided for @managersTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Managers'**
-  String get managersTitle;
-
-  /// No description provided for @managersSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'View and manage dashboard managers.'**
-  String get managersSubtitle;
-
-  /// No description provided for @managersEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No managers yet. Click \"Add manager\" to create one.'**
-  String get managersEmpty;
-
-  /// No description provided for @addManagerButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Add manager'**
-  String get addManagerButton;
-
-  /// No description provided for @createAdminsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create manager'**
-  String get createAdminsTitle;
-
-  /// No description provided for @createAdminsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Add new manager with email, password, and role.'**
-  String get createAdminsSubtitle;
-
-  /// No description provided for @createAdminButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Create manager'**
-  String get createAdminButton;
-
-  /// No description provided for @createAdminSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Manager created successfully.'**
-  String get createAdminSuccess;
-
-  /// No description provided for @deleteManagerButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get deleteManagerButton;
-
-  /// No description provided for @deleteManagerConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete manager'**
-  String get deleteManagerConfirmTitle;
-
-  /// No description provided for @deleteManagerConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete {name}? This will remove their access.'**
-  String deleteManagerConfirmMessage(String name);
-
-  /// No description provided for @deleteManagerSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Manager deleted successfully.'**
-  String get deleteManagerSuccess;
-
-  /// No description provided for @deleteManagerError.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to delete manager.'**
-  String get deleteManagerError;
-
-  /// No description provided for @roleAdmin.
-  ///
-  /// In en, this message translates to:
-  /// **'Admin'**
-  String get roleAdmin;
-
-  /// No description provided for @roleUser.
-  ///
-  /// In en, this message translates to:
-  /// **'User'**
-  String get roleUser;
-
-  /// No description provided for @categoriesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Categories'**
-  String get categoriesTitle;
-
-  /// No description provided for @categoriesSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage categories and subcategories.'**
-  String get categoriesSubtitle;
-
-  /// No description provided for @addCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Add category'**
-  String get addCategory;
-
-  /// No description provided for @addSubCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Add sub category'**
-  String get addSubCategory;
-
-  /// No description provided for @categoryArabicName.
-  ///
-  /// In en, this message translates to:
-  /// **'Arabic name'**
-  String get categoryArabicName;
-
-  /// No description provided for @categoryEnglishName.
-  ///
-  /// In en, this message translates to:
-  /// **'English name'**
-  String get categoryEnglishName;
-
-  /// No description provided for @categoryImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Image'**
-  String get categoryImage;
-
-  /// No description provided for @pickImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick from device'**
-  String get pickImage;
-
-  /// No description provided for @categoryImageRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Image is required'**
-  String get categoryImageRequired;
-
-  /// No description provided for @categorySaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Category saved'**
-  String get categorySaved;
-
-  /// No description provided for @categoryTitleSize.
-  ///
-  /// In en, this message translates to:
-  /// **'Title size'**
-  String get categoryTitleSize;
-
-  /// No description provided for @categoryImageWidth.
-  ///
-  /// In en, this message translates to:
-  /// **'Image width (0–1)'**
-  String get categoryImageWidth;
-
-  /// No description provided for @categoryImageHeight.
-  ///
-  /// In en, this message translates to:
-  /// **'Image height (0–1)'**
-  String get categoryImageHeight;
-
-  /// No description provided for @categoryOpacity.
-  ///
-  /// In en, this message translates to:
-  /// **'Opacity (0–1)'**
-  String get categoryOpacity;
-
-  /// No description provided for @categoryCalculatorType.
-  ///
-  /// In en, this message translates to:
-  /// **'Calculator / Tool'**
-  String get categoryCalculatorType;
-
-  /// No description provided for @categoryCalculatorTypeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Select calculator or tool'**
-  String get categoryCalculatorTypeHint;
-
-  /// No description provided for @extractionFailureLogsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Extraction Failure Logs'**
-  String get extractionFailureLogsTitle;
-
-  /// No description provided for @extractionFailureLogsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Product pages where add-to-cart could not be shown.'**
-  String get extractionFailureLogsSubtitle;
-
-  /// No description provided for @extractionFailureLogsUrl.
-  ///
-  /// In en, this message translates to:
-  /// **'URL'**
-  String get extractionFailureLogsUrl;
-
-  /// No description provided for @extractionFailureLogsMarketplace.
-  ///
-  /// In en, this message translates to:
-  /// **'Marketplace'**
-  String get extractionFailureLogsMarketplace;
-
-  /// No description provided for @extractionFailureLogsTitleFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Title'**
-  String get extractionFailureLogsTitleFound;
-
-  /// No description provided for @extractionFailureLogsPriceFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Price'**
-  String get extractionFailureLogsPriceFound;
-
-  /// No description provided for @extractionFailureLogsColorFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Color'**
-  String get extractionFailureLogsColorFound;
-
-  /// No description provided for @extractionFailureLogsSizeFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Size'**
-  String get extractionFailureLogsSizeFound;
-
-  /// No description provided for @extractionFailureLogsCreatedAt.
-  ///
-  /// In en, this message translates to:
-  /// **'Date'**
-  String get extractionFailureLogsCreatedAt;
-
-  /// No description provided for @extractionFailureLogsYes.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes'**
-  String get extractionFailureLogsYes;
-
-  /// No description provided for @extractionFailureLogsNo.
-  ///
-  /// In en, this message translates to:
-  /// **'No'**
-  String get extractionFailureLogsNo;
+  /// In ar, this message translates to:
+  /// **'حساب البريد'**
+  String get authProviderEmail;
 
   /// No description provided for @calculatorsTitle.
   ///
-  /// In en, this message translates to:
-  /// **'Finance Calculators'**
+  /// In ar, this message translates to:
+  /// **'الحاسبات المالية'**
   String get calculatorsTitle;
 
   /// No description provided for @calculatorsSubtitle.
   ///
-  /// In en, this message translates to:
-  /// **'Calculate financing options and eligibility'**
+  /// In ar, this message translates to:
+  /// **'احسب خيارات التمويل والأهلية'**
   String get calculatorsSubtitle;
 
   /// No description provided for @calcPersonalFinance.
   ///
-  /// In en, this message translates to:
-  /// **'Personal Finance (PLAS)'**
+  /// In ar, this message translates to:
+  /// **'التمويل الشخصي (PLAS)'**
   String get calcPersonalFinance;
 
   /// No description provided for @calcPersonalFinanceDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Calculate personal financing with full details'**
+  /// In ar, this message translates to:
+  /// **'حساب التمويل الشخصي بالتفاصيل الكاملة'**
   String get calcPersonalFinanceDesc;
 
   /// No description provided for @calcPersonalFinanceQuick.
   ///
-  /// In en, this message translates to:
-  /// **'Quick Personal Finance'**
+  /// In ar, this message translates to:
+  /// **'التمويل الشخصي المختصر'**
   String get calcPersonalFinanceQuick;
 
   /// No description provided for @calcPersonalFinanceQuickDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Simplified personal financing calculator'**
+  /// In ar, this message translates to:
+  /// **'حاسبة تمويل شخصي مبسطة'**
   String get calcPersonalFinanceQuickDesc;
 
   /// No description provided for @calcDebtPurchase.
   ///
-  /// In en, this message translates to:
-  /// **'Debt Purchase'**
+  /// In ar, this message translates to:
+  /// **'شراء مديونية'**
   String get calcDebtPurchase;
 
   /// No description provided for @calcDebtPurchaseDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Transfer debt from another bank'**
+  /// In ar, this message translates to:
+  /// **'نقل المديونية من بنك آخر'**
   String get calcDebtPurchaseDesc;
 
   /// No description provided for @calcRealEstate.
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate'**
+  /// In ar, this message translates to:
+  /// **'التمويل العقاري'**
   String get calcRealEstate;
 
   /// No description provided for @calcRealEstateDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Real estate financing with auto-calculated duration'**
+  /// In ar, this message translates to:
+  /// **'تمويل عقاري مع حساب المدة المتاحة تلقائياً'**
   String get calcRealEstateDesc;
 
   /// No description provided for @calcRealEstatePlus.
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate Plus (2-in-1)'**
+  /// In ar, this message translates to:
+  /// **'التمويل العقاري بلص (2 في 1)'**
   String get calcRealEstatePlus;
 
   /// No description provided for @calcRealEstatePlusDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Real estate financing with personal loan'**
+  /// In ar, this message translates to:
+  /// **'تمويل عقاري مع تمويل شخصي'**
   String get calcRealEstatePlusDesc;
 
   /// No description provided for @calcLeasingRegular.
   ///
-  /// In en, this message translates to:
-  /// **'Leasing (Tajiri)'**
+  /// In ar, this message translates to:
+  /// **'التأجيري (تاجيري)'**
   String get calcLeasingRegular;
 
   /// No description provided for @calcLeasingRegularDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Vehicle leasing calculator'**
+  /// In ar, this message translates to:
+  /// **'حاسبة التمويل التأجيري للسيارات'**
   String get calcLeasingRegularDesc;
 
   /// No description provided for @calcLeasingMicro.
   ///
-  /// In en, this message translates to:
-  /// **'Leasing Micro'**
+  /// In ar, this message translates to:
+  /// **'التأجيري مايكرو'**
   String get calcLeasingMicro;
 
   /// No description provided for @calcLeasingMicroDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Auto-calculate max affordable vehicle'**
+  /// In ar, this message translates to:
+  /// **'حساب أقصى سعر سيارة ممكن'**
   String get calcLeasingMicroDesc;
 
   /// No description provided for @calcLeasingAutoCalcMaxCar.
   ///
-  /// In en, this message translates to:
-  /// **'Auto-calculate max vehicle price for client'**
+  /// In ar, this message translates to:
+  /// **'حساب تلقائي اقصى سعر سيارة للعميل'**
   String get calcLeasingAutoCalcMaxCar;
 
   /// No description provided for @calcLeasingCarPriceZeroHint.
   ///
-  /// In en, this message translates to:
-  /// **'Put zero in the car price field'**
+  /// In ar, this message translates to:
+  /// **'وضع صفر في خانة سعر السيارة'**
   String get calcLeasingCarPriceZeroHint;
 
   /// No description provided for @calcResultCostOfTerm.
   ///
-  /// In en, this message translates to:
-  /// **'Cost of term'**
+  /// In ar, this message translates to:
+  /// **'كلفة الأجل'**
   String get calcResultCostOfTerm;
 
   /// No description provided for @calcLeasingAsPercent.
   ///
-  /// In en, this message translates to:
-  /// **'Percentage of vehicle value'**
+  /// In ar, this message translates to:
+  /// **'نسبة مئوية من قيمة السيارة'**
   String get calcLeasingAsPercent;
 
   /// No description provided for @calcLeasingAsAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Amount (SAR)'**
+  /// In ar, this message translates to:
+  /// **'مبلغ (ريال)'**
   String get calcLeasingAsAmount;
 
   /// No description provided for @calcInputAdminFees.
   ///
-  /// In en, this message translates to:
-  /// **'Administrative fees (SAR)'**
+  /// In ar, this message translates to:
+  /// **'الرسوم الإدارية (ريال)'**
   String get calcInputAdminFees;
 
   /// No description provided for @calcInputLicensePlateFees.
   ///
-  /// In en, this message translates to:
-  /// **'License plate fees (SAR)'**
+  /// In ar, this message translates to:
+  /// **'رسوم اللوحات (ريال)'**
   String get calcInputLicensePlateFees;
 
   /// No description provided for @calcResultLicensePlateFees.
   ///
-  /// In en, this message translates to:
-  /// **'License plate fees'**
+  /// In ar, this message translates to:
+  /// **'رسوم اللوحات'**
   String get calcResultLicensePlateFees;
 
   /// No description provided for @calcPosFinancing.
   ///
-  /// In en, this message translates to:
-  /// **'POS Financing'**
+  /// In ar, this message translates to:
+  /// **'تمويل نقاط البيع'**
   String get calcPosFinancing;
 
   /// No description provided for @calcPosFinancingDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Business POS financing calculator'**
+  /// In ar, this message translates to:
+  /// **'حاسبة تمويل نقاط البيع للأعمال'**
   String get calcPosFinancingDesc;
 
   /// No description provided for @calcKhairat.
   ///
-  /// In en, this message translates to:
-  /// **'Khairat Savings'**
+  /// In ar, this message translates to:
+  /// **'حساب خيرات'**
   String get calcKhairat;
 
   /// No description provided for @calcKhairatDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Savings account profit calculator'**
+  /// In ar, this message translates to:
+  /// **'حاسبة أرباح حساب الادخار'**
   String get calcKhairatDesc;
 
   /// No description provided for @calcProtectionSavings.
   ///
-  /// In en, this message translates to:
-  /// **'Protection & Savings'**
+  /// In ar, this message translates to:
+  /// **'الحماية والادخار'**
   String get calcProtectionSavings;
 
   /// No description provided for @calcProtectionSavingsDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Insurance and investment projection'**
+  /// In ar, this message translates to:
+  /// **'جدول التأمين والاستثمار'**
   String get calcProtectionSavingsDesc;
 
   /// No description provided for @calcAgeCalculator.
   ///
-  /// In en, this message translates to:
-  /// **'Age Calculator'**
+  /// In ar, this message translates to:
+  /// **'حاسبة العمر'**
   String get calcAgeCalculator;
 
   /// No description provided for @calcAgeCalculatorDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Calculate age from date of birth'**
+  /// In ar, this message translates to:
+  /// **'حساب العمر من تاريخ الميلاد'**
   String get calcAgeCalculatorDesc;
 
   /// No description provided for @calcDateConverter.
   ///
-  /// In en, this message translates to:
-  /// **'Date Converter'**
+  /// In ar, this message translates to:
+  /// **'تحويل التاريخ'**
   String get calcDateConverter;
 
   /// No description provided for @calcDateConverterDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Convert Hijri to Gregorian and vice versa'**
+  /// In ar, this message translates to:
+  /// **'تحويل بين الهجري والميلادي'**
   String get calcDateConverterDesc;
 
   /// No description provided for @calcDeductions.
   ///
-  /// In en, this message translates to:
-  /// **'Deductions Calculator'**
+  /// In ar, this message translates to:
+  /// **'حاسبة الاستقطاعات'**
   String get calcDeductions;
 
   /// No description provided for @calcDeductionsDesc.
   ///
-  /// In en, this message translates to:
-  /// **'View salary deduction breakdown'**
+  /// In ar, this message translates to:
+  /// **'عرض تفصيل الاستقطاعات من الراتب'**
   String get calcDeductionsDesc;
 
   /// No description provided for @calcBankFees.
   ///
-  /// In en, this message translates to:
-  /// **'Bank Fees'**
+  /// In ar, this message translates to:
+  /// **'الرسوم البنكية'**
   String get calcBankFees;
 
   /// No description provided for @calcBankFeesDesc.
   ///
-  /// In en, this message translates to:
-  /// **'SAMA banking fee comparison and guide'**
+  /// In ar, this message translates to:
+  /// **'مقارنة الرسوم البنكية وفق تعليمات ساما'**
   String get calcBankFeesDesc;
 
   /// No description provided for @calcInputSalary.
   ///
-  /// In en, this message translates to:
-  /// **'Monthly Salary (SAR)'**
+  /// In ar, this message translates to:
+  /// **'الراتب الشهري (ريال)'**
   String get calcInputSalary;
 
   /// No description provided for @calcInputEmploymentType.
   ///
-  /// In en, this message translates to:
-  /// **'Employment Type'**
+  /// In ar, this message translates to:
+  /// **'الوضع الوظيفي'**
   String get calcInputEmploymentType;
 
   /// No description provided for @calcInputSector.
   ///
-  /// In en, this message translates to:
-  /// **'Employment Sector'**
+  /// In ar, this message translates to:
+  /// **'القطاع الوظيفي'**
   String get calcInputSector;
 
   /// No description provided for @calcInputDateOfBirth.
   ///
-  /// In en, this message translates to:
-  /// **'Date of Birth'**
+  /// In ar, this message translates to:
+  /// **'تاريخ الميلاد'**
   String get calcInputDateOfBirth;
 
   /// No description provided for @calcInputProfitRate.
   ///
-  /// In en, this message translates to:
-  /// **'Profit Rate'**
+  /// In ar, this message translates to:
+  /// **'هامش الربح'**
   String get calcInputProfitRate;
 
   /// No description provided for @calcInputDuration.
   ///
-  /// In en, this message translates to:
-  /// **'Finance Duration'**
+  /// In ar, this message translates to:
+  /// **'مدة التمويل'**
   String get calcInputDuration;
 
   /// No description provided for @calcInputDurationYears.
   ///
-  /// In en, this message translates to:
-  /// **'Duration (Years)'**
+  /// In ar, this message translates to:
+  /// **'المدة (سنوات)'**
   String get calcInputDurationYears;
 
   /// No description provided for @calcInputCreditCardAhli.
   ///
-  /// In en, this message translates to:
-  /// **'Total Credit Card Limits'**
+  /// In ar, this message translates to:
+  /// **'مجموع حدود بطاقات الاهلي الائتمانية'**
   String get calcInputCreditCardAhli;
 
   /// No description provided for @calcInputCreditCardOther.
   ///
-  /// In en, this message translates to:
-  /// **'Total Other Bank Credit Card Limits'**
+  /// In ar, this message translates to:
+  /// **'مجموع حدود بطاقات البنوك الاخرى الائتمانية'**
   String get calcInputCreditCardOther;
 
   /// No description provided for @calcInputHasRealEstate.
   ///
-  /// In en, this message translates to:
-  /// **'Has Real Estate Loan?'**
+  /// In ar, this message translates to:
+  /// **'هل يوجد تمويل عقاري؟'**
   String get calcInputHasRealEstate;
 
   /// No description provided for @calcInputMilitaryRank.
   ///
-  /// In en, this message translates to:
-  /// **'Military Rank'**
+  /// In ar, this message translates to:
+  /// **'الرتبة العسكرية'**
   String get calcInputMilitaryRank;
 
   /// No description provided for @calcInputOtherBankDebt.
   ///
-  /// In en, this message translates to:
-  /// **'Debt at Other Bank (SAR)'**
+  /// In ar, this message translates to:
+  /// **'المديونية في البنك الآخر (ريال)'**
   String get calcInputOtherBankDebt;
 
   /// No description provided for @calcInputCarPrice.
   ///
-  /// In en, this message translates to:
-  /// **'Vehicle Price (SAR)'**
+  /// In ar, this message translates to:
+  /// **'سعر السيارة (ريال)'**
   String get calcInputCarPrice;
 
   /// No description provided for @calcInputDownPayment.
   ///
-  /// In en, this message translates to:
-  /// **'Down Payment'**
+  /// In ar, this message translates to:
+  /// **'الدفعة الأولى'**
   String get calcInputDownPayment;
 
   /// No description provided for @calcInputCustomerType.
   ///
-  /// In en, this message translates to:
-  /// **'Customer Type'**
+  /// In ar, this message translates to:
+  /// **'نوع العميل'**
   String get calcInputCustomerType;
 
   /// No description provided for @calcInputSegment.
   ///
-  /// In en, this message translates to:
-  /// **'Segment'**
+  /// In ar, this message translates to:
+  /// **'الشريحة'**
   String get calcInputSegment;
 
   /// No description provided for @calcInputHasPersonalLoan.
   ///
-  /// In en, this message translates to:
-  /// **'Has Personal Loan?'**
+  /// In ar, this message translates to:
+  /// **'هل لديه تمويل شخصي؟'**
   String get calcInputHasPersonalLoan;
 
   /// No description provided for @calcInputPersonalLoanPayment.
   ///
-  /// In en, this message translates to:
-  /// **'Personal Loan Monthly Payment'**
+  /// In ar, this message translates to:
+  /// **'قسط التمويل الشخصي'**
   String get calcInputPersonalLoanPayment;
 
   /// No description provided for @calcInputHasOtherDeductions.
   ///
-  /// In en, this message translates to:
-  /// **'Has Other Deductions?'**
+  /// In ar, this message translates to:
+  /// **'هل لديه استقطاعات أخرى؟'**
   String get calcInputHasOtherDeductions;
 
   /// No description provided for @calcInputOtherDeductions.
   ///
-  /// In en, this message translates to:
-  /// **'Other Deductions Amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ الاستقطاعات الأخرى'**
   String get calcInputOtherDeductions;
 
   /// No description provided for @calcInputExistingObligations.
   ///
-  /// In en, this message translates to:
-  /// **'Current Monthly Obligations'**
+  /// In ar, this message translates to:
+  /// **'الالتزامات الشهرية الحالية'**
   String get calcInputExistingObligations;
 
   /// No description provided for @calcInputPersonalFinanceObligation.
   ///
-  /// In en, this message translates to:
-  /// **'Personal Finance Obligations'**
+  /// In ar, this message translates to:
+  /// **'التزامات التمويل الشخصي'**
   String get calcInputPersonalFinanceObligation;
 
   /// No description provided for @calcInputLeasingCreditObligation.
   ///
-  /// In en, this message translates to:
-  /// **'Leasing / Credit Card Obligations'**
+  /// In ar, this message translates to:
+  /// **'تمويل تاجيري او بطاقات الائتمان'**
   String get calcInputLeasingCreditObligation;
 
   /// No description provided for @calcInputRealEstateObligation.
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate Financing'**
+  /// In ar, this message translates to:
+  /// **'تمويل عقاري'**
   String get calcInputRealEstateObligation;
 
   /// No description provided for @calcInputRealEstatePayment.
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate Loan Payment'**
+  /// In ar, this message translates to:
+  /// **'قسط التمويل العقاري'**
   String get calcInputRealEstatePayment;
 
   /// No description provided for @calcInputRemainingInstallments.
   ///
-  /// In en, this message translates to:
-  /// **'Remaining Personal Loan Installments'**
+  /// In ar, this message translates to:
+  /// **'الأقساط المتبقية للتمويل الشخصي'**
   String get calcInputRemainingInstallments;
 
   /// No description provided for @calcInputBusinessType.
   ///
-  /// In en, this message translates to:
-  /// **'Business Type'**
+  /// In ar, this message translates to:
+  /// **'نوع المنشأة'**
   String get calcInputBusinessType;
 
   /// No description provided for @calcInputBusinessActivity.
   ///
-  /// In en, this message translates to:
-  /// **'Business Activity'**
+  /// In ar, this message translates to:
+  /// **'نشاط المنشأة'**
   String get calcInputBusinessActivity;
 
   /// No description provided for @calcInputAnnualSales.
   ///
-  /// In en, this message translates to:
-  /// **'Annual Sales (SAR)'**
+  /// In ar, this message translates to:
+  /// **'مبيعات سنوية (ريال)'**
   String get calcInputAnnualSales;
 
   /// No description provided for @calcInputBusinessAge.
   ///
-  /// In en, this message translates to:
-  /// **'Business Age'**
+  /// In ar, this message translates to:
+  /// **'عمر المنشأة'**
   String get calcInputBusinessAge;
 
   /// No description provided for @calcInputPosPeriod.
   ///
-  /// In en, this message translates to:
-  /// **'POS Operating Period'**
+  /// In ar, this message translates to:
+  /// **'فترة تشغيل نقاط البيع'**
   String get calcInputPosPeriod;
 
   /// No description provided for @calcInputMonthlyTransactions.
   ///
-  /// In en, this message translates to:
-  /// **'Monthly POS Transactions'**
+  /// In ar, this message translates to:
+  /// **'عدد العمليات الشهرية'**
   String get calcInputMonthlyTransactions;
 
   /// No description provided for @calcInputLoanAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Loan Amount (SAR)'**
+  /// In ar, this message translates to:
+  /// **'مبلغ التمويل (ريال)'**
   String get calcInputLoanAmount;
 
   /// No description provided for @calcInputLoanAmountOptional.
   ///
-  /// In en, this message translates to:
-  /// **'Financing Amount - Optional (SAR)'**
+  /// In ar, this message translates to:
+  /// **'مبلغ التمويل - اختياري (ريال)'**
   String get calcInputLoanAmountOptional;
 
   /// No description provided for @calcHintSpecificAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Enter specific amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ محدد'**
   String get calcHintSpecificAmount;
 
   /// No description provided for @calcInputDepositAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Deposit Amount (SAR)'**
+  /// In ar, this message translates to:
+  /// **'مبلغ الإيداع (ريال)'**
   String get calcInputDepositAmount;
 
   /// No description provided for @calcInputPeriod.
   ///
-  /// In en, this message translates to:
-  /// **'Investment Period'**
+  /// In ar, this message translates to:
+  /// **'فترة الاستثمار'**
   String get calcInputPeriod;
 
   /// No description provided for @calcInputSubscriptionAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Subscription Amount (SAR)'**
+  /// In ar, this message translates to:
+  /// **'مبلغ الاشتراك (ريال)'**
   String get calcInputSubscriptionAmount;
 
   /// No description provided for @calcInputReturnRate.
   ///
-  /// In en, this message translates to:
-  /// **'Return Rate'**
+  /// In ar, this message translates to:
+  /// **'هامش ربح العائد'**
   String get calcInputReturnRate;
 
   /// No description provided for @calcInputCoverageAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Coverage Amount (SAR)'**
+  /// In ar, this message translates to:
+  /// **'مبلغ التغطية (ريال)'**
   String get calcInputCoverageAmount;
 
   /// No description provided for @calcInputProgramDuration.
   ///
-  /// In en, this message translates to:
-  /// **'Program Duration (Years)'**
+  /// In ar, this message translates to:
+  /// **'مدة البرنامج (سنوات)'**
   String get calcInputProgramDuration;
 
   /// No description provided for @calcInputInvestmentStrategy.
   ///
-  /// In en, this message translates to:
-  /// **'Investment Strategy'**
+  /// In ar, this message translates to:
+  /// **'برنامج الاستثمار'**
   String get calcInputInvestmentStrategy;
 
   /// No description provided for @calcInputHousingSubsidy.
   ///
-  /// In en, this message translates to:
-  /// **'Housing Support'**
+  /// In ar, this message translates to:
+  /// **'الدعم السكني'**
   String get calcInputHousingSubsidy;
 
   /// No description provided for @calcInputHasEtezaz.
   ///
-  /// In en, this message translates to:
-  /// **'Eitizaz'**
+  /// In ar, this message translates to:
+  /// **'اعتزاز'**
   String get calcInputHasEtezaz;
 
   /// No description provided for @calcInputOtherObligations.
   ///
-  /// In en, this message translates to:
-  /// **'Other Obligations'**
+  /// In ar, this message translates to:
+  /// **'التزامات اخرى'**
   String get calcInputOtherObligations;
 
   /// No description provided for @calcInputRemainingLoanDuration.
   ///
-  /// In en, this message translates to:
-  /// **'Remaining Loan Duration'**
+  /// In ar, this message translates to:
+  /// **'المدة المتبقية من القرض'**
   String get calcInputRemainingLoanDuration;
 
   /// No description provided for @calcInputSpecificREAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Specific Real Estate Amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ تمويل عقاري محدد'**
   String get calcInputSpecificREAmount;
 
   /// No description provided for @calcInputREDurationMonths.
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate Financing Duration (Months)'**
+  /// In ar, this message translates to:
+  /// **'مدة التمويل العقاري (بالأشهر)'**
   String get calcInputREDurationMonths;
 
   /// No description provided for @calcAutoFromRetirement.
   ///
-  /// In en, this message translates to:
-  /// **'Auto (from retirement age)'**
+  /// In ar, this message translates to:
+  /// **'تلقائي (حسب سن التقاعد)'**
   String get calcAutoFromRetirement;
 
   /// No description provided for @calcInputRequestedAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Requested Amount (SAR)'**
+  /// In ar, this message translates to:
+  /// **'المبلغ المطلوب (ريال)'**
   String get calcInputRequestedAmount;
 
   /// No description provided for @calcInputGregorianDate.
   ///
-  /// In en, this message translates to:
-  /// **'Gregorian Date'**
+  /// In ar, this message translates to:
+  /// **'التاريخ الميلادي'**
   String get calcInputGregorianDate;
 
   /// No description provided for @calcInputHijriDate.
   ///
-  /// In en, this message translates to:
-  /// **'Hijri Date'**
+  /// In ar, this message translates to:
+  /// **'التاريخ الهجري'**
   String get calcInputHijriDate;
 
   /// No description provided for @calcResultTitle.
   ///
-  /// In en, this message translates to:
-  /// **'Calculation Results'**
+  /// In ar, this message translates to:
+  /// **'نتائج الحساب'**
   String get calcResultTitle;
 
   /// No description provided for @calcResultEligible.
   ///
-  /// In en, this message translates to:
-  /// **'Eligible for Financing'**
+  /// In ar, this message translates to:
+  /// **'مؤهل للتمويل'**
   String get calcResultEligible;
 
   /// No description provided for @calcResultNotEligible.
   ///
-  /// In en, this message translates to:
-  /// **'Not Eligible'**
+  /// In ar, this message translates to:
+  /// **'غير مؤهل'**
   String get calcResultNotEligible;
 
   /// No description provided for @calcResultDeductionRatio.
   ///
-  /// In en, this message translates to:
-  /// **'Deduction Ratio'**
+  /// In ar, this message translates to:
+  /// **'نسبة الاستقطاع'**
   String get calcResultDeductionRatio;
 
   /// No description provided for @calcResultMonthlyInstallment.
   ///
-  /// In en, this message translates to:
-  /// **'Monthly Installment'**
+  /// In ar, this message translates to:
+  /// **'القسط الشهري'**
   String get calcResultMonthlyInstallment;
 
   /// No description provided for @calcResultTotalFinancing.
   ///
-  /// In en, this message translates to:
-  /// **'Total Financing'**
+  /// In ar, this message translates to:
+  /// **'إجمالي التمويل'**
   String get calcResultTotalFinancing;
 
   /// No description provided for @calcResultApprovalAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Approval Amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ الموافقة'**
   String get calcResultApprovalAmount;
 
   /// No description provided for @calcResultAdminFees.
   ///
-  /// In en, this message translates to:
-  /// **'Admin Fees Amount (0.5%)'**
+  /// In ar, this message translates to:
+  /// **'مبلغ الرسوم الادارية (0.5%)'**
   String get calcResultAdminFees;
 
   /// No description provided for @calcResultVat.
   ///
-  /// In en, this message translates to:
-  /// **'Tax'**
+  /// In ar, this message translates to:
+  /// **'الضريبة'**
   String get calcResultVat;
 
   /// No description provided for @calcResultTotalFees.
   ///
-  /// In en, this message translates to:
-  /// **'Total Fees'**
+  /// In ar, this message translates to:
+  /// **'إجمالي الرسوم'**
   String get calcResultTotalFees;
 
   /// No description provided for @calcResultNetAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Net Finance after Fee Deduction'**
+  /// In ar, this message translates to:
+  /// **'صافي مبلغ التمويل بعد استقطاع الرسوم'**
   String get calcResultNetAmount;
 
   /// No description provided for @calcResultBankProfit.
   ///
-  /// In en, this message translates to:
-  /// **'Total Bank Profit'**
+  /// In ar, this message translates to:
+  /// **'إجمالي الربح الخاص بالبنك'**
   String get calcResultBankProfit;
 
   /// No description provided for @calcResultNetAfterAll.
   ///
-  /// In en, this message translates to:
-  /// **'Net Finance after All Deductions'**
+  /// In ar, this message translates to:
+  /// **'صافي مبلغ التمويل بعد خصم كل الرسوم'**
   String get calcResultNetAfterAll;
 
   /// No description provided for @calcResultMaxAvailableMonths.
   ///
-  /// In en, this message translates to:
-  /// **'Max Available Months'**
+  /// In ar, this message translates to:
+  /// **'أقصى مدة متاحة'**
   String get calcResultMaxAvailableMonths;
 
   /// No description provided for @calcResultDebtAtOtherBank.
   ///
-  /// In en, this message translates to:
-  /// **'Debt at Other Bank'**
+  /// In ar, this message translates to:
+  /// **'المديونية في البنك الآخر'**
   String get calcResultDebtAtOtherBank;
 
   /// No description provided for @calcResultNetAfterDebt.
   ///
-  /// In en, this message translates to:
-  /// **'Net client financing after deducting other bank debt'**
+  /// In ar, this message translates to:
+  /// **'صافي مبلغ تمويل العميل بعد خصم مديونية البنك الآخر'**
   String get calcResultNetAfterDebt;
 
   /// No description provided for @calcResultAdminFeesIncludingTax.
   ///
-  /// In en, this message translates to:
-  /// **'Administrative fees including tax'**
+  /// In ar, this message translates to:
+  /// **'الرسوم الإدارية شامل الضريبة'**
   String get calcResultAdminFeesIncludingTax;
 
   /// No description provided for @calcResultMaxREAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Max Real Estate Amount'**
+  /// In ar, this message translates to:
+  /// **'أقصى مبلغ عقاري'**
   String get calcResultMaxREAmount;
 
   /// No description provided for @calcResultMonthlyDuringPL.
   ///
-  /// In en, this message translates to:
-  /// **'Monthly Installment (1) During Personal Loan'**
+  /// In ar, this message translates to:
+  /// **'القسط الشهري ( 1 ) خلال مدة القسط الشخصي'**
   String get calcResultMonthlyDuringPL;
 
   /// No description provided for @calcResultMonthlyAfterPL.
   ///
-  /// In en, this message translates to:
-  /// **'Monthly Installment (2) After Personal Loan'**
+  /// In ar, this message translates to:
+  /// **'القسط الشهري ( 2 ) بعد انتهاء القسط الشخصي'**
   String get calcResultMonthlyAfterPL;
 
   /// No description provided for @calcResultLoanAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Financing Amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ التمويل'**
   String get calcResultLoanAmount;
 
   /// No description provided for @calcResultDuration.
   ///
-  /// In en, this message translates to:
-  /// **'Duration'**
+  /// In ar, this message translates to:
+  /// **'المدة'**
   String get calcResultDuration;
 
   /// No description provided for @calcResultProfitAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Profit Amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ الربح'**
   String get calcResultProfitAmount;
 
   /// No description provided for @calcResultTotalWithProfit.
   ///
-  /// In en, this message translates to:
-  /// **'Total With Profit'**
+  /// In ar, this message translates to:
+  /// **'الإجمالي مع الأرباح'**
   String get calcResultTotalWithProfit;
 
   /// No description provided for @calcResultAdminAppraisalFees.
   ///
-  /// In en, this message translates to:
-  /// **'Admin & Appraisal Fees'**
+  /// In ar, this message translates to:
+  /// **'رسوم إدارية وتقييم'**
   String get calcResultAdminAppraisalFees;
 
   /// No description provided for @calcResultHousingSubsidy.
   ///
-  /// In en, this message translates to:
-  /// **'Housing Subsidy'**
+  /// In ar, this message translates to:
+  /// **'الدعم السكني'**
   String get calcResultHousingSubsidy;
 
   /// No description provided for @calcResultGrandTotal.
   ///
-  /// In en, this message translates to:
-  /// **'Grand Total'**
+  /// In ar, this message translates to:
+  /// **'الإجمالي الكلي'**
   String get calcResultGrandTotal;
 
   /// No description provided for @calcResultFinanceDurationMonths.
   ///
-  /// In en, this message translates to:
-  /// **'Finance Duration (in Months)'**
+  /// In ar, this message translates to:
+  /// **'مدة التمويل ( بالأشهر )'**
   String get calcResultFinanceDurationMonths;
 
   /// No description provided for @calcResultAvailableDurationYears.
   ///
-  /// In en, this message translates to:
-  /// **'Available Duration for Client'**
+  /// In ar, this message translates to:
+  /// **'المدة المتاحة للعميل'**
   String get calcResultAvailableDurationYears;
 
   /// No description provided for @calcYear.
   ///
-  /// In en, this message translates to:
-  /// **'Year'**
+  /// In ar, this message translates to:
+  /// **'سنة'**
   String get calcYear;
 
   /// No description provided for @calcResultAdminAppraisalIncludingTax.
   ///
-  /// In en, this message translates to:
-  /// **'Admin & Valuation Fees'**
+  /// In ar, this message translates to:
+  /// **'الرسوم الإدارية والتقييم شاملة الضريبة'**
   String get calcResultAdminAppraisalIncludingTax;
 
   /// No description provided for @calcResultBankProfitRE.
   ///
-  /// In en, this message translates to:
-  /// **'Bank Profits'**
+  /// In ar, this message translates to:
+  /// **'ارباح البنك'**
   String get calcResultBankProfitRE;
 
   /// No description provided for @calcResultFinalAmountWithSupport.
   ///
-  /// In en, this message translates to:
-  /// **'Final Amount + ( Housing Support / Eitizaz ) if any'**
+  /// In ar, this message translates to:
+  /// **'المبلغ النهائي + ( الدعم السكني / اعتزاز ) ان وجد'**
   String get calcResultFinalAmountWithSupport;
 
   /// No description provided for @calcInputPersonalLoanIfAny.
   ///
-  /// In en, this message translates to:
-  /// **'Personal Finance Installment'**
+  /// In ar, this message translates to:
+  /// **'قسط التمويل الشخصي'**
   String get calcInputPersonalLoanIfAny;
 
   /// No description provided for @calcResultInsurance.
   ///
-  /// In en, this message translates to:
-  /// **'Insurance'**
+  /// In ar, this message translates to:
+  /// **'التأمين'**
   String get calcResultInsurance;
 
   /// No description provided for @calcResultDownPayment.
   ///
-  /// In en, this message translates to:
-  /// **'Down Payment'**
+  /// In ar, this message translates to:
+  /// **'الدفعة الأولى'**
   String get calcResultDownPayment;
 
   /// No description provided for @calcResultLastPayment.
   ///
-  /// In en, this message translates to:
-  /// **'Last Payment (Balloon)'**
+  /// In ar, this message translates to:
+  /// **'الدفعة الأخيرة '**
   String get calcResultLastPayment;
 
   /// No description provided for @calcResultFinancedAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Financed Amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ التمويل'**
   String get calcResultFinancedAmount;
 
   /// No description provided for @calcResultAPR.
   ///
-  /// In en, this message translates to:
-  /// **'APR'**
+  /// In ar, this message translates to:
+  /// **'معدل النسبة السنوية'**
   String get calcResultAPR;
 
   /// No description provided for @calcResultTotalPaid.
   ///
-  /// In en, this message translates to:
-  /// **'Total Paid'**
+  /// In ar, this message translates to:
+  /// **'الإجمالي المدفوع'**
   String get calcResultTotalPaid;
 
   /// No description provided for @calcResultActualRatio.
   ///
-  /// In en, this message translates to:
-  /// **'Actual Deduction Ratio'**
+  /// In ar, this message translates to:
+  /// **'نسبة الاستقطاع الفعلية'**
   String get calcResultActualRatio;
 
   /// No description provided for @calcResultRequiredDP.
   ///
-  /// In en, this message translates to:
-  /// **'Required Down Payment'**
+  /// In ar, this message translates to:
+  /// **'مبلغ الدفعة الأولى المطلوبة'**
   String get calcResultRequiredDP;
 
   /// No description provided for @calcResultDecision.
   ///
-  /// In en, this message translates to:
-  /// **'Decision'**
+  /// In ar, this message translates to:
+  /// **'القرار'**
   String get calcResultDecision;
 
   /// No description provided for @calcResultAvailableForCar.
   ///
-  /// In en, this message translates to:
-  /// **'Available for Vehicle'**
+  /// In ar, this message translates to:
+  /// **'المتاح لتمويل السيارة'**
   String get calcResultAvailableForCar;
 
   /// No description provided for @calcResultEffectiveCarPrice.
   ///
-  /// In en, this message translates to:
-  /// **'Effective Vehicle Price'**
+  /// In ar, this message translates to:
+  /// **'سعر السيارة الفعلي'**
   String get calcResultEffectiveCarPrice;
 
   /// No description provided for @calcResultTotalReturn.
   ///
-  /// In en, this message translates to:
-  /// **'Total Return'**
+  /// In ar, this message translates to:
+  /// **'إجمالي العائد'**
   String get calcResultTotalReturn;
 
   /// No description provided for @calcResultProfit.
   ///
-  /// In en, this message translates to:
-  /// **'Profit'**
+  /// In ar, this message translates to:
+  /// **'الأرباح'**
   String get calcResultProfit;
 
   /// No description provided for @calcResultMinDeposit.
   ///
-  /// In en, this message translates to:
-  /// **'Minimum Deposit'**
+  /// In ar, this message translates to:
+  /// **'الحد الأدنى للإيداع'**
   String get calcResultMinDeposit;
 
   /// No description provided for @calcResultCashValue.
   ///
-  /// In en, this message translates to:
-  /// **'Cash Value'**
+  /// In ar, this message translates to:
+  /// **'القيمة النقدية'**
   String get calcResultCashValue;
 
   /// No description provided for @calcResultSurrenderValue.
   ///
-  /// In en, this message translates to:
-  /// **'Surrender Value'**
+  /// In ar, this message translates to:
+  /// **'قيمة الاسترداد'**
   String get calcResultSurrenderValue;
 
   /// No description provided for @calcResultDeathBenefit.
   ///
-  /// In en, this message translates to:
-  /// **'Death Benefit'**
+  /// In ar, this message translates to:
+  /// **'منفعة الوفاة'**
   String get calcResultDeathBenefit;
 
   /// No description provided for @calcResultCoverageAmount.
   ///
-  /// In en, this message translates to:
-  /// **'Coverage Amount'**
+  /// In ar, this message translates to:
+  /// **'مبلغ التغطية'**
   String get calcResultCoverageAmount;
 
   /// No description provided for @calcResultReturnRate.
   ///
-  /// In en, this message translates to:
-  /// **'Annual Return Rate'**
+  /// In ar, this message translates to:
+  /// **'نسبة العائد السنوي'**
   String get calcResultReturnRate;
 
   /// No description provided for @calcResultFinalBenefit.
   ///
-  /// In en, this message translates to:
-  /// **'Final Benefit'**
+  /// In ar, this message translates to:
+  /// **'المنفعة آخر المدة'**
   String get calcResultFinalBenefit;
 
   /// No description provided for @calcResultYear.
   ///
-  /// In en, this message translates to:
-  /// **'Year'**
+  /// In ar, this message translates to:
+  /// **'السنة'**
   String get calcResultYear;
 
   /// No description provided for @calcResultProjectionTable.
   ///
-  /// In en, this message translates to:
-  /// **'Year-by-Year Projection'**
+  /// In ar, this message translates to:
+  /// **'الجدول السنوي'**
   String get calcResultProjectionTable;
 
   /// No description provided for @calcResultAgeYears.
   ///
-  /// In en, this message translates to:
-  /// **'Age (Years)'**
+  /// In ar, this message translates to:
+  /// **'العمر (سنوات)'**
   String get calcResultAgeYears;
 
   /// No description provided for @calcResultAgeMonths.
   ///
-  /// In en, this message translates to:
-  /// **'Age (Months)'**
+  /// In ar, this message translates to:
+  /// **'العمر (أشهر)'**
   String get calcResultAgeMonths;
 
   /// No description provided for @calcResultAgeDays.
   ///
-  /// In en, this message translates to:
-  /// **'Age (Days)'**
+  /// In ar, this message translates to:
+  /// **'العمر (أيام)'**
   String get calcResultAgeDays;
 
   /// No description provided for @calcResultAmountAt33.
   ///
-  /// In en, this message translates to:
-  /// **'Personal Finance (33.33%)'**
+  /// In ar, this message translates to:
+  /// **'تمويل شخصي (33.33%)'**
   String get calcResultAmountAt33;
 
   /// No description provided for @calcResultAmountAt45.
   ///
-  /// In en, this message translates to:
-  /// **'Leasing / Credit Cards (45%)'**
+  /// In ar, this message translates to:
+  /// **'تمويل تاجيري او بطاقات الائتمان (45%)'**
   String get calcResultAmountAt45;
 
   /// No description provided for @calcResultAmountAt55or65.
   ///
-  /// In en, this message translates to:
-  /// **'Real Estate (55%/65%)'**
+  /// In ar, this message translates to:
+  /// **'تمويل عقاري (55%/65%)'**
   String get calcResultAmountAt55or65;
 
   /// No description provided for @calcResultRemaining.
   ///
-  /// In en, this message translates to:
-  /// **'Remaining Salary'**
+  /// In ar, this message translates to:
+  /// **'المتبقي من الراتب'**
   String get calcResultRemaining;
 
   /// No description provided for @calcResultApplicable.
   ///
-  /// In en, this message translates to:
-  /// **'Applicable?'**
+  /// In ar, this message translates to:
+  /// **'هل ينطبق؟'**
   String get calcResultApplicable;
 
   /// No description provided for @calcResultHijriDate.
   ///
-  /// In en, this message translates to:
-  /// **'Hijri Date'**
+  /// In ar, this message translates to:
+  /// **'التاريخ الهجري'**
   String get calcResultHijriDate;
 
   /// No description provided for @calcResultGregorianDate.
   ///
-  /// In en, this message translates to:
-  /// **'Gregorian Date'**
+  /// In ar, this message translates to:
+  /// **'التاريخ الميلادي'**
   String get calcResultGregorianDate;
 
   /// No description provided for @calcSalaryClient.
   ///
-  /// In en, this message translates to:
-  /// **'Salary Client'**
+  /// In ar, this message translates to:
+  /// **'عميل رواتب'**
   String get calcSalaryClient;
 
   /// No description provided for @calcNonSalaryClient.
   ///
-  /// In en, this message translates to:
-  /// **'Non-Salary Client'**
+  /// In ar, this message translates to:
+  /// **'غير رواتب'**
   String get calcNonSalaryClient;
 
   /// No description provided for @calcYes.
   ///
-  /// In en, this message translates to:
-  /// **'Yes'**
+  /// In ar, this message translates to:
+  /// **'نعم'**
   String get calcYes;
 
   /// No description provided for @calcNo.
   ///
-  /// In en, this message translates to:
-  /// **'No'**
+  /// In ar, this message translates to:
+  /// **'لا'**
   String get calcNo;
 
   /// No description provided for @calcRealEstateNone.
   ///
-  /// In en, this message translates to:
-  /// **'None'**
+  /// In ar, this message translates to:
+  /// **'لا يوجد'**
   String get calcRealEstateNone;
 
   /// No description provided for @calcRealEstateHas.
   ///
-  /// In en, this message translates to:
-  /// **'Yes'**
+  /// In ar, this message translates to:
+  /// **'يوجد'**
   String get calcRealEstateHas;
 
   /// No description provided for @calcCalculate.
   ///
-  /// In en, this message translates to:
-  /// **'Calculate'**
+  /// In ar, this message translates to:
+  /// **'احسب'**
   String get calcCalculate;
 
   /// No description provided for @calcReset.
   ///
-  /// In en, this message translates to:
-  /// **'Reset'**
+  /// In ar, this message translates to:
+  /// **'إعادة ضبط'**
   String get calcReset;
 
   /// No description provided for @calcSar.
   ///
-  /// In en, this message translates to:
-  /// **'SAR'**
+  /// In ar, this message translates to:
+  /// **'ريال'**
   String get calcSar;
 
   /// No description provided for @calcMonth.
   ///
-  /// In en, this message translates to:
-  /// **'month'**
+  /// In ar, this message translates to:
+  /// **'شهر'**
   String get calcMonth;
 
   /// No description provided for @calcMonths.
   ///
-  /// In en, this message translates to:
-  /// **'months'**
+  /// In ar, this message translates to:
+  /// **'أشهر'**
   String get calcMonths;
 
   /// No description provided for @calcApproved.
   ///
-  /// In en, this message translates to:
-  /// **'Approved'**
+  /// In ar, this message translates to:
+  /// **'مقبول'**
   String get calcApproved;
 
   /// No description provided for @calcIncreaseDownPayment.
   ///
-  /// In en, this message translates to:
-  /// **'Increase Down Payment'**
+  /// In ar, this message translates to:
+  /// **'ارفع الدفعة الأولى'**
   String get calcIncreaseDownPayment;
 
   /// No description provided for @calcAllConditionsMet.
   ///
-  /// In en, this message translates to:
-  /// **'All conditions met'**
+  /// In ar, this message translates to:
+  /// **'جميع الشروط مستوفاة'**
   String get calcAllConditionsMet;
 
   /// No description provided for @calcConvertToHijri.
   ///
-  /// In en, this message translates to:
-  /// **'Convert to Hijri'**
+  /// In ar, this message translates to:
+  /// **'تحويل إلى هجري'**
   String get calcConvertToHijri;
 
   /// No description provided for @calcConvertToGregorian.
   ///
-  /// In en, this message translates to:
-  /// **'Convert to Gregorian'**
+  /// In ar, this message translates to:
+  /// **'تحويل إلى ميلادي'**
   String get calcConvertToGregorian;
 
-  /// No description provided for @aiSettings.
+  /// No description provided for @aiChatGreeting.
   ///
-  /// In en, this message translates to:
-  /// **'AI Settings'**
-  String get aiSettings;
+  /// In ar, this message translates to:
+  /// **'اسألني عن النتيجة'**
+  String get aiChatGreeting;
 
-  /// No description provided for @aiSettingsSubtitle.
+  /// Subtitle for the age calculator page
   ///
-  /// In en, this message translates to:
-  /// **'Manage the Claude AI API key for the chat assistant.'**
-  String get aiSettingsSubtitle;
+  /// In ar, this message translates to:
+  /// **'حاسبة العمر الميلادي والهجري'**
+  String get calcAgeSubtitle;
 
-  /// No description provided for @aiApiKeyLabel.
+  /// Label for birth date picker in age calculator
   ///
-  /// In en, this message translates to:
-  /// **'Claude API Key'**
-  String get aiApiKeyLabel;
+  /// In ar, this message translates to:
+  /// **'تاريخ الميلاد (ميلادي)'**
+  String get calcAgeInputBirthDate;
 
-  /// No description provided for @aiApiKeyHint.
+  /// Label for today date picker in age calculator
   ///
-  /// In en, this message translates to:
-  /// **'Enter your Claude API key (sk-ant-...)'**
-  String get aiApiKeyHint;
+  /// In ar, this message translates to:
+  /// **'تاريخ اليوم'**
+  String get calcAgeInputTodayDate;
 
-  /// No description provided for @aiApiKeyNotConfigured.
+  /// Calculate button label in age calculator
   ///
-  /// In en, this message translates to:
-  /// **'No API key configured yet.'**
-  String get aiApiKeyNotConfigured;
+  /// In ar, this message translates to:
+  /// **'احسب العمر'**
+  String get calcAgeCalculateButton;
 
-  /// No description provided for @aiApiKeySaved.
+  /// Result section title in age calculator
   ///
-  /// In en, this message translates to:
-  /// **'API key saved successfully.'**
-  String get aiApiKeySaved;
+  /// In ar, this message translates to:
+  /// **'النتيجة'**
+  String get calcAgeResultTitle;
 
-  /// No description provided for @aiApiKeyDeleted.
+  /// Full age display format
   ///
-  /// In en, this message translates to:
-  /// **'API key deleted successfully.'**
-  String get aiApiKeyDeleted;
+  /// In ar, this message translates to:
+  /// **'{years} سنة و {months} شهر و {days} يوم'**
+  String calcAgeResultYearsMonthsDays(int years, int months, int days);
 
-  /// No description provided for @aiApiKeyDeleteConfirmTitle.
+  /// Age in total months
   ///
-  /// In en, this message translates to:
-  /// **'Delete API Key'**
-  String get aiApiKeyDeleteConfirmTitle;
+  /// In ar, this message translates to:
+  /// **'{count} شهر'**
+  String calcAgeResultTotalMonths(int count);
 
-  /// No description provided for @aiApiKeyDeleteConfirmMessage.
+  /// Age in total days
   ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete the API key? The AI chat feature will stop working.'**
-  String get aiApiKeyDeleteConfirmMessage;
+  /// In ar, this message translates to:
+  /// **'{count} يوم'**
+  String calcAgeResultTotalDays(int count);
 
-  /// No description provided for @aiApiKeyInvalid.
+  /// Approximate Hijri age
   ///
-  /// In en, this message translates to:
-  /// **'API key must start with sk-ant-'**
-  String get aiApiKeyInvalid;
+  /// In ar, this message translates to:
+  /// **'~{years} سنة هجرية'**
+  String calcAgeResultHijriApprox(int years);
 
-  /// No description provided for @aiApiKeyRequired.
+  /// Label for approximate Hijri age result
   ///
-  /// In en, this message translates to:
-  /// **'API key is required'**
-  String get aiApiKeyRequired;
+  /// In ar, this message translates to:
+  /// **'العمر الهجري (تقريبي)'**
+  String get calcAgeResultHijriLabel;
 
-  /// No description provided for @save.
+  /// Label for age in months result
   ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
+  /// In ar, this message translates to:
+  /// **'العمر بالشهور'**
+  String get calcAgeResultAgeInMonths;
 
-  /// No description provided for @update.
+  /// Label for age in days result
   ///
-  /// In en, this message translates to:
-  /// **'Update'**
-  String get update;
+  /// In ar, this message translates to:
+  /// **'العمر بالأيام'**
+  String get calcAgeResultAgeInDays;
 
-  /// No description provided for @delete.
+  /// Label for age in years result
   ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
+  /// In ar, this message translates to:
+  /// **'العمر بالسنوات'**
+  String get calcAgeResultAgeInYears;
+
+  /// Button to go back to input form from results
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة للبيانات'**
+  String get calcBackToInput;
+
+  /// Prompt to enter salary
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل الراتب'**
+  String get calcEnterSalary;
+
+  /// Calculate now button label
+  ///
+  /// In ar, this message translates to:
+  /// **'احسب الآن'**
+  String get calcCalculateNow;
+
+  /// Prompt to calculate before viewing results
+  ///
+  /// In ar, this message translates to:
+  /// **'احسب أولاً'**
+  String get calcCalculateFirst;
+
+  /// Title for installment schedule section
+  ///
+  /// In ar, this message translates to:
+  /// **'جدول الأقساط'**
+  String get calcScheduleTitle;
+
+  /// Description for installment schedule
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض التفاصيل الشهرية الكاملة'**
+  String get calcScheduleDesc;
+
+  /// Button to show schedule
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض'**
+  String get calcScheduleShow;
+
+  /// Month column header in schedule table
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر'**
+  String get calcScheduleMonth;
+
+  /// Payment column header in schedule table
+  ///
+  /// In ar, this message translates to:
+  /// **'القسط'**
+  String get calcSchedulePayment;
+
+  /// Total paid column header in schedule table
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي مدفوع'**
+  String get calcScheduleTotalPaid;
+
+  /// Client data section title
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات العميل'**
+  String get calcClientData;
+
+  /// Employment status label
+  ///
+  /// In ar, this message translates to:
+  /// **'الوضع الوظيفي'**
+  String get calcEmploymentStatus;
+
+  /// Employed status option
+  ///
+  /// In ar, this message translates to:
+  /// **'موظف'**
+  String get calcEmployed;
+
+  /// Retired status option
+  ///
+  /// In ar, this message translates to:
+  /// **'متقاعد'**
+  String get calcRetired;
+
+  /// Mortgage label
+  ///
+  /// In ar, this message translates to:
+  /// **'تمويل عقاري'**
+  String get calcMortgage;
+
+  /// No mortgage option
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد'**
+  String get calcMortgageNone;
+
+  /// Has mortgage option
+  ///
+  /// In ar, this message translates to:
+  /// **'نعم يوجد'**
+  String get calcMortgageHas;
+
+  /// Birth year label
+  ///
+  /// In ar, this message translates to:
+  /// **'سنة الميلاد'**
+  String get calcBirthYear;
+
+  /// Birth month label
+  ///
+  /// In ar, this message translates to:
+  /// **'شهر الميلاد'**
+  String get calcBirthMonth;
+
+  /// Retirement age label
+  ///
+  /// In ar, this message translates to:
+  /// **'سن التقاعد (سنة)'**
+  String get calcRetirementAge;
+
+  /// Age in months label
+  ///
+  /// In ar, this message translates to:
+  /// **'العمر بالشهور'**
+  String get calcAgeInMonths;
+
+  /// Available period label
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة المتاحة'**
+  String get calcAvailablePeriod;
+
+  /// Time eligibility label
+  ///
+  /// In ar, this message translates to:
+  /// **'الأهلية الزمنية'**
+  String get calcTimeEligibility;
+
+  /// Eligible for financing status
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤهل للتمويل'**
+  String get calcEligible;
+
+  /// Not eligible status (less than 60 months)
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مؤهل (أقل من 60 شهر)'**
+  String get calcNotEligible;
+
+  /// Client salary label
+  ///
+  /// In ar, this message translates to:
+  /// **'راتب العميل (ريال)'**
+  String get calcSalaryLabel;
+
+  /// Profit rate percentage label
+  ///
+  /// In ar, this message translates to:
+  /// **'هامش الربح (%)'**
+  String get calcProfitRateLabel;
+
+  /// Financing duration in months label
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة التمويل (شهر)'**
+  String get calcDurationLabel;
+
+  /// Total Ahli credit card limits label
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموع حدود بطاقات الأهلي'**
+  String get calcAhliCardsLabel;
+
+  /// Total other banks credit card limits label
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموع حدود بطاقات البنوك الأخرى'**
+  String get calcOtherCardsLabel;
+
+  /// Monthly installment label
+  ///
+  /// In ar, this message translates to:
+  /// **'القسط الشهري'**
+  String get calcMonthlyInstallment;
+
+  /// Deduction ratio label
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الاستقطاع'**
+  String get calcDeductionRatio;
+
+  /// Total financing label
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي التمويل'**
+  String get calcTotalFinancing;
+
+  /// Approval amount label
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ الموافقة'**
+  String get calcApprovalAmount;
+
+  /// Bank profit label
+  ///
+  /// In ar, this message translates to:
+  /// **'ربح البنك'**
+  String get calcBankProfit;
+
+  /// Admin fees label with rate and cap
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم الإدارية (0.5% | أقصى 2,500)'**
+  String get calcAdminFeesLabel;
+
+  /// VAT 15% label
+  ///
+  /// In ar, this message translates to:
+  /// **'الضريبة (15%)'**
+  String get calcVatLabel;
+
+  /// Total fees label
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الرسوم'**
+  String get calcTotalFeesLabel;
+
+  /// Net financing amount label
+  ///
+  /// In ar, this message translates to:
+  /// **'صافي مبلغ التمويل'**
+  String get calcNetFinancing;
+
+  /// Approved success message
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبول — تم الاحتساب بنجاح'**
+  String get calcApprovedSuccess;
+
+  /// Rejected due to insufficient time remaining
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مؤهل — المدة المتبقية أقل من 60 شهر'**
+  String get calcRejectedTime;
+
+  /// Review data prompt
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع البيانات'**
+  String get calcReviewData;
+
+  /// Not yet calculated message
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم الحساب بعد'**
+  String get calcNotCalculatedYet;
+
+  /// Prompt to enter data and press calculate
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل البيانات واضغط «احسب»'**
+  String get calcEnterDataAndCalculate;
+
+  /// Subtitle for personal finance plus calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة التمويل الشخصي بلص'**
+  String get calcPersonalFinanceSubtitle;
+
+  /// Subtitle for quick personal finance calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة التمويل الشخصي المختصر'**
+  String get calcPersonalQuickSubtitle;
+
+  /// Military type label
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع العسكري'**
+  String get calcMilitaryType;
+
+  /// Military rank label
+  ///
+  /// In ar, this message translates to:
+  /// **'الرتبة العسكرية'**
+  String get calcMilitaryRank;
+
+  /// Military type: pilot
+  ///
+  /// In ar, this message translates to:
+  /// **'طيار'**
+  String get calcMilTypePilot;
+
+  /// Military type: non-pilot
+  ///
+  /// In ar, this message translates to:
+  /// **'غير طيار'**
+  String get calcMilTypeNonPilot;
+
+  /// Military type: enlisted
+  ///
+  /// In ar, this message translates to:
+  /// **'أفراد'**
+  String get calcMilTypeEnlisted;
+
+  /// Financing data section title
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات التمويل'**
+  String get calcFinancingData;
+
+  /// Deduction section title
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الاستقطاع'**
+  String get calcDeductionSection;
+
+  /// Financing amounts section title
+  ///
+  /// In ar, this message translates to:
+  /// **'مبالغ التمويل'**
+  String get calcAmountsSection;
+
+  /// Fees and tax section title
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم والضريبة'**
+  String get calcFeesSection;
+
+  /// Net section title
+  ///
+  /// In ar, this message translates to:
+  /// **'الصافي'**
+  String get calcNetSection;
+
+  /// Applied deduction ratio label
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الاستقطاع المطبقة'**
+  String get calcAppliedDeduction;
+
+  /// Total financing multiplied by months
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي التمويل ({months} x القسط)'**
+  String calcTotalFinancingMultiplied(int months);
+
+  /// Net financing after all fees
+  ///
+  /// In ar, this message translates to:
+  /// **'صافي التمويل (بعد كل الرسوم)'**
+  String get calcNetAfterFees;
+
+  /// Eligible both time-wise and financially
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبول — مؤهل زمنياً ومالياً'**
+  String get calcEligibleFinancially;
+
+  /// Subtitle for debt purchase calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة تمويل شراء مديونية'**
+  String get calcDebtPurchaseSubtitle;
+
+  /// Debt amount at other bank label
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ المديونية في البنك الآخر (ريال)'**
+  String get calcDebtAmount;
+
+  /// Debt at other bank section title
+  ///
+  /// In ar, this message translates to:
+  /// **'المديونية في البنك الآخر'**
+  String get calcDebtSection;
+
+  /// Debt at other bank label
+  ///
+  /// In ar, this message translates to:
+  /// **'المديونية في البنك الآخر'**
+  String get calcDebtAtOtherBank;
+
+  /// Net amount after deducting debt
+  ///
+  /// In ar, this message translates to:
+  /// **'صافي المبلغ بعد خصم المديونية'**
+  String get calcNetAfterDebt;
+
+  /// Warning when debt exceeds net financing
+  ///
+  /// In ar, this message translates to:
+  /// **'المديونية تتجاوز صافي التمويل'**
+  String get calcDebtExceedsNet;
+
+  /// Subtitle for real estate calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة التمويل العقاري (2 في 1)'**
+  String get calcRealEstateSubtitle;
+
+  /// Subtitle for real estate plus calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة التمويل العقاري بلص (2 في 1)'**
+  String get calcRealEstatePlusSubtitle;
+
+  /// Financial information section title
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلومات المالية'**
+  String get calcFinancialInfo;
+
+  /// Mortgage duration in years label
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة التمويل العقاري (سنة)'**
+  String get calcMortgageYears;
+
+  /// Personal loan installment label
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط التمويل الشخصي (ريال)'**
+  String get calcPersonalInstallment;
+
+  /// Remaining personal loan installments in months
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأقساط المتبقية من التمويل الشخصي (شهر)'**
+  String get calcRemainingMonths;
+
+  /// Additional options section title
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات إضافية'**
+  String get calcAdditionalOptions;
+
+  /// Housing support label
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم السكني'**
+  String get calcHousingSupport;
+
+  /// Etizaz program (Ministry of Defense)
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتزاز (وزارة الدفاع)'**
+  String get calcEtizaz;
+
+  /// Fixed real estate loan amount hint
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ تمويل عقاري محدد (اتركه 0 للحساب التلقائي)'**
+  String get calcFixedLoan;
+
+  /// 2-in-1 program title
+  ///
+  /// In ar, this message translates to:
+  /// **'برنامج 2 في 1'**
+  String get calcTwoInOneProgram;
+
+  /// Real estate loan amount in 2-in-1 program
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ التمويل العقاري (2 في 1)'**
+  String get calcLoanAmount2in1;
+
+  /// Installment during personal loan period
+  ///
+  /// In ar, this message translates to:
+  /// **'القسط خلال فترة التمويل الشخصي'**
+  String get calcInstallmentDuring;
+
+  /// Installment after personal loan ends
+  ///
+  /// In ar, this message translates to:
+  /// **'القسط بعد انتهاء التمويل الشخصي'**
+  String get calcInstallmentAfter;
+
+  /// Total with housing support and Etizaz
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي مع الدعم والاعتزاز'**
+  String get calcTotalWithSupport;
+
+  /// Admin and appraisal fees
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم الإدارية والتقييم'**
+  String get calcAdminAndAppraisal;
+
+  /// Fixed loan amount label
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ التمويل المحدد'**
+  String get calcFixedLoanAmount;
+
+  /// Total profits label
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الأرباح'**
+  String get calcTotalProfits;
+
+  /// Grand total label
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي الكلي'**
+  String get calcGrandTotal;
+
+  /// Calculation success message
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاحتساب بنجاح'**
+  String get calcCalculatedSuccessfully;
+
+  /// Workplace label
+  ///
+  /// In ar, this message translates to:
+  /// **'جهة العمل'**
+  String get calcWorkplace;
+
+  /// Rank label
+  ///
+  /// In ar, this message translates to:
+  /// **'الرتبة'**
+  String get calcRankLabel;
+
+  /// Civilian workplace option
+  ///
+  /// In ar, this message translates to:
+  /// **'مدني'**
+  String get calcCivilian;
+
+  /// Military enlisted option
+  ///
+  /// In ar, this message translates to:
+  /// **'عسكري أفراد'**
+  String get calcMilitaryEnlisted;
+
+  /// Officers non-pilot option
+  ///
+  /// In ar, this message translates to:
+  /// **'ضباط غير طيارين'**
+  String get calcOfficersNonPilot;
+
+  /// Officers pilot option
+  ///
+  /// In ar, this message translates to:
+  /// **'ضباط طيارين'**
+  String get calcOfficersPilot;
+
+  /// Personal information section title
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلومات الشخصية'**
+  String get calcPersonalInfo;
+
+  /// Maximum duration hint
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى للمدة: {years} سنة'**
+  String calcMaxYearsHint(int years);
+
+  /// Exceeded retirement age message
+  ///
+  /// In ar, this message translates to:
+  /// **'تجاوز سن التقاعد'**
+  String get calcExceededRetirement;
+
+  /// Duration data section title
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات المدة'**
+  String get calcDurationData;
+
+  /// Available duration for client
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة المتاحة للعميل'**
+  String get calcAvailableForClient;
+
+  /// Approved financing duration
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة التمويل المعتمدة'**
+  String get calcApprovedDuration;
+
+  /// Allowed deduction ratio
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الاستقطاع المسموحة'**
+  String get calcAllowedDeduction;
+
+  /// Remaining personal financing period
+  ///
+  /// In ar, this message translates to:
+  /// **'فترة التمويل الشخصي المتبقية'**
+  String get calcPersonalPeriod;
+
+  /// Months after personal loan ends
+  ///
+  /// In ar, this message translates to:
+  /// **'الأشهر بعد انتهاء الشخصي'**
+  String get calcMonthsAfterPersonal;
+
+  /// Total with support section title
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي مع الدعم'**
+  String get calcSupportSection;
+
+  /// Eligible within retirement age message
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤهل -- المدة ضمن سن التقاعد'**
+  String get calcEligibleWithinRetirement;
+
+  /// Adjustment required with available years
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل مطلوب -- المدة المتاحة {years} سنة فقط'**
+  String calcAdjustmentRequired(int years);
+
+  /// Phase column header in schedule
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة'**
+  String get calcSchedulePhase;
+
+  /// Phase: with personal loan
+  ///
+  /// In ar, this message translates to:
+  /// **'مع الشخصي'**
+  String get calcPhaseWithPersonal;
+
+  /// Phase: after personal loan
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد الشخصي'**
+  String get calcPhaseAfterPersonal;
+
+  /// Detailed installment schedule title
+  ///
+  /// In ar, this message translates to:
+  /// **'جدول الأقساط التفصيلي'**
+  String get calcDetailedSchedule;
+
+  /// Description of schedule phases
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط فترة التمويل الشخصي + قسط ما بعده'**
+  String get calcSchedulePhaseDesc;
+
+  /// Subtitle for bank fees comparison page
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم البنكية — مقارنة السابقة والمحدثة'**
+  String get calcBankFeesSubtitle;
+
+  /// Bank fees note about SAMA guidelines
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم وفق دليل تعرفة خدمات المؤسسات المالية الصادر من ساما — الأسعار غير شاملة ضريبة القيمة المضافة (VAT 15%) إلا إذا نُص عليها'**
+  String get calcBankFeesNote;
+
+  /// Admin fees for financing title
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم الإدارية للتمويل'**
+  String get calcAdminFeesTitle;
+
+  /// Financing admin fees label
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التمويل الإدارية'**
+  String get calcFinancingAdminFees;
+
+  /// Previous value column header
+  ///
+  /// In ar, this message translates to:
+  /// **'السابق'**
+  String get calcPreviousValue;
+
+  /// Updated value column header
+  ///
+  /// In ar, this message translates to:
+  /// **'المحدّث'**
+  String get calcUpdatedValue;
+
+  /// Basic banking services section
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمات البنكية الأساسية'**
+  String get calcBasicServices;
+
+  /// Financial transfers section
+  ///
+  /// In ar, this message translates to:
+  /// **'الحوالات المالية'**
+  String get calcTransfers;
+
+  /// Official documents section
+  ///
+  /// In ar, this message translates to:
+  /// **'الوثائق الرسمية'**
+  String get calcOfficialDocs;
+
+  /// Service column header
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة'**
+  String get calcServiceColumn;
+
+  /// Electronic channel column header
+  ///
+  /// In ar, this message translates to:
+  /// **'إلكتروني'**
+  String get calcElectronicColumn;
+
+  /// Branch channel column header
+  ///
+  /// In ar, this message translates to:
+  /// **'الفرع'**
+  String get calcBranchColumn;
+
+  /// Free of charge label
+  ///
+  /// In ar, this message translates to:
+  /// **'مجاناً'**
+  String get calcFree;
+
+  /// Mada card label
+  ///
+  /// In ar, this message translates to:
+  /// **'بطاقة مدى'**
+  String get calcMadaCard;
+
+  /// Bank fees disclaimer with important notes
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات مهمة:\n• جميع الرسوم أعلاه غير شاملة ضريبة القيمة المضافة 15%\n• هذا الملف للاسترشاد فقط — يرجى التحقق من موقع ساما الرسمي (sama.gov.sa)\n• تسري التعليمات خلال 60 يوماً من تاريخ نشرها'**
+  String get calcBankFeesDisclaimer;
+
+  /// Subtitle for date converter page
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل التاريخ ميلادي وهجري'**
+  String get calcDateConverterSubtitle;
+
+  /// Conversion result title
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجة التحويل'**
+  String get calcConversionResult;
+
+  /// Gregorian to Hijri conversion direction
+  ///
+  /// In ar, this message translates to:
+  /// **'ميلادي ← هجري'**
+  String get calcGregorianToHijri;
+
+  /// Hijri to Gregorian conversion direction
+  ///
+  /// In ar, this message translates to:
+  /// **'هجري ← ميلادي'**
+  String get calcHijriToGregorian;
+
+  /// Gregorian date label
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ الميلادي'**
+  String get calcGregorianDate;
+
+  /// Hijri day label
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get calcHijriDay;
+
+  /// Hijri month label
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر'**
+  String get calcHijriMonth;
+
+  /// Hijri year label
+  ///
+  /// In ar, this message translates to:
+  /// **'السنة الهجرية'**
+  String get calcHijriYear;
+
+  /// Convert button label
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل'**
+  String get calcConvertButton;
+
+  /// Subtitle for Khayrat calculator page
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة خيرات — الودائع والاستثمار'**
+  String get calcKhayratSubtitle;
+
+  /// Investment data section title
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات الاستثمار'**
+  String get calcInvestmentData;
+
+  /// Amount and period section title
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ والفترة'**
+  String get calcAmountAndPeriod;
+
+  /// Investment amount label with minimum
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ الاستثمار (ريال) — الحد الأدنى 100,000'**
+  String get calcInvestmentAmount;
+
+  /// Minimum deposit hint
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأدنى 100,000 ريال'**
+  String get calcMinDeposit;
+
+  /// Investment period label
+  ///
+  /// In ar, this message translates to:
+  /// **'فترة الاستثمار'**
+  String get calcInvestmentPeriod;
+
+  /// Calculate profits button label
+  ///
+  /// In ar, this message translates to:
+  /// **'احسب الأرباح'**
+  String get calcCalculateProfits;
+
+  /// Profit margin label
+  ///
+  /// In ar, this message translates to:
+  /// **'هامش الربح'**
+  String get calcProfitMargin;
+
+  /// Profits label
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرباح'**
+  String get calcProfits;
+
+  /// New amount after profit
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ الجديد'**
+  String get calcNewAmount;
+
+  /// Amount meets requirements message
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ مستوفٍ للشروط'**
+  String get calcAmountCompliant;
+
+  /// Subtitle for POS financing calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة تمويل نقاط البيع'**
+  String get calcPosSubtitle;
+
+  /// Entity information section title
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات المنشأة'**
+  String get calcEntityInfo;
+
+  /// Entity type label
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع المنشأة'**
+  String get calcEntityType;
+
+  /// Entity activity label
+  ///
+  /// In ar, this message translates to:
+  /// **'نشاط المنشأة'**
+  String get calcEntityActivity;
+
+  /// Entity age label
+  ///
+  /// In ar, this message translates to:
+  /// **'عمر المنشأة'**
+  String get calcEntityAge;
+
+  /// POS operating period label
+  ///
+  /// In ar, this message translates to:
+  /// **'فترة تشغيل نقاط البيع'**
+  String get calcPosOperatingPeriod;
+
+  /// Average annual sales label
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط المبيعات السنوية (ريال)'**
+  String get calcAnnualSales;
+
+  /// Average monthly POS sales label
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط مبيعات نقاط البيع الشهرية (ريال)'**
+  String get calcMonthlyPosSales;
+
+  /// Monthly POS operations count
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد عمليات نقاط البيع شهريا'**
+  String get calcPosOperationsCount;
+
+  /// Financing details section title
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل التمويل'**
+  String get calcFinancingDetails;
+
+  /// Financing term in months
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة التمويل (شهر)'**
+  String get calcTermMonths;
+
+  /// Financing amount (average x 6)
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ التمويل (المتوسط × 6)'**
+  String get calcFinancingAmount;
+
+  /// Profit rate label
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الربح'**
+  String get calcProfitRate;
+
+  /// Total profit label
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الربح'**
+  String get calcTotalProfit;
+
+  /// Total label
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get calcTotal;
+
+  /// POS admin fees with rate and tax
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم الإدارية (5% بحد 2,500 + ضريبة 15%)'**
+  String get calcAdminFeesPos;
+
+  /// Entity eligible message
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبولة — المنشأة مؤهلة'**
+  String get calcEntityEligible;
+
+  /// Entity rejected due to insufficient age
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوضة — عمر المنشأة أو نقاط البيع غير كاف'**
+  String get calcEntityRejectedAge;
+
+  /// Entity rejected due to insufficient sales
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوضة — المبيعات أقل من 400,000 ريال'**
+  String get calcEntityRejectedSales;
+
+  /// Average monthly sales label
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط المبيعات الشهرية'**
+  String get calcMonthlySales;
+
+  /// Rejected status label
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوض'**
+  String get calcRejected;
+
+  /// Subtitle for protection and savings calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'برنامج الحماية والادخار - الدفعة الواحدة'**
+  String get calcProtectionSubtitle;
+
+  /// Program data section title
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات البرنامج'**
+  String get calcProgramData;
+
+  /// Subscription and duration section
+  ///
+  /// In ar, this message translates to:
+  /// **'الاشتراك والمدة'**
+  String get calcSubscriptionAndDuration;
+
+  /// Subscription amount label
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ الاشتراك (ريال)'**
+  String get calcSubscriptionAmount;
+
+  /// Program duration in years
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة البرنامج (سنوات)'**
+  String get calcProgramDuration;
+
+  /// Investment strategy label
+  ///
+  /// In ar, this message translates to:
+  /// **'استراتيجية الاستثمار'**
+  String get calcInvestmentStrategy;
+
+  /// Age at contract signing
+  ///
+  /// In ar, this message translates to:
+  /// **'العمر عند التعاقد'**
+  String get calcAgeAtContract;
+
+  /// Cash value after N years
+  ///
+  /// In ar, this message translates to:
+  /// **'القيمة النقدية بعد {years} سنوات'**
+  String calcCashValueAfter(int years);
+
+  /// Redemption value label
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة الاسترداد'**
+  String get calcRedemptionValue;
+
+  /// Death benefit label
+  ///
+  /// In ar, this message translates to:
+  /// **'منفعة الوفاة'**
+  String get calcDeathBenefit;
+
+  /// Insurance coverage label
+  ///
+  /// In ar, this message translates to:
+  /// **'التغطية التأمينية'**
+  String get calcInsuranceCoverage;
+
+  /// Total investment income label
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي دخل الاستثمار'**
+  String get calcTotalInvestmentIncome;
+
+  /// Year column in projection table
+  ///
+  /// In ar, this message translates to:
+  /// **'السنة'**
+  String get calcProjectionYear;
+
+  /// Cash value column in projection table
+  ///
+  /// In ar, this message translates to:
+  /// **'القيمة النقدية'**
+  String get calcProjectionCashValue;
+
+  /// Death benefit column in projection table
+  ///
+  /// In ar, this message translates to:
+  /// **'منفعة الوفاة'**
+  String get calcProjectionDeathBenefit;
+
+  /// Admin fees column in projection table
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم الإدارة'**
+  String get calcProjectionAdminFees;
+
+  /// Subtitle for deduction ratio calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'احتساب نسب الاستقطاع'**
+  String get calcDeductionRatioSubtitle;
+
+  /// Subtitle for available deduction calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'الاستقطاع المتاح حسب المنتجات'**
+  String get calcDeductionAvailSubtitle;
+
+  /// Deduction ratio mode tab label
+  ///
+  /// In ar, this message translates to:
+  /// **'📊 نسبة الاستقطاع'**
+  String get calcDeductionRatioMode;
+
+  /// Available deduction mode tab label
+  ///
+  /// In ar, this message translates to:
+  /// **'✅ الاستقطاع المتاح'**
+  String get calcDeductionAvailMode;
+
+  /// Total salary label
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الراتب (ريال)'**
+  String get calcTotalSalary;
+
+  /// Job status label
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالة الوظيفية'**
+  String get calcJobStatus;
+
+  /// Personal financing installment label
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط التمويل الشخصي (ريال)'**
+  String get calcPersonalInstLabel;
+
+  /// Leasing financing installment label
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط التمويل التأجيري (ريال)'**
+  String get calcLeasingInstLabel;
+
+  /// Real estate financing installment label
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط التمويل العقاري (ريال)'**
+  String get calcRealEstateInstLabel;
+
+  /// Other obligations label
+  ///
+  /// In ar, this message translates to:
+  /// **'التزامات أخرى (ريال)'**
+  String get calcOtherObligations;
+
+  /// Calculate deduction button label
+  ///
+  /// In ar, this message translates to:
+  /// **'احتساب'**
+  String get calcCalculateDeduction;
+
+  /// Salary label in results
+  ///
+  /// In ar, this message translates to:
+  /// **'الراتب'**
+  String get calcSalaryAmount;
+
+  /// Personal financing label in results
+  ///
+  /// In ar, this message translates to:
+  /// **'التمويل الشخصي'**
+  String get calcPersonalFinancing;
+
+  /// Leasing financing label in results
+  ///
+  /// In ar, this message translates to:
+  /// **'التمويل التأجيري'**
+  String get calcLeasingFinancing;
+
+  /// Real estate financing label in results
+  ///
+  /// In ar, this message translates to:
+  /// **'التمويل العقاري'**
+  String get calcRealEstateFinancing;
+
+  /// Total current obligations label
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الالتزامات الحالية'**
+  String get calcTotalObligations;
+
+  /// Current deduction ratio label
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الاستقطاع الحالية'**
+  String get calcCurrentDeduction;
+
+  /// Available for personal financing
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح للتمويل الشخصي'**
+  String get calcAvailablePersonal;
+
+  /// Available for leasing financing (45%)
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح للتمويل التأجيري (45%)'**
+  String get calcAvailableLeasing;
+
+  /// Available for real estate financing
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح للتمويل العقاري'**
+  String get calcAvailableRealEstate;
+
+  /// January month name
+  ///
+  /// In ar, this message translates to:
+  /// **'يناير'**
+  String get monthJan;
+
+  /// February month name
+  ///
+  /// In ar, this message translates to:
+  /// **'فبراير'**
+  String get monthFeb;
+
+  /// March month name
+  ///
+  /// In ar, this message translates to:
+  /// **'مارس'**
+  String get monthMar;
+
+  /// April month name
+  ///
+  /// In ar, this message translates to:
+  /// **'أبريل'**
+  String get monthApr;
+
+  /// May month name
+  ///
+  /// In ar, this message translates to:
+  /// **'مايو'**
+  String get monthMay;
+
+  /// June month name
+  ///
+  /// In ar, this message translates to:
+  /// **'يونيو'**
+  String get monthJun;
+
+  /// July month name
+  ///
+  /// In ar, this message translates to:
+  /// **'يوليو'**
+  String get monthJul;
+
+  /// August month name
+  ///
+  /// In ar, this message translates to:
+  /// **'أغسطس'**
+  String get monthAug;
+
+  /// September month name
+  ///
+  /// In ar, this message translates to:
+  /// **'سبتمبر'**
+  String get monthSep;
+
+  /// October month name
+  ///
+  /// In ar, this message translates to:
+  /// **'أكتوبر'**
+  String get monthOct;
+
+  /// November month name
+  ///
+  /// In ar, this message translates to:
+  /// **'نوفمبر'**
+  String get monthNov;
+
+  /// December month name
+  ///
+  /// In ar, this message translates to:
+  /// **'ديسمبر'**
+  String get monthDec;
+
+  /// Subtitle for leasing calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة التمويل التأجيري'**
+  String get calcLeasingSubtitle;
+
+  /// Subtitle for leasing micro calculator
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة التمويل التأجيري - مايكرو'**
+  String get calcLeasingMicroSubtitle;
+
+  /// All periods table title for Khairat
+  ///
+  /// In ar, this message translates to:
+  /// **'جدول جميع الفترات'**
+  String get calcAllPeriodsTable;
+
+  /// Period column header
+  ///
+  /// In ar, this message translates to:
+  /// **'الفترة'**
+  String get calcPeriodColumn;
+
+  /// Days column header
+  ///
+  /// In ar, this message translates to:
+  /// **'الأيام'**
+  String get calcDaysColumn;
+
+  /// Profit margin column header
+  ///
+  /// In ar, this message translates to:
+  /// **'هامش الربح'**
+  String get calcProfitMarginColumn;
+
+  /// Profits column header
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرباح'**
+  String get calcProfitsColumn;
+
+  /// New amount column header
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ الجديد'**
+  String get calcNewAmountColumn;
+
+  /// N years label
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} سنوات'**
+  String calcNYears(int count);
+
+  /// Profit rate percentage input label
+  ///
+  /// In ar, this message translates to:
+  /// **'هامش الربح (%)'**
+  String get calcProfitRatePercent;
+
+  /// Entity data section title
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات المنشأة'**
+  String get calcEntityData;
+
+  /// Prompt to enter data and calculate
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل البيانات واضغط احسب'**
+  String get calcEnterDataPrompt;
+
+  /// Title for deduction ratio section
+  ///
+  /// In ar, this message translates to:
+  /// **'احتساب نسب الاستقطاع'**
+  String get calcDeductionRatioTitle;
+
+  /// Title for available deduction section
+  ///
+  /// In ar, this message translates to:
+  /// **'الاستقطاع المتاح'**
+  String get calcDeductionAvailTitle;
+
+  /// Period with days count
+  ///
+  /// In ar, this message translates to:
+  /// **'{period} ({days} يوم)'**
+  String calcPeriodDays(String period, int days);
+
+  /// Investment amount label (result)
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ الاستثمار'**
+  String get calcInvestmentAmountLabel;
+
+  /// Date converter page header title
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل التاريخ'**
+  String get calcDateConverterTitle;
+
+  /// PDF export button label
+  ///
+  /// In ar, this message translates to:
+  /// **'PDF'**
+  String get calcExportPdf;
+
+  /// Image export button label
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة'**
+  String get calcExportImage;
+
+  /// Personal financing with percentage
+  ///
+  /// In ar, this message translates to:
+  /// **'التمويل الشخصي ({rate}%)'**
+  String calcPersonalFinancingWithRate(String rate);
+
+  /// Leasing financing with percentage
+  ///
+  /// In ar, this message translates to:
+  /// **'التمويل التأجيري ({rate}%)'**
+  String calcLeasingFinancingWithRate(String rate);
+
+  /// Real estate financing with percentage
+  ///
+  /// In ar, this message translates to:
+  /// **'التمويل العقاري ({rate}%)'**
+  String calcRealEstateFinancingWithRate(String rate);
+
+  /// Available personal financing with rate
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح للتمويل الشخصي ({rate}%)'**
+  String calcAvailablePersonalWithRate(String rate);
+
+  /// Available real estate financing with rate
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح للتمويل العقاري ({rate}%)'**
+  String calcAvailableRealEstateWithRate(String rate);
+
+  /// AI context for bank fees page
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم البنكية ساما'**
+  String get calcBankFeesAiContext;
+
+  /// Section header for client and financing data
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات العميل والتمويل'**
+  String get calcClientAndFinancingData;
+
+  /// Section header for client info
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات العميل'**
+  String get calcClientInfo;
+
+  /// Label for customer segment dropdown
+  ///
+  /// In ar, this message translates to:
+  /// **'شريحة العميل'**
+  String get calcCustomerSegment;
+
+  /// Label for car price input
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر السيارة (ريال)'**
+  String get calcCarPrice;
+
+  /// Label for leasing duration in months
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة التمويل (شهر)'**
+  String get calcLeasingDurationMonths;
+
+  /// Label for profit rate / cost of term
+  ///
+  /// In ar, this message translates to:
+  /// **'هامش الربح / كلفة الآجل (%)'**
+  String get calcProfitRateCost;
+
+  /// Label for admin fees input
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم الإدارية (ريال)'**
+  String get calcAdminFeesInput;
+
+  /// Label for plate fees input
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم اللوحات (ريال)'**
+  String get calcPlateFees;
+
+  /// Section header for payments
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفعات — نسبة % أو مبلغ من سعر السيارة'**
+  String get calcPaymentsSection;
+
+  /// Label for down payment
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفعة الأولى'**
+  String get calcDownPaymentLabel;
+
+  /// Label for last payment
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفعة الأخيرة'**
+  String get calcLastPaymentLabel;
+
+  /// Label for insurance
+  ///
+  /// In ar, this message translates to:
+  /// **'التأمين'**
+  String get calcInsuranceLabel;
+
+  /// Section header for current obligations
+  ///
+  /// In ar, this message translates to:
+  /// **'الالتزامات الحالية'**
+  String get calcCurrentObligations;
+
+  /// Label for personal financing installment
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط تمويل شخصي'**
+  String get calcPersonalFinancingInst;
+
+  /// Label for other obligations
+  ///
+  /// In ar, this message translates to:
+  /// **'التزامات أخرى'**
+  String get calcOtherObligationsLabel;
+
+  /// Label for real estate installment
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط تمويل عقاري'**
+  String get calcRealEstateInst;
+
+  /// Button label for calc by car price
+  ///
+  /// In ar, this message translates to:
+  /// **'احتساب بناء على سعر السيارة'**
+  String get calcByCarPrice;
+
+  /// Button label for max car price
+  ///
+  /// In ar, this message translates to:
+  /// **'أقصى سعر للسيارة'**
+  String get calcMaxCarPrice;
+
+  /// Snackbar message for missing salary and car price
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل الراتب وسعر السيارة'**
+  String get calcEnterSalaryAndPrice;
+
+  /// Snackbar message when obligations exceed limit
+  ///
+  /// In ar, this message translates to:
+  /// **'الالتزامات تستهلك كامل نسبة الاستقطاع'**
+  String get calcObligationsExceedLimit;
+
+  /// Title for SAMA bank system dialog
+  ///
+  /// In ar, this message translates to:
+  /// **'نظام الاعتماد البنكي (SAMA)'**
+  String get calcSamaBankSystem;
+
+  /// Dialog title after successful financing calc
+  ///
+  /// In ar, this message translates to:
+  /// **'تم احتساب التمويل بنجاح'**
+  String get calcFinancingSuccess;
+
+  /// Dialog title for max available financing
+  ///
+  /// In ar, this message translates to:
+  /// **'أقصى تمويل متاح للعميل'**
+  String get calcMaxAvailableFinancing;
+
+  /// Label for amount
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ'**
+  String get calcAmountLabel;
+
+  /// Label for mandatory down payment
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفعة الأولى الإلزامية'**
+  String get calcMandatoryDownPayment;
+
+  /// Confirmation dialog question
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد ترجمة الاحتساب على الآلة ؟'**
+  String get calcTranslateToCalcQuestion;
+
+  /// Result label for cost of term / bank profit
+  ///
+  /// In ar, this message translates to:
+  /// **'كلفة الآجل (ربح البنك)'**
+  String get calcCostOfTermBankProfit;
+
+  /// Result label for total repayment
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي السداد'**
+  String get calcTotalRepayment;
+
+  /// Deduction bar actual percentage
+  ///
+  /// In ar, this message translates to:
+  /// **'الاستقطاع: {percent}%'**
+  String calcDeductionActual(String percent);
+
+  /// Deduction bar limit percentage
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد: {percent}%'**
+  String calcDeductionLimitLabel(String percent);
+
+  /// Approved badge text for SAMA
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبول — الطلب ضمن شروط ساما'**
+  String get calcApprovedSama;
+
+  /// Rejected badge text for deduction exceeded
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوض — تجاوز نسبة الاستقطاع'**
+  String get calcRejectedDeduction;
+
+  /// Title for required down payment box
+  ///
+  /// In ar, this message translates to:
+  /// **'لإقرار الطلب — ارفع الدفعة الأولى بمبلغ'**
+  String get calcRequiredDownPaymentTitle;
+
+  /// Subtitle for required down payment
+  ///
+  /// In ar, this message translates to:
+  /// **'أي ما يعادل {percent}% من سعر السيارة'**
+  String calcRequiredDownPaymentSubtitle(String percent);
+
+  /// Title for loan comparison modal
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة مدد التمويل'**
+  String get calcCompareTitle;
+
+  /// Column header for duration
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة'**
+  String get calcCompareDuration;
+
+  /// Column header for cost
+  ///
+  /// In ar, this message translates to:
+  /// **'كلفة الآجل'**
+  String get calcCompareCost;
+
+  /// Column header for total
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get calcCompareTotal;
+
+  /// Button label for compare
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة'**
+  String get calcCompareScheduleBtn;
+
+  /// Description for duration comparison
+  ///
+  /// In ar, this message translates to:
+  /// **'قارن 12 / 24 / 36 / 48 / 60 شهر'**
+  String get calcCompareDesc;
+
+  /// Note about last payment inclusion
+  ///
+  /// In ar, this message translates to:
+  /// **'* يشمل الدفعة الأخيرة {amount} ر.س'**
+  String calcLastPaymentIncludes(String amount);
+
+  /// Label for percentage mode
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة %'**
+  String get calcPercentMode;
+
+  /// Label for amount mode
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ'**
+  String get calcAmountMode;
+
+  /// Retirement age label
+  ///
+  /// In ar, this message translates to:
+  /// **'سن التقاعد: '**
+  String get calcRetirementAgeLabel;
+
+  /// Available period label
+  ///
+  /// In ar, this message translates to:
+  /// **' | المدة المتاحة: '**
+  String get calcAvailablePeriodLabel;
+
+  /// Year suffix text
+  ///
+  /// In ar, this message translates to:
+  /// **' سنة'**
+  String get calcYearSuffix;
+
+  /// Text for no support/no etizaz
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد'**
+  String get calcNoSupport;
+
+  /// Duration formatted as years and months
+  ///
+  /// In ar, this message translates to:
+  /// **'{years} سنة ({months} شهر)'**
+  String calcDurationYearsMonths(int years, int months);
+
+  /// Installment label during personal loan period
+  ///
+  /// In ar, this message translates to:
+  /// **'القسط خلال فترة التمويل الشخصي ({months} شهر)'**
+  String calcInstallmentDuringMonths(int months);
+
+  /// Installment label after personal loan period
+  ///
+  /// In ar, this message translates to:
+  /// **'القسط بعد انتهاء التمويل الشخصي ({months} شهر)'**
+  String calcInstallmentAfterMonths(int months);
+
+  /// Section header for fixed loan
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المحدد'**
+  String get calcFixedLoanSection;
+
+  /// Month suffix text
+  ///
+  /// In ar, this message translates to:
+  /// **' شهر'**
+  String get calcMonthSuffix;
+
+  /// N months formatted
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} شهر'**
+  String calcNMonths(int count);
+
+  /// N years formatted
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} سنة'**
+  String calcNYearsFormatted(int count);
+
+  /// SAR currency suffix
+  ///
+  /// In ar, this message translates to:
+  /// **' ر.س'**
+  String get calcSarSuffix;
+
+  /// SAR per month suffix
+  ///
+  /// In ar, this message translates to:
+  /// **' ر.س / شهر'**
+  String get calcPerMonthSuffix;
+
+  /// Coming soon dialog title
+  ///
+  /// In ar, this message translates to:
+  /// **'قريباً'**
+  String get comingSoonTitle;
+
+  /// Coming soon dialog message
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الخدمة ستكون متاحة قريباً'**
+  String get comingSoonMessage;
+
+  /// OK button label
+  ///
+  /// In ar, this message translates to:
+  /// **'حسناً'**
+  String get ok;
+
+  /// Developer full name
+  ///
+  /// In ar, this message translates to:
+  /// **'عبدالله المالكي'**
+  String get developerName;
+
+  /// Developer role/title
+  ///
+  /// In ar, this message translates to:
+  /// **'قائد في الخدمات المالية بخبرة مصرفية تتجاوز 19 عاماً، ومبتكر يسخّر الذكاء الاصطناعي والتقنية لتطوير الخدمات المصرفية'**
+  String get developerRole;
+
+  /// Developer email address
+  ///
+  /// In ar, this message translates to:
+  /// **'Abdullahalmalki@nesab.sa'**
+  String get developerEmail;
+
+  /// Developer website display text
+  ///
+  /// In ar, this message translates to:
+  /// **'www.Nesab.sa'**
+  String get developerWebsite;
+
+  /// App name in about dialog
+  ///
+  /// In ar, this message translates to:
+  /// **'نِسَب'**
+  String get aboutAppName;
+
+  /// App tagline in about dialog
+  ///
+  /// In ar, this message translates to:
+  /// **'حلول تمويلية ذكية'**
+  String get aboutAppTagline;
+
+  /// Full app description in about dialog
+  ///
+  /// In ar, this message translates to:
+  /// **'نِسَب هو منصة متكاملة للمنتجات المالية الإسلامية تجمع بين التحليل الرقمي والإرشاد العملي لتمكين المستخدمين من فهم كل تفصيلة مالية قبل اتخاذ القرارات. استعرض وقارن الحلول التمويلية المتنوعة واختر الأنسب لاحتياجاتك.'**
+  String get aboutAppFullDescription;
+
+  /// App feature: financing calculators
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبات تمويلية بنتائج فورية'**
+  String get aboutAppFeatureCalculator;
+
+  /// App feature: financial planning
+  ///
+  /// In ar, this message translates to:
+  /// **'أدوات التخطيط والتقدير المالي'**
+  String get aboutAppFeaturePlanning;
+
+  /// App feature: educational guidance
+  ///
+  /// In ar, this message translates to:
+  /// **'إرشادات تعليمية لتحقيق الاستقرار المالي'**
+  String get aboutAppFeatureGuidance;
+
+  /// App feature: sharia compliant
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات تمويل متوافقة مع الشريعة الإسلامية'**
+  String get aboutAppFeatureSharia;
+
+  /// App website display text
+  ///
+  /// In ar, this message translates to:
+  /// **'www.nesab.sa'**
+  String get aboutAppWebsite;
+
+  /// Label for current password field
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور الحالية'**
+  String get currentPassword;
+
+  /// Label for new password field
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور الجديدة'**
+  String get newPassword;
+
+  /// Label for confirm new password field
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد كلمة المرور الجديدة'**
+  String get confirmNewPassword;
+
+  /// Success message after password change
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تغيير كلمة المرور بنجاح'**
+  String get passwordChanged;
+
+  /// Error when new password and confirmation do not match
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمات المرور غير متطابقة'**
+  String get passwordsDoNotMatch;
+
+  /// Error when password is too short
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور يجب أن تكون 6 أحرف على الأقل'**
+  String get passwordTooShort;
+
+  /// Success message after signature upload
+  ///
+  /// In ar, this message translates to:
+  /// **'تم رفع التوقيع بنجاح'**
+  String get signatureUploaded;
+
+  /// Error message when signature upload fails
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل رفع التوقيع'**
+  String get signatureUploadFailed;
+
+  /// Button label for picking an image
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صورة'**
+  String get pickImage;
+
+  /// Label shown during upload
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري الرفع...'**
+  String get uploading;
+
+  /// Button label for taking a photo with camera
+  ///
+  /// In ar, this message translates to:
+  /// **'الكاميرا'**
+  String get camera;
+
+  /// Button label for deleting a saved signature
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف التوقيع'**
+  String get deleteSignature;
+
+  /// Label for signature name field
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get signatureName;
+
+  /// Hint text for signature name field
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل اسمك'**
+  String get signatureNameHint;
+
+  /// Label for signature phone number field
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الجوال'**
+  String get signatureNumber;
+
+  /// Hint text for signature phone number field
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رقم جوالك'**
+  String get signatureNumberHint;
 }
 
 class _AppLocalizationsDelegate

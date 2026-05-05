@@ -100,7 +100,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profitRate => 'نسبة الأرباح';
 
   @override
-  String get features => 'المميزات';
+  String get features => 'المزايا';
 
   @override
   String get productDescription => 'وصف المنتج';
@@ -275,6 +275,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get logoutConfirmMessage => 'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
+
+  @override
+  String get deleteAccount => 'حذف الحساب';
+
+  @override
+  String get deleteAccountTitle => 'حذف الحساب';
+
+  @override
+  String get deleteAccountMessage =>
+      'سيتم حذف حسابك وجميع بياناتك نهائياً ولا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من المتابعة؟';
+
+  @override
+  String get deleteAccountConfirm => 'حذف نهائي';
 
   @override
   String get cancel => 'إلغاء';
@@ -474,18 +487,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get displayNameHint => 'أدخل اسمك';
-
-  @override
-  String get authProviderLabel => 'طريقة الدخول';
-
-  @override
-  String get roleLabel => 'الدور';
-
-  @override
-  String get createdAtLabel => 'تاريخ الإنشاء';
-
-  @override
-  String get lastLoginLabel => 'آخر دخول';
 
   @override
   String get orLoginWith => 'أو سجّل دخولك باستخدام';
@@ -761,161 +762,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get subToolsDeductionsDesc => 'حساب صافي الراتب بعد الاستقطاعات';
 
   @override
-  String get adminLoginTitle => 'لوحة تحكم المشرف';
+  String get profileUpdated => 'تم تحديث البيانات بنجاح';
 
   @override
-  String get adminLoginSubtitle => 'سجّل الدخول لإدارة اللوحة';
+  String get saveChanges => 'حفظ التغييرات';
 
   @override
-  String get usersTitle => 'المستخدمون';
+  String get profileWebsite => 'موقع الويب';
 
   @override
-  String get toolsTitle => 'الأدوات';
+  String get profileUploadSignature => 'ارفع توقيعك';
 
   @override
-  String get dashboardTitle => 'لوحة التحكم';
+  String get authProviderGoogle => 'حساب Google';
 
   @override
-  String pageOf(int current, int total) {
-    return 'صفحة $current من $total';
-  }
+  String get authProviderApple => 'حساب Apple';
 
   @override
-  String get rowsPerPage => 'صفوف لكل صفحة';
-
-  @override
-  String get search => 'بحث';
-
-  @override
-  String get managersTitle => 'المديرون';
-
-  @override
-  String get managersSubtitle => 'عرض وإدارة مديري اللوحة.';
-
-  @override
-  String get managersEmpty =>
-      'لا يوجد مديرون بعد. انقر \"إضافة مدير\" لإنشاء واحد.';
-
-  @override
-  String get addManagerButton => 'إضافة مدير';
-
-  @override
-  String get createAdminsTitle => 'إنشاء مدير';
-
-  @override
-  String get createAdminsSubtitle =>
-      'إضافة مدير جديد بالبريد الإلكتروني وكلمة المرور والدور.';
-
-  @override
-  String get createAdminButton => 'إنشاء مدير';
-
-  @override
-  String get createAdminSuccess => 'تم إنشاء المدير بنجاح.';
-
-  @override
-  String get deleteManagerButton => 'حذف';
-
-  @override
-  String get deleteManagerConfirmTitle => 'حذف المدير';
-
-  @override
-  String deleteManagerConfirmMessage(String name) {
-    return 'هل أنت متأكد من حذف $name؟ سيتم إزالة صلاحيات الدخول.';
-  }
-
-  @override
-  String get deleteManagerSuccess => 'تم حذف المدير بنجاح.';
-
-  @override
-  String get deleteManagerError => 'فشل في حذف المدير.';
-
-  @override
-  String get roleAdmin => 'مسؤول';
-
-  @override
-  String get roleUser => 'مستخدم';
-
-  @override
-  String get categoriesTitle => 'الفئات';
-
-  @override
-  String get categoriesSubtitle => 'إدارة الفئات والفئات الفرعية.';
-
-  @override
-  String get addCategory => 'إضافة فئة';
-
-  @override
-  String get addSubCategory => 'إضافة فئة فرعية';
-
-  @override
-  String get categoryArabicName => 'الاسم بالعربية';
-
-  @override
-  String get categoryEnglishName => 'الاسم بالإنجليزية';
-
-  @override
-  String get categoryImage => 'الصورة';
-
-  @override
-  String get pickImage => 'اختر من الجهاز';
-
-  @override
-  String get categoryImageRequired => 'الصورة مطلوبة';
-
-  @override
-  String get categorySaved => 'تم حفظ الفئة';
-
-  @override
-  String get categoryTitleSize => 'حجم العنوان';
-
-  @override
-  String get categoryImageWidth => 'عرض الصورة (0–1)';
-
-  @override
-  String get categoryImageHeight => 'ارتفاع الصورة (0–1)';
-
-  @override
-  String get categoryOpacity => 'الشفافية (0–1)';
-
-  @override
-  String get categoryCalculatorType => 'الحاسبة / الأداة';
-
-  @override
-  String get categoryCalculatorTypeHint => 'اختر الحاسبة أو الأداة';
-
-  @override
-  String get extractionFailureLogsTitle => 'سجلات فشل الاستخراج';
-
-  @override
-  String get extractionFailureLogsSubtitle =>
-      'صفحات المنتجات التي لم يُعرض فيها زر الإضافة للسلة.';
-
-  @override
-  String get extractionFailureLogsUrl => 'الرابط';
-
-  @override
-  String get extractionFailureLogsMarketplace => 'السوق';
-
-  @override
-  String get extractionFailureLogsTitleFound => 'العنوان';
-
-  @override
-  String get extractionFailureLogsPriceFound => 'السعر';
-
-  @override
-  String get extractionFailureLogsColorFound => 'اللون';
-
-  @override
-  String get extractionFailureLogsSizeFound => 'المقاس';
-
-  @override
-  String get extractionFailureLogsCreatedAt => 'التاريخ';
-
-  @override
-  String get extractionFailureLogsYes => 'نعم';
-
-  @override
-  String get extractionFailureLogsNo => 'لا';
+  String get authProviderEmail => 'حساب البريد';
 
   @override
   String get calculatorsTitle => 'الحاسبات المالية';
@@ -1442,45 +1307,1080 @@ class AppLocalizationsAr extends AppLocalizations {
   String get calcConvertToGregorian => 'تحويل إلى ميلادي';
 
   @override
-  String get aiSettings => 'إعدادات الذكاء الاصطناعي';
+  String get aiChatGreeting => 'اسألني عن النتيجة';
 
   @override
-  String get aiSettingsSubtitle => 'إدارة مفتاح Claude AI للمساعد الذكي.';
+  String get calcAgeSubtitle => 'حاسبة العمر الميلادي والهجري';
 
   @override
-  String get aiApiKeyLabel => 'مفتاح Claude API';
+  String get calcAgeInputBirthDate => 'تاريخ الميلاد (ميلادي)';
 
   @override
-  String get aiApiKeyHint => 'أدخل مفتاح Claude API (sk-ant-...)';
+  String get calcAgeInputTodayDate => 'تاريخ اليوم';
 
   @override
-  String get aiApiKeyNotConfigured => 'لم يتم تهيئة مفتاح API بعد.';
+  String get calcAgeCalculateButton => 'احسب العمر';
 
   @override
-  String get aiApiKeySaved => 'تم حفظ مفتاح API بنجاح.';
+  String get calcAgeResultTitle => 'النتيجة';
 
   @override
-  String get aiApiKeyDeleted => 'تم حذف مفتاح API بنجاح.';
+  String calcAgeResultYearsMonthsDays(int years, int months, int days) {
+    return '$years سنة و $months شهر و $days يوم';
+  }
 
   @override
-  String get aiApiKeyDeleteConfirmTitle => 'حذف مفتاح API';
+  String calcAgeResultTotalMonths(int count) {
+    return '$count شهر';
+  }
 
   @override
-  String get aiApiKeyDeleteConfirmMessage =>
-      'هل أنت متأكد من حذف مفتاح API؟ ستتوقف ميزة الدردشة الذكية عن العمل.';
+  String calcAgeResultTotalDays(int count) {
+    return '$count يوم';
+  }
 
   @override
-  String get aiApiKeyInvalid => 'يجب أن يبدأ مفتاح API بـ sk-ant-';
+  String calcAgeResultHijriApprox(int years) {
+    return '~$years سنة هجرية';
+  }
 
   @override
-  String get aiApiKeyRequired => 'مفتاح API مطلوب';
+  String get calcAgeResultHijriLabel => 'العمر الهجري (تقريبي)';
 
   @override
-  String get save => 'حفظ';
+  String get calcAgeResultAgeInMonths => 'العمر بالشهور';
 
   @override
-  String get update => 'تحديث';
+  String get calcAgeResultAgeInDays => 'العمر بالأيام';
 
   @override
-  String get delete => 'حذف';
+  String get calcAgeResultAgeInYears => 'العمر بالسنوات';
+
+  @override
+  String get calcBackToInput => 'العودة للبيانات';
+
+  @override
+  String get calcEnterSalary => 'أدخل الراتب';
+
+  @override
+  String get calcCalculateNow => 'احسب الآن';
+
+  @override
+  String get calcCalculateFirst => 'احسب أولاً';
+
+  @override
+  String get calcScheduleTitle => 'جدول الأقساط';
+
+  @override
+  String get calcScheduleDesc => 'عرض التفاصيل الشهرية الكاملة';
+
+  @override
+  String get calcScheduleShow => 'عرض';
+
+  @override
+  String get calcScheduleMonth => 'الشهر';
+
+  @override
+  String get calcSchedulePayment => 'القسط';
+
+  @override
+  String get calcScheduleTotalPaid => 'إجمالي مدفوع';
+
+  @override
+  String get calcClientData => 'بيانات العميل';
+
+  @override
+  String get calcEmploymentStatus => 'الوضع الوظيفي';
+
+  @override
+  String get calcEmployed => 'موظف';
+
+  @override
+  String get calcRetired => 'متقاعد';
+
+  @override
+  String get calcMortgage => 'تمويل عقاري';
+
+  @override
+  String get calcMortgageNone => 'لا يوجد';
+
+  @override
+  String get calcMortgageHas => 'نعم يوجد';
+
+  @override
+  String get calcBirthYear => 'سنة الميلاد';
+
+  @override
+  String get calcBirthMonth => 'شهر الميلاد';
+
+  @override
+  String get calcRetirementAge => 'سن التقاعد (سنة)';
+
+  @override
+  String get calcAgeInMonths => 'العمر بالشهور';
+
+  @override
+  String get calcAvailablePeriod => 'المدة المتاحة';
+
+  @override
+  String get calcTimeEligibility => 'الأهلية الزمنية';
+
+  @override
+  String get calcEligible => 'مؤهل للتمويل';
+
+  @override
+  String get calcNotEligible => 'غير مؤهل (أقل من 60 شهر)';
+
+  @override
+  String get calcSalaryLabel => 'راتب العميل (ريال)';
+
+  @override
+  String get calcProfitRateLabel => 'هامش الربح (%)';
+
+  @override
+  String get calcDurationLabel => 'مدة التمويل (شهر)';
+
+  @override
+  String get calcAhliCardsLabel => 'مجموع حدود بطاقات الأهلي';
+
+  @override
+  String get calcOtherCardsLabel => 'مجموع حدود بطاقات البنوك الأخرى';
+
+  @override
+  String get calcMonthlyInstallment => 'القسط الشهري';
+
+  @override
+  String get calcDeductionRatio => 'نسبة الاستقطاع';
+
+  @override
+  String get calcTotalFinancing => 'إجمالي التمويل';
+
+  @override
+  String get calcApprovalAmount => 'مبلغ الموافقة';
+
+  @override
+  String get calcBankProfit => 'ربح البنك';
+
+  @override
+  String get calcAdminFeesLabel => 'الرسوم الإدارية (0.5% | أقصى 2,500)';
+
+  @override
+  String get calcVatLabel => 'الضريبة (15%)';
+
+  @override
+  String get calcTotalFeesLabel => 'إجمالي الرسوم';
+
+  @override
+  String get calcNetFinancing => 'صافي مبلغ التمويل';
+
+  @override
+  String get calcApprovedSuccess => 'مقبول — تم الاحتساب بنجاح';
+
+  @override
+  String get calcRejectedTime => 'غير مؤهل — المدة المتبقية أقل من 60 شهر';
+
+  @override
+  String get calcReviewData => 'راجع البيانات';
+
+  @override
+  String get calcNotCalculatedYet => 'لم يتم الحساب بعد';
+
+  @override
+  String get calcEnterDataAndCalculate => 'أدخل البيانات واضغط «احسب»';
+
+  @override
+  String get calcPersonalFinanceSubtitle => 'حاسبة التمويل الشخصي بلص';
+
+  @override
+  String get calcPersonalQuickSubtitle => 'حاسبة التمويل الشخصي المختصر';
+
+  @override
+  String get calcMilitaryType => 'نوع العسكري';
+
+  @override
+  String get calcMilitaryRank => 'الرتبة العسكرية';
+
+  @override
+  String get calcMilTypePilot => 'طيار';
+
+  @override
+  String get calcMilTypeNonPilot => 'غير طيار';
+
+  @override
+  String get calcMilTypeEnlisted => 'أفراد';
+
+  @override
+  String get calcFinancingData => 'بيانات التمويل';
+
+  @override
+  String get calcDeductionSection => 'نسبة الاستقطاع';
+
+  @override
+  String get calcAmountsSection => 'مبالغ التمويل';
+
+  @override
+  String get calcFeesSection => 'الرسوم والضريبة';
+
+  @override
+  String get calcNetSection => 'الصافي';
+
+  @override
+  String get calcAppliedDeduction => 'نسبة الاستقطاع المطبقة';
+
+  @override
+  String calcTotalFinancingMultiplied(int months) {
+    return 'إجمالي التمويل ($months x القسط)';
+  }
+
+  @override
+  String get calcNetAfterFees => 'صافي التمويل (بعد كل الرسوم)';
+
+  @override
+  String get calcEligibleFinancially => 'مقبول — مؤهل زمنياً ومالياً';
+
+  @override
+  String get calcDebtPurchaseSubtitle => 'حاسبة تمويل شراء مديونية';
+
+  @override
+  String get calcDebtAmount => 'مبلغ المديونية في البنك الآخر (ريال)';
+
+  @override
+  String get calcDebtSection => 'المديونية في البنك الآخر';
+
+  @override
+  String get calcDebtAtOtherBank => 'المديونية في البنك الآخر';
+
+  @override
+  String get calcNetAfterDebt => 'صافي المبلغ بعد خصم المديونية';
+
+  @override
+  String get calcDebtExceedsNet => 'المديونية تتجاوز صافي التمويل';
+
+  @override
+  String get calcRealEstateSubtitle => 'حاسبة التمويل العقاري (2 في 1)';
+
+  @override
+  String get calcRealEstatePlusSubtitle => 'حاسبة التمويل العقاري بلص (2 في 1)';
+
+  @override
+  String get calcFinancialInfo => 'المعلومات المالية';
+
+  @override
+  String get calcMortgageYears => 'مدة التمويل العقاري (سنة)';
+
+  @override
+  String get calcPersonalInstallment => 'قسط التمويل الشخصي (ريال)';
+
+  @override
+  String get calcRemainingMonths =>
+      'عدد الأقساط المتبقية من التمويل الشخصي (شهر)';
+
+  @override
+  String get calcAdditionalOptions => 'خيارات إضافية';
+
+  @override
+  String get calcHousingSupport => 'الدعم السكني';
+
+  @override
+  String get calcEtizaz => 'اعتزاز (وزارة الدفاع)';
+
+  @override
+  String get calcFixedLoan => 'مبلغ تمويل عقاري محدد (اتركه 0 للحساب التلقائي)';
+
+  @override
+  String get calcTwoInOneProgram => 'برنامج 2 في 1';
+
+  @override
+  String get calcLoanAmount2in1 => 'مبلغ التمويل العقاري (2 في 1)';
+
+  @override
+  String get calcInstallmentDuring => 'القسط خلال فترة التمويل الشخصي';
+
+  @override
+  String get calcInstallmentAfter => 'القسط بعد انتهاء التمويل الشخصي';
+
+  @override
+  String get calcTotalWithSupport => 'الإجمالي مع الدعم والاعتزاز';
+
+  @override
+  String get calcAdminAndAppraisal => 'الرسوم الإدارية والتقييم';
+
+  @override
+  String get calcFixedLoanAmount => 'مبلغ التمويل المحدد';
+
+  @override
+  String get calcTotalProfits => 'إجمالي الأرباح';
+
+  @override
+  String get calcGrandTotal => 'الإجمالي الكلي';
+
+  @override
+  String get calcCalculatedSuccessfully => 'تم الاحتساب بنجاح';
+
+  @override
+  String get calcWorkplace => 'جهة العمل';
+
+  @override
+  String get calcRankLabel => 'الرتبة';
+
+  @override
+  String get calcCivilian => 'مدني';
+
+  @override
+  String get calcMilitaryEnlisted => 'عسكري أفراد';
+
+  @override
+  String get calcOfficersNonPilot => 'ضباط غير طيارين';
+
+  @override
+  String get calcOfficersPilot => 'ضباط طيارين';
+
+  @override
+  String get calcPersonalInfo => 'المعلومات الشخصية';
+
+  @override
+  String calcMaxYearsHint(int years) {
+    return 'الحد الأقصى للمدة: $years سنة';
+  }
+
+  @override
+  String get calcExceededRetirement => 'تجاوز سن التقاعد';
+
+  @override
+  String get calcDurationData => 'بيانات المدة';
+
+  @override
+  String get calcAvailableForClient => 'المدة المتاحة للعميل';
+
+  @override
+  String get calcApprovedDuration => 'مدة التمويل المعتمدة';
+
+  @override
+  String get calcAllowedDeduction => 'نسبة الاستقطاع المسموحة';
+
+  @override
+  String get calcPersonalPeriod => 'فترة التمويل الشخصي المتبقية';
+
+  @override
+  String get calcMonthsAfterPersonal => 'الأشهر بعد انتهاء الشخصي';
+
+  @override
+  String get calcSupportSection => 'الإجمالي مع الدعم';
+
+  @override
+  String get calcEligibleWithinRetirement => 'مؤهل -- المدة ضمن سن التقاعد';
+
+  @override
+  String calcAdjustmentRequired(int years) {
+    return 'تعديل مطلوب -- المدة المتاحة $years سنة فقط';
+  }
+
+  @override
+  String get calcSchedulePhase => 'المرحلة';
+
+  @override
+  String get calcPhaseWithPersonal => 'مع الشخصي';
+
+  @override
+  String get calcPhaseAfterPersonal => 'بعد الشخصي';
+
+  @override
+  String get calcDetailedSchedule => 'جدول الأقساط التفصيلي';
+
+  @override
+  String get calcSchedulePhaseDesc => 'قسط فترة التمويل الشخصي + قسط ما بعده';
+
+  @override
+  String get calcBankFeesSubtitle => 'الرسوم البنكية — مقارنة السابقة والمحدثة';
+
+  @override
+  String get calcBankFeesNote =>
+      'الرسوم وفق دليل تعرفة خدمات المؤسسات المالية الصادر من ساما — الأسعار غير شاملة ضريبة القيمة المضافة (VAT 15%) إلا إذا نُص عليها';
+
+  @override
+  String get calcAdminFeesTitle => 'الرسوم الإدارية للتمويل';
+
+  @override
+  String get calcFinancingAdminFees => 'رسوم التمويل الإدارية';
+
+  @override
+  String get calcPreviousValue => 'السابق';
+
+  @override
+  String get calcUpdatedValue => 'المحدّث';
+
+  @override
+  String get calcBasicServices => 'الخدمات البنكية الأساسية';
+
+  @override
+  String get calcTransfers => 'الحوالات المالية';
+
+  @override
+  String get calcOfficialDocs => 'الوثائق الرسمية';
+
+  @override
+  String get calcServiceColumn => 'الخدمة';
+
+  @override
+  String get calcElectronicColumn => 'إلكتروني';
+
+  @override
+  String get calcBranchColumn => 'الفرع';
+
+  @override
+  String get calcFree => 'مجاناً';
+
+  @override
+  String get calcMadaCard => 'بطاقة مدى';
+
+  @override
+  String get calcBankFeesDisclaimer =>
+      'تنبيهات مهمة:\n• جميع الرسوم أعلاه غير شاملة ضريبة القيمة المضافة 15%\n• هذا الملف للاسترشاد فقط — يرجى التحقق من موقع ساما الرسمي (sama.gov.sa)\n• تسري التعليمات خلال 60 يوماً من تاريخ نشرها';
+
+  @override
+  String get calcDateConverterSubtitle => 'تحويل التاريخ ميلادي وهجري';
+
+  @override
+  String get calcConversionResult => 'نتيجة التحويل';
+
+  @override
+  String get calcGregorianToHijri => 'ميلادي ← هجري';
+
+  @override
+  String get calcHijriToGregorian => 'هجري ← ميلادي';
+
+  @override
+  String get calcGregorianDate => 'التاريخ الميلادي';
+
+  @override
+  String get calcHijriDay => 'اليوم';
+
+  @override
+  String get calcHijriMonth => 'الشهر';
+
+  @override
+  String get calcHijriYear => 'السنة الهجرية';
+
+  @override
+  String get calcConvertButton => 'تحويل';
+
+  @override
+  String get calcKhayratSubtitle => 'حاسبة خيرات — الودائع والاستثمار';
+
+  @override
+  String get calcInvestmentData => 'بيانات الاستثمار';
+
+  @override
+  String get calcAmountAndPeriod => 'المبلغ والفترة';
+
+  @override
+  String get calcInvestmentAmount =>
+      'مبلغ الاستثمار (ريال) — الحد الأدنى 100,000';
+
+  @override
+  String get calcMinDeposit => 'الحد الأدنى 100,000 ريال';
+
+  @override
+  String get calcInvestmentPeriod => 'فترة الاستثمار';
+
+  @override
+  String get calcCalculateProfits => 'احسب الأرباح';
+
+  @override
+  String get calcProfitMargin => 'هامش الربح';
+
+  @override
+  String get calcProfits => 'الأرباح';
+
+  @override
+  String get calcNewAmount => 'المبلغ الجديد';
+
+  @override
+  String get calcAmountCompliant => 'المبلغ مستوفٍ للشروط';
+
+  @override
+  String get calcPosSubtitle => 'حاسبة تمويل نقاط البيع';
+
+  @override
+  String get calcEntityInfo => 'معلومات المنشأة';
+
+  @override
+  String get calcEntityType => 'نوع المنشأة';
+
+  @override
+  String get calcEntityActivity => 'نشاط المنشأة';
+
+  @override
+  String get calcEntityAge => 'عمر المنشأة';
+
+  @override
+  String get calcPosOperatingPeriod => 'فترة تشغيل نقاط البيع';
+
+  @override
+  String get calcAnnualSales => 'متوسط المبيعات السنوية (ريال)';
+
+  @override
+  String get calcMonthlyPosSales => 'متوسط مبيعات نقاط البيع الشهرية (ريال)';
+
+  @override
+  String get calcPosOperationsCount => 'عدد عمليات نقاط البيع شهريا';
+
+  @override
+  String get calcFinancingDetails => 'تفاصيل التمويل';
+
+  @override
+  String get calcTermMonths => 'مدة التمويل (شهر)';
+
+  @override
+  String get calcFinancingAmount => 'مبلغ التمويل (المتوسط × 6)';
+
+  @override
+  String get calcProfitRate => 'نسبة الربح';
+
+  @override
+  String get calcTotalProfit => 'إجمالي الربح';
+
+  @override
+  String get calcTotal => 'الإجمالي';
+
+  @override
+  String get calcAdminFeesPos => 'الرسوم الإدارية (5% بحد 2,500 + ضريبة 15%)';
+
+  @override
+  String get calcEntityEligible => 'مقبولة — المنشأة مؤهلة';
+
+  @override
+  String get calcEntityRejectedAge =>
+      'مرفوضة — عمر المنشأة أو نقاط البيع غير كاف';
+
+  @override
+  String get calcEntityRejectedSales => 'مرفوضة — المبيعات أقل من 400,000 ريال';
+
+  @override
+  String get calcMonthlySales => 'متوسط المبيعات الشهرية';
+
+  @override
+  String get calcRejected => 'مرفوض';
+
+  @override
+  String get calcProtectionSubtitle =>
+      'برنامج الحماية والادخار - الدفعة الواحدة';
+
+  @override
+  String get calcProgramData => 'بيانات البرنامج';
+
+  @override
+  String get calcSubscriptionAndDuration => 'الاشتراك والمدة';
+
+  @override
+  String get calcSubscriptionAmount => 'مبلغ الاشتراك (ريال)';
+
+  @override
+  String get calcProgramDuration => 'مدة البرنامج (سنوات)';
+
+  @override
+  String get calcInvestmentStrategy => 'استراتيجية الاستثمار';
+
+  @override
+  String get calcAgeAtContract => 'العمر عند التعاقد';
+
+  @override
+  String calcCashValueAfter(int years) {
+    return 'القيمة النقدية بعد $years سنوات';
+  }
+
+  @override
+  String get calcRedemptionValue => 'قيمة الاسترداد';
+
+  @override
+  String get calcDeathBenefit => 'منفعة الوفاة';
+
+  @override
+  String get calcInsuranceCoverage => 'التغطية التأمينية';
+
+  @override
+  String get calcTotalInvestmentIncome => 'إجمالي دخل الاستثمار';
+
+  @override
+  String get calcProjectionYear => 'السنة';
+
+  @override
+  String get calcProjectionCashValue => 'القيمة النقدية';
+
+  @override
+  String get calcProjectionDeathBenefit => 'منفعة الوفاة';
+
+  @override
+  String get calcProjectionAdminFees => 'رسوم الإدارة';
+
+  @override
+  String get calcDeductionRatioSubtitle => 'احتساب نسب الاستقطاع';
+
+  @override
+  String get calcDeductionAvailSubtitle => 'الاستقطاع المتاح حسب المنتجات';
+
+  @override
+  String get calcDeductionRatioMode => '📊 نسبة الاستقطاع';
+
+  @override
+  String get calcDeductionAvailMode => '✅ الاستقطاع المتاح';
+
+  @override
+  String get calcTotalSalary => 'إجمالي الراتب (ريال)';
+
+  @override
+  String get calcJobStatus => 'الحالة الوظيفية';
+
+  @override
+  String get calcPersonalInstLabel => 'قسط التمويل الشخصي (ريال)';
+
+  @override
+  String get calcLeasingInstLabel => 'قسط التمويل التأجيري (ريال)';
+
+  @override
+  String get calcRealEstateInstLabel => 'قسط التمويل العقاري (ريال)';
+
+  @override
+  String get calcOtherObligations => 'التزامات أخرى (ريال)';
+
+  @override
+  String get calcCalculateDeduction => 'احتساب';
+
+  @override
+  String get calcSalaryAmount => 'الراتب';
+
+  @override
+  String get calcPersonalFinancing => 'التمويل الشخصي';
+
+  @override
+  String get calcLeasingFinancing => 'التمويل التأجيري';
+
+  @override
+  String get calcRealEstateFinancing => 'التمويل العقاري';
+
+  @override
+  String get calcTotalObligations => 'إجمالي الالتزامات الحالية';
+
+  @override
+  String get calcCurrentDeduction => 'نسبة الاستقطاع الحالية';
+
+  @override
+  String get calcAvailablePersonal => 'المتاح للتمويل الشخصي';
+
+  @override
+  String get calcAvailableLeasing => 'المتاح للتمويل التأجيري (45%)';
+
+  @override
+  String get calcAvailableRealEstate => 'المتاح للتمويل العقاري';
+
+  @override
+  String get monthJan => 'يناير';
+
+  @override
+  String get monthFeb => 'فبراير';
+
+  @override
+  String get monthMar => 'مارس';
+
+  @override
+  String get monthApr => 'أبريل';
+
+  @override
+  String get monthMay => 'مايو';
+
+  @override
+  String get monthJun => 'يونيو';
+
+  @override
+  String get monthJul => 'يوليو';
+
+  @override
+  String get monthAug => 'أغسطس';
+
+  @override
+  String get monthSep => 'سبتمبر';
+
+  @override
+  String get monthOct => 'أكتوبر';
+
+  @override
+  String get monthNov => 'نوفمبر';
+
+  @override
+  String get monthDec => 'ديسمبر';
+
+  @override
+  String get calcLeasingSubtitle => 'حاسبة التمويل التأجيري';
+
+  @override
+  String get calcLeasingMicroSubtitle => 'حاسبة التمويل التأجيري - مايكرو';
+
+  @override
+  String get calcAllPeriodsTable => 'جدول جميع الفترات';
+
+  @override
+  String get calcPeriodColumn => 'الفترة';
+
+  @override
+  String get calcDaysColumn => 'الأيام';
+
+  @override
+  String get calcProfitMarginColumn => 'هامش الربح';
+
+  @override
+  String get calcProfitsColumn => 'الأرباح';
+
+  @override
+  String get calcNewAmountColumn => 'المبلغ الجديد';
+
+  @override
+  String calcNYears(int count) {
+    return '$count سنوات';
+  }
+
+  @override
+  String get calcProfitRatePercent => 'هامش الربح (%)';
+
+  @override
+  String get calcEntityData => 'بيانات المنشأة';
+
+  @override
+  String get calcEnterDataPrompt => 'أدخل البيانات واضغط احسب';
+
+  @override
+  String get calcDeductionRatioTitle => 'احتساب نسب الاستقطاع';
+
+  @override
+  String get calcDeductionAvailTitle => 'الاستقطاع المتاح';
+
+  @override
+  String calcPeriodDays(String period, int days) {
+    return '$period ($days يوم)';
+  }
+
+  @override
+  String get calcInvestmentAmountLabel => 'مبلغ الاستثمار';
+
+  @override
+  String get calcDateConverterTitle => 'تحويل التاريخ';
+
+  @override
+  String get calcExportPdf => 'PDF';
+
+  @override
+  String get calcExportImage => 'صورة';
+
+  @override
+  String calcPersonalFinancingWithRate(String rate) {
+    return 'التمويل الشخصي ($rate%)';
+  }
+
+  @override
+  String calcLeasingFinancingWithRate(String rate) {
+    return 'التمويل التأجيري ($rate%)';
+  }
+
+  @override
+  String calcRealEstateFinancingWithRate(String rate) {
+    return 'التمويل العقاري ($rate%)';
+  }
+
+  @override
+  String calcAvailablePersonalWithRate(String rate) {
+    return 'المتاح للتمويل الشخصي ($rate%)';
+  }
+
+  @override
+  String calcAvailableRealEstateWithRate(String rate) {
+    return 'المتاح للتمويل العقاري ($rate%)';
+  }
+
+  @override
+  String get calcBankFeesAiContext => 'الرسوم البنكية ساما';
+
+  @override
+  String get calcClientAndFinancingData => 'بيانات العميل والتمويل';
+
+  @override
+  String get calcClientInfo => 'معلومات العميل';
+
+  @override
+  String get calcCustomerSegment => 'شريحة العميل';
+
+  @override
+  String get calcCarPrice => 'سعر السيارة (ريال)';
+
+  @override
+  String get calcLeasingDurationMonths => 'مدة التمويل (شهر)';
+
+  @override
+  String get calcProfitRateCost => 'هامش الربح / كلفة الآجل (%)';
+
+  @override
+  String get calcAdminFeesInput => 'الرسوم الإدارية (ريال)';
+
+  @override
+  String get calcPlateFees => 'رسوم اللوحات (ريال)';
+
+  @override
+  String get calcPaymentsSection => 'الدفعات — نسبة % أو مبلغ من سعر السيارة';
+
+  @override
+  String get calcDownPaymentLabel => 'الدفعة الأولى';
+
+  @override
+  String get calcLastPaymentLabel => 'الدفعة الأخيرة';
+
+  @override
+  String get calcInsuranceLabel => 'التأمين';
+
+  @override
+  String get calcCurrentObligations => 'الالتزامات الحالية';
+
+  @override
+  String get calcPersonalFinancingInst => 'قسط تمويل شخصي';
+
+  @override
+  String get calcOtherObligationsLabel => 'التزامات أخرى';
+
+  @override
+  String get calcRealEstateInst => 'قسط تمويل عقاري';
+
+  @override
+  String get calcByCarPrice => 'احتساب بناء على سعر السيارة';
+
+  @override
+  String get calcMaxCarPrice => 'أقصى سعر للسيارة';
+
+  @override
+  String get calcEnterSalaryAndPrice => 'أدخل الراتب وسعر السيارة';
+
+  @override
+  String get calcObligationsExceedLimit =>
+      'الالتزامات تستهلك كامل نسبة الاستقطاع';
+
+  @override
+  String get calcSamaBankSystem => 'نظام الاعتماد البنكي (SAMA)';
+
+  @override
+  String get calcFinancingSuccess => 'تم احتساب التمويل بنجاح';
+
+  @override
+  String get calcMaxAvailableFinancing => 'أقصى تمويل متاح للعميل';
+
+  @override
+  String get calcAmountLabel => 'المبلغ';
+
+  @override
+  String get calcMandatoryDownPayment => 'الدفعة الأولى الإلزامية';
+
+  @override
+  String get calcTranslateToCalcQuestion =>
+      'هل تريد ترجمة الاحتساب على الآلة ؟';
+
+  @override
+  String get calcCostOfTermBankProfit => 'كلفة الآجل (ربح البنك)';
+
+  @override
+  String get calcTotalRepayment => 'إجمالي السداد';
+
+  @override
+  String calcDeductionActual(String percent) {
+    return 'الاستقطاع: $percent%';
+  }
+
+  @override
+  String calcDeductionLimitLabel(String percent) {
+    return 'الحد: $percent%';
+  }
+
+  @override
+  String get calcApprovedSama => 'مقبول — الطلب ضمن شروط ساما';
+
+  @override
+  String get calcRejectedDeduction => 'مرفوض — تجاوز نسبة الاستقطاع';
+
+  @override
+  String get calcRequiredDownPaymentTitle =>
+      'لإقرار الطلب — ارفع الدفعة الأولى بمبلغ';
+
+  @override
+  String calcRequiredDownPaymentSubtitle(String percent) {
+    return 'أي ما يعادل $percent% من سعر السيارة';
+  }
+
+  @override
+  String get calcCompareTitle => 'مقارنة مدد التمويل';
+
+  @override
+  String get calcCompareDuration => 'المدة';
+
+  @override
+  String get calcCompareCost => 'كلفة الآجل';
+
+  @override
+  String get calcCompareTotal => 'الإجمالي';
+
+  @override
+  String get calcCompareScheduleBtn => 'مقارنة';
+
+  @override
+  String get calcCompareDesc => 'قارن 12 / 24 / 36 / 48 / 60 شهر';
+
+  @override
+  String calcLastPaymentIncludes(String amount) {
+    return '* يشمل الدفعة الأخيرة $amount ر.س';
+  }
+
+  @override
+  String get calcPercentMode => 'نسبة %';
+
+  @override
+  String get calcAmountMode => 'مبلغ';
+
+  @override
+  String get calcRetirementAgeLabel => 'سن التقاعد: ';
+
+  @override
+  String get calcAvailablePeriodLabel => ' | المدة المتاحة: ';
+
+  @override
+  String get calcYearSuffix => ' سنة';
+
+  @override
+  String get calcNoSupport => 'لا يوجد';
+
+  @override
+  String calcDurationYearsMonths(int years, int months) {
+    return '$years سنة ($months شهر)';
+  }
+
+  @override
+  String calcInstallmentDuringMonths(int months) {
+    return 'القسط خلال فترة التمويل الشخصي ($months شهر)';
+  }
+
+  @override
+  String calcInstallmentAfterMonths(int months) {
+    return 'القسط بعد انتهاء التمويل الشخصي ($months شهر)';
+  }
+
+  @override
+  String get calcFixedLoanSection => 'المبلغ المحدد';
+
+  @override
+  String get calcMonthSuffix => ' شهر';
+
+  @override
+  String calcNMonths(int count) {
+    return '$count شهر';
+  }
+
+  @override
+  String calcNYearsFormatted(int count) {
+    return '$count سنة';
+  }
+
+  @override
+  String get calcSarSuffix => ' ر.س';
+
+  @override
+  String get calcPerMonthSuffix => ' ر.س / شهر';
+
+  @override
+  String get comingSoonTitle => 'قريباً';
+
+  @override
+  String get comingSoonMessage => 'هذه الخدمة ستكون متاحة قريباً';
+
+  @override
+  String get ok => 'حسناً';
+
+  @override
+  String get developerName => 'عبدالله المالكي';
+
+  @override
+  String get developerRole =>
+      'قائد في الخدمات المالية بخبرة مصرفية تتجاوز 19 عاماً، ومبتكر يسخّر الذكاء الاصطناعي والتقنية لتطوير الخدمات المصرفية';
+
+  @override
+  String get developerEmail => 'Abdullahalmalki@nesab.sa';
+
+  @override
+  String get developerWebsite => 'www.Nesab.sa';
+
+  @override
+  String get aboutAppName => 'نِسَب';
+
+  @override
+  String get aboutAppTagline => 'حلول تمويلية ذكية';
+
+  @override
+  String get aboutAppFullDescription =>
+      'نِسَب هو منصة متكاملة للمنتجات المالية الإسلامية تجمع بين التحليل الرقمي والإرشاد العملي لتمكين المستخدمين من فهم كل تفصيلة مالية قبل اتخاذ القرارات. استعرض وقارن الحلول التمويلية المتنوعة واختر الأنسب لاحتياجاتك.';
+
+  @override
+  String get aboutAppFeatureCalculator => 'حاسبات تمويلية بنتائج فورية';
+
+  @override
+  String get aboutAppFeaturePlanning => 'أدوات التخطيط والتقدير المالي';
+
+  @override
+  String get aboutAppFeatureGuidance =>
+      'إرشادات تعليمية لتحقيق الاستقرار المالي';
+
+  @override
+  String get aboutAppFeatureSharia =>
+      'خيارات تمويل متوافقة مع الشريعة الإسلامية';
+
+  @override
+  String get aboutAppWebsite => 'www.nesab.sa';
+
+  @override
+  String get currentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmNewPassword => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get passwordChanged => 'تم تغيير كلمة المرور بنجاح';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمات المرور غير متطابقة';
+
+  @override
+  String get passwordTooShort => 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+
+  @override
+  String get signatureUploaded => 'تم رفع التوقيع بنجاح';
+
+  @override
+  String get signatureUploadFailed => 'فشل رفع التوقيع';
+
+  @override
+  String get pickImage => 'اختر صورة';
+
+  @override
+  String get uploading => 'جاري الرفع...';
+
+  @override
+  String get camera => 'الكاميرا';
+
+  @override
+  String get deleteSignature => 'حذف التوقيع';
+
+  @override
+  String get signatureName => 'الاسم';
+
+  @override
+  String get signatureNameHint => 'أدخل اسمك';
+
+  @override
+  String get signatureNumber => 'رقم الجوال';
+
+  @override
+  String get signatureNumberHint => 'أدخل رقم جوالك';
 }

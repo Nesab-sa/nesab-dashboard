@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:nesab_dashboard/core/theme/app_colors.dart';
-import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
+import 'package:nesab/core/theme/app_colors.dart';
+import 'package:nesab/core/theme/app_dimensions.dart';
 
 /// Supported visual variants for [AppButton].
 enum AppButtonVariant { primary, secondary, outlined, text }
@@ -38,7 +38,7 @@ class AppButton extends StatelessWidget {
     final button = switch (variant) {
       AppButtonVariant.primary => _elevated(
         AppColors.primary,
-        AppColors.onPrimaryContrast,
+        Colors.white,
         onTap,
         child,
         hasIcon,
@@ -46,7 +46,7 @@ class AppButton extends StatelessWidget {
       ),
       AppButtonVariant.secondary => _elevated(
         AppColors.accent,
-        AppColors.onPrimaryContrast,
+        Colors.white,
         onTap,
         child,
         hasIcon,

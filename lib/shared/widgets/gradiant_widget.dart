@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'package:nesab_dashboard/core/theme/app_colors.dart';
-
 /// A blurred multi-color aurora background effect with optional child content.
 ///
 /// Renders several overlapping color orbs with heavy Gaussian blur,
@@ -59,8 +57,10 @@ class GradiantWidget extends StatelessWidget {
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
             colors: [
-              AppColors.purple600.withValues(alpha: 0.15),
-              AppColors.blue.withValues(alpha: 0.10),
+              // const Color.fromARGB(255, 17, 41, 255).withValues(alpha: 0.3),
+              // const Color(0xFF38BDF8).withValues(alpha: 0.3),
+              const Color(0xFF8B5CF6).withValues(alpha: 0.15),
+              const Color(0xFF38BDF8).withValues(alpha: 0.10),
             ],
           ),
           borderRadius: BorderRadius.circular(9999),

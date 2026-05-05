@@ -39,7 +39,7 @@ abstract class RouteNames {
 
   // ── Category Details ─────────────────────────────────────────────────
 
-  static const String categoryDetailPath = '/category/:type';
+  static const String categoryDetailPath = '/category/:id';
   static const String categoryDetailName = 'categoryDetail';
 
   // ── Apply ─────────────────────────────────────────────────────────────────
@@ -78,16 +78,8 @@ abstract class RouteNames {
   static const String paywallPath = '/paywall';
   static const String paywallName = 'paywall';
 
-  // ── Dashboard ─────────────────────────────────────────────────────────
+  // ── Profit Margins Compare ───────────────────────────────────────────────
 
-  static const String dashboardPath = '/dashboard';
-  static const String dashboardName = 'dashboard';
-
-
-
-  static const String usersPath = '/dashboard/users';
-  static const String usersName = 'users';
-
-  static const String toolsPath = '/dashboard/tools';
-  static const String toolsName = 'tools';
+  static const String profitMarginsPath = '/profit-margins';
+  static const String profitMarginsName = 'profitMargins';
 }

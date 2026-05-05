@@ -1,14 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'package:nesab_dashboard/features/dashboard/data/models/user_model.dart';
+import 'package:nesab/features/auth/domain/entities/user_entity.dart';
 
 part 'auth_state.freezed.dart';
 
 @freezed
-class AuthState with _$AuthState {
+sealed class AuthState with _$AuthState {
   const factory AuthState.initial() = _Initial;
   const factory AuthState.loading() = _Loading;
-  const factory AuthState.authenticated(UserModel user) = _Authenticated;
+  const factory AuthState.authenticated(UserEntity user) = _Authenticated;
   const factory AuthState.unauthenticated() = _Unauthenticated;
   const factory AuthState.error(String message) = _Error;
+  const factory AuthState.resetLinkSent() = _ResetLinkSent;
 }

@@ -44,5 +44,20 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Firebase Functions (compiled output)
-functions/lib/
+# Signing
+android/key.properties
+*.jks
+*.keystore
+
+# Environment
+.env*
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.config.dart
+*.gr.dart
+
+# Temp files
+*.tmp
+Thumbs.db

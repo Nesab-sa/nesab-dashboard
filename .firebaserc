@@ -1,7 +1,13 @@
 {
-  "projects": {
-    "default": "nesab-26771"
+  "projects": {},
+  "targets": {
+    "nesab-26771": {
+      "hosting": {
+        "privacy": [
+          "nesab-privacy"
+        ]
+      }
+    }
   },
-  "targets": {},
   "etags": {}
 }

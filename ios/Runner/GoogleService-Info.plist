@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1007875215696-n8j368odr9a0pa3518pp038o294c1htr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1007875215696-n8j368odr9a0pa3518pp038o294c1htr</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1007875215696-8nu7hnb3m58eaqs7havhbuqarjs43b2t.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC4Fh2I8fWATqvWf6B_DOitKZV9QwhR45E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1007875215696</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>sa.nesab.app</string>
+	<key>PROJECT_ID</key>
+	<string>nesab-26771</string>
+	<key>STORAGE_BUCKET</key>
+	<string>nesab-26771.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1007875215696:ios:54dc7292ba339476a01c55</string>
+</dict>
+</plist>

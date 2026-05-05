@@ -55,7 +55,7 @@ extension AuthStatePatterns on AuthState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Authenticated value)?  authenticated,TResult Function( _Unauthenticated value)?  unauthenticated,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Authenticated value)?  authenticated,TResult Function( _Unauthenticated value)?  unauthenticated,TResult Function( _Error value)?  error,TResult Function( _ResetLinkSent value)?  resetLinkSent,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -63,7 +63,8 @@ return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Authenticated() when authenticated != null:
 return authenticated(_that);case _Unauthenticated() when unauthenticated != null:
 return unauthenticated(_that);case _Error() when error != null:
-return error(_that);case _:
+return error(_that);case _ResetLinkSent() when resetLinkSent != null:
+return resetLinkSent(_that);case _:
   return orElse();
 
 }
@@ -81,7 +82,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Authenticated value)  authenticated,required TResult Function( _Unauthenticated value)  unauthenticated,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Authenticated value)  authenticated,required TResult Function( _Unauthenticated value)  unauthenticated,required TResult Function( _Error value)  error,required TResult Function( _ResetLinkSent value)  resetLinkSent,}){
 final _that = this;
 switch (_that) {
 case _Initial():
@@ -89,10 +90,8 @@ return initial(_that);case _Loading():
 return loading(_that);case _Authenticated():
 return authenticated(_that);case _Unauthenticated():
 return unauthenticated(_that);case _Error():
-return error(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return error(_that);case _ResetLinkSent():
+return resetLinkSent(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -106,7 +105,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Authenticated value)?  authenticated,TResult? Function( _Unauthenticated value)?  unauthenticated,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Authenticated value)?  authenticated,TResult? Function( _Unauthenticated value)?  unauthenticated,TResult? Function( _Error value)?  error,TResult? Function( _ResetLinkSent value)?  resetLinkSent,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -114,7 +113,8 @@ return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Authenticated() when authenticated != null:
 return authenticated(_that);case _Unauthenticated() when unauthenticated != null:
 return unauthenticated(_that);case _Error() when error != null:
-return error(_that);case _:
+return error(_that);case _ResetLinkSent() when resetLinkSent != null:
+return resetLinkSent(_that);case _:
   return null;
 
 }
@@ -131,14 +131,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( UserModel user)?  authenticated,TResult Function()?  unauthenticated,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( UserEntity user)?  authenticated,TResult Function()?  unauthenticated,TResult Function( String message)?  error,TResult Function()?  resetLinkSent,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Authenticated() when authenticated != null:
 return authenticated(_that.user);case _Unauthenticated() when unauthenticated != null:
 return unauthenticated();case _Error() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case _ResetLinkSent() when resetLinkSent != null:
+return resetLinkSent();case _:
   return orElse();
 
 }
@@ -156,17 +157,15 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( UserModel user)  authenticated,required TResult Function()  unauthenticated,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( UserEntity user)  authenticated,required TResult Function()  unauthenticated,required TResult Function( String message)  error,required TResult Function()  resetLinkSent,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Authenticated():
 return authenticated(_that.user);case _Unauthenticated():
 return unauthenticated();case _Error():
-return error(_that.message);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return error(_that.message);case _ResetLinkSent():
+return resetLinkSent();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -180,14 +179,15 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( UserModel user)?  authenticated,TResult? Function()?  unauthenticated,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( UserEntity user)?  authenticated,TResult? Function()?  unauthenticated,TResult? Function( String message)?  error,TResult? Function()?  resetLinkSent,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Authenticated() when authenticated != null:
 return authenticated(_that.user);case _Unauthenticated() when unauthenticated != null:
 return unauthenticated();case _Error() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case _ResetLinkSent() when resetLinkSent != null:
+return resetLinkSent();case _:
   return null;
 
 }
@@ -266,7 +266,7 @@ class _Authenticated implements AuthState {
   const _Authenticated(this.user);
   
 
- final  UserModel user;
+ final  UserEntity user;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -298,7 +298,7 @@ abstract mixin class _$AuthenticatedCopyWith<$Res> implements $AuthStateCopyWith
   factory _$AuthenticatedCopyWith(_Authenticated value, $Res Function(_Authenticated) _then) = __$AuthenticatedCopyWithImpl;
 @useResult
 $Res call({
- UserModel user
+ UserEntity user
 });
 
 
@@ -318,7 +318,7 @@ class __$AuthenticatedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
   return _then(_Authenticated(
 null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserModel,
+as UserEntity,
   ));
 }
 
@@ -422,5 +422,37 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class _ResetLinkSent implements AuthState {
+  const _ResetLinkSent();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResetLinkSent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AuthState.resetLinkSent()';
+}
+
+
+}
+
+
+
 
 // dart format on

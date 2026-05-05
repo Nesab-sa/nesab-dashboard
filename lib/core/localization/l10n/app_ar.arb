@@ -366,6 +366,22 @@
   "@logoutConfirmMessage": {
     "description": "Confirmation message in the logout dialog"
   },
+  "deleteAccount": "حذف الحساب",
+  "@deleteAccount": {
+    "description": "Delete account menu item label"
+  },
+  "deleteAccountTitle": "حذف الحساب",
+  "@deleteAccountTitle": {
+    "description": "Title of the delete account confirmation dialog"
+  },
+  "deleteAccountMessage": "سيتم حذف حسابك وجميع بياناتك نهائياً ولا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من المتابعة؟",
+  "@deleteAccountMessage": {
+    "description": "Confirmation message in the delete account dialog"
+  },
+  "deleteAccountConfirm": "حذف نهائي",
+  "@deleteAccountConfirm": {
+    "description": "Destructive confirm button label in the delete account dialog"
+  },
   "cancel": "\u0625\u0644\u063a\u0627\u0621",
   "@cancel": {
     "description": "Cancel button label used in dialogs"
@@ -638,22 +654,6 @@
   "displayNameHint": "أدخل اسمك",
   "@displayNameHint": {
     "description": "Hint for display name text field"
-  },
-  "authProviderLabel": "طريقة الدخول",
-  "@authProviderLabel": {
-    "description": "Label for auth provider column"
-  },
-  "roleLabel": "الدور",
-  "@roleLabel": {
-    "description": "Label for role column"
-  },
-  "createdAtLabel": "تاريخ الإنشاء",
-  "@createdAtLabel": {
-    "description": "Label for created at column"
-  },
-  "lastLoginLabel": "آخر دخول",
-  "@lastLoginLabel": {
-    "description": "Label for last login column"
   },
   "orLoginWith": "أو سجّل دخولك باستخدام",
   "@orLoginWith": {
@@ -949,71 +949,19 @@
   "subToolsDeductions": "معرفة الاستقطاعات",
   "subToolsDeductionsDesc": "حساب صافي الراتب بعد الاستقطاعات",
 
-  "adminLoginTitle": "لوحة تحكم المشرف",
-  "adminLoginSubtitle": "سجّل الدخول لإدارة اللوحة",
-  "usersTitle": "المستخدمون",
-  "toolsTitle": "الأدوات",
-  "dashboardTitle": "لوحة التحكم",
-  "pageOf": "صفحة {current} من {total}",
-  "@pageOf": {
-    "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
-    }
+  "profileUpdated": "تم تحديث البيانات بنجاح",
+  "@profileUpdated": {
+    "description": "Success message after profile update"
   },
-  "rowsPerPage": "صفوف لكل صفحة",
-  "search": "بحث",
-
-  "managersTitle": "المديرون",
-  "managersSubtitle": "عرض وإدارة مديري اللوحة.",
-  "managersEmpty": "لا يوجد مديرون بعد. انقر \"إضافة مدير\" لإنشاء واحد.",
-  "addManagerButton": "إضافة مدير",
-  "createAdminsTitle": "إنشاء مدير",
-  "createAdminsSubtitle": "إضافة مدير جديد بالبريد الإلكتروني وكلمة المرور والدور.",
-  "createAdminButton": "إنشاء مدير",
-  "createAdminSuccess": "تم إنشاء المدير بنجاح.",
-  "deleteManagerButton": "حذف",
-  "deleteManagerConfirmTitle": "حذف المدير",
-  "deleteManagerConfirmMessage": "هل أنت متأكد من حذف {name}؟ سيتم إزالة صلاحيات الدخول.",
-  "@deleteManagerConfirmMessage": {
-    "placeholders": {
-      "name": {"type": "String"}
-    }
+  "saveChanges": "حفظ التغييرات",
+  "@saveChanges": {
+    "description": "Save changes button label"
   },
-  "deleteManagerSuccess": "تم حذف المدير بنجاح.",
-  "deleteManagerError": "فشل في حذف المدير.",
-  "roleLabel": "الدور",
-  "roleAdmin": "مسؤول",
-  "roleUser": "مستخدم",
-
-  "categoriesTitle": "الفئات",
-  "categoriesSubtitle": "إدارة الفئات والفئات الفرعية.",
-  "addCategory": "إضافة فئة",
-  "addSubCategory": "إضافة فئة فرعية",
-  "categoryArabicName": "الاسم بالعربية",
-  "categoryEnglishName": "الاسم بالإنجليزية",
-  "categoryImage": "الصورة",
-  "pickImage": "اختر من الجهاز",
-  "categoryImageRequired": "الصورة مطلوبة",
-  "categorySaved": "تم حفظ الفئة",
-  "categoryTitleSize": "حجم العنوان",
-  "categoryImageWidth": "عرض الصورة (0–1)",
-  "categoryImageHeight": "ارتفاع الصورة (0–1)",
-  "categoryOpacity": "الشفافية (0–1)",
-  "categoryCalculatorType": "الحاسبة / الأداة",
-  "categoryCalculatorTypeHint": "اختر الحاسبة أو الأداة",
-
-  "extractionFailureLogsTitle": "سجلات فشل الاستخراج",
-  "extractionFailureLogsSubtitle": "صفحات المنتجات التي لم يُعرض فيها زر الإضافة للسلة.",
-  "extractionFailureLogsUrl": "الرابط",
-  "extractionFailureLogsMarketplace": "السوق",
-  "extractionFailureLogsTitleFound": "العنوان",
-  "extractionFailureLogsPriceFound": "السعر",
-  "extractionFailureLogsColorFound": "اللون",
-  "extractionFailureLogsSizeFound": "المقاس",
-  "extractionFailureLogsCreatedAt": "التاريخ",
-  "extractionFailureLogsYes": "نعم",
-  "extractionFailureLogsNo": "لا",
+  "profileWebsite": "موقع الويب",
+  "profileUploadSignature": "ارفع توقيعك",
+  "authProviderGoogle": "حساب Google",
+  "authProviderApple": "حساب Apple",
+  "authProviderEmail": "حساب البريد",
 
   "calculatorsTitle": "الحاسبات المالية",
   "calculatorsSubtitle": "احسب خيارات التمويل والأهلية",
@@ -1053,7 +1001,6 @@
   "calcDeductionsDesc": "عرض تفصيل الاستقطاعات من الراتب",
   "calcBankFees": "الرسوم البنكية",
   "calcBankFeesDesc": "مقارنة الرسوم البنكية وفق تعليمات ساما",
-
   "calcInputSalary": "الراتب الشهري (ريال)",
   "calcInputEmploymentType": "الوضع الوظيفي",
   "calcInputSector": "القطاع الوظيفي",
@@ -1106,7 +1053,6 @@
   "calcInputRequestedAmount": "المبلغ المطلوب (ريال)",
   "calcInputGregorianDate": "التاريخ الميلادي",
   "calcInputHijriDate": "التاريخ الهجري",
-
   "calcResultTitle": "نتائج الحساب",
   "calcResultEligible": "مؤهل للتمويل",
   "calcResultNotEligible": "غير مؤهل",
@@ -1173,7 +1119,6 @@
   "calcResultApplicable": "هل ينطبق؟",
   "calcResultHijriDate": "التاريخ الهجري",
   "calcResultGregorianDate": "التاريخ الميلادي",
-
   "calcSalaryClient": "عميل رواتب",
   "calcNonSalaryClient": "غير رواتب",
   "calcYes": "نعم",
@@ -1190,19 +1135,1479 @@
   "calcAllConditionsMet": "جميع الشروط مستوفاة",
   "calcConvertToHijri": "تحويل إلى هجري",
   "calcConvertToGregorian": "تحويل إلى ميلادي",
+  "aiChatGreeting": "اسألني عن النتيجة",
 
-  "aiSettings": "إعدادات الذكاء الاصطناعي",
-  "aiSettingsSubtitle": "إدارة مفتاح Claude AI للمساعد الذكي.",
-  "aiApiKeyLabel": "مفتاح Claude API",
-  "aiApiKeyHint": "أدخل مفتاح Claude API (sk-ant-...)",
-  "aiApiKeyNotConfigured": "لم يتم تهيئة مفتاح API بعد.",
-  "aiApiKeySaved": "تم حفظ مفتاح API بنجاح.",
-  "aiApiKeyDeleted": "تم حذف مفتاح API بنجاح.",
-  "aiApiKeyDeleteConfirmTitle": "حذف مفتاح API",
-  "aiApiKeyDeleteConfirmMessage": "هل أنت متأكد من حذف مفتاح API؟ ستتوقف ميزة الدردشة الذكية عن العمل.",
-  "aiApiKeyInvalid": "يجب أن يبدأ مفتاح API بـ sk-ant-",
-  "aiApiKeyRequired": "مفتاح API مطلوب",
-  "save": "حفظ",
-  "update": "تحديث",
-  "delete": "حذف"
+  "calcAgeSubtitle": "حاسبة العمر الميلادي والهجري",
+  "@calcAgeSubtitle": {
+    "description": "Subtitle for the age calculator page"
+  },
+  "calcAgeInputBirthDate": "تاريخ الميلاد (ميلادي)",
+  "@calcAgeInputBirthDate": {
+    "description": "Label for birth date picker in age calculator"
+  },
+  "calcAgeInputTodayDate": "تاريخ اليوم",
+  "@calcAgeInputTodayDate": {
+    "description": "Label for today date picker in age calculator"
+  },
+  "calcAgeCalculateButton": "احسب العمر",
+  "@calcAgeCalculateButton": {
+    "description": "Calculate button label in age calculator"
+  },
+  "calcAgeResultTitle": "النتيجة",
+  "@calcAgeResultTitle": {
+    "description": "Result section title in age calculator"
+  },
+  "calcAgeResultYearsMonthsDays": "{years} سنة و {months} شهر و {days} يوم",
+  "@calcAgeResultYearsMonthsDays": {
+    "description": "Full age display format",
+    "placeholders": {
+      "years": { "type": "int" },
+      "months": { "type": "int" },
+      "days": { "type": "int" }
+    }
+  },
+  "calcAgeResultTotalMonths": "{count} شهر",
+  "@calcAgeResultTotalMonths": {
+    "description": "Age in total months",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "calcAgeResultTotalDays": "{count} يوم",
+  "@calcAgeResultTotalDays": {
+    "description": "Age in total days",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "calcAgeResultHijriApprox": "~{years} سنة هجرية",
+  "@calcAgeResultHijriApprox": {
+    "description": "Approximate Hijri age",
+    "placeholders": {
+      "years": { "type": "int" }
+    }
+  },
+  "calcAgeResultHijriLabel": "العمر الهجري (تقريبي)",
+  "@calcAgeResultHijriLabel": {
+    "description": "Label for approximate Hijri age result"
+  },
+  "calcAgeResultAgeInMonths": "العمر بالشهور",
+  "@calcAgeResultAgeInMonths": {
+    "description": "Label for age in months result"
+  },
+  "calcAgeResultAgeInDays": "العمر بالأيام",
+  "@calcAgeResultAgeInDays": {
+    "description": "Label for age in days result"
+  },
+  "calcAgeResultAgeInYears": "العمر بالسنوات",
+  "@calcAgeResultAgeInYears": {
+    "description": "Label for age in years result"
+  },
+
+  "calcBackToInput": "العودة للبيانات",
+  "@calcBackToInput": {
+    "description": "Button to go back to input form from results"
+  },
+  "calcEnterSalary": "أدخل الراتب",
+  "@calcEnterSalary": {
+    "description": "Prompt to enter salary"
+  },
+  "calcCalculateNow": "احسب الآن",
+  "@calcCalculateNow": {
+    "description": "Calculate now button label"
+  },
+  "calcCalculateFirst": "احسب أولاً",
+  "@calcCalculateFirst": {
+    "description": "Prompt to calculate before viewing results"
+  },
+  "calcScheduleTitle": "جدول الأقساط",
+  "@calcScheduleTitle": {
+    "description": "Title for installment schedule section"
+  },
+  "calcScheduleDesc": "عرض التفاصيل الشهرية الكاملة",
+  "@calcScheduleDesc": {
+    "description": "Description for installment schedule"
+  },
+  "calcScheduleShow": "عرض",
+  "@calcScheduleShow": {
+    "description": "Button to show schedule"
+  },
+  "calcScheduleMonth": "الشهر",
+  "@calcScheduleMonth": {
+    "description": "Month column header in schedule table"
+  },
+  "calcSchedulePayment": "القسط",
+  "@calcSchedulePayment": {
+    "description": "Payment column header in schedule table"
+  },
+  "calcScheduleTotalPaid": "إجمالي مدفوع",
+  "@calcScheduleTotalPaid": {
+    "description": "Total paid column header in schedule table"
+  },
+  "calcClientData": "بيانات العميل",
+  "@calcClientData": {
+    "description": "Client data section title"
+  },
+  "calcEmploymentStatus": "الوضع الوظيفي",
+  "@calcEmploymentStatus": {
+    "description": "Employment status label"
+  },
+  "calcEmployed": "موظف",
+  "@calcEmployed": {
+    "description": "Employed status option"
+  },
+  "calcRetired": "متقاعد",
+  "@calcRetired": {
+    "description": "Retired status option"
+  },
+  "calcMortgage": "تمويل عقاري",
+  "@calcMortgage": {
+    "description": "Mortgage label"
+  },
+  "calcMortgageNone": "لا يوجد",
+  "@calcMortgageNone": {
+    "description": "No mortgage option"
+  },
+  "calcMortgageHas": "نعم يوجد",
+  "@calcMortgageHas": {
+    "description": "Has mortgage option"
+  },
+  "calcBirthYear": "سنة الميلاد",
+  "@calcBirthYear": {
+    "description": "Birth year label"
+  },
+  "calcBirthMonth": "شهر الميلاد",
+  "@calcBirthMonth": {
+    "description": "Birth month label"
+  },
+  "calcRetirementAge": "سن التقاعد (سنة)",
+  "@calcRetirementAge": {
+    "description": "Retirement age label"
+  },
+  "calcAgeInMonths": "العمر بالشهور",
+  "@calcAgeInMonths": {
+    "description": "Age in months label"
+  },
+  "calcAvailablePeriod": "المدة المتاحة",
+  "@calcAvailablePeriod": {
+    "description": "Available period label"
+  },
+  "calcTimeEligibility": "الأهلية الزمنية",
+  "@calcTimeEligibility": {
+    "description": "Time eligibility label"
+  },
+  "calcEligible": "مؤهل للتمويل",
+  "@calcEligible": {
+    "description": "Eligible for financing status"
+  },
+  "calcNotEligible": "غير مؤهل (أقل من 60 شهر)",
+  "@calcNotEligible": {
+    "description": "Not eligible status (less than 60 months)"
+  },
+  "calcSalaryLabel": "راتب العميل (ريال)",
+  "@calcSalaryLabel": {
+    "description": "Client salary label"
+  },
+  "calcProfitRateLabel": "هامش الربح (%)",
+  "@calcProfitRateLabel": {
+    "description": "Profit rate percentage label"
+  },
+  "calcDurationLabel": "مدة التمويل (شهر)",
+  "@calcDurationLabel": {
+    "description": "Financing duration in months label"
+  },
+  "calcAhliCardsLabel": "مجموع حدود بطاقات الأهلي",
+  "@calcAhliCardsLabel": {
+    "description": "Total Ahli credit card limits label"
+  },
+  "calcOtherCardsLabel": "مجموع حدود بطاقات البنوك الأخرى",
+  "@calcOtherCardsLabel": {
+    "description": "Total other banks credit card limits label"
+  },
+  "calcMonthlyInstallment": "القسط الشهري",
+  "@calcMonthlyInstallment": {
+    "description": "Monthly installment label"
+  },
+  "calcDeductionRatio": "نسبة الاستقطاع",
+  "@calcDeductionRatio": {
+    "description": "Deduction ratio label"
+  },
+  "calcTotalFinancing": "إجمالي التمويل",
+  "@calcTotalFinancing": {
+    "description": "Total financing label"
+  },
+  "calcApprovalAmount": "مبلغ الموافقة",
+  "@calcApprovalAmount": {
+    "description": "Approval amount label"
+  },
+  "calcBankProfit": "ربح البنك",
+  "@calcBankProfit": {
+    "description": "Bank profit label"
+  },
+  "calcAdminFeesLabel": "الرسوم الإدارية (0.5% | أقصى 2,500)",
+  "@calcAdminFeesLabel": {
+    "description": "Admin fees label with rate and cap"
+  },
+  "calcVatLabel": "الضريبة (15%)",
+  "@calcVatLabel": {
+    "description": "VAT 15% label"
+  },
+  "calcTotalFeesLabel": "إجمالي الرسوم",
+  "@calcTotalFeesLabel": {
+    "description": "Total fees label"
+  },
+  "calcNetFinancing": "صافي مبلغ التمويل",
+  "@calcNetFinancing": {
+    "description": "Net financing amount label"
+  },
+  "calcApprovedSuccess": "مقبول — تم الاحتساب بنجاح",
+  "@calcApprovedSuccess": {
+    "description": "Approved success message"
+  },
+  "calcRejectedTime": "غير مؤهل — المدة المتبقية أقل من 60 شهر",
+  "@calcRejectedTime": {
+    "description": "Rejected due to insufficient time remaining"
+  },
+  "calcReviewData": "راجع البيانات",
+  "@calcReviewData": {
+    "description": "Review data prompt"
+  },
+  "calcNotCalculatedYet": "لم يتم الحساب بعد",
+  "@calcNotCalculatedYet": {
+    "description": "Not yet calculated message"
+  },
+  "calcEnterDataAndCalculate": "أدخل البيانات واضغط «احسب»",
+  "@calcEnterDataAndCalculate": {
+    "description": "Prompt to enter data and press calculate"
+  },
+
+  "calcPersonalFinanceSubtitle": "حاسبة التمويل الشخصي بلص",
+  "@calcPersonalFinanceSubtitle": {
+    "description": "Subtitle for personal finance plus calculator"
+  },
+  "calcPersonalQuickSubtitle": "حاسبة التمويل الشخصي المختصر",
+  "@calcPersonalQuickSubtitle": {
+    "description": "Subtitle for quick personal finance calculator"
+  },
+  "calcMilitaryType": "نوع العسكري",
+  "@calcMilitaryType": {
+    "description": "Military type label"
+  },
+  "calcMilitaryRank": "الرتبة العسكرية",
+  "@calcMilitaryRank": {
+    "description": "Military rank label"
+  },
+  "calcMilTypePilot": "طيار",
+  "@calcMilTypePilot": {
+    "description": "Military type: pilot"
+  },
+  "calcMilTypeNonPilot": "غير طيار",
+  "@calcMilTypeNonPilot": {
+    "description": "Military type: non-pilot"
+  },
+  "calcMilTypeEnlisted": "أفراد",
+  "@calcMilTypeEnlisted": {
+    "description": "Military type: enlisted"
+  },
+  "calcFinancingData": "بيانات التمويل",
+  "@calcFinancingData": {
+    "description": "Financing data section title"
+  },
+  "calcDeductionSection": "نسبة الاستقطاع",
+  "@calcDeductionSection": {
+    "description": "Deduction section title"
+  },
+  "calcAmountsSection": "مبالغ التمويل",
+  "@calcAmountsSection": {
+    "description": "Financing amounts section title"
+  },
+  "calcFeesSection": "الرسوم والضريبة",
+  "@calcFeesSection": {
+    "description": "Fees and tax section title"
+  },
+  "calcNetSection": "الصافي",
+  "@calcNetSection": {
+    "description": "Net section title"
+  },
+  "calcAppliedDeduction": "نسبة الاستقطاع المطبقة",
+  "@calcAppliedDeduction": {
+    "description": "Applied deduction ratio label"
+  },
+  "calcTotalFinancingMultiplied": "إجمالي التمويل ({months} x القسط)",
+  "@calcTotalFinancingMultiplied": {
+    "description": "Total financing multiplied by months",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "calcNetAfterFees": "صافي التمويل (بعد كل الرسوم)",
+  "@calcNetAfterFees": {
+    "description": "Net financing after all fees"
+  },
+  "calcEligibleFinancially": "مقبول — مؤهل زمنياً ومالياً",
+  "@calcEligibleFinancially": {
+    "description": "Eligible both time-wise and financially"
+  },
+
+  "calcDebtPurchaseSubtitle": "حاسبة تمويل شراء مديونية",
+  "@calcDebtPurchaseSubtitle": {
+    "description": "Subtitle for debt purchase calculator"
+  },
+  "calcDebtAmount": "مبلغ المديونية في البنك الآخر (ريال)",
+  "@calcDebtAmount": {
+    "description": "Debt amount at other bank label"
+  },
+  "calcDebtSection": "المديونية في البنك الآخر",
+  "@calcDebtSection": {
+    "description": "Debt at other bank section title"
+  },
+  "calcDebtAtOtherBank": "المديونية في البنك الآخر",
+  "@calcDebtAtOtherBank": {
+    "description": "Debt at other bank label"
+  },
+  "calcNetAfterDebt": "صافي المبلغ بعد خصم المديونية",
+  "@calcNetAfterDebt": {
+    "description": "Net amount after deducting debt"
+  },
+  "calcDebtExceedsNet": "المديونية تتجاوز صافي التمويل",
+  "@calcDebtExceedsNet": {
+    "description": "Warning when debt exceeds net financing"
+  },
+
+  "calcRealEstateSubtitle": "حاسبة التمويل العقاري (2 في 1)",
+  "@calcRealEstateSubtitle": {
+    "description": "Subtitle for real estate calculator"
+  },
+  "calcRealEstatePlusSubtitle": "حاسبة التمويل العقاري بلص (2 في 1)",
+  "@calcRealEstatePlusSubtitle": {
+    "description": "Subtitle for real estate plus calculator"
+  },
+  "calcFinancialInfo": "المعلومات المالية",
+  "@calcFinancialInfo": {
+    "description": "Financial information section title"
+  },
+  "calcMortgageYears": "مدة التمويل العقاري (سنة)",
+  "@calcMortgageYears": {
+    "description": "Mortgage duration in years label"
+  },
+  "calcPersonalInstallment": "قسط التمويل الشخصي (ريال)",
+  "@calcPersonalInstallment": {
+    "description": "Personal loan installment label"
+  },
+  "calcRemainingMonths": "عدد الأقساط المتبقية من التمويل الشخصي (شهر)",
+  "@calcRemainingMonths": {
+    "description": "Remaining personal loan installments in months"
+  },
+  "calcAdditionalOptions": "خيارات إضافية",
+  "@calcAdditionalOptions": {
+    "description": "Additional options section title"
+  },
+  "calcHousingSupport": "الدعم السكني",
+  "@calcHousingSupport": {
+    "description": "Housing support label"
+  },
+  "calcEtizaz": "اعتزاز (وزارة الدفاع)",
+  "@calcEtizaz": {
+    "description": "Etizaz program (Ministry of Defense)"
+  },
+  "calcFixedLoan": "مبلغ تمويل عقاري محدد (اتركه 0 للحساب التلقائي)",
+  "@calcFixedLoan": {
+    "description": "Fixed real estate loan amount hint"
+  },
+  "calcTwoInOneProgram": "برنامج 2 في 1",
+  "@calcTwoInOneProgram": {
+    "description": "2-in-1 program title"
+  },
+  "calcLoanAmount2in1": "مبلغ التمويل العقاري (2 في 1)",
+  "@calcLoanAmount2in1": {
+    "description": "Real estate loan amount in 2-in-1 program"
+  },
+  "calcInstallmentDuring": "القسط خلال فترة التمويل الشخصي",
+  "@calcInstallmentDuring": {
+    "description": "Installment during personal loan period"
+  },
+  "calcInstallmentAfter": "القسط بعد انتهاء التمويل الشخصي",
+  "@calcInstallmentAfter": {
+    "description": "Installment after personal loan ends"
+  },
+  "calcTotalWithSupport": "الإجمالي مع الدعم والاعتزاز",
+  "@calcTotalWithSupport": {
+    "description": "Total with housing support and Etizaz"
+  },
+  "calcAdminAndAppraisal": "الرسوم الإدارية والتقييم",
+  "@calcAdminAndAppraisal": {
+    "description": "Admin and appraisal fees"
+  },
+  "calcFixedLoanAmount": "مبلغ التمويل المحدد",
+  "@calcFixedLoanAmount": {
+    "description": "Fixed loan amount label"
+  },
+  "calcTotalProfits": "إجمالي الأرباح",
+  "@calcTotalProfits": {
+    "description": "Total profits label"
+  },
+  "calcGrandTotal": "الإجمالي الكلي",
+  "@calcGrandTotal": {
+    "description": "Grand total label"
+  },
+  "calcCalculatedSuccessfully": "تم الاحتساب بنجاح",
+  "@calcCalculatedSuccessfully": {
+    "description": "Calculation success message"
+  },
+  "calcWorkplace": "جهة العمل",
+  "@calcWorkplace": {
+    "description": "Workplace label"
+  },
+  "calcRankLabel": "الرتبة",
+  "@calcRankLabel": {
+    "description": "Rank label"
+  },
+  "calcCivilian": "مدني",
+  "@calcCivilian": {
+    "description": "Civilian workplace option"
+  },
+  "calcMilitaryEnlisted": "عسكري أفراد",
+  "@calcMilitaryEnlisted": {
+    "description": "Military enlisted option"
+  },
+  "calcOfficersNonPilot": "ضباط غير طيارين",
+  "@calcOfficersNonPilot": {
+    "description": "Officers non-pilot option"
+  },
+  "calcOfficersPilot": "ضباط طيارين",
+  "@calcOfficersPilot": {
+    "description": "Officers pilot option"
+  },
+  "calcPersonalInfo": "المعلومات الشخصية",
+  "@calcPersonalInfo": {
+    "description": "Personal information section title"
+  },
+  "calcMaxYearsHint": "الحد الأقصى للمدة: {years} سنة",
+  "@calcMaxYearsHint": {
+    "description": "Maximum duration hint",
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "calcExceededRetirement": "تجاوز سن التقاعد",
+  "@calcExceededRetirement": {
+    "description": "Exceeded retirement age message"
+  },
+  "calcDurationData": "بيانات المدة",
+  "@calcDurationData": {
+    "description": "Duration data section title"
+  },
+  "calcAvailableForClient": "المدة المتاحة للعميل",
+  "@calcAvailableForClient": {
+    "description": "Available duration for client"
+  },
+  "calcApprovedDuration": "مدة التمويل المعتمدة",
+  "@calcApprovedDuration": {
+    "description": "Approved financing duration"
+  },
+  "calcAllowedDeduction": "نسبة الاستقطاع المسموحة",
+  "@calcAllowedDeduction": {
+    "description": "Allowed deduction ratio"
+  },
+  "calcPersonalPeriod": "فترة التمويل الشخصي المتبقية",
+  "@calcPersonalPeriod": {
+    "description": "Remaining personal financing period"
+  },
+  "calcMonthsAfterPersonal": "الأشهر بعد انتهاء الشخصي",
+  "@calcMonthsAfterPersonal": {
+    "description": "Months after personal loan ends"
+  },
+  "calcSupportSection": "الإجمالي مع الدعم",
+  "@calcSupportSection": {
+    "description": "Total with support section title"
+  },
+  "calcEligibleWithinRetirement": "مؤهل -- المدة ضمن سن التقاعد",
+  "@calcEligibleWithinRetirement": {
+    "description": "Eligible within retirement age message"
+  },
+  "calcAdjustmentRequired": "تعديل مطلوب -- المدة المتاحة {years} سنة فقط",
+  "@calcAdjustmentRequired": {
+    "description": "Adjustment required with available years",
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "calcSchedulePhase": "المرحلة",
+  "@calcSchedulePhase": {
+    "description": "Phase column header in schedule"
+  },
+  "calcPhaseWithPersonal": "مع الشخصي",
+  "@calcPhaseWithPersonal": {
+    "description": "Phase: with personal loan"
+  },
+  "calcPhaseAfterPersonal": "بعد الشخصي",
+  "@calcPhaseAfterPersonal": {
+    "description": "Phase: after personal loan"
+  },
+  "calcDetailedSchedule": "جدول الأقساط التفصيلي",
+  "@calcDetailedSchedule": {
+    "description": "Detailed installment schedule title"
+  },
+  "calcSchedulePhaseDesc": "قسط فترة التمويل الشخصي + قسط ما بعده",
+  "@calcSchedulePhaseDesc": {
+    "description": "Description of schedule phases"
+  },
+
+  "calcBankFeesSubtitle": "الرسوم البنكية — مقارنة السابقة والمحدثة",
+  "@calcBankFeesSubtitle": {
+    "description": "Subtitle for bank fees comparison page"
+  },
+  "calcBankFeesNote": "الرسوم وفق دليل تعرفة خدمات المؤسسات المالية الصادر من ساما — الأسعار غير شاملة ضريبة القيمة المضافة (VAT 15%) إلا إذا نُص عليها",
+  "@calcBankFeesNote": {
+    "description": "Bank fees note about SAMA guidelines"
+  },
+  "calcAdminFeesTitle": "الرسوم الإدارية للتمويل",
+  "@calcAdminFeesTitle": {
+    "description": "Admin fees for financing title"
+  },
+  "calcFinancingAdminFees": "رسوم التمويل الإدارية",
+  "@calcFinancingAdminFees": {
+    "description": "Financing admin fees label"
+  },
+  "calcPreviousValue": "السابق",
+  "@calcPreviousValue": {
+    "description": "Previous value column header"
+  },
+  "calcUpdatedValue": "المحدّث",
+  "@calcUpdatedValue": {
+    "description": "Updated value column header"
+  },
+  "calcBasicServices": "الخدمات البنكية الأساسية",
+  "@calcBasicServices": {
+    "description": "Basic banking services section"
+  },
+  "calcTransfers": "الحوالات المالية",
+  "@calcTransfers": {
+    "description": "Financial transfers section"
+  },
+  "calcOfficialDocs": "الوثائق الرسمية",
+  "@calcOfficialDocs": {
+    "description": "Official documents section"
+  },
+  "calcServiceColumn": "الخدمة",
+  "@calcServiceColumn": {
+    "description": "Service column header"
+  },
+  "calcElectronicColumn": "إلكتروني",
+  "@calcElectronicColumn": {
+    "description": "Electronic channel column header"
+  },
+  "calcBranchColumn": "الفرع",
+  "@calcBranchColumn": {
+    "description": "Branch channel column header"
+  },
+  "calcFree": "مجاناً",
+  "@calcFree": {
+    "description": "Free of charge label"
+  },
+  "calcMadaCard": "بطاقة مدى",
+  "@calcMadaCard": {
+    "description": "Mada card label"
+  },
+  "calcBankFeesDisclaimer": "تنبيهات مهمة:\n• جميع الرسوم أعلاه غير شاملة ضريبة القيمة المضافة 15%\n• هذا الملف للاسترشاد فقط — يرجى التحقق من موقع ساما الرسمي (sama.gov.sa)\n• تسري التعليمات خلال 60 يوماً من تاريخ نشرها",
+  "@calcBankFeesDisclaimer": {
+    "description": "Bank fees disclaimer with important notes"
+  },
+
+  "calcDateConverterSubtitle": "تحويل التاريخ ميلادي وهجري",
+  "@calcDateConverterSubtitle": {
+    "description": "Subtitle for date converter page"
+  },
+  "calcConversionResult": "نتيجة التحويل",
+  "@calcConversionResult": {
+    "description": "Conversion result title"
+  },
+  "calcGregorianToHijri": "ميلادي ← هجري",
+  "@calcGregorianToHijri": {
+    "description": "Gregorian to Hijri conversion direction"
+  },
+  "calcHijriToGregorian": "هجري ← ميلادي",
+  "@calcHijriToGregorian": {
+    "description": "Hijri to Gregorian conversion direction"
+  },
+  "calcGregorianDate": "التاريخ الميلادي",
+  "@calcGregorianDate": {
+    "description": "Gregorian date label"
+  },
+  "calcHijriDay": "اليوم",
+  "@calcHijriDay": {
+    "description": "Hijri day label"
+  },
+  "calcHijriMonth": "الشهر",
+  "@calcHijriMonth": {
+    "description": "Hijri month label"
+  },
+  "calcHijriYear": "السنة الهجرية",
+  "@calcHijriYear": {
+    "description": "Hijri year label"
+  },
+  "calcConvertButton": "تحويل",
+  "@calcConvertButton": {
+    "description": "Convert button label"
+  },
+
+  "calcKhayratSubtitle": "حاسبة خيرات — الودائع والاستثمار",
+  "@calcKhayratSubtitle": {
+    "description": "Subtitle for Khayrat calculator page"
+  },
+  "calcInvestmentData": "بيانات الاستثمار",
+  "@calcInvestmentData": {
+    "description": "Investment data section title"
+  },
+  "calcAmountAndPeriod": "المبلغ والفترة",
+  "@calcAmountAndPeriod": {
+    "description": "Amount and period section title"
+  },
+  "calcInvestmentAmount": "مبلغ الاستثمار (ريال) — الحد الأدنى 100,000",
+  "@calcInvestmentAmount": {
+    "description": "Investment amount label with minimum"
+  },
+  "calcMinDeposit": "الحد الأدنى 100,000 ريال",
+  "@calcMinDeposit": {
+    "description": "Minimum deposit hint"
+  },
+  "calcInvestmentPeriod": "فترة الاستثمار",
+  "@calcInvestmentPeriod": {
+    "description": "Investment period label"
+  },
+  "calcCalculateProfits": "احسب الأرباح",
+  "@calcCalculateProfits": {
+    "description": "Calculate profits button label"
+  },
+  "calcProfitMargin": "هامش الربح",
+  "@calcProfitMargin": {
+    "description": "Profit margin label"
+  },
+  "calcProfits": "الأرباح",
+  "@calcProfits": {
+    "description": "Profits label"
+  },
+  "calcNewAmount": "المبلغ الجديد",
+  "@calcNewAmount": {
+    "description": "New amount after profit"
+  },
+  "calcAmountCompliant": "المبلغ مستوفٍ للشروط",
+  "@calcAmountCompliant": {
+    "description": "Amount meets requirements message"
+  },
+
+  "calcPosSubtitle": "حاسبة تمويل نقاط البيع",
+  "@calcPosSubtitle": {
+    "description": "Subtitle for POS financing calculator"
+  },
+  "calcEntityInfo": "معلومات المنشأة",
+  "@calcEntityInfo": {
+    "description": "Entity information section title"
+  },
+  "calcEntityType": "نوع المنشأة",
+  "@calcEntityType": {
+    "description": "Entity type label"
+  },
+  "calcEntityActivity": "نشاط المنشأة",
+  "@calcEntityActivity": {
+    "description": "Entity activity label"
+  },
+  "calcEntityAge": "عمر المنشأة",
+  "@calcEntityAge": {
+    "description": "Entity age label"
+  },
+  "calcPosOperatingPeriod": "فترة تشغيل نقاط البيع",
+  "@calcPosOperatingPeriod": {
+    "description": "POS operating period label"
+  },
+  "calcAnnualSales": "متوسط المبيعات السنوية (ريال)",
+  "@calcAnnualSales": {
+    "description": "Average annual sales label"
+  },
+  "calcMonthlyPosSales": "متوسط مبيعات نقاط البيع الشهرية (ريال)",
+  "@calcMonthlyPosSales": {
+    "description": "Average monthly POS sales label"
+  },
+  "calcPosOperationsCount": "عدد عمليات نقاط البيع شهريا",
+  "@calcPosOperationsCount": {
+    "description": "Monthly POS operations count"
+  },
+  "calcFinancingDetails": "تفاصيل التمويل",
+  "@calcFinancingDetails": {
+    "description": "Financing details section title"
+  },
+  "calcTermMonths": "مدة التمويل (شهر)",
+  "@calcTermMonths": {
+    "description": "Financing term in months"
+  },
+  "calcFinancingAmount": "مبلغ التمويل (المتوسط × 6)",
+  "@calcFinancingAmount": {
+    "description": "Financing amount (average x 6)"
+  },
+  "calcProfitRate": "نسبة الربح",
+  "@calcProfitRate": {
+    "description": "Profit rate label"
+  },
+  "calcTotalProfit": "إجمالي الربح",
+  "@calcTotalProfit": {
+    "description": "Total profit label"
+  },
+  "calcTotal": "الإجمالي",
+  "@calcTotal": {
+    "description": "Total label"
+  },
+  "calcAdminFeesPos": "الرسوم الإدارية (5% بحد 2,500 + ضريبة 15%)",
+  "@calcAdminFeesPos": {
+    "description": "POS admin fees with rate and tax"
+  },
+  "calcEntityEligible": "مقبولة — المنشأة مؤهلة",
+  "@calcEntityEligible": {
+    "description": "Entity eligible message"
+  },
+  "calcEntityRejectedAge": "مرفوضة — عمر المنشأة أو نقاط البيع غير كاف",
+  "@calcEntityRejectedAge": {
+    "description": "Entity rejected due to insufficient age"
+  },
+  "calcEntityRejectedSales": "مرفوضة — المبيعات أقل من 400,000 ريال",
+  "@calcEntityRejectedSales": {
+    "description": "Entity rejected due to insufficient sales"
+  },
+  "calcMonthlySales": "متوسط المبيعات الشهرية",
+  "@calcMonthlySales": {
+    "description": "Average monthly sales label"
+  },
+  "calcRejected": "مرفوض",
+  "@calcRejected": {
+    "description": "Rejected status label"
+  },
+
+  "calcProtectionSubtitle": "برنامج الحماية والادخار - الدفعة الواحدة",
+  "@calcProtectionSubtitle": {
+    "description": "Subtitle for protection and savings calculator"
+  },
+  "calcProgramData": "بيانات البرنامج",
+  "@calcProgramData": {
+    "description": "Program data section title"
+  },
+  "calcSubscriptionAndDuration": "الاشتراك والمدة",
+  "@calcSubscriptionAndDuration": {
+    "description": "Subscription and duration section"
+  },
+  "calcSubscriptionAmount": "مبلغ الاشتراك (ريال)",
+  "@calcSubscriptionAmount": {
+    "description": "Subscription amount label"
+  },
+  "calcProgramDuration": "مدة البرنامج (سنوات)",
+  "@calcProgramDuration": {
+    "description": "Program duration in years"
+  },
+  "calcInvestmentStrategy": "استراتيجية الاستثمار",
+  "@calcInvestmentStrategy": {
+    "description": "Investment strategy label"
+  },
+  "calcAgeAtContract": "العمر عند التعاقد",
+  "@calcAgeAtContract": {
+    "description": "Age at contract signing"
+  },
+  "calcCashValueAfter": "القيمة النقدية بعد {years} سنوات",
+  "@calcCashValueAfter": {
+    "description": "Cash value after N years",
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "calcRedemptionValue": "قيمة الاسترداد",
+  "@calcRedemptionValue": {
+    "description": "Redemption value label"
+  },
+  "calcDeathBenefit": "منفعة الوفاة",
+  "@calcDeathBenefit": {
+    "description": "Death benefit label"
+  },
+  "calcInsuranceCoverage": "التغطية التأمينية",
+  "@calcInsuranceCoverage": {
+    "description": "Insurance coverage label"
+  },
+  "calcTotalInvestmentIncome": "إجمالي دخل الاستثمار",
+  "@calcTotalInvestmentIncome": {
+    "description": "Total investment income label"
+  },
+  "calcProjectionYear": "السنة",
+  "@calcProjectionYear": {
+    "description": "Year column in projection table"
+  },
+  "calcProjectionCashValue": "القيمة النقدية",
+  "@calcProjectionCashValue": {
+    "description": "Cash value column in projection table"
+  },
+  "calcProjectionDeathBenefit": "منفعة الوفاة",
+  "@calcProjectionDeathBenefit": {
+    "description": "Death benefit column in projection table"
+  },
+  "calcProjectionAdminFees": "رسوم الإدارة",
+  "@calcProjectionAdminFees": {
+    "description": "Admin fees column in projection table"
+  },
+
+  "calcDeductionRatioSubtitle": "احتساب نسب الاستقطاع",
+  "@calcDeductionRatioSubtitle": {
+    "description": "Subtitle for deduction ratio calculator"
+  },
+  "calcDeductionAvailSubtitle": "الاستقطاع المتاح حسب المنتجات",
+  "@calcDeductionAvailSubtitle": {
+    "description": "Subtitle for available deduction calculator"
+  },
+  "calcDeductionRatioMode": "📊 نسبة الاستقطاع",
+  "@calcDeductionRatioMode": {
+    "description": "Deduction ratio mode tab label"
+  },
+  "calcDeductionAvailMode": "✅ الاستقطاع المتاح",
+  "@calcDeductionAvailMode": {
+    "description": "Available deduction mode tab label"
+  },
+  "calcTotalSalary": "إجمالي الراتب (ريال)",
+  "@calcTotalSalary": {
+    "description": "Total salary label"
+  },
+  "calcJobStatus": "الحالة الوظيفية",
+  "@calcJobStatus": {
+    "description": "Job status label"
+  },
+  "calcPersonalInstLabel": "قسط التمويل الشخصي (ريال)",
+  "@calcPersonalInstLabel": {
+    "description": "Personal financing installment label"
+  },
+  "calcLeasingInstLabel": "قسط التمويل التأجيري (ريال)",
+  "@calcLeasingInstLabel": {
+    "description": "Leasing financing installment label"
+  },
+  "calcRealEstateInstLabel": "قسط التمويل العقاري (ريال)",
+  "@calcRealEstateInstLabel": {
+    "description": "Real estate financing installment label"
+  },
+  "calcOtherObligations": "التزامات أخرى (ريال)",
+  "@calcOtherObligations": {
+    "description": "Other obligations label"
+  },
+  "calcCalculateDeduction": "احتساب",
+  "@calcCalculateDeduction": {
+    "description": "Calculate deduction button label"
+  },
+  "calcSalaryAmount": "الراتب",
+  "@calcSalaryAmount": {
+    "description": "Salary label in results"
+  },
+  "calcPersonalFinancing": "التمويل الشخصي",
+  "@calcPersonalFinancing": {
+    "description": "Personal financing label in results"
+  },
+  "calcLeasingFinancing": "التمويل التأجيري",
+  "@calcLeasingFinancing": {
+    "description": "Leasing financing label in results"
+  },
+  "calcRealEstateFinancing": "التمويل العقاري",
+  "@calcRealEstateFinancing": {
+    "description": "Real estate financing label in results"
+  },
+  "calcTotalObligations": "إجمالي الالتزامات الحالية",
+  "@calcTotalObligations": {
+    "description": "Total current obligations label"
+  },
+  "calcCurrentDeduction": "نسبة الاستقطاع الحالية",
+  "@calcCurrentDeduction": {
+    "description": "Current deduction ratio label"
+  },
+  "calcAvailablePersonal": "المتاح للتمويل الشخصي",
+  "@calcAvailablePersonal": {
+    "description": "Available for personal financing"
+  },
+  "calcAvailableLeasing": "المتاح للتمويل التأجيري (45%)",
+  "@calcAvailableLeasing": {
+    "description": "Available for leasing financing (45%)"
+  },
+  "calcAvailableRealEstate": "المتاح للتمويل العقاري",
+  "@calcAvailableRealEstate": {
+    "description": "Available for real estate financing"
+  },
+
+  "monthJan": "يناير",
+  "@monthJan": {
+    "description": "January month name"
+  },
+  "monthFeb": "فبراير",
+  "@monthFeb": {
+    "description": "February month name"
+  },
+  "monthMar": "مارس",
+  "@monthMar": {
+    "description": "March month name"
+  },
+  "monthApr": "أبريل",
+  "@monthApr": {
+    "description": "April month name"
+  },
+  "monthMay": "مايو",
+  "@monthMay": {
+    "description": "May month name"
+  },
+  "monthJun": "يونيو",
+  "@monthJun": {
+    "description": "June month name"
+  },
+  "monthJul": "يوليو",
+  "@monthJul": {
+    "description": "July month name"
+  },
+  "monthAug": "أغسطس",
+  "@monthAug": {
+    "description": "August month name"
+  },
+  "monthSep": "سبتمبر",
+  "@monthSep": {
+    "description": "September month name"
+  },
+  "monthOct": "أكتوبر",
+  "@monthOct": {
+    "description": "October month name"
+  },
+  "monthNov": "نوفمبر",
+  "@monthNov": {
+    "description": "November month name"
+  },
+  "monthDec": "ديسمبر",
+  "@monthDec": {
+    "description": "December month name"
+  },
+
+  "calcLeasingSubtitle": "حاسبة التمويل التأجيري",
+  "@calcLeasingSubtitle": {
+    "description": "Subtitle for leasing calculator"
+  },
+  "calcLeasingMicroSubtitle": "حاسبة التمويل التأجيري - مايكرو",
+  "@calcLeasingMicroSubtitle": {
+    "description": "Subtitle for leasing micro calculator"
+  },
+
+  "calcAllPeriodsTable": "جدول جميع الفترات",
+  "@calcAllPeriodsTable": {
+    "description": "All periods table title for Khairat"
+  },
+  "calcPeriodColumn": "الفترة",
+  "@calcPeriodColumn": {
+    "description": "Period column header"
+  },
+  "calcDaysColumn": "الأيام",
+  "@calcDaysColumn": {
+    "description": "Days column header"
+  },
+  "calcProfitMarginColumn": "هامش الربح",
+  "@calcProfitMarginColumn": {
+    "description": "Profit margin column header"
+  },
+  "calcProfitsColumn": "الأرباح",
+  "@calcProfitsColumn": {
+    "description": "Profits column header"
+  },
+  "calcNewAmountColumn": "المبلغ الجديد",
+  "@calcNewAmountColumn": {
+    "description": "New amount column header"
+  },
+  "calcNYears": "{count} سنوات",
+  "@calcNYears": {
+    "description": "N years label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calcProfitRatePercent": "هامش الربح (%)",
+  "@calcProfitRatePercent": {
+    "description": "Profit rate percentage input label"
+  },
+  "calcEntityData": "بيانات المنشأة",
+  "@calcEntityData": {
+    "description": "Entity data section title"
+  },
+  "calcEnterDataPrompt": "أدخل البيانات واضغط احسب",
+  "@calcEnterDataPrompt": {
+    "description": "Prompt to enter data and calculate"
+  },
+  "calcDeductionRatioTitle": "احتساب نسب الاستقطاع",
+  "@calcDeductionRatioTitle": {
+    "description": "Title for deduction ratio section"
+  },
+  "calcDeductionAvailTitle": "الاستقطاع المتاح",
+  "@calcDeductionAvailTitle": {
+    "description": "Title for available deduction section"
+  },
+  "calcPeriodDays": "{period} ({days} يوم)",
+  "@calcPeriodDays": {
+    "description": "Period with days count",
+    "placeholders": {
+      "period": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "calcInvestmentAmountLabel": "مبلغ الاستثمار",
+  "@calcInvestmentAmountLabel": {
+    "description": "Investment amount label (result)"
+  },
+  "calcDateConverterTitle": "تحويل التاريخ",
+  "@calcDateConverterTitle": {
+    "description": "Date converter page header title"
+  },
+  "calcExportPdf": "PDF",
+  "@calcExportPdf": {
+    "description": "PDF export button label"
+  },
+  "calcExportImage": "صورة",
+  "@calcExportImage": {
+    "description": "Image export button label"
+  },
+  "calcPersonalFinancingWithRate": "التمويل الشخصي ({rate}%)",
+  "@calcPersonalFinancingWithRate": {
+    "description": "Personal financing with percentage",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcLeasingFinancingWithRate": "التمويل التأجيري ({rate}%)",
+  "@calcLeasingFinancingWithRate": {
+    "description": "Leasing financing with percentage",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcRealEstateFinancingWithRate": "التمويل العقاري ({rate}%)",
+  "@calcRealEstateFinancingWithRate": {
+    "description": "Real estate financing with percentage",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcAvailablePersonalWithRate": "المتاح للتمويل الشخصي ({rate}%)",
+  "@calcAvailablePersonalWithRate": {
+    "description": "Available personal financing with rate",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcAvailableRealEstateWithRate": "المتاح للتمويل العقاري ({rate}%)",
+  "@calcAvailableRealEstateWithRate": {
+    "description": "Available real estate financing with rate",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcBankFeesAiContext": "الرسوم البنكية ساما",
+  "@calcBankFeesAiContext": {
+    "description": "AI context for bank fees page"
+  },
+
+  "calcClientAndFinancingData": "بيانات العميل والتمويل",
+  "@calcClientAndFinancingData": {
+    "description": "Section header for client and financing data"
+  },
+  "calcClientInfo": "معلومات العميل",
+  "@calcClientInfo": {
+    "description": "Section header for client info"
+  },
+  "calcCustomerSegment": "شريحة العميل",
+  "@calcCustomerSegment": {
+    "description": "Label for customer segment dropdown"
+  },
+  "calcCarPrice": "سعر السيارة (ريال)",
+  "@calcCarPrice": {
+    "description": "Label for car price input"
+  },
+  "calcLeasingDurationMonths": "مدة التمويل (شهر)",
+  "@calcLeasingDurationMonths": {
+    "description": "Label for leasing duration in months"
+  },
+  "calcProfitRateCost": "هامش الربح / كلفة الآجل (%)",
+  "@calcProfitRateCost": {
+    "description": "Label for profit rate / cost of term"
+  },
+  "calcAdminFeesInput": "الرسوم الإدارية (ريال)",
+  "@calcAdminFeesInput": {
+    "description": "Label for admin fees input"
+  },
+  "calcPlateFees": "رسوم اللوحات (ريال)",
+  "@calcPlateFees": {
+    "description": "Label for plate fees input"
+  },
+  "calcPaymentsSection": "الدفعات — نسبة % أو مبلغ من سعر السيارة",
+  "@calcPaymentsSection": {
+    "description": "Section header for payments"
+  },
+  "calcDownPaymentLabel": "الدفعة الأولى",
+  "@calcDownPaymentLabel": {
+    "description": "Label for down payment"
+  },
+  "calcLastPaymentLabel": "الدفعة الأخيرة",
+  "@calcLastPaymentLabel": {
+    "description": "Label for last payment"
+  },
+  "calcInsuranceLabel": "التأمين",
+  "@calcInsuranceLabel": {
+    "description": "Label for insurance"
+  },
+  "calcCurrentObligations": "الالتزامات الحالية",
+  "@calcCurrentObligations": {
+    "description": "Section header for current obligations"
+  },
+  "calcPersonalFinancingInst": "قسط تمويل شخصي",
+  "@calcPersonalFinancingInst": {
+    "description": "Label for personal financing installment"
+  },
+  "calcOtherObligationsLabel": "التزامات أخرى",
+  "@calcOtherObligationsLabel": {
+    "description": "Label for other obligations"
+  },
+  "calcRealEstateInst": "قسط تمويل عقاري",
+  "@calcRealEstateInst": {
+    "description": "Label for real estate installment"
+  },
+  "calcByCarPrice": "احتساب بناء على سعر السيارة",
+  "@calcByCarPrice": {
+    "description": "Button label for calc by car price"
+  },
+  "calcMaxCarPrice": "أقصى سعر للسيارة",
+  "@calcMaxCarPrice": {
+    "description": "Button label for max car price"
+  },
+  "calcEnterSalaryAndPrice": "أدخل الراتب وسعر السيارة",
+  "@calcEnterSalaryAndPrice": {
+    "description": "Snackbar message for missing salary and car price"
+  },
+  "calcObligationsExceedLimit": "الالتزامات تستهلك كامل نسبة الاستقطاع",
+  "@calcObligationsExceedLimit": {
+    "description": "Snackbar message when obligations exceed limit"
+  },
+  "calcSamaBankSystem": "نظام الاعتماد البنكي (SAMA)",
+  "@calcSamaBankSystem": {
+    "description": "Title for SAMA bank system dialog"
+  },
+  "calcFinancingSuccess": "تم احتساب التمويل بنجاح",
+  "@calcFinancingSuccess": {
+    "description": "Dialog title after successful financing calc"
+  },
+  "calcMaxAvailableFinancing": "أقصى تمويل متاح للعميل",
+  "@calcMaxAvailableFinancing": {
+    "description": "Dialog title for max available financing"
+  },
+  "calcAmountLabel": "المبلغ",
+  "@calcAmountLabel": {
+    "description": "Label for amount"
+  },
+  "calcMandatoryDownPayment": "الدفعة الأولى الإلزامية",
+  "@calcMandatoryDownPayment": {
+    "description": "Label for mandatory down payment"
+  },
+  "calcTranslateToCalcQuestion": "هل تريد ترجمة الاحتساب على الآلة ؟",
+  "@calcTranslateToCalcQuestion": {
+    "description": "Confirmation dialog question"
+  },
+  "calcCostOfTermBankProfit": "كلفة الآجل (ربح البنك)",
+  "@calcCostOfTermBankProfit": {
+    "description": "Result label for cost of term / bank profit"
+  },
+  "calcTotalRepayment": "إجمالي السداد",
+  "@calcTotalRepayment": {
+    "description": "Result label for total repayment"
+  },
+  "calcDeductionActual": "الاستقطاع: {percent}%",
+  "@calcDeductionActual": {
+    "description": "Deduction bar actual percentage",
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "calcDeductionLimitLabel": "الحد: {percent}%",
+  "@calcDeductionLimitLabel": {
+    "description": "Deduction bar limit percentage",
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "calcApprovedSama": "مقبول — الطلب ضمن شروط ساما",
+  "@calcApprovedSama": {
+    "description": "Approved badge text for SAMA"
+  },
+  "calcRejectedDeduction": "مرفوض — تجاوز نسبة الاستقطاع",
+  "@calcRejectedDeduction": {
+    "description": "Rejected badge text for deduction exceeded"
+  },
+  "calcRequiredDownPaymentTitle": "لإقرار الطلب — ارفع الدفعة الأولى بمبلغ",
+  "@calcRequiredDownPaymentTitle": {
+    "description": "Title for required down payment box"
+  },
+  "calcRequiredDownPaymentSubtitle": "أي ما يعادل {percent}% من سعر السيارة",
+  "@calcRequiredDownPaymentSubtitle": {
+    "description": "Subtitle for required down payment",
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "calcCompareTitle": "مقارنة مدد التمويل",
+  "@calcCompareTitle": {
+    "description": "Title for loan comparison modal"
+  },
+  "calcCompareDuration": "المدة",
+  "@calcCompareDuration": {
+    "description": "Column header for duration"
+  },
+  "calcCompareCost": "كلفة الآجل",
+  "@calcCompareCost": {
+    "description": "Column header for cost"
+  },
+  "calcCompareTotal": "الإجمالي",
+  "@calcCompareTotal": {
+    "description": "Column header for total"
+  },
+  "calcCompareScheduleBtn": "مقارنة",
+  "@calcCompareScheduleBtn": {
+    "description": "Button label for compare"
+  },
+  "calcCompareDesc": "قارن 12 / 24 / 36 / 48 / 60 شهر",
+  "@calcCompareDesc": {
+    "description": "Description for duration comparison"
+  },
+  "calcLastPaymentIncludes": "* يشمل الدفعة الأخيرة {amount} ر.س",
+  "@calcLastPaymentIncludes": {
+    "description": "Note about last payment inclusion",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "calcPercentMode": "نسبة %",
+  "@calcPercentMode": {
+    "description": "Label for percentage mode"
+  },
+  "calcAmountMode": "مبلغ",
+  "@calcAmountMode": {
+    "description": "Label for amount mode"
+  },
+  "calcRetirementAgeLabel": "سن التقاعد: ",
+  "@calcRetirementAgeLabel": {
+    "description": "Retirement age label"
+  },
+  "calcAvailablePeriodLabel": " | المدة المتاحة: ",
+  "@calcAvailablePeriodLabel": {
+    "description": "Available period label"
+  },
+  "calcYearSuffix": " سنة",
+  "@calcYearSuffix": {
+    "description": "Year suffix text"
+  },
+  "calcNoSupport": "لا يوجد",
+  "@calcNoSupport": {
+    "description": "Text for no support/no etizaz"
+  },
+  "calcDurationYearsMonths": "{years} سنة ({months} شهر)",
+  "@calcDurationYearsMonths": {
+    "description": "Duration formatted as years and months",
+    "placeholders": {
+      "years": { "type": "int" },
+      "months": { "type": "int" }
+    }
+  },
+  "calcInstallmentDuringMonths": "القسط خلال فترة التمويل الشخصي ({months} شهر)",
+  "@calcInstallmentDuringMonths": {
+    "description": "Installment label during personal loan period",
+    "placeholders": {
+      "months": { "type": "int" }
+    }
+  },
+  "calcInstallmentAfterMonths": "القسط بعد انتهاء التمويل الشخصي ({months} شهر)",
+  "@calcInstallmentAfterMonths": {
+    "description": "Installment label after personal loan period",
+    "placeholders": {
+      "months": { "type": "int" }
+    }
+  },
+  "calcFixedLoanSection": "المبلغ المحدد",
+  "@calcFixedLoanSection": {
+    "description": "Section header for fixed loan"
+  },
+  "calcMonthSuffix": " شهر",
+  "@calcMonthSuffix": {
+    "description": "Month suffix text"
+  },
+  "calcNMonths": "{count} شهر",
+  "@calcNMonths": {
+    "description": "N months formatted",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "calcNYearsFormatted": "{count} سنة",
+  "@calcNYearsFormatted": {
+    "description": "N years formatted",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "calcSarSuffix": " ر.س",
+  "@calcSarSuffix": {
+    "description": "SAR currency suffix"
+  },
+  "calcPerMonthSuffix": " ر.س / شهر",
+  "@calcPerMonthSuffix": {
+    "description": "SAR per month suffix"
+  },
+
+  "comingSoonTitle": "قريباً",
+  "@comingSoonTitle": {
+    "description": "Coming soon dialog title"
+  },
+  "comingSoonMessage": "هذه الخدمة ستكون متاحة قريباً",
+  "@comingSoonMessage": {
+    "description": "Coming soon dialog message"
+  },
+  "ok": "حسناً",
+  "@ok": {
+    "description": "OK button label"
+  },
+
+  "developerName": "عبدالله المالكي",
+  "@developerName": {
+    "description": "Developer full name"
+  },
+  "developerRole": "قائد في الخدمات المالية بخبرة مصرفية تتجاوز 19 عاماً، ومبتكر يسخّر الذكاء الاصطناعي والتقنية لتطوير الخدمات المصرفية",
+  "@developerRole": {
+    "description": "Developer role/title"
+  },
+  "developerEmail": "Abdullahalmalki@nesab.sa",
+  "@developerEmail": {
+    "description": "Developer email address"
+  },
+  "developerWebsite": "www.Nesab.sa",
+  "@developerWebsite": {
+    "description": "Developer website display text"
+  },
+  "aboutAppName": "نِسَب",
+  "@aboutAppName": {
+    "description": "App name in about dialog"
+  },
+  "aboutAppTagline": "حلول تمويلية ذكية",
+  "@aboutAppTagline": {
+    "description": "App tagline in about dialog"
+  },
+  "aboutAppFullDescription": "نِسَب هو منصة متكاملة للمنتجات المالية الإسلامية تجمع بين التحليل الرقمي والإرشاد العملي لتمكين المستخدمين من فهم كل تفصيلة مالية قبل اتخاذ القرارات. استعرض وقارن الحلول التمويلية المتنوعة واختر الأنسب لاحتياجاتك.",
+  "@aboutAppFullDescription": {
+    "description": "Full app description in about dialog"
+  },
+  "aboutAppFeatureCalculator": "حاسبات تمويلية بنتائج فورية",
+  "@aboutAppFeatureCalculator": {
+    "description": "App feature: financing calculators"
+  },
+  "aboutAppFeaturePlanning": "أدوات التخطيط والتقدير المالي",
+  "@aboutAppFeaturePlanning": {
+    "description": "App feature: financial planning"
+  },
+  "aboutAppFeatureGuidance": "إرشادات تعليمية لتحقيق الاستقرار المالي",
+  "@aboutAppFeatureGuidance": {
+    "description": "App feature: educational guidance"
+  },
+  "aboutAppFeatureSharia": "خيارات تمويل متوافقة مع الشريعة الإسلامية",
+  "@aboutAppFeatureSharia": {
+    "description": "App feature: sharia compliant"
+  },
+  "aboutAppWebsite": "www.nesab.sa",
+  "@aboutAppWebsite": {
+    "description": "App website display text"
+  },
+  "features": "المزايا",
+  "@features": {
+    "description": "Features section title"
+  },
+
+  "currentPassword": "كلمة المرور الحالية",
+  "@currentPassword": {
+    "description": "Label for current password field"
+  },
+  "newPassword": "كلمة المرور الجديدة",
+  "@newPassword": {
+    "description": "Label for new password field"
+  },
+  "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+  "@confirmNewPassword": {
+    "description": "Label for confirm new password field"
+  },
+  "passwordChanged": "تم تغيير كلمة المرور بنجاح",
+  "@passwordChanged": {
+    "description": "Success message after password change"
+  },
+  "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+  "@passwordsDoNotMatch": {
+    "description": "Error when new password and confirmation do not match"
+  },
+  "passwordTooShort": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+  "@passwordTooShort": {
+    "description": "Error when password is too short"
+  },
+  "signatureUploaded": "تم رفع التوقيع بنجاح",
+  "@signatureUploaded": {
+    "description": "Success message after signature upload"
+  },
+  "signatureUploadFailed": "فشل رفع التوقيع",
+  "@signatureUploadFailed": {
+    "description": "Error message when signature upload fails"
+  },
+  "pickImage": "اختر صورة",
+  "@pickImage": {
+    "description": "Button label for picking an image"
+  },
+  "uploading": "جاري الرفع...",
+  "@uploading": {
+    "description": "Label shown during upload"
+  },
+  "camera": "الكاميرا",
+  "@camera": {
+    "description": "Button label for taking a photo with camera"
+  },
+  "deleteSignature": "حذف التوقيع",
+  "@deleteSignature": {
+    "description": "Button label for deleting a saved signature"
+  },
+  "signatureName": "الاسم",
+  "@signatureName": {
+    "description": "Label for signature name field"
+  },
+  "signatureNameHint": "أدخل اسمك",
+  "@signatureNameHint": {
+    "description": "Hint text for signature name field"
+  },
+  "signatureNumber": "رقم الجوال",
+  "@signatureNumber": {
+    "description": "Label for signature phone number field"
+  },
+  "signatureNumberHint": "أدخل رقم جوالك",
+  "@signatureNumberHint": {
+    "description": "Hint text for signature phone number field"
+  }
 }

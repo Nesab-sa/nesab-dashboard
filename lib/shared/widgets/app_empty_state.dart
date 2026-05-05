@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
+import 'package:nesab/core/theme/app_dimensions.dart';
 
 /// Shows an icon, a [message], and an optional action button to represent
 /// an empty / no-data state.

@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "1007875215696",
+    "project_id": "nesab-26771",
+    "storage_bucket": "nesab-26771.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007875215696:android:01f2532c9ebdbb4aa01c55",
+        "android_client_info": {
+          "package_name": "com.example.nesab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007875215696-8nu7hnb3m58eaqs7havhbuqarjs43b2t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nesab",
+            "certificate_hash": "25178a8c4f1afc705a7c9aee4771b2c05e951af0"
+          }
+        },
+        {
+          "client_id": "1007875215696-svda6oktcr62fps6l8bsob07k80nrhh1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5ptOYMotGuwHxj5e2Vgakk9JdK-6E8DI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007875215696-svda6oktcr62fps6l8bsob07k80nrhh1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1007875215696-i9jbkkre2s5fthkmdq38t97v5ogckf0f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.nesab"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007875215696:android:97001eea4a3e4642a01c55",
+        "android_client_info": {
+          "package_name": "sa.nesab.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007875215696-svda6oktcr62fps6l8bsob07k80nrhh1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5ptOYMotGuwHxj5e2Vgakk9JdK-6E8DI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007875215696-svda6oktcr62fps6l8bsob07k80nrhh1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1007875215696-i9jbkkre2s5fthkmdq38t97v5ogckf0f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.nesab"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

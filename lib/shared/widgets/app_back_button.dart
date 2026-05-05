@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
+import 'package:nesab/core/theme/app_dimensions.dart';
 
 /// A reusable back button with an Apple-style chevron icon inside a
 /// rounded-rectangle container.
@@ -25,12 +25,12 @@ class AppBackButton extends StatelessWidget {
       child: Material(
         color: colorScheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+          borderRadius: BorderRadius.circular(50),
           side: BorderSide(color: colorScheme.outline),
         ),
         child: InkWell(
           onTap: onPressed ?? () => Navigator.maybePop(context),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+          borderRadius: BorderRadius.circular(50),
           child: Icon(
             Icons.arrow_back_ios_new_rounded,
             size: AppDimensions.iconSm,

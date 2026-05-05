@@ -1,14 +1,1 @@
-{
-  "firestore": {"rules": "firestore.rules"},
-  "storage": {"rules": "storage.rules"},
-  "hosting": {
-    "public": "build/web",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
-  },
-  "functions": [{
-    "source": "functions",
-    "codebase": "default",
-    "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "*.local"],
-    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
-  }]
-}
+{"firestore":{"rules":"firestore.rules"},"hosting":[{"target":"privacy","public":"hosting","ignore":["firebase.json","**/.*","**/node_modules/**"]}],"flutter":{"platforms":{"android":{"default":{"projectId":"nesab-26771","appId":"1:1007875215696:android:97001eea4a3e4642a01c55","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"nesab-26771","appId":"1:1007875215696:ios:54dc7292ba339476a01c55","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"nesab-26771","appId":"1:1007875215696:ios:4bb5b2a7b19ff904a01c55","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"nesab-26771","configurations":{"android":"1:1007875215696:android:97001eea4a3e4642a01c55","ios":"1:1007875215696:ios:54dc7292ba339476a01c55"}}}}}}

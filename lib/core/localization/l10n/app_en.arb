@@ -104,6 +104,10 @@
   "logout": "Logout",
   "logoutConfirmTitle": "Logout",
   "logoutConfirmMessage": "Are you sure you want to logout?",
+  "deleteAccount": "Delete account",
+  "deleteAccountTitle": "Delete account",
+  "deleteAccountMessage": "Your account and all data will be permanently deleted. This action cannot be undone. Are you sure you want to continue?",
+  "deleteAccountConfirm": "Delete permanently",
   "cancel": "Cancel",
   "confirm": "Confirm",
   "guest": "Guest",
@@ -184,10 +188,6 @@
   "passwordHint": "Enter your password",
   "displayNameLabel": "Name",
   "displayNameHint": "Enter your name",
-  "authProviderLabel": "Auth Provider",
-  "roleLabel": "Role",
-  "createdAtLabel": "Created",
-  "lastLoginLabel": "Last Login",
   "orLoginWith": "or sign in with",
   "register": "Register",
   "login": "Sign in",
@@ -290,72 +290,13 @@
   "subToolsDeductions": "Deductions Calculator",
   "subToolsDeductionsDesc": "Calculate net salary after deductions",
 
-  "adminLoginTitle": "Admin Dashboard",
-  "adminLoginSubtitle": "Sign in to manage the dashboard",
-  "usersTitle": "Users",
-  "toolsTitle": "Tools",
-  "dashboardTitle": "Dashboard",
-  "pageOf": "Page {current} of {total}",
-  "@pageOf": {
-    "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
-    }
-  },
-  "rowsPerPage": "Rows per page",
-  "search": "Search",
-
-  "managersTitle": "Managers",
-  "managersSubtitle": "View and manage dashboard managers.",
-  "managersEmpty": "No managers yet. Click \"Add manager\" to create one.",
-  "addManagerButton": "Add manager",
-  "createAdminsTitle": "Create manager",
-  "createAdminsSubtitle": "Add new manager with email, password, and role.",
-  "createAdminButton": "Create manager",
-  "createAdminSuccess": "Manager created successfully.",
-  "deleteManagerButton": "Delete",
-  "deleteManagerConfirmTitle": "Delete manager",
-  "deleteManagerConfirmMessage": "Are you sure you want to delete {name}? This will remove their access.",
-  "@deleteManagerConfirmMessage": {
-    "placeholders": {
-      "name": {"type": "String"}
-    }
-  },
-  "deleteManagerSuccess": "Manager deleted successfully.",
-  "deleteManagerError": "Failed to delete manager.",
-  "roleLabel": "Role",
-  "roleAdmin": "Admin",
-  "roleUser": "User",
-
-  "categoriesTitle": "Categories",
-  "categoriesSubtitle": "Manage categories and subcategories.",
-  "addCategory": "Add category",
-  "addSubCategory": "Add sub category",
-  "categoryArabicName": "Arabic name",
-  "categoryEnglishName": "English name",
-  "categoryImage": "Image",
-  "pickImage": "Pick from device",
-  "categoryImageRequired": "Image is required",
-  "categorySaved": "Category saved",
-  "categoryTitleSize": "Title size",
-  "categoryImageWidth": "Image width (0–1)",
-  "categoryImageHeight": "Image height (0–1)",
-  "categoryOpacity": "Opacity (0–1)",
-  "categoryCalculatorType": "Calculator / Tool",
-  "categoryCalculatorTypeHint": "Select calculator or tool",
-
-  "extractionFailureLogsTitle": "Extraction Failure Logs",
-  "extractionFailureLogsSubtitle": "Product pages where add-to-cart could not be shown.",
-  "extractionFailureLogsUrl": "URL",
-  "extractionFailureLogsMarketplace": "Marketplace",
-  "extractionFailureLogsTitleFound": "Title",
-  "extractionFailureLogsPriceFound": "Price",
-  "extractionFailureLogsColorFound": "Color",
-  "extractionFailureLogsSizeFound": "Size",
-  "extractionFailureLogsCreatedAt": "Date",
-  "extractionFailureLogsYes": "Yes",
-  "extractionFailureLogsNo": "No",
-
+  "profileUpdated": "Profile updated successfully",
+  "saveChanges": "Save Changes",
+  "profileWebsite": "Website",
+  "profileUploadSignature": "Upload your signature",
+  "authProviderGoogle": "Google account",
+  "authProviderApple": "Apple account",
+  "authProviderEmail": "Email account",
   "calculatorsTitle": "Finance Calculators",
   "calculatorsSubtitle": "Calculate financing options and eligibility",
   "calcPersonalFinance": "Personal Finance (PLAS)",
@@ -394,7 +335,6 @@
   "calcDeductionsDesc": "View salary deduction breakdown",
   "calcBankFees": "Bank Fees",
   "calcBankFeesDesc": "SAMA banking fee comparison and guide",
-
   "calcInputSalary": "Monthly Salary (SAR)",
   "calcInputEmploymentType": "Employment Type",
   "calcInputSector": "Employment Sector",
@@ -447,7 +387,6 @@
   "calcInputRequestedAmount": "Requested Amount (SAR)",
   "calcInputGregorianDate": "Gregorian Date",
   "calcInputHijriDate": "Hijri Date",
-
   "calcResultTitle": "Calculation Results",
   "calcResultEligible": "Eligible for Financing",
   "calcResultNotEligible": "Not Eligible",
@@ -514,7 +453,6 @@
   "calcResultApplicable": "Applicable?",
   "calcResultHijriDate": "Hijri Date",
   "calcResultGregorianDate": "Gregorian Date",
-
   "calcSalaryClient": "Salary Client",
   "calcNonSalaryClient": "Non-Salary Client",
   "calcYes": "Yes",
@@ -531,19 +469,1226 @@
   "calcAllConditionsMet": "All conditions met",
   "calcConvertToHijri": "Convert to Hijri",
   "calcConvertToGregorian": "Convert to Gregorian",
+  "aiChatGreeting": "Ask me about the result",
 
-  "aiSettings": "AI Settings",
-  "aiSettingsSubtitle": "Manage the Claude AI API key for the chat assistant.",
-  "aiApiKeyLabel": "Claude API Key",
-  "aiApiKeyHint": "Enter your Claude API key (sk-ant-...)",
-  "aiApiKeyNotConfigured": "No API key configured yet.",
-  "aiApiKeySaved": "API key saved successfully.",
-  "aiApiKeyDeleted": "API key deleted successfully.",
-  "aiApiKeyDeleteConfirmTitle": "Delete API Key",
-  "aiApiKeyDeleteConfirmMessage": "Are you sure you want to delete the API key? The AI chat feature will stop working.",
-  "aiApiKeyInvalid": "API key must start with sk-ant-",
-  "aiApiKeyRequired": "API key is required",
-  "save": "Save",
-  "update": "Update",
-  "delete": "Delete"
+  "calcAgeSubtitle": "Gregorian & Hijri Age Calculator",
+  "@calcAgeSubtitle": {
+    "description": "Subtitle for the age calculator page"
+  },
+  "calcAgeInputBirthDate": "Date of Birth (Gregorian)",
+  "@calcAgeInputBirthDate": {
+    "description": "Label for birth date picker in age calculator"
+  },
+  "calcAgeInputTodayDate": "Today's Date",
+  "@calcAgeInputTodayDate": {
+    "description": "Label for today date picker in age calculator"
+  },
+  "calcAgeCalculateButton": "Calculate Age",
+  "@calcAgeCalculateButton": {
+    "description": "Calculate button label in age calculator"
+  },
+  "calcAgeResultTitle": "Result",
+  "@calcAgeResultTitle": {
+    "description": "Result section title in age calculator"
+  },
+  "calcAgeResultYearsMonthsDays": "{years} years, {months} months, {days} days",
+  "@calcAgeResultYearsMonthsDays": {
+    "description": "Full age display format",
+    "placeholders": {
+      "years": { "type": "int" },
+      "months": { "type": "int" },
+      "days": { "type": "int" }
+    }
+  },
+  "calcAgeResultTotalMonths": "{count} months",
+  "@calcAgeResultTotalMonths": {
+    "description": "Age in total months",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "calcAgeResultTotalDays": "{count} days",
+  "@calcAgeResultTotalDays": {
+    "description": "Age in total days",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "calcAgeResultHijriApprox": "~{years} Hijri years",
+  "@calcAgeResultHijriApprox": {
+    "description": "Approximate Hijri age",
+    "placeholders": {
+      "years": { "type": "int" }
+    }
+  },
+  "calcAgeResultHijriLabel": "Hijri Age (approximate)",
+  "@calcAgeResultHijriLabel": {
+    "description": "Label for approximate Hijri age result"
+  },
+  "calcAgeResultAgeInMonths": "Age in Months",
+  "@calcAgeResultAgeInMonths": {
+    "description": "Label for age in months result"
+  },
+  "calcAgeResultAgeInDays": "Age in Days",
+  "@calcAgeResultAgeInDays": {
+    "description": "Label for age in days result"
+  },
+  "calcAgeResultAgeInYears": "Age in Years",
+  "@calcAgeResultAgeInYears": {
+    "description": "Label for age in years result"
+  },
+
+  "calcBackToInput": "Back to Input",
+  "@calcBackToInput": {
+    "description": "Button to go back to input form from results"
+  },
+  "calcEnterSalary": "Enter salary",
+  "@calcEnterSalary": {
+    "description": "Prompt to enter salary"
+  },
+  "calcCalculateNow": "Calculate Now",
+  "@calcCalculateNow": {
+    "description": "Calculate now button label"
+  },
+  "calcCalculateFirst": "Calculate First",
+  "@calcCalculateFirst": {
+    "description": "Prompt to calculate before viewing results"
+  },
+  "calcScheduleTitle": "Installment Schedule",
+  "@calcScheduleTitle": {
+    "description": "Title for installment schedule section"
+  },
+  "calcScheduleDesc": "View full monthly details",
+  "@calcScheduleDesc": {
+    "description": "Description for installment schedule"
+  },
+  "calcScheduleShow": "Show",
+  "@calcScheduleShow": {
+    "description": "Button to show schedule"
+  },
+  "calcScheduleMonth": "Month",
+  "@calcScheduleMonth": {
+    "description": "Month column header in schedule table"
+  },
+  "calcSchedulePayment": "Payment",
+  "@calcSchedulePayment": {
+    "description": "Payment column header in schedule table"
+  },
+  "calcScheduleTotalPaid": "Total Paid",
+  "@calcScheduleTotalPaid": {
+    "description": "Total paid column header in schedule table"
+  },
+  "calcClientData": "Client Data",
+  "@calcClientData": {
+    "description": "Client data section title"
+  },
+  "calcEmploymentStatus": "Employment Status",
+  "@calcEmploymentStatus": {
+    "description": "Employment status label"
+  },
+  "calcEmployed": "Employed",
+  "@calcEmployed": {
+    "description": "Employed status option"
+  },
+  "calcRetired": "Retired",
+  "@calcRetired": {
+    "description": "Retired status option"
+  },
+  "calcMortgage": "Mortgage",
+  "@calcMortgage": {
+    "description": "Mortgage label"
+  },
+  "calcMortgageNone": "None",
+  "@calcMortgageNone": {
+    "description": "No mortgage option"
+  },
+  "calcMortgageHas": "Yes, has one",
+  "@calcMortgageHas": {
+    "description": "Has mortgage option"
+  },
+  "calcBirthYear": "Birth Year",
+  "@calcBirthYear": {
+    "description": "Birth year label"
+  },
+  "calcBirthMonth": "Birth Month",
+  "@calcBirthMonth": {
+    "description": "Birth month label"
+  },
+  "calcRetirementAge": "Retirement Age (years)",
+  "@calcRetirementAge": {
+    "description": "Retirement age label"
+  },
+  "calcAgeInMonths": "Age in Months",
+  "@calcAgeInMonths": {
+    "description": "Age in months label"
+  },
+  "calcAvailablePeriod": "Available Period",
+  "@calcAvailablePeriod": {
+    "description": "Available period label"
+  },
+  "calcTimeEligibility": "Time Eligibility",
+  "@calcTimeEligibility": {
+    "description": "Time eligibility label"
+  },
+  "calcEligible": "Eligible for Financing",
+  "@calcEligible": {
+    "description": "Eligible for financing status"
+  },
+  "calcNotEligible": "Not Eligible (less than 60 months)",
+  "@calcNotEligible": {
+    "description": "Not eligible status (less than 60 months)"
+  },
+  "calcSalaryLabel": "Client Salary (SAR)",
+  "@calcSalaryLabel": {
+    "description": "Client salary label"
+  },
+  "calcProfitRateLabel": "Profit Rate (%)",
+  "@calcProfitRateLabel": {
+    "description": "Profit rate percentage label"
+  },
+  "calcDurationLabel": "Financing Duration (months)",
+  "@calcDurationLabel": {
+    "description": "Financing duration in months label"
+  },
+  "calcAhliCardsLabel": "Total Ahli Card Limits",
+  "@calcAhliCardsLabel": {
+    "description": "Total Ahli credit card limits label"
+  },
+  "calcOtherCardsLabel": "Total Other Banks Card Limits",
+  "@calcOtherCardsLabel": {
+    "description": "Total other banks credit card limits label"
+  },
+  "calcMonthlyInstallment": "Monthly Installment",
+  "@calcMonthlyInstallment": {
+    "description": "Monthly installment label"
+  },
+  "calcDeductionRatio": "Deduction Ratio",
+  "@calcDeductionRatio": {
+    "description": "Deduction ratio label"
+  },
+  "calcTotalFinancing": "Total Financing",
+  "@calcTotalFinancing": {
+    "description": "Total financing label"
+  },
+  "calcApprovalAmount": "Approval Amount",
+  "@calcApprovalAmount": {
+    "description": "Approval amount label"
+  },
+  "calcBankProfit": "Bank Profit",
+  "@calcBankProfit": {
+    "description": "Bank profit label"
+  },
+  "calcAdminFeesLabel": "Admin Fees (0.5% | max 2,500)",
+  "@calcAdminFeesLabel": {
+    "description": "Admin fees label with rate and cap"
+  },
+  "calcVatLabel": "VAT (15%)",
+  "@calcVatLabel": {
+    "description": "VAT 15% label"
+  },
+  "calcTotalFeesLabel": "Total Fees",
+  "@calcTotalFeesLabel": {
+    "description": "Total fees label"
+  },
+  "calcNetFinancing": "Net Financing Amount",
+  "@calcNetFinancing": {
+    "description": "Net financing amount label"
+  },
+  "calcApprovedSuccess": "Approved — Calculated successfully",
+  "@calcApprovedSuccess": {
+    "description": "Approved success message"
+  },
+  "calcRejectedTime": "Not Eligible — Remaining period less than 60 months",
+  "@calcRejectedTime": {
+    "description": "Rejected due to insufficient time remaining"
+  },
+  "calcReviewData": "Review Data",
+  "@calcReviewData": {
+    "description": "Review data prompt"
+  },
+  "calcNotCalculatedYet": "Not calculated yet",
+  "@calcNotCalculatedYet": {
+    "description": "Not yet calculated message"
+  },
+  "calcEnterDataAndCalculate": "Enter data and press \"Calculate\"",
+  "@calcEnterDataAndCalculate": {
+    "description": "Prompt to enter data and press calculate"
+  },
+
+  "calcPersonalFinanceSubtitle": "Personal Finance Plus Calculator",
+  "@calcPersonalFinanceSubtitle": {
+    "description": "Subtitle for personal finance plus calculator"
+  },
+  "calcPersonalQuickSubtitle": "Quick Personal Finance Calculator",
+  "@calcPersonalQuickSubtitle": {
+    "description": "Subtitle for quick personal finance calculator"
+  },
+  "calcMilitaryType": "Military Type",
+  "@calcMilitaryType": {
+    "description": "Military type label"
+  },
+  "calcMilitaryRank": "Military Rank",
+  "@calcMilitaryRank": {
+    "description": "Military rank label"
+  },
+  "calcMilTypePilot": "Pilot",
+  "@calcMilTypePilot": {
+    "description": "Military type: pilot"
+  },
+  "calcMilTypeNonPilot": "Non-Pilot",
+  "@calcMilTypeNonPilot": {
+    "description": "Military type: non-pilot"
+  },
+  "calcMilTypeEnlisted": "Enlisted",
+  "@calcMilTypeEnlisted": {
+    "description": "Military type: enlisted"
+  },
+  "calcFinancingData": "Financing Data",
+  "@calcFinancingData": {
+    "description": "Financing data section title"
+  },
+  "calcDeductionSection": "Deduction Ratio",
+  "@calcDeductionSection": {
+    "description": "Deduction section title"
+  },
+  "calcAmountsSection": "Financing Amounts",
+  "@calcAmountsSection": {
+    "description": "Financing amounts section title"
+  },
+  "calcFeesSection": "Fees & Tax",
+  "@calcFeesSection": {
+    "description": "Fees and tax section title"
+  },
+  "calcNetSection": "Net",
+  "@calcNetSection": {
+    "description": "Net section title"
+  },
+  "calcAppliedDeduction": "Applied Deduction Ratio",
+  "@calcAppliedDeduction": {
+    "description": "Applied deduction ratio label"
+  },
+  "calcTotalFinancingMultiplied": "Total Financing ({months} x Installment)",
+  "@calcTotalFinancingMultiplied": {
+    "description": "Total financing multiplied by months",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "calcNetAfterFees": "Net Financing (after all fees)",
+  "@calcNetAfterFees": {
+    "description": "Net financing after all fees"
+  },
+  "calcEligibleFinancially": "Approved — Eligible by time and finances",
+  "@calcEligibleFinancially": {
+    "description": "Eligible both time-wise and financially"
+  },
+
+  "calcDebtPurchaseSubtitle": "Debt Purchase Financing Calculator",
+  "@calcDebtPurchaseSubtitle": {
+    "description": "Subtitle for debt purchase calculator"
+  },
+  "calcDebtAmount": "Debt Amount at Other Bank (SAR)",
+  "@calcDebtAmount": {
+    "description": "Debt amount at other bank label"
+  },
+  "calcDebtSection": "Debt at Other Bank",
+  "@calcDebtSection": {
+    "description": "Debt at other bank section title"
+  },
+  "calcDebtAtOtherBank": "Debt at Other Bank",
+  "@calcDebtAtOtherBank": {
+    "description": "Debt at other bank label"
+  },
+  "calcNetAfterDebt": "Net Amount After Deducting Debt",
+  "@calcNetAfterDebt": {
+    "description": "Net amount after deducting debt"
+  },
+  "calcDebtExceedsNet": "Debt exceeds net financing",
+  "@calcDebtExceedsNet": {
+    "description": "Warning when debt exceeds net financing"
+  },
+
+  "calcRealEstateSubtitle": "Real Estate Financing Calculator (2-in-1)",
+  "@calcRealEstateSubtitle": {
+    "description": "Subtitle for real estate calculator"
+  },
+  "calcRealEstatePlusSubtitle": "Real Estate Plus Financing Calculator (2-in-1)",
+  "@calcRealEstatePlusSubtitle": {
+    "description": "Subtitle for real estate plus calculator"
+  },
+  "calcFinancialInfo": "Financial Information",
+  "@calcFinancialInfo": {
+    "description": "Financial information section title"
+  },
+  "calcMortgageYears": "Mortgage Duration (years)",
+  "@calcMortgageYears": {
+    "description": "Mortgage duration in years label"
+  },
+  "calcPersonalInstallment": "Personal Loan Installment (SAR)",
+  "@calcPersonalInstallment": {
+    "description": "Personal loan installment label"
+  },
+  "calcRemainingMonths": "Remaining Personal Loan Installments (months)",
+  "@calcRemainingMonths": {
+    "description": "Remaining personal loan installments in months"
+  },
+  "calcAdditionalOptions": "Additional Options",
+  "@calcAdditionalOptions": {
+    "description": "Additional options section title"
+  },
+  "calcHousingSupport": "Housing Support",
+  "@calcHousingSupport": {
+    "description": "Housing support label"
+  },
+  "calcEtizaz": "Etizaz (Ministry of Defense)",
+  "@calcEtizaz": {
+    "description": "Etizaz program (Ministry of Defense)"
+  },
+  "calcFixedLoan": "Fixed Real Estate Amount (leave 0 for auto-calculation)",
+  "@calcFixedLoan": {
+    "description": "Fixed real estate loan amount hint"
+  },
+  "calcTwoInOneProgram": "2-in-1 Program",
+  "@calcTwoInOneProgram": {
+    "description": "2-in-1 program title"
+  },
+  "calcLoanAmount2in1": "Real Estate Loan Amount (2-in-1)",
+  "@calcLoanAmount2in1": {
+    "description": "Real estate loan amount in 2-in-1 program"
+  },
+  "calcInstallmentDuring": "Installment During Personal Loan Period",
+  "@calcInstallmentDuring": {
+    "description": "Installment during personal loan period"
+  },
+  "calcInstallmentAfter": "Installment After Personal Loan Ends",
+  "@calcInstallmentAfter": {
+    "description": "Installment after personal loan ends"
+  },
+  "calcTotalWithSupport": "Total with Support & Etizaz",
+  "@calcTotalWithSupport": {
+    "description": "Total with housing support and Etizaz"
+  },
+  "calcAdminAndAppraisal": "Admin & Appraisal Fees",
+  "@calcAdminAndAppraisal": {
+    "description": "Admin and appraisal fees"
+  },
+  "calcFixedLoanAmount": "Fixed Loan Amount",
+  "@calcFixedLoanAmount": {
+    "description": "Fixed loan amount label"
+  },
+  "calcTotalProfits": "Total Profits",
+  "@calcTotalProfits": {
+    "description": "Total profits label"
+  },
+  "calcGrandTotal": "Grand Total",
+  "@calcGrandTotal": {
+    "description": "Grand total label"
+  },
+  "calcCalculatedSuccessfully": "Calculated successfully",
+  "@calcCalculatedSuccessfully": {
+    "description": "Calculation success message"
+  },
+  "calcWorkplace": "Workplace",
+  "@calcWorkplace": {
+    "description": "Workplace label"
+  },
+  "calcRankLabel": "Rank",
+  "@calcRankLabel": {
+    "description": "Rank label"
+  },
+  "calcCivilian": "Civilian",
+  "@calcCivilian": {
+    "description": "Civilian workplace option"
+  },
+  "calcMilitaryEnlisted": "Military Enlisted",
+  "@calcMilitaryEnlisted": {
+    "description": "Military enlisted option"
+  },
+  "calcOfficersNonPilot": "Officers (Non-Pilot)",
+  "@calcOfficersNonPilot": {
+    "description": "Officers non-pilot option"
+  },
+  "calcOfficersPilot": "Officers (Pilot)",
+  "@calcOfficersPilot": {
+    "description": "Officers pilot option"
+  },
+  "calcPersonalInfo": "Personal Information",
+  "@calcPersonalInfo": {
+    "description": "Personal information section title"
+  },
+  "calcMaxYearsHint": "Maximum duration: {years} years",
+  "@calcMaxYearsHint": {
+    "description": "Maximum duration hint",
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "calcExceededRetirement": "Exceeded Retirement Age",
+  "@calcExceededRetirement": {
+    "description": "Exceeded retirement age message"
+  },
+  "calcDurationData": "Duration Data",
+  "@calcDurationData": {
+    "description": "Duration data section title"
+  },
+  "calcAvailableForClient": "Available Duration for Client",
+  "@calcAvailableForClient": {
+    "description": "Available duration for client"
+  },
+  "calcApprovedDuration": "Approved Financing Duration",
+  "@calcApprovedDuration": {
+    "description": "Approved financing duration"
+  },
+  "calcAllowedDeduction": "Allowed Deduction Ratio",
+  "@calcAllowedDeduction": {
+    "description": "Allowed deduction ratio"
+  },
+  "calcPersonalPeriod": "Remaining Personal Financing Period",
+  "@calcPersonalPeriod": {
+    "description": "Remaining personal financing period"
+  },
+  "calcMonthsAfterPersonal": "Months After Personal Loan Ends",
+  "@calcMonthsAfterPersonal": {
+    "description": "Months after personal loan ends"
+  },
+  "calcSupportSection": "Total with Support",
+  "@calcSupportSection": {
+    "description": "Total with support section title"
+  },
+  "calcEligibleWithinRetirement": "Eligible — Duration within retirement age",
+  "@calcEligibleWithinRetirement": {
+    "description": "Eligible within retirement age message"
+  },
+  "calcAdjustmentRequired": "Adjustment required — Available duration is {years} years only",
+  "@calcAdjustmentRequired": {
+    "description": "Adjustment required with available years",
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "calcSchedulePhase": "Phase",
+  "@calcSchedulePhase": {
+    "description": "Phase column header in schedule"
+  },
+  "calcPhaseWithPersonal": "With Personal Loan",
+  "@calcPhaseWithPersonal": {
+    "description": "Phase: with personal loan"
+  },
+  "calcPhaseAfterPersonal": "After Personal Loan",
+  "@calcPhaseAfterPersonal": {
+    "description": "Phase: after personal loan"
+  },
+  "calcDetailedSchedule": "Detailed Installment Schedule",
+  "@calcDetailedSchedule": {
+    "description": "Detailed installment schedule title"
+  },
+  "calcSchedulePhaseDesc": "Personal loan period installment + post-period installment",
+  "@calcSchedulePhaseDesc": {
+    "description": "Description of schedule phases"
+  },
+
+  "calcBankFeesSubtitle": "Bank Fees — Previous vs Updated Comparison",
+  "@calcBankFeesSubtitle": {
+    "description": "Subtitle for bank fees comparison page"
+  },
+  "calcBankFeesNote": "Fees per SAMA financial institutions tariff guide — Prices exclude VAT (15%) unless stated otherwise",
+  "@calcBankFeesNote": {
+    "description": "Bank fees note about SAMA guidelines"
+  },
+  "calcAdminFeesTitle": "Financing Admin Fees",
+  "@calcAdminFeesTitle": {
+    "description": "Admin fees for financing title"
+  },
+  "calcFinancingAdminFees": "Financing Admin Fees",
+  "@calcFinancingAdminFees": {
+    "description": "Financing admin fees label"
+  },
+  "calcPreviousValue": "Previous",
+  "@calcPreviousValue": {
+    "description": "Previous value column header"
+  },
+  "calcUpdatedValue": "Updated",
+  "@calcUpdatedValue": {
+    "description": "Updated value column header"
+  },
+  "calcBasicServices": "Basic Banking Services",
+  "@calcBasicServices": {
+    "description": "Basic banking services section"
+  },
+  "calcTransfers": "Financial Transfers",
+  "@calcTransfers": {
+    "description": "Financial transfers section"
+  },
+  "calcOfficialDocs": "Official Documents",
+  "@calcOfficialDocs": {
+    "description": "Official documents section"
+  },
+  "calcServiceColumn": "Service",
+  "@calcServiceColumn": {
+    "description": "Service column header"
+  },
+  "calcElectronicColumn": "Electronic",
+  "@calcElectronicColumn": {
+    "description": "Electronic channel column header"
+  },
+  "calcBranchColumn": "Branch",
+  "@calcBranchColumn": {
+    "description": "Branch channel column header"
+  },
+  "calcFree": "Free",
+  "@calcFree": {
+    "description": "Free of charge label"
+  },
+  "calcMadaCard": "Mada Card",
+  "@calcMadaCard": {
+    "description": "Mada card label"
+  },
+  "calcBankFeesDisclaimer": "Important notices:\n• All fees above exclude 15% VAT\n• This file is for reference only — please verify on the official SAMA website (sama.gov.sa)\n• Instructions take effect within 60 days of publication",
+  "@calcBankFeesDisclaimer": {
+    "description": "Bank fees disclaimer with important notes"
+  },
+
+  "calcDateConverterSubtitle": "Gregorian & Hijri Date Converter",
+  "@calcDateConverterSubtitle": {
+    "description": "Subtitle for date converter page"
+  },
+  "calcConversionResult": "Conversion Result",
+  "@calcConversionResult": {
+    "description": "Conversion result title"
+  },
+  "calcGregorianToHijri": "Gregorian → Hijri",
+  "@calcGregorianToHijri": {
+    "description": "Gregorian to Hijri conversion direction"
+  },
+  "calcHijriToGregorian": "Hijri → Gregorian",
+  "@calcHijriToGregorian": {
+    "description": "Hijri to Gregorian conversion direction"
+  },
+  "calcGregorianDate": "Gregorian Date",
+  "@calcGregorianDate": {
+    "description": "Gregorian date label"
+  },
+  "calcHijriDay": "Day",
+  "@calcHijriDay": {
+    "description": "Hijri day label"
+  },
+  "calcHijriMonth": "Month",
+  "@calcHijriMonth": {
+    "description": "Hijri month label"
+  },
+  "calcHijriYear": "Hijri Year",
+  "@calcHijriYear": {
+    "description": "Hijri year label"
+  },
+  "calcConvertButton": "Convert",
+  "@calcConvertButton": {
+    "description": "Convert button label"
+  },
+
+  "calcKhayratSubtitle": "Khayrat Calculator — Deposits & Investment",
+  "@calcKhayratSubtitle": {
+    "description": "Subtitle for Khayrat calculator page"
+  },
+  "calcInvestmentData": "Investment Data",
+  "@calcInvestmentData": {
+    "description": "Investment data section title"
+  },
+  "calcAmountAndPeriod": "Amount & Period",
+  "@calcAmountAndPeriod": {
+    "description": "Amount and period section title"
+  },
+  "calcInvestmentAmount": "Investment Amount (SAR) — Minimum 100,000",
+  "@calcInvestmentAmount": {
+    "description": "Investment amount label with minimum"
+  },
+  "calcMinDeposit": "Minimum 100,000 SAR",
+  "@calcMinDeposit": {
+    "description": "Minimum deposit hint"
+  },
+  "calcInvestmentPeriod": "Investment Period",
+  "@calcInvestmentPeriod": {
+    "description": "Investment period label"
+  },
+  "calcCalculateProfits": "Calculate Profits",
+  "@calcCalculateProfits": {
+    "description": "Calculate profits button label"
+  },
+  "calcProfitMargin": "Profit Margin",
+  "@calcProfitMargin": {
+    "description": "Profit margin label"
+  },
+  "calcProfits": "Profits",
+  "@calcProfits": {
+    "description": "Profits label"
+  },
+  "calcNewAmount": "New Amount",
+  "@calcNewAmount": {
+    "description": "New amount after profit"
+  },
+  "calcAmountCompliant": "Amount meets requirements",
+  "@calcAmountCompliant": {
+    "description": "Amount meets requirements message"
+  },
+
+  "calcPosSubtitle": "POS Financing Calculator",
+  "@calcPosSubtitle": {
+    "description": "Subtitle for POS financing calculator"
+  },
+  "calcEntityInfo": "Entity Information",
+  "@calcEntityInfo": {
+    "description": "Entity information section title"
+  },
+  "calcEntityType": "Entity Type",
+  "@calcEntityType": {
+    "description": "Entity type label"
+  },
+  "calcEntityActivity": "Entity Activity",
+  "@calcEntityActivity": {
+    "description": "Entity activity label"
+  },
+  "calcEntityAge": "Entity Age",
+  "@calcEntityAge": {
+    "description": "Entity age label"
+  },
+  "calcPosOperatingPeriod": "POS Operating Period",
+  "@calcPosOperatingPeriod": {
+    "description": "POS operating period label"
+  },
+  "calcAnnualSales": "Average Annual Sales (SAR)",
+  "@calcAnnualSales": {
+    "description": "Average annual sales label"
+  },
+  "calcMonthlyPosSales": "Average Monthly POS Sales (SAR)",
+  "@calcMonthlyPosSales": {
+    "description": "Average monthly POS sales label"
+  },
+  "calcPosOperationsCount": "Monthly POS Operations Count",
+  "@calcPosOperationsCount": {
+    "description": "Monthly POS operations count"
+  },
+  "calcFinancingDetails": "Financing Details",
+  "@calcFinancingDetails": {
+    "description": "Financing details section title"
+  },
+  "calcTermMonths": "Financing Term (months)",
+  "@calcTermMonths": {
+    "description": "Financing term in months"
+  },
+  "calcFinancingAmount": "Financing Amount (Average x 6)",
+  "@calcFinancingAmount": {
+    "description": "Financing amount (average x 6)"
+  },
+  "calcProfitRate": "Profit Rate",
+  "@calcProfitRate": {
+    "description": "Profit rate label"
+  },
+  "calcTotalProfit": "Total Profit",
+  "@calcTotalProfit": {
+    "description": "Total profit label"
+  },
+  "calcTotal": "Total",
+  "@calcTotal": {
+    "description": "Total label"
+  },
+  "calcAdminFeesPos": "Admin Fees (5% max 2,500 + 15% VAT)",
+  "@calcAdminFeesPos": {
+    "description": "POS admin fees with rate and tax"
+  },
+  "calcEntityEligible": "Approved — Entity is eligible",
+  "@calcEntityEligible": {
+    "description": "Entity eligible message"
+  },
+  "calcEntityRejectedAge": "Rejected — Entity or POS age is insufficient",
+  "@calcEntityRejectedAge": {
+    "description": "Entity rejected due to insufficient age"
+  },
+  "calcEntityRejectedSales": "Rejected — Sales less than 400,000 SAR",
+  "@calcEntityRejectedSales": {
+    "description": "Entity rejected due to insufficient sales"
+  },
+  "calcMonthlySales": "Average Monthly Sales",
+  "@calcMonthlySales": {
+    "description": "Average monthly sales label"
+  },
+  "calcRejected": "Rejected",
+  "@calcRejected": {
+    "description": "Rejected status label"
+  },
+
+  "calcProtectionSubtitle": "Protection & Savings — Single Payment",
+  "@calcProtectionSubtitle": {
+    "description": "Subtitle for protection and savings calculator"
+  },
+  "calcProgramData": "Program Data",
+  "@calcProgramData": {
+    "description": "Program data section title"
+  },
+  "calcSubscriptionAndDuration": "Subscription & Duration",
+  "@calcSubscriptionAndDuration": {
+    "description": "Subscription and duration section"
+  },
+  "calcSubscriptionAmount": "Subscription Amount (SAR)",
+  "@calcSubscriptionAmount": {
+    "description": "Subscription amount label"
+  },
+  "calcProgramDuration": "Program Duration (years)",
+  "@calcProgramDuration": {
+    "description": "Program duration in years"
+  },
+  "calcInvestmentStrategy": "Investment Strategy",
+  "@calcInvestmentStrategy": {
+    "description": "Investment strategy label"
+  },
+  "calcAgeAtContract": "Age at Contract",
+  "@calcAgeAtContract": {
+    "description": "Age at contract signing"
+  },
+  "calcCashValueAfter": "Cash Value After {years} Years",
+  "@calcCashValueAfter": {
+    "description": "Cash value after N years",
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "calcRedemptionValue": "Redemption Value",
+  "@calcRedemptionValue": {
+    "description": "Redemption value label"
+  },
+  "calcDeathBenefit": "Death Benefit",
+  "@calcDeathBenefit": {
+    "description": "Death benefit label"
+  },
+  "calcInsuranceCoverage": "Insurance Coverage",
+  "@calcInsuranceCoverage": {
+    "description": "Insurance coverage label"
+  },
+  "calcTotalInvestmentIncome": "Total Investment Income",
+  "@calcTotalInvestmentIncome": {
+    "description": "Total investment income label"
+  },
+  "calcProjectionYear": "Year",
+  "@calcProjectionYear": {
+    "description": "Year column in projection table"
+  },
+  "calcProjectionCashValue": "Cash Value",
+  "@calcProjectionCashValue": {
+    "description": "Cash value column in projection table"
+  },
+  "calcProjectionDeathBenefit": "Death Benefit",
+  "@calcProjectionDeathBenefit": {
+    "description": "Death benefit column in projection table"
+  },
+  "calcProjectionAdminFees": "Admin Fees",
+  "@calcProjectionAdminFees": {
+    "description": "Admin fees column in projection table"
+  },
+
+  "calcDeductionRatioSubtitle": "Deduction Ratio Calculator",
+  "@calcDeductionRatioSubtitle": {
+    "description": "Subtitle for deduction ratio calculator"
+  },
+  "calcDeductionAvailSubtitle": "Available Deduction by Product",
+  "@calcDeductionAvailSubtitle": {
+    "description": "Subtitle for available deduction calculator"
+  },
+  "calcDeductionRatioMode": "Deduction Ratio",
+  "@calcDeductionRatioMode": {
+    "description": "Deduction ratio mode tab label"
+  },
+  "calcDeductionAvailMode": "Available Deduction",
+  "@calcDeductionAvailMode": {
+    "description": "Available deduction mode tab label"
+  },
+  "calcTotalSalary": "Total Salary (SAR)",
+  "@calcTotalSalary": {
+    "description": "Total salary label"
+  },
+  "calcJobStatus": "Job Status",
+  "@calcJobStatus": {
+    "description": "Job status label"
+  },
+  "calcPersonalInstLabel": "Personal Financing Installment (SAR)",
+  "@calcPersonalInstLabel": {
+    "description": "Personal financing installment label"
+  },
+  "calcLeasingInstLabel": "Leasing Installment (SAR)",
+  "@calcLeasingInstLabel": {
+    "description": "Leasing financing installment label"
+  },
+  "calcRealEstateInstLabel": "Real Estate Installment (SAR)",
+  "@calcRealEstateInstLabel": {
+    "description": "Real estate financing installment label"
+  },
+  "calcOtherObligations": "Other Obligations (SAR)",
+  "@calcOtherObligations": {
+    "description": "Other obligations label"
+  },
+  "calcCalculateDeduction": "Calculate",
+  "@calcCalculateDeduction": {
+    "description": "Calculate deduction button label"
+  },
+  "calcSalaryAmount": "Salary",
+  "@calcSalaryAmount": {
+    "description": "Salary label in results"
+  },
+  "calcPersonalFinancing": "Personal Financing",
+  "@calcPersonalFinancing": {
+    "description": "Personal financing label in results"
+  },
+  "calcLeasingFinancing": "Leasing Financing",
+  "@calcLeasingFinancing": {
+    "description": "Leasing financing label in results"
+  },
+  "calcRealEstateFinancing": "Real Estate Financing",
+  "@calcRealEstateFinancing": {
+    "description": "Real estate financing label in results"
+  },
+  "calcTotalObligations": "Total Current Obligations",
+  "@calcTotalObligations": {
+    "description": "Total current obligations label"
+  },
+  "calcCurrentDeduction": "Current Deduction Ratio",
+  "@calcCurrentDeduction": {
+    "description": "Current deduction ratio label"
+  },
+  "calcAvailablePersonal": "Available for Personal Financing",
+  "@calcAvailablePersonal": {
+    "description": "Available for personal financing"
+  },
+  "calcAvailableLeasing": "Available for Leasing (45%)",
+  "@calcAvailableLeasing": {
+    "description": "Available for leasing financing (45%)"
+  },
+  "calcAvailableRealEstate": "Available for Real Estate",
+  "@calcAvailableRealEstate": {
+    "description": "Available for real estate financing"
+  },
+
+  "monthJan": "January",
+  "@monthJan": {
+    "description": "January month name"
+  },
+  "monthFeb": "February",
+  "@monthFeb": {
+    "description": "February month name"
+  },
+  "monthMar": "March",
+  "@monthMar": {
+    "description": "March month name"
+  },
+  "monthApr": "April",
+  "@monthApr": {
+    "description": "April month name"
+  },
+  "monthMay": "May",
+  "@monthMay": {
+    "description": "May month name"
+  },
+  "monthJun": "June",
+  "@monthJun": {
+    "description": "June month name"
+  },
+  "monthJul": "July",
+  "@monthJul": {
+    "description": "July month name"
+  },
+  "monthAug": "August",
+  "@monthAug": {
+    "description": "August month name"
+  },
+  "monthSep": "September",
+  "@monthSep": {
+    "description": "September month name"
+  },
+  "monthOct": "October",
+  "@monthOct": {
+    "description": "October month name"
+  },
+  "monthNov": "November",
+  "@monthNov": {
+    "description": "November month name"
+  },
+  "monthDec": "December",
+  "@monthDec": {
+    "description": "December month name"
+  },
+
+  "calcLeasingSubtitle": "Leasing Finance Calculator",
+  "@calcLeasingSubtitle": {
+    "description": "Subtitle for leasing calculator"
+  },
+  "calcLeasingMicroSubtitle": "Leasing Finance Calculator - Micro",
+  "@calcLeasingMicroSubtitle": {
+    "description": "Subtitle for leasing micro calculator"
+  },
+
+  "calcAllPeriodsTable": "All Periods Table",
+  "@calcAllPeriodsTable": {
+    "description": "All periods table title for Khairat"
+  },
+  "calcPeriodColumn": "Period",
+  "@calcPeriodColumn": {
+    "description": "Period column header"
+  },
+  "calcDaysColumn": "Days",
+  "@calcDaysColumn": {
+    "description": "Days column header"
+  },
+  "calcProfitMarginColumn": "Profit Margin",
+  "@calcProfitMarginColumn": {
+    "description": "Profit margin column header"
+  },
+  "calcProfitsColumn": "Profits",
+  "@calcProfitsColumn": {
+    "description": "Profits column header"
+  },
+  "calcNewAmountColumn": "New Amount",
+  "@calcNewAmountColumn": {
+    "description": "New amount column header"
+  },
+  "calcNYears": "{count} years",
+  "@calcNYears": {
+    "description": "N years label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calcProfitRatePercent": "Profit Rate (%)",
+  "@calcProfitRatePercent": {
+    "description": "Profit rate percentage input label"
+  },
+  "calcEntityData": "Entity Data",
+  "@calcEntityData": {
+    "description": "Entity data section title"
+  },
+  "calcEnterDataPrompt": "Enter data and press Calculate",
+  "@calcEnterDataPrompt": {
+    "description": "Prompt to enter data and calculate"
+  },
+  "calcDeductionRatioTitle": "Deduction Ratios",
+  "@calcDeductionRatioTitle": {
+    "description": "Title for deduction ratio section"
+  },
+  "calcDeductionAvailTitle": "Available Deduction",
+  "@calcDeductionAvailTitle": {
+    "description": "Title for available deduction section"
+  },
+  "calcPeriodDays": "{period} ({days} days)",
+  "@calcPeriodDays": {
+    "description": "Period with days count",
+    "placeholders": {
+      "period": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "calcInvestmentAmountLabel": "Investment Amount",
+  "@calcInvestmentAmountLabel": {
+    "description": "Investment amount label (result)"
+  },
+  "calcDateConverterTitle": "Date Converter",
+  "@calcDateConverterTitle": {
+    "description": "Date converter page header title"
+  },
+  "calcExportPdf": "PDF",
+  "@calcExportPdf": {
+    "description": "PDF export button label"
+  },
+  "calcExportImage": "Image",
+  "@calcExportImage": {
+    "description": "Image export button label"
+  },
+  "calcPersonalFinancingWithRate": "Personal Financing ({rate}%)",
+  "@calcPersonalFinancingWithRate": {
+    "description": "Personal financing with percentage",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcLeasingFinancingWithRate": "Leasing Financing ({rate}%)",
+  "@calcLeasingFinancingWithRate": {
+    "description": "Leasing financing with percentage",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcRealEstateFinancingWithRate": "Real Estate Financing ({rate}%)",
+  "@calcRealEstateFinancingWithRate": {
+    "description": "Real estate financing with percentage",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcAvailablePersonalWithRate": "Available Personal ({rate}%)",
+  "@calcAvailablePersonalWithRate": {
+    "description": "Available personal financing with rate",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcAvailableRealEstateWithRate": "Available Real Estate ({rate}%)",
+  "@calcAvailableRealEstateWithRate": {
+    "description": "Available real estate financing with rate",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "calcBankFeesAiContext": "SAMA Bank Fees",
+  "@calcBankFeesAiContext": {
+    "description": "AI context for bank fees page"
+  },
+
+  "comingSoonTitle": "Coming Soon",
+  "@comingSoonTitle": {
+    "description": "Coming soon dialog title"
+  },
+  "comingSoonMessage": "This feature will be available soon",
+  "@comingSoonMessage": {
+    "description": "Coming soon dialog message"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button label"
+  },
+
+  "developerName": "Abdullah Almalki",
+  "@developerName": {
+    "description": "Developer full name"
+  },
+  "developerRole": "Financial services leader with over 19 years of banking experience, harnessing AI and technology to advance banking services",
+  "@developerRole": {
+    "description": "Developer role/title"
+  },
+  "developerEmail": "Abdullahalmalki@nesab.sa",
+  "@developerEmail": {
+    "description": "Developer email address"
+  },
+  "developerWebsite": "www.Nesab.sa",
+  "@developerWebsite": {
+    "description": "Developer website display text"
+  },
+  "aboutAppName": "Nesab",
+  "@aboutAppName": {
+    "description": "App name in about dialog"
+  },
+  "aboutAppTagline": "Smart Financing Solutions",
+  "@aboutAppTagline": {
+    "description": "App tagline in about dialog"
+  },
+  "aboutAppFullDescription": "Nesab is a comprehensive Islamic financial products platform that combines numerical analysis and practical guidance to empower users in understanding every financial detail before making commitments. Browse and compare diverse financing solutions and choose the most suitable for your needs.",
+  "@aboutAppFullDescription": {
+    "description": "Full app description in about dialog"
+  },
+  "aboutAppFeatureCalculator": "Financing calculators with instant results",
+  "@aboutAppFeatureCalculator": {
+    "description": "App feature: financing calculators"
+  },
+  "aboutAppFeaturePlanning": "Financial planning and estimation tools",
+  "@aboutAppFeaturePlanning": {
+    "description": "App feature: financial planning"
+  },
+  "aboutAppFeatureGuidance": "Educational guidance for financial stability",
+  "@aboutAppFeatureGuidance": {
+    "description": "App feature: educational guidance"
+  },
+  "aboutAppFeatureSharia": "Sharia-compliant financing options",
+  "@aboutAppFeatureSharia": {
+    "description": "App feature: sharia compliant"
+  },
+  "aboutAppWebsite": "www.nesab.sa",
+  "@aboutAppWebsite": {
+    "description": "App website display text"
+  },
+  "features": "Features",
+  "@features": {
+    "description": "Features section title"
+  },
+
+  "currentPassword": "Current Password",
+  "@currentPassword": {
+    "description": "Label for current password field"
+  },
+  "newPassword": "New Password",
+  "@newPassword": {
+    "description": "Label for new password field"
+  },
+  "confirmNewPassword": "Confirm New Password",
+  "@confirmNewPassword": {
+    "description": "Label for confirm new password field"
+  },
+  "passwordChanged": "Password changed successfully",
+  "@passwordChanged": {
+    "description": "Success message after password change"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Error when new password and confirmation do not match"
+  },
+  "passwordTooShort": "Password must be at least 6 characters",
+  "@passwordTooShort": {
+    "description": "Error when password is too short"
+  },
+  "signatureUploaded": "Signature uploaded successfully",
+  "@signatureUploaded": {
+    "description": "Success message after signature upload"
+  },
+  "signatureUploadFailed": "Failed to upload signature",
+  "@signatureUploadFailed": {
+    "description": "Error message when signature upload fails"
+  },
+  "pickImage": "Pick Image",
+  "@pickImage": {
+    "description": "Button label for picking an image"
+  },
+  "uploading": "Uploading...",
+  "@uploading": {
+    "description": "Label shown during upload"
+  },
+  "camera": "Camera",
+  "@camera": {
+    "description": "Button label for taking a photo with camera"
+  },
+  "deleteSignature": "Delete Signature",
+  "@deleteSignature": {
+    "description": "Button label for deleting a saved signature"
+  },
+  "signatureName": "Name",
+  "@signatureName": {
+    "description": "Label for signature name field"
+  },
+  "signatureNameHint": "Enter your name",
+  "@signatureNameHint": {
+    "description": "Hint text for signature name field"
+  },
+  "signatureNumber": "Phone Number",
+  "@signatureNumber": {
+    "description": "Label for signature phone number field"
+  },
+  "signatureNumberHint": "Enter your phone number",
+  "@signatureNumberHint": {
+    "description": "Hint text for signature phone number field"
+  }
 }

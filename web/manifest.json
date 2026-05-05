@@ -1,6 +1,6 @@
 {
-    "name": "nesab_dashboard",
-    "short_name": "nesab_dashboard",
+    "name": "nesab",
+    "short_name": "nesab",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

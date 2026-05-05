@@ -327,7 +327,7 @@ ${PRODUCT_KEYS.map((p, i) => (i + 1) + ". " + p.key + " (" + p.label + ")").join
 exports.updateProfitMargins = functions
     .region("us-central1")
     .runWith({ secrets: ["XAI_API_KEY"] })
-    .pubsub.schedule("0 7 * * *")
+    .pubsub.schedule("30 6 * * *")
     .timeZone("UTC")
     .onRun(async () => {
     functions.logger.info("updateProfitMargins: starting daily run");
@@ -340,16 +340,12 @@ exports.updateProfitMargins = functions
         return;
     }
     const requestBody = JSON.stringify({
-        model: "grok-4.1-fast",
-        messages: [
-            { role: "user", content: PROFIT_MARGIN_PROMPT },
-        ],
-        max_tokens: 2048,
-        temperature: 0.2,
+        model: "grok-4.20-reasoning",
+        input: PROFIT_MARGIN_PROMPT,
     });
     const options = {
         hostname: "api.x.ai",
-        path: "/v1/chat/completions",
+        path: "/v1/responses",
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -368,8 +364,8 @@ exports.updateProfitMargins = functions
     let parsed;
     try {
         const apiResponse = JSON.parse(rawResponse);
-        const choices = apiResponse.choices;
-        const content = choices?.[0]?.message?.content ?? "";
+        const output = apiResponse.output;
+        const content = output?.[0]?.content?.[0]?.text ?? "";
         const jsonMatch = content.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
             functions.logger.error("updateProfitMargins: no JSON found in response", content);
@@ -394,7 +390,7 @@ exports.updateProfitMargins = functions
         functions.logger.error("updateProfitMargins: Firestore write failed", e);
     }
 });
-exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["GROK_API_KEY"] }).https.onCall(async (_data, context) => {
+exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY"] }).https.onCall(async (_data, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
     }
@@ -412,14 +408,12 @@ exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ s
         throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
     }
     const requestBody = JSON.stringify({
-        model: "grok-4.1-fast",
-        messages: [{ role: "user", content: PROFIT_MARGIN_PROMPT }],
-        max_tokens: 2048,
-        temperature: 0.2,
+        model: "grok-4.20-reasoning",
+        input: PROFIT_MARGIN_PROMPT,
     });
     const options = {
         hostname: "api.x.ai",
-        path: "/v1/chat/completions",
+        path: "/v1/responses",
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -433,14 +427,14 @@ exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ s
     }
     catch (e) {
         const errMsg = e instanceof Error ? e.message : String(e);
-        functions.logger.error("triggerProfitMarginsUpdate: Grok API call failed", { error: errMsg, keyLength: apiKey?.length ?? 0 });
+        functions.logger.error("triggerProfitMarginsUpdate: Grok API call failed", { error: errMsg });
         throw new functions.https.HttpsError("internal", `فشل الاتصال بـ Grok API: ${errMsg}`);
     }
     let parsed;
     try {
         const apiResponse = JSON.parse(rawResponse);
-        const choices = apiResponse.choices;
-        const content = choices?.[0]?.message?.content ?? "";
+        const output = apiResponse.output;
+        const content = output?.[0]?.content?.[0]?.text ?? "";
         const jsonMatch = content.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
             throw new functions.https.HttpsError("internal", "لم يُرجع Grok بيانات JSON صالحة.");

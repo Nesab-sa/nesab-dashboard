@@ -58,6 +58,8 @@ interface AiChatData {
   message?: string;
   pageContext?: string;
   conversationHistory?: ChatMessage[];
+  conversationId?: string;
+  source?: string;
 }
 
 interface AiConfig {
@@ -258,7 +260,47 @@ export const aiChatProxy = functions.region("us-central1").https.onCall(
       }
 
       const reply = parsed.choices?.[0]?.message?.content ?? "";
-      return { reply, provider: aiConfig.provider, model: aiConfig.model };
+
+      // Save conversation to Firestore
+      const conversationId = typeof data?.conversationId === "string" && data.conversationId
+        ? data.conversationId
+        : firestore.collection("ai_conversations").doc().id;
+      const source = typeof data?.source === "string" ? data.source : "app";
+      const userId = context.auth!.uid;
+
+      const newMessages = [
+        ...history.filter((m) => m.role !== "system"),
+        { role: "user" as const, content: message },
+        { role: "assistant" as const, content: reply },
+      ];
+
+      try {
+        const convRef = firestore.collection("ai_conversations").doc(conversationId);
+        const convDoc = await convRef.get();
+        if (convDoc.exists) {
+          await convRef.update({
+            messages: newMessages,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            messageCount: newMessages.filter((m) => m.role === "user").length,
+            pageContext: pageContext || convDoc.data()?.pageContext || "",
+          });
+        } else {
+          await convRef.set({
+            id: conversationId,
+            userId,
+            source,
+            pageContext: pageContext || "",
+            messages: newMessages,
+            messageCount: 1,
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          });
+        }
+      } catch (e) {
+        functions.logger.warn("Could not save conversation", e);
+      }
+
+      return { reply, provider: aiConfig.provider, model: aiConfig.model, conversationId };
     } catch (err: unknown) {
       if (err instanceof functions.https.HttpsError) throw err;
       const msg = err instanceof Error ? err.message : String(err);

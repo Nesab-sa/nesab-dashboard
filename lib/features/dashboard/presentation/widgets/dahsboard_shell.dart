@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/ai_conversations_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/ai_settings_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/app_pages_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/notifications_page.dart';
@@ -47,6 +48,7 @@ class _DashboardShellState extends State<DashboardShell> {
       DashboardSection.aiSettings => const AiSettingsPage(),
       DashboardSection.profitMargins => const ProfitMarginsPage(),
       DashboardSection.notifications => const NotificationsPage(),
+      DashboardSection.aiConversations => const AiConversationsPage(),
     };
   }
 

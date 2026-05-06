@@ -31,6 +31,7 @@ class _AiChatWidgetState extends State<AiChatWidget> {
     ),
   ];
 
+  String? _conversationId;
   final _repo = AiChatRepository();
 
   void _toggle() => setState(() => _isOpen = !_isOpen);
@@ -47,12 +48,15 @@ class _AiChatWidgetState extends State<AiChatWidget> {
     _scrollToBottom();
 
     try {
-      final response = await _repo.sendMessage(
+      final result = await _repo.sendMessage(
         message: q,
         pageContext: widget.contextBuilder?.call(),
+        conversationId: _conversationId,
+        source: 'app',
       );
+      _conversationId = result.conversationId ?? _conversationId;
       setState(() {
-        _messages.add(_ChatMsg(text: response, isUser: false));
+        _messages.add(_ChatMsg(text: result.reply, isUser: false));
         _isLoading = false;
       });
     } catch (_) {

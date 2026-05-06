@@ -13,23 +13,32 @@ class AiChatRepository {
   /// [pageContext] describes the current page/calculator for better AI context.
   /// [conversationHistory] is a list of previous messages.
   /// Returns the AI response text on success, or throws on error.
-  Future<String> sendMessage({
+  /// Returns a record of (reply, conversationId).
+  Future<({String reply, String? conversationId})> sendMessage({
     required String message,
     String? pageContext,
     List<Map<String, String>>? conversationHistory,
+    String? conversationId,
+    String source = 'app',
   }) async {
     try {
       final callable = _functions.httpsCallable('aiChatProxy');
-      final payload = <String, dynamic>{'message': message};
+      final payload = <String, dynamic>{'message': message, 'source': source};
       if (pageContext != null && pageContext.isNotEmpty) {
         payload['pageContext'] = pageContext;
       }
       if (conversationHistory != null && conversationHistory.isNotEmpty) {
         payload['conversationHistory'] = conversationHistory;
       }
+      if (conversationId != null && conversationId.isNotEmpty) {
+        payload['conversationId'] = conversationId;
+      }
       final result = await callable.call<Map<String, dynamic>>(payload);
       final data = result.data as Map<String, dynamic>?;
-      return data?['reply'] as String? ?? '';
+      return (
+        reply: data?['reply'] as String? ?? '',
+        conversationId: data?['conversationId'] as String?,
+      );
     } on FirebaseFunctionsException {
       rethrow;
     } catch (e) {

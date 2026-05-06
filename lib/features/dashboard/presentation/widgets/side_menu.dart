@@ -100,6 +100,13 @@ class SideMenu extends StatelessWidget {
                   expanded: expanded,
                   selectedSection: selectedSection,
                 ),
+                NavItem(
+                  icon: FontAwesomeIcons.commentsDollar,
+                  label: 'محادثات الـ AI',
+                  section: DashboardSection.aiConversations,
+                  expanded: expanded,
+                  selectedSection: selectedSection,
+                ),
                 Divider(height: 1, color: borderColor),
               ],
             ),

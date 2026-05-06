@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:nesab_dashboard/core/extensions/context_extensions.dart';
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
+import 'package:nesab_dashboard/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/dashboard_section.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/side_menu.dart';
 
@@ -41,86 +43,101 @@ class MobileLayout extends StatelessWidget {
         ),
       ),
       drawer: Drawer(
+        width: 280,
         backgroundColor: bgColor,
         child: SafeArea(
           child: ValueListenableBuilder<DashboardSection>(
             valueListenable: selectedSection,
             builder: (context, current, _) {
-              final items = <Widget>[
-                const Logo(expanded: true),
-                Divider(height: 1, color: dividerColor),
-                MobileNavItem(
-                  icon: FontAwesomeIcons.users,
-                  label: context.l10n.usersTitle,
-                  currentSection: current,
-                  section: DashboardSection.users,
-                  selectedSection: selectedSection,
-                  textColor: textColor,
-                ),
-                MobileNavItem(
-                  icon: FontAwesomeIcons.userPlus,
-                  label: context.l10n.managersTitle,
-                  currentSection: current,
-                  section: DashboardSection.createAdmins,
-                  selectedSection: selectedSection,
-                  textColor: textColor,
-                ),
-                MobileNavItem(
-                  icon: FontAwesomeIcons.folderTree,
-                  label: context.l10n.categoriesTitle,
-                  currentSection: current,
-                  section: DashboardSection.categories,
-                  selectedSection: selectedSection,
-                  textColor: textColor,
-                ),
-                MobileNavItem(
-                  icon: FontAwesomeIcons.wrench,
-                  label: context.l10n.toolsTitle,
-                  currentSection: current,
-                  section: DashboardSection.tools,
-                  selectedSection: selectedSection,
-                  textColor: textColor,
-                ),
-                MobileNavItem(
-                  icon: FontAwesomeIcons.mobileScreen,
-                  label: 'صفحات التطبيق',
-                  currentSection: current,
-                  section: DashboardSection.appPages,
-                  selectedSection: selectedSection,
-                  textColor: textColor,
-                ),
-                MobileNavItem(
-                  icon: FontAwesomeIcons.robot,
-                  label: 'إعدادات الذكاء الاصطناعي',
-                  currentSection: current,
-                  section: DashboardSection.aiSettings,
-                  selectedSection: selectedSection,
-                  textColor: textColor,
-                ),
-                MobileNavItem(
-                  icon: FontAwesomeIcons.chartLine,
-                  label: 'هوامش الربح',
-                  currentSection: current,
-                  section: DashboardSection.profitMargins,
-                  selectedSection: selectedSection,
-                  textColor: textColor,
-                ),
-                MobileNavItem(
-                  icon: FontAwesomeIcons.bell,
-                  label: 'رسائل الإشعار',
-                  currentSection: current,
-                  section: DashboardSection.notifications,
-                  selectedSection: selectedSection,
-                  textColor: textColor,
-                ),
-                Divider(height: 1, color: dividerColor),
-              ];
-
-              return ListView(
-                padding: const EdgeInsets.symmetric(
-                  vertical: AppDimensions.spacingMd,
-                ),
-                children: items,
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppDimensions.spacingMd,
+                      ),
+                      children: [
+                        const Logo(expanded: true),
+                        Divider(height: 1, color: dividerColor),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.users,
+                          label: context.l10n.usersTitle,
+                          currentSection: current,
+                          section: DashboardSection.users,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.userPlus,
+                          label: context.l10n.managersTitle,
+                          currentSection: current,
+                          section: DashboardSection.createAdmins,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.folderTree,
+                          label: context.l10n.categoriesTitle,
+                          currentSection: current,
+                          section: DashboardSection.categories,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.wrench,
+                          label: context.l10n.toolsTitle,
+                          currentSection: current,
+                          section: DashboardSection.tools,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.mobileScreen,
+                          label: 'صفحات التطبيق',
+                          currentSection: current,
+                          section: DashboardSection.appPages,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.robot,
+                          label: 'إعدادات الذكاء الاصطناعي',
+                          currentSection: current,
+                          section: DashboardSection.aiSettings,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.chartLine,
+                          label: 'هوامش الربح',
+                          currentSection: current,
+                          section: DashboardSection.profitMargins,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.bell,
+                          label: 'رسائل الإشعار',
+                          currentSection: current,
+                          section: DashboardSection.notifications,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.commentsDollar,
+                          label: 'محادثات الـ AI',
+                          currentSection: current,
+                          section: DashboardSection.aiConversations,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(height: 1, color: dividerColor),
+                  MobileLogoutButton(textColor: textColor),
+                  const SizedBox(height: AppDimensions.spacingSm),
+                ],
               );
             },
           ),
@@ -162,15 +179,65 @@ class MobileNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tile = ListTile(
-      leading: Icon(icon, color: textColor),
-      title: Text(label, style: TextStyle(color: textColor)),
+    return ListTile(
+      leading: FaIcon(icon, size: 18, color: textColor),
+      title: Text(
+        label,
+        style: TextStyle(color: textColor),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
       selected: currentSection == section,
       onTap: () {
         selectedSection.value = section;
         Navigator.of(context).pop();
       },
     );
-    return tile;
+  }
+}
+
+class MobileLogoutButton extends StatelessWidget {
+  const MobileLogoutButton({super.key, required this.textColor});
+
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: FaIcon(
+        FontAwesomeIcons.arrowRightFromBracket,
+        size: 18,
+        color: textColor,
+      ),
+      title: Text(
+        context.l10n.logout,
+        style: TextStyle(color: textColor),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+      onTap: () async {
+        Navigator.of(context).pop();
+        final confirm = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(context.l10n.logoutConfirmTitle),
+            content: Text(context.l10n.logoutConfirmMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(context.l10n.cancel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(context.l10n.logout),
+              ),
+            ],
+          ),
+        );
+        if (confirm == true && context.mounted) {
+          await context.read<AuthCubit>().logout();
+        }
+      },
+    );
   }
 }

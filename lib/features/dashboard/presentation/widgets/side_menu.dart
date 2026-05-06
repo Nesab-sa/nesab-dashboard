@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:nesab_dashboard/core/extensions/context_extensions.dart';
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
+import 'package:nesab_dashboard/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/dashboard_section.dart';
 
 class SideMenu extends StatelessWidget {
@@ -107,10 +109,12 @@ class SideMenu extends StatelessWidget {
                   expanded: expanded,
                   selectedSection: selectedSection,
                 ),
-                Divider(height: 1, color: borderColor),
               ],
             ),
           ),
+          Divider(height: 1, color: borderColor),
+          SidebarLogoutButton(expanded: expanded),
+          const SizedBox(height: AppDimensions.spacingSm),
         ],
       ),
     );
@@ -374,6 +378,74 @@ class NavItemIcon extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class SidebarLogoutButton extends StatelessWidget {
+  const SidebarLogoutButton({super.key, required this.expanded});
+
+  final bool expanded;
+
+  static Future<void> _showLogoutDialog(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(context.l10n.logoutConfirmTitle),
+        content: Text(context.l10n.logoutConfirmMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(context.l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(context.l10n.logout),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true && context.mounted) {
+      await context.read<AuthCubit>().logout();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final secondaryColor = isDark
+        ? AppColors.dashboardTextSecondary
+        : AppColors.lightModeTextSecondary;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacingSm),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: expanded ? 16 : 8,
+          vertical: 4,
+        ),
+        leading: SizedBox(
+          width: 28,
+          height: 28,
+          child: Center(
+            child: FaIcon(
+              FontAwesomeIcons.arrowRightFromBracket,
+              size: AppDimensions.iconLg,
+              color: secondaryColor,
+            ),
+          ),
+        ),
+        title: expanded
+            ? Text(
+                context.l10n.logout,
+                style: TextStyle(color: secondaryColor),
+                overflow: TextOverflow.ellipsis,
+              )
+            : null,
+        onTap: () => _showLogoutDialog(context),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+        ),
       ),
     );
   }

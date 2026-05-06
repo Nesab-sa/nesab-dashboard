@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:nesab_dashboard/core/extensions/context_extensions.dart';
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
-import 'package:nesab_dashboard/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:nesab_dashboard/core/localization/cubit/locale_cubit.dart';
 import 'package:nesab_dashboard/core/localization/cubit/locale_state.dart';
 import 'package:nesab_dashboard/core/theme/cubit/theme_cubit.dart';
@@ -62,8 +60,6 @@ class TopHeader extends StatelessWidget {
           const LanguageToggleButton(),
           const SizedBox(width: AppDimensions.spacingSm),
           ThemeToggleButton(textColor: textColor),
-          const SizedBox(width: AppDimensions.spacingSm),
-          LogoutButton(textColor: textColor),
         ],
       ),
     );
@@ -147,40 +143,3 @@ class ThemeToggleButton extends StatelessWidget {
   }
 }
 
-class LogoutButton extends StatelessWidget {
-  const LogoutButton({super.key, required this.textColor});
-
-  final Color textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(FontAwesomeIcons.arrowRightFromBracket, color: textColor),
-      onPressed: () => _showLogoutDialog(context),
-      tooltip: context.l10n.logout,
-    );
-  }
-
-  static Future<void> _showLogoutDialog(BuildContext context) async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(context.l10n.logoutConfirmTitle),
-        content: Text(context.l10n.logoutConfirmMessage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(context.l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(context.l10n.logout),
-          ),
-        ],
-      ),
-    );
-    if (confirm == true && context.mounted) {
-      await context.read<AuthCubit>().logout();
-    }
-  }
-}

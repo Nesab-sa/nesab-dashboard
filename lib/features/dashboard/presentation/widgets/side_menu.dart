@@ -109,6 +109,7 @@ class SideMenu extends StatelessWidget {
                   expanded: expanded,
                   selectedSection: selectedSection,
                 ),
+Divider(height: 1, color: borderColor),
               ],
             ),
           ),

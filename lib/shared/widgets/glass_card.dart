@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:nesab/core/theme/app_dimensions.dart';
 
+import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
+
+/// A glassmorphism card with blur and gradient border.
+/// Use for category/service cards. Optional [onTap].
 class GlassCard extends StatelessWidget {
   const GlassCard({
     super.key,
@@ -45,18 +48,8 @@ class GlassCard extends StatelessWidget {
                   end: const Alignment(1, 1),
                   colors: isDark
                       ? [
-                          const Color.fromARGB(
-                            255,
-                            0,
-                            0,
-                            0,
-                          ).withValues(alpha: 0.55),
-                          const Color.fromARGB(
-                            255,
-                            0,
-                            0,
-                            0,
-                          ).withValues(alpha: 0.40),
+                          const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 0.55),
+                          const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 0.40),
                         ]
                       : [
                           Colors.white.withValues(alpha: 0.55),

@@ -33,10 +33,7 @@ enum AuthFailureCode {
 }
 
 final class AuthFailure extends Failure {
-  const AuthFailure({
-    required super.message,
-    required this.code,
-  });
+  const AuthFailure({required super.message, required this.code});
 
   final AuthFailureCode code;
 }

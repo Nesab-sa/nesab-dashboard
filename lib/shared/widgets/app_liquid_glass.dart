@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 
-import 'package:nesab/core/theme/app_dimensions.dart';
+import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
 
 /// A reusable liquid glass lens widget wrapping [LiquidGlassView].
 ///
@@ -50,9 +50,7 @@ class AppLiquidGlass extends StatelessWidget {
       pixelRatio: pixelRatio,
       realTimeCapture: realTimeCapture,
       backgroundWidget: backgroundWidget,
-      children: [
-        for (final lens in lenses) lens._build(),
-      ],
+      children: [for (final lens in lenses) lens._build()],
     );
   }
 }

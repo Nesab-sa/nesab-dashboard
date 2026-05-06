@@ -200,7 +200,7 @@ return $default(_that.themeMode);case _:
 
 
 class _ThemeState implements ThemeState {
-  const _ThemeState({this.themeMode = ThemeMode.dark});
+  const _ThemeState({this.themeMode = ThemeMode.light});
   
 
 @override@JsonKey() final  ThemeMode themeMode;

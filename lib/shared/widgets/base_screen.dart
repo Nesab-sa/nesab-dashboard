@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:nesab/shared/widgets/gradiant_widget.dart';
+import 'package:nesab_dashboard/core/theme/app_colors.dart';
 
 class BaseScreen extends StatelessWidget {
-  const BaseScreen({
-    required this.child,
-    this.bottomNavigationBar,
-    super.key,
-  });
-
+  const BaseScreen({super.key, required this.child});
   final Widget child;
-  final Widget? bottomNavigationBar;
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(color: Theme.of(context).scaffoldBackgroundColor),
-        const Positioned(child: GradiantWidget(width: double.infinity)),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SafeArea(child: child),
-          bottomNavigationBar: bottomNavigationBar,
+    return Container(
+      color: AppColors.backgroundDark,
+      child: SafeArea(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Background gradient
+            //   const Positioned(child: GradiantWidget()),
+            // Main content
+            SizedBox.expand(
+              child: Scaffold(backgroundColor: Colors.transparent, body: child),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nesab/core/extensions/context_extensions.dart';
-import 'package:nesab/core/theme/app_dimensions.dart';
+import 'package:nesab_dashboard/core/extensions/context_extensions.dart';
+import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
 
 /// Displays an error icon, a [message], and an optional retry button.
 class AppErrorWidget extends StatelessWidget {

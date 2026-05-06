@@ -15,17 +15,6 @@ abstract class AppDimensions {
   static const double spacingXxl = 24;
   static const double spacingXxxl = 32;
 
-  // ── Base Font Sizes ────────────────────────────────────────────────────
-
-  static const double fontSizeXs = 10;
-  static const double fontSizeSm = 12;
-  static const double fontSizeBody = 14;
-  static const double fontSizeMd = 16;
-  static const double fontSizeLg = 18;
-  static const double fontSizeXl = 20;
-  static const double fontSizeXxl = 24;
-  static const double fontSizeHeading = 28;
-
   // ── Border Radius ────────────────────────────────────────────────────────
 
   static const double radiusSm = 8;
@@ -49,7 +38,7 @@ abstract class AppDimensions {
 
   static const double buttonHeightSm = 36;
   static const double buttonHeightMd = 44;
-  static const double buttonHeightLg = 46;
+  static const double buttonHeightLg = 52;
 
   // ── Screen Padding ───────────────────────────────────────────────────────
 

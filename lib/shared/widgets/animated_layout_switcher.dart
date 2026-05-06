@@ -50,7 +50,7 @@ class AnimatedLayoutSwitcher extends StatefulWidget {
   /// Builder that receives the index and [LayoutMetrics] with animation
   /// progress `t` (0 = grid, 1 = list).
   final Widget Function(BuildContext context, int index, LayoutMetrics metrics)
-  itemBuilder;
+      itemBuilder;
 
   final int gridCrossAxisCount;
   final double gridSpacing;
@@ -77,7 +77,10 @@ class _AnimatedLayoutSwitcherState extends State<AnimatedLayoutSwitcher>
       duration: widget.duration,
       value: widget.isGrid ? 0.0 : 1.0,
     );
-    _animation = CurvedAnimation(parent: _controller, curve: widget.curve);
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: widget.curve,
+    );
   }
 
   @override

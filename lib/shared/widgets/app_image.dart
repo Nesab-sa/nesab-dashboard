@@ -14,7 +14,6 @@ class AppImage extends StatelessWidget {
     this.width,
     this.height,
     this.color,
-    this.colorBlendMode,
     this.fit = BoxFit.contain,
     this.alignment = Alignment.center,
     this.placeholder,
@@ -25,7 +24,6 @@ class AppImage extends StatelessWidget {
   final double? width;
   final double? height;
   final Color? color;
-  final BlendMode? colorBlendMode;
   final BoxFit fit;
   final AlignmentGeometry alignment;
   final Widget? placeholder;
@@ -42,6 +40,7 @@ class AppImage extends StatelessWidget {
               width: width,
               height: height,
               fit: fit,
+              alignment: alignment,
               colorFilter: color != null
                   ? ColorFilter.mode(color!, BlendMode.srcIn)
                   : null,
@@ -51,6 +50,7 @@ class AppImage extends StatelessWidget {
               width: width,
               height: height,
               fit: fit,
+              alignment: alignment,
               colorFilter: color != null
                   ? ColorFilter.mode(color!, BlendMode.srcIn)
                   : null,
@@ -58,7 +58,6 @@ class AppImage extends StatelessWidget {
     }
 
     if (_isNetwork) {
-      const cacheSize = 256;
       return CachedNetworkImage(
         imageUrl: path,
         width: width,
@@ -66,35 +65,24 @@ class AppImage extends StatelessWidget {
         fit: fit,
         alignment: alignment as Alignment,
         color: color,
-        colorBlendMode: colorBlendMode,
-        fadeInDuration: Duration.zero,
-        fadeOutDuration: Duration.zero,
-        memCacheWidth: cacheSize,
-        memCacheHeight: cacheSize,
         placeholder: placeholder != null ? (_, _) => placeholder! : null,
         errorWidget: (_, _, _) =>
             placeholder ?? const Icon(Icons.broken_image_outlined),
       );
     }
 
-    final image = Image.asset(
+    return Image.asset(
       path,
       width: width,
       height: height,
       fit: fit,
-      alignment: alignment as Alignment,
+      alignment: alignment,
+      color: color,
+      cacheWidth: width != null ? (width! * 2).toInt() : null,
+      cacheHeight: height != null ? (height! * 2).toInt() : null,
+      errorBuilder: placeholder != null
+          ? (_, _, _) => placeholder!
+          : (_, _, _) => const Icon(Icons.broken_image_outlined),
     );
-
-    if (color != null) {
-      return ColorFiltered(
-        colorFilter: ColorFilter.mode(
-          color!,
-          colorBlendMode ?? BlendMode.srcIn,
-        ),
-        child: image,
-      );
-    }
-
-    return image;
   }
 }

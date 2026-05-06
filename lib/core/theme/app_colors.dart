@@ -77,6 +77,14 @@ abstract class AppColors {
   static const Color purple100 = Color(0xFFEDE9FE);
   static const Color blue600 = Color(0xFF2563EB);
   static const Color purple600 = Color(0xFF7C3AED);
+
+  /// Contrast color for content on dark backgrounds (e.g. buttons, cards).
+  static const Color onPrimaryContrast = Color(0xFFFFFFFF);
+
+  /// Card gradient (overview personal card).
+  static const Color cardGradientPurple = Color(0xFF7C3AED);
+  static const Color cardGradientPink = Color(0xFFEC4899);
+  static const Color cardGradientAmber = Color(0xFFF59E0B);
   static const Color gray50 = Color(0xFFF9FAFB);
   static const Color gray200 = Color(0xFFE5E7EB);
   static const Color gray800 = Color(0xFF1F2937);
@@ -87,6 +95,32 @@ abstract class AppColors {
   static const Color amber600 = Color(0xFFD97706);
   static const Color amber100 = Color(0xFFFEF3C7);
   static const Color amber800 = Color(0xFF92400E);
+
+  // ── Light Mode (Onpay-style) ────────────────────────────────────────
+
+  /// Sidebar, header, and body background.
+  static const Color lightModeBg = Color(0xFFEFEDEC);
+  static const Color lightModeCard = Color(0xFFFFFFFF);
+
+  /// Primary text and icons in light mode.
+  static const Color lightModeTextPrimary = Color(0xFF30335D);
+
+  /// Secondary text (hints) in light mode.
+  static const Color lightModeTextSecondary = Color(0xFF30335D);
+  static const Color lightModeSideMenu = Color(0xFFFFFFFF);
+  static const Color lightModeNavActive = Color(0xFFE8F4FD);
+  static const Color lightModeBorder = Color(0xFFE5E7EB);
+
+  // ── Dashboard Theme (Dark – Unified Reporting Style) ─────────────────
+
+  static const Color dashboardBg = Color(0xFF1A1A1A);
+  static const Color dashboardCard = Color(0xFF2C2F48);
+  static const Color dashboardCardHeader = Color(0xFF23263E);
+  static const Color dashboardTextPrimary = Color(0xFFFFFFFF);
+  static const Color dashboardTextSecondary = Color(0xFFB0B0B0);
+  static const Color dashboardSideMenu = Color(0xFF23263E);
+  static const Color dashboardSideMenuHover = Color(0xFF2C2F48);
+  static const Color dashboardBorder = Color(0xFF3A3E5C);
 
   // ── Service Category Colors ──────────────────────────────────────────
 
@@ -102,7 +136,10 @@ abstract class AppColors {
   static const Color categoryCharityLight = Color(0xFFE8D5A8);
   static const Color categoryTools = Color(0xFF374151);
   static const Color categoryToolsLight = Color(0xFF4B5563);
-    static const Color calcBg = Color(0xFF040D1E);
+
+  // ── Calculator Dark Theme (Neon / Cyber) ──────────────────────────────
+
+  static const Color calcBg = Color(0xFF040D1E);
   static const Color calcCard = Color(0xFF0A1A35);
   static const Color calcCard2 = Color(0xFF0D2040);
   static const Color calcBorder = Color(0xFF122850);
@@ -117,16 +154,4 @@ abstract class AppColors {
   static const Color calcMuted = Color(0xFF4A6A9A);
   static const Color calcInput = Color(0xFF030B1A);
   static const Color calcHeaderTop = Color(0xFF040F28);
-
-  // ── Dashboard / Light-mode aliases (used by calculator widgets) ────────
-
-  static const Color dashboardBg = backgroundDark;
-  static const Color dashboardTextPrimary = textPrimaryDark;
-  static const Color lightModeTextPrimary = textPrimaryLight;
-  static const Color dashboardTextSecondary = textSecondaryDark;
-  static const Color lightModeTextSecondary = textSecondaryLight;
-  static const Color dashboardCard = surfaceDark;
-  static const Color lightModeCard = surfaceLight;
-  static const Color dashboardBorder = borderDark;
-  static const Color lightModeBorder = border;
 }

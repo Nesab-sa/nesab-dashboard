@@ -279,19 +279,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutConfirmMessage => 'Are you sure you want to logout?';
 
   @override
-  String get deleteAccount => 'Delete account';
-
-  @override
-  String get deleteAccountTitle => 'Delete account';
-
-  @override
-  String get deleteAccountMessage =>
-      'Your account and all data will be permanently deleted. This action cannot be undone. Are you sure you want to continue?';
-
-  @override
-  String get deleteAccountConfirm => 'Delete permanently';
-
-  @override
   String get cancel => 'Cancel';
 
   @override
@@ -489,6 +476,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get displayNameHint => 'Enter your name';
+
+  @override
+  String get authProviderLabel => 'Auth Provider';
+
+  @override
+  String get roleLabel => 'Role';
+
+  @override
+  String get createdAtLabel => 'Created';
+
+  @override
+  String get lastLoginLabel => 'Last Login';
 
   @override
   String get orLoginWith => 'or sign in with';
@@ -771,25 +770,161 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subToolsDeductionsDesc => 'Calculate net salary after deductions';
 
   @override
-  String get profileUpdated => 'Profile updated successfully';
+  String get adminLoginTitle => 'Admin Dashboard';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get adminLoginSubtitle => 'Sign in to manage the dashboard';
 
   @override
-  String get profileWebsite => 'Website';
+  String get usersTitle => 'Users';
 
   @override
-  String get profileUploadSignature => 'Upload your signature';
+  String get toolsTitle => 'Tools';
 
   @override
-  String get authProviderGoogle => 'Google account';
+  String get dashboardTitle => 'Dashboard';
 
   @override
-  String get authProviderApple => 'Apple account';
+  String pageOf(int current, int total) {
+    return 'Page $current of $total';
+  }
 
   @override
-  String get authProviderEmail => 'Email account';
+  String get rowsPerPage => 'Rows per page';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get managersTitle => 'Managers';
+
+  @override
+  String get managersSubtitle => 'View and manage dashboard managers.';
+
+  @override
+  String get managersEmpty =>
+      'No managers yet. Click \"Add manager\" to create one.';
+
+  @override
+  String get addManagerButton => 'Add manager';
+
+  @override
+  String get createAdminsTitle => 'Create manager';
+
+  @override
+  String get createAdminsSubtitle =>
+      'Add new manager with email, password, and role.';
+
+  @override
+  String get createAdminButton => 'Create manager';
+
+  @override
+  String get createAdminSuccess => 'Manager created successfully.';
+
+  @override
+  String get deleteManagerButton => 'Delete';
+
+  @override
+  String get deleteManagerConfirmTitle => 'Delete manager';
+
+  @override
+  String deleteManagerConfirmMessage(String name) {
+    return 'Are you sure you want to delete $name? This will remove their access.';
+  }
+
+  @override
+  String get deleteManagerSuccess => 'Manager deleted successfully.';
+
+  @override
+  String get deleteManagerError => 'Failed to delete manager.';
+
+  @override
+  String get roleAdmin => 'Admin';
+
+  @override
+  String get roleUser => 'User';
+
+  @override
+  String get categoriesTitle => 'Categories';
+
+  @override
+  String get categoriesSubtitle => 'Manage categories and subcategories.';
+
+  @override
+  String get addCategory => 'Add category';
+
+  @override
+  String get addSubCategory => 'Add sub category';
+
+  @override
+  String get categoryArabicName => 'Arabic name';
+
+  @override
+  String get categoryEnglishName => 'English name';
+
+  @override
+  String get categoryImage => 'Image';
+
+  @override
+  String get pickImage => 'Pick from device';
+
+  @override
+  String get categoryImageRequired => 'Image is required';
+
+  @override
+  String get categorySaved => 'Category saved';
+
+  @override
+  String get categoryTitleSize => 'Title size';
+
+  @override
+  String get categoryImageWidth => 'Image width (0–1)';
+
+  @override
+  String get categoryImageHeight => 'Image height (0–1)';
+
+  @override
+  String get categoryOpacity => 'Opacity (0–1)';
+
+  @override
+  String get categoryCalculatorType => 'Calculator / Tool';
+
+  @override
+  String get categoryCalculatorTypeHint => 'Select calculator or tool';
+
+  @override
+  String get extractionFailureLogsTitle => 'Extraction Failure Logs';
+
+  @override
+  String get extractionFailureLogsSubtitle =>
+      'Product pages where add-to-cart could not be shown.';
+
+  @override
+  String get extractionFailureLogsUrl => 'URL';
+
+  @override
+  String get extractionFailureLogsMarketplace => 'Marketplace';
+
+  @override
+  String get extractionFailureLogsTitleFound => 'Title';
+
+  @override
+  String get extractionFailureLogsPriceFound => 'Price';
+
+  @override
+  String get extractionFailureLogsColorFound => 'Color';
+
+  @override
+  String get extractionFailureLogsSizeFound => 'Size';
+
+  @override
+  String get extractionFailureLogsCreatedAt => 'Date';
+
+  @override
+  String get extractionFailureLogsYes => 'Yes';
+
+  @override
+  String get extractionFailureLogsNo => 'No';
 
   @override
   String get calculatorsTitle => 'Finance Calculators';
@@ -1325,1090 +1460,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calcConvertToGregorian => 'Convert to Gregorian';
 
   @override
-  String get aiChatGreeting => 'Ask me about the result';
+  String get aiSettings => 'AI Settings';
 
   @override
-  String get calcAgeSubtitle => 'Gregorian & Hijri Age Calculator';
+  String get aiSettingsSubtitle =>
+      'Manage the Claude AI API key for the chat assistant.';
 
   @override
-  String get calcAgeInputBirthDate => 'Date of Birth (Gregorian)';
+  String get aiApiKeyLabel => 'Claude API Key';
 
   @override
-  String get calcAgeInputTodayDate => 'Today\'s Date';
+  String get aiApiKeyHint => 'Enter your Claude API key (sk-ant-...)';
 
   @override
-  String get calcAgeCalculateButton => 'Calculate Age';
+  String get aiApiKeyNotConfigured => 'No API key configured yet.';
 
   @override
-  String get calcAgeResultTitle => 'Result';
+  String get aiApiKeySaved => 'API key saved successfully.';
 
   @override
-  String calcAgeResultYearsMonthsDays(int years, int months, int days) {
-    return '$years years, $months months, $days days';
-  }
+  String get aiApiKeyDeleted => 'API key deleted successfully.';
 
   @override
-  String calcAgeResultTotalMonths(int count) {
-    return '$count months';
-  }
+  String get aiApiKeyDeleteConfirmTitle => 'Delete API Key';
 
   @override
-  String calcAgeResultTotalDays(int count) {
-    return '$count days';
-  }
+  String get aiApiKeyDeleteConfirmMessage =>
+      'Are you sure you want to delete the API key? The AI chat feature will stop working.';
 
   @override
-  String calcAgeResultHijriApprox(int years) {
-    return '~$years Hijri years';
-  }
+  String get aiApiKeyInvalid => 'API key must start with sk-ant-';
 
   @override
-  String get calcAgeResultHijriLabel => 'Hijri Age (approximate)';
+  String get aiApiKeyRequired => 'API key is required';
 
   @override
-  String get calcAgeResultAgeInMonths => 'Age in Months';
+  String get save => 'Save';
 
   @override
-  String get calcAgeResultAgeInDays => 'Age in Days';
+  String get update => 'Update';
 
   @override
-  String get calcAgeResultAgeInYears => 'Age in Years';
-
-  @override
-  String get calcBackToInput => 'Back to Input';
-
-  @override
-  String get calcEnterSalary => 'Enter salary';
-
-  @override
-  String get calcCalculateNow => 'Calculate Now';
-
-  @override
-  String get calcCalculateFirst => 'Calculate First';
-
-  @override
-  String get calcScheduleTitle => 'Installment Schedule';
-
-  @override
-  String get calcScheduleDesc => 'View full monthly details';
-
-  @override
-  String get calcScheduleShow => 'Show';
-
-  @override
-  String get calcScheduleMonth => 'Month';
-
-  @override
-  String get calcSchedulePayment => 'Payment';
-
-  @override
-  String get calcScheduleTotalPaid => 'Total Paid';
-
-  @override
-  String get calcClientData => 'Client Data';
-
-  @override
-  String get calcEmploymentStatus => 'Employment Status';
-
-  @override
-  String get calcEmployed => 'Employed';
-
-  @override
-  String get calcRetired => 'Retired';
-
-  @override
-  String get calcMortgage => 'Mortgage';
-
-  @override
-  String get calcMortgageNone => 'None';
-
-  @override
-  String get calcMortgageHas => 'Yes, has one';
-
-  @override
-  String get calcBirthYear => 'Birth Year';
-
-  @override
-  String get calcBirthMonth => 'Birth Month';
-
-  @override
-  String get calcRetirementAge => 'Retirement Age (years)';
-
-  @override
-  String get calcAgeInMonths => 'Age in Months';
-
-  @override
-  String get calcAvailablePeriod => 'Available Period';
-
-  @override
-  String get calcTimeEligibility => 'Time Eligibility';
-
-  @override
-  String get calcEligible => 'Eligible for Financing';
-
-  @override
-  String get calcNotEligible => 'Not Eligible (less than 60 months)';
-
-  @override
-  String get calcSalaryLabel => 'Client Salary (SAR)';
-
-  @override
-  String get calcProfitRateLabel => 'Profit Rate (%)';
-
-  @override
-  String get calcDurationLabel => 'Financing Duration (months)';
-
-  @override
-  String get calcAhliCardsLabel => 'Total Ahli Card Limits';
-
-  @override
-  String get calcOtherCardsLabel => 'Total Other Banks Card Limits';
-
-  @override
-  String get calcMonthlyInstallment => 'Monthly Installment';
-
-  @override
-  String get calcDeductionRatio => 'Deduction Ratio';
-
-  @override
-  String get calcTotalFinancing => 'Total Financing';
-
-  @override
-  String get calcApprovalAmount => 'Approval Amount';
-
-  @override
-  String get calcBankProfit => 'Bank Profit';
-
-  @override
-  String get calcAdminFeesLabel => 'Admin Fees (0.5% | max 2,500)';
-
-  @override
-  String get calcVatLabel => 'VAT (15%)';
-
-  @override
-  String get calcTotalFeesLabel => 'Total Fees';
-
-  @override
-  String get calcNetFinancing => 'Net Financing Amount';
-
-  @override
-  String get calcApprovedSuccess => 'Approved — Calculated successfully';
-
-  @override
-  String get calcRejectedTime =>
-      'Not Eligible — Remaining period less than 60 months';
-
-  @override
-  String get calcReviewData => 'Review Data';
-
-  @override
-  String get calcNotCalculatedYet => 'Not calculated yet';
-
-  @override
-  String get calcEnterDataAndCalculate => 'Enter data and press \"Calculate\"';
-
-  @override
-  String get calcPersonalFinanceSubtitle => 'Personal Finance Plus Calculator';
-
-  @override
-  String get calcPersonalQuickSubtitle => 'Quick Personal Finance Calculator';
-
-  @override
-  String get calcMilitaryType => 'Military Type';
-
-  @override
-  String get calcMilitaryRank => 'Military Rank';
-
-  @override
-  String get calcMilTypePilot => 'Pilot';
-
-  @override
-  String get calcMilTypeNonPilot => 'Non-Pilot';
-
-  @override
-  String get calcMilTypeEnlisted => 'Enlisted';
-
-  @override
-  String get calcFinancingData => 'Financing Data';
-
-  @override
-  String get calcDeductionSection => 'Deduction Ratio';
-
-  @override
-  String get calcAmountsSection => 'Financing Amounts';
-
-  @override
-  String get calcFeesSection => 'Fees & Tax';
-
-  @override
-  String get calcNetSection => 'Net';
-
-  @override
-  String get calcAppliedDeduction => 'Applied Deduction Ratio';
-
-  @override
-  String calcTotalFinancingMultiplied(int months) {
-    return 'Total Financing ($months x Installment)';
-  }
-
-  @override
-  String get calcNetAfterFees => 'Net Financing (after all fees)';
-
-  @override
-  String get calcEligibleFinancially =>
-      'Approved — Eligible by time and finances';
-
-  @override
-  String get calcDebtPurchaseSubtitle => 'Debt Purchase Financing Calculator';
-
-  @override
-  String get calcDebtAmount => 'Debt Amount at Other Bank (SAR)';
-
-  @override
-  String get calcDebtSection => 'Debt at Other Bank';
-
-  @override
-  String get calcDebtAtOtherBank => 'Debt at Other Bank';
-
-  @override
-  String get calcNetAfterDebt => 'Net Amount After Deducting Debt';
-
-  @override
-  String get calcDebtExceedsNet => 'Debt exceeds net financing';
-
-  @override
-  String get calcRealEstateSubtitle =>
-      'Real Estate Financing Calculator (2-in-1)';
-
-  @override
-  String get calcRealEstatePlusSubtitle =>
-      'Real Estate Plus Financing Calculator (2-in-1)';
-
-  @override
-  String get calcFinancialInfo => 'Financial Information';
-
-  @override
-  String get calcMortgageYears => 'Mortgage Duration (years)';
-
-  @override
-  String get calcPersonalInstallment => 'Personal Loan Installment (SAR)';
-
-  @override
-  String get calcRemainingMonths =>
-      'Remaining Personal Loan Installments (months)';
-
-  @override
-  String get calcAdditionalOptions => 'Additional Options';
-
-  @override
-  String get calcHousingSupport => 'Housing Support';
-
-  @override
-  String get calcEtizaz => 'Etizaz (Ministry of Defense)';
-
-  @override
-  String get calcFixedLoan =>
-      'Fixed Real Estate Amount (leave 0 for auto-calculation)';
-
-  @override
-  String get calcTwoInOneProgram => '2-in-1 Program';
-
-  @override
-  String get calcLoanAmount2in1 => 'Real Estate Loan Amount (2-in-1)';
-
-  @override
-  String get calcInstallmentDuring => 'Installment During Personal Loan Period';
-
-  @override
-  String get calcInstallmentAfter => 'Installment After Personal Loan Ends';
-
-  @override
-  String get calcTotalWithSupport => 'Total with Support & Etizaz';
-
-  @override
-  String get calcAdminAndAppraisal => 'Admin & Appraisal Fees';
-
-  @override
-  String get calcFixedLoanAmount => 'Fixed Loan Amount';
-
-  @override
-  String get calcTotalProfits => 'Total Profits';
-
-  @override
-  String get calcGrandTotal => 'Grand Total';
-
-  @override
-  String get calcCalculatedSuccessfully => 'Calculated successfully';
-
-  @override
-  String get calcWorkplace => 'Workplace';
-
-  @override
-  String get calcRankLabel => 'Rank';
-
-  @override
-  String get calcCivilian => 'Civilian';
-
-  @override
-  String get calcMilitaryEnlisted => 'Military Enlisted';
-
-  @override
-  String get calcOfficersNonPilot => 'Officers (Non-Pilot)';
-
-  @override
-  String get calcOfficersPilot => 'Officers (Pilot)';
-
-  @override
-  String get calcPersonalInfo => 'Personal Information';
-
-  @override
-  String calcMaxYearsHint(int years) {
-    return 'Maximum duration: $years years';
-  }
-
-  @override
-  String get calcExceededRetirement => 'Exceeded Retirement Age';
-
-  @override
-  String get calcDurationData => 'Duration Data';
-
-  @override
-  String get calcAvailableForClient => 'Available Duration for Client';
-
-  @override
-  String get calcApprovedDuration => 'Approved Financing Duration';
-
-  @override
-  String get calcAllowedDeduction => 'Allowed Deduction Ratio';
-
-  @override
-  String get calcPersonalPeriod => 'Remaining Personal Financing Period';
-
-  @override
-  String get calcMonthsAfterPersonal => 'Months After Personal Loan Ends';
-
-  @override
-  String get calcSupportSection => 'Total with Support';
-
-  @override
-  String get calcEligibleWithinRetirement =>
-      'Eligible — Duration within retirement age';
-
-  @override
-  String calcAdjustmentRequired(int years) {
-    return 'Adjustment required — Available duration is $years years only';
-  }
-
-  @override
-  String get calcSchedulePhase => 'Phase';
-
-  @override
-  String get calcPhaseWithPersonal => 'With Personal Loan';
-
-  @override
-  String get calcPhaseAfterPersonal => 'After Personal Loan';
-
-  @override
-  String get calcDetailedSchedule => 'Detailed Installment Schedule';
-
-  @override
-  String get calcSchedulePhaseDesc =>
-      'Personal loan period installment + post-period installment';
-
-  @override
-  String get calcBankFeesSubtitle =>
-      'Bank Fees — Previous vs Updated Comparison';
-
-  @override
-  String get calcBankFeesNote =>
-      'Fees per SAMA financial institutions tariff guide — Prices exclude VAT (15%) unless stated otherwise';
-
-  @override
-  String get calcAdminFeesTitle => 'Financing Admin Fees';
-
-  @override
-  String get calcFinancingAdminFees => 'Financing Admin Fees';
-
-  @override
-  String get calcPreviousValue => 'Previous';
-
-  @override
-  String get calcUpdatedValue => 'Updated';
-
-  @override
-  String get calcBasicServices => 'Basic Banking Services';
-
-  @override
-  String get calcTransfers => 'Financial Transfers';
-
-  @override
-  String get calcOfficialDocs => 'Official Documents';
-
-  @override
-  String get calcServiceColumn => 'Service';
-
-  @override
-  String get calcElectronicColumn => 'Electronic';
-
-  @override
-  String get calcBranchColumn => 'Branch';
-
-  @override
-  String get calcFree => 'Free';
-
-  @override
-  String get calcMadaCard => 'Mada Card';
-
-  @override
-  String get calcBankFeesDisclaimer =>
-      'Important notices:\n• All fees above exclude 15% VAT\n• This file is for reference only — please verify on the official SAMA website (sama.gov.sa)\n• Instructions take effect within 60 days of publication';
-
-  @override
-  String get calcDateConverterSubtitle => 'Gregorian & Hijri Date Converter';
-
-  @override
-  String get calcConversionResult => 'Conversion Result';
-
-  @override
-  String get calcGregorianToHijri => 'Gregorian → Hijri';
-
-  @override
-  String get calcHijriToGregorian => 'Hijri → Gregorian';
-
-  @override
-  String get calcGregorianDate => 'Gregorian Date';
-
-  @override
-  String get calcHijriDay => 'Day';
-
-  @override
-  String get calcHijriMonth => 'Month';
-
-  @override
-  String get calcHijriYear => 'Hijri Year';
-
-  @override
-  String get calcConvertButton => 'Convert';
-
-  @override
-  String get calcKhayratSubtitle =>
-      'Khayrat Calculator — Deposits & Investment';
-
-  @override
-  String get calcInvestmentData => 'Investment Data';
-
-  @override
-  String get calcAmountAndPeriod => 'Amount & Period';
-
-  @override
-  String get calcInvestmentAmount =>
-      'Investment Amount (SAR) — Minimum 100,000';
-
-  @override
-  String get calcMinDeposit => 'Minimum 100,000 SAR';
-
-  @override
-  String get calcInvestmentPeriod => 'Investment Period';
-
-  @override
-  String get calcCalculateProfits => 'Calculate Profits';
-
-  @override
-  String get calcProfitMargin => 'Profit Margin';
-
-  @override
-  String get calcProfits => 'Profits';
-
-  @override
-  String get calcNewAmount => 'New Amount';
-
-  @override
-  String get calcAmountCompliant => 'Amount meets requirements';
-
-  @override
-  String get calcPosSubtitle => 'POS Financing Calculator';
-
-  @override
-  String get calcEntityInfo => 'Entity Information';
-
-  @override
-  String get calcEntityType => 'Entity Type';
-
-  @override
-  String get calcEntityActivity => 'Entity Activity';
-
-  @override
-  String get calcEntityAge => 'Entity Age';
-
-  @override
-  String get calcPosOperatingPeriod => 'POS Operating Period';
-
-  @override
-  String get calcAnnualSales => 'Average Annual Sales (SAR)';
-
-  @override
-  String get calcMonthlyPosSales => 'Average Monthly POS Sales (SAR)';
-
-  @override
-  String get calcPosOperationsCount => 'Monthly POS Operations Count';
-
-  @override
-  String get calcFinancingDetails => 'Financing Details';
-
-  @override
-  String get calcTermMonths => 'Financing Term (months)';
-
-  @override
-  String get calcFinancingAmount => 'Financing Amount (Average x 6)';
-
-  @override
-  String get calcProfitRate => 'Profit Rate';
-
-  @override
-  String get calcTotalProfit => 'Total Profit';
-
-  @override
-  String get calcTotal => 'Total';
-
-  @override
-  String get calcAdminFeesPos => 'Admin Fees (5% max 2,500 + 15% VAT)';
-
-  @override
-  String get calcEntityEligible => 'Approved — Entity is eligible';
-
-  @override
-  String get calcEntityRejectedAge =>
-      'Rejected — Entity or POS age is insufficient';
-
-  @override
-  String get calcEntityRejectedSales =>
-      'Rejected — Sales less than 400,000 SAR';
-
-  @override
-  String get calcMonthlySales => 'Average Monthly Sales';
-
-  @override
-  String get calcRejected => 'Rejected';
-
-  @override
-  String get calcProtectionSubtitle => 'Protection & Savings — Single Payment';
-
-  @override
-  String get calcProgramData => 'Program Data';
-
-  @override
-  String get calcSubscriptionAndDuration => 'Subscription & Duration';
-
-  @override
-  String get calcSubscriptionAmount => 'Subscription Amount (SAR)';
-
-  @override
-  String get calcProgramDuration => 'Program Duration (years)';
-
-  @override
-  String get calcInvestmentStrategy => 'Investment Strategy';
-
-  @override
-  String get calcAgeAtContract => 'Age at Contract';
-
-  @override
-  String calcCashValueAfter(int years) {
-    return 'Cash Value After $years Years';
-  }
-
-  @override
-  String get calcRedemptionValue => 'Redemption Value';
-
-  @override
-  String get calcDeathBenefit => 'Death Benefit';
-
-  @override
-  String get calcInsuranceCoverage => 'Insurance Coverage';
-
-  @override
-  String get calcTotalInvestmentIncome => 'Total Investment Income';
-
-  @override
-  String get calcProjectionYear => 'Year';
-
-  @override
-  String get calcProjectionCashValue => 'Cash Value';
-
-  @override
-  String get calcProjectionDeathBenefit => 'Death Benefit';
-
-  @override
-  String get calcProjectionAdminFees => 'Admin Fees';
-
-  @override
-  String get calcDeductionRatioSubtitle => 'Deduction Ratio Calculator';
-
-  @override
-  String get calcDeductionAvailSubtitle => 'Available Deduction by Product';
-
-  @override
-  String get calcDeductionRatioMode => 'Deduction Ratio';
-
-  @override
-  String get calcDeductionAvailMode => 'Available Deduction';
-
-  @override
-  String get calcTotalSalary => 'Total Salary (SAR)';
-
-  @override
-  String get calcJobStatus => 'Job Status';
-
-  @override
-  String get calcPersonalInstLabel => 'Personal Financing Installment (SAR)';
-
-  @override
-  String get calcLeasingInstLabel => 'Leasing Installment (SAR)';
-
-  @override
-  String get calcRealEstateInstLabel => 'Real Estate Installment (SAR)';
-
-  @override
-  String get calcOtherObligations => 'Other Obligations (SAR)';
-
-  @override
-  String get calcCalculateDeduction => 'Calculate';
-
-  @override
-  String get calcSalaryAmount => 'Salary';
-
-  @override
-  String get calcPersonalFinancing => 'Personal Financing';
-
-  @override
-  String get calcLeasingFinancing => 'Leasing Financing';
-
-  @override
-  String get calcRealEstateFinancing => 'Real Estate Financing';
-
-  @override
-  String get calcTotalObligations => 'Total Current Obligations';
-
-  @override
-  String get calcCurrentDeduction => 'Current Deduction Ratio';
-
-  @override
-  String get calcAvailablePersonal => 'Available for Personal Financing';
-
-  @override
-  String get calcAvailableLeasing => 'Available for Leasing (45%)';
-
-  @override
-  String get calcAvailableRealEstate => 'Available for Real Estate';
-
-  @override
-  String get monthJan => 'January';
-
-  @override
-  String get monthFeb => 'February';
-
-  @override
-  String get monthMar => 'March';
-
-  @override
-  String get monthApr => 'April';
-
-  @override
-  String get monthMay => 'May';
-
-  @override
-  String get monthJun => 'June';
-
-  @override
-  String get monthJul => 'July';
-
-  @override
-  String get monthAug => 'August';
-
-  @override
-  String get monthSep => 'September';
-
-  @override
-  String get monthOct => 'October';
-
-  @override
-  String get monthNov => 'November';
-
-  @override
-  String get monthDec => 'December';
-
-  @override
-  String get calcLeasingSubtitle => 'Leasing Finance Calculator';
-
-  @override
-  String get calcLeasingMicroSubtitle => 'Leasing Finance Calculator - Micro';
-
-  @override
-  String get calcAllPeriodsTable => 'All Periods Table';
-
-  @override
-  String get calcPeriodColumn => 'Period';
-
-  @override
-  String get calcDaysColumn => 'Days';
-
-  @override
-  String get calcProfitMarginColumn => 'Profit Margin';
-
-  @override
-  String get calcProfitsColumn => 'Profits';
-
-  @override
-  String get calcNewAmountColumn => 'New Amount';
-
-  @override
-  String calcNYears(int count) {
-    return '$count years';
-  }
-
-  @override
-  String get calcProfitRatePercent => 'Profit Rate (%)';
-
-  @override
-  String get calcEntityData => 'Entity Data';
-
-  @override
-  String get calcEnterDataPrompt => 'Enter data and press Calculate';
-
-  @override
-  String get calcDeductionRatioTitle => 'Deduction Ratios';
-
-  @override
-  String get calcDeductionAvailTitle => 'Available Deduction';
-
-  @override
-  String calcPeriodDays(String period, int days) {
-    return '$period ($days days)';
-  }
-
-  @override
-  String get calcInvestmentAmountLabel => 'Investment Amount';
-
-  @override
-  String get calcDateConverterTitle => 'Date Converter';
-
-  @override
-  String get calcExportPdf => 'PDF';
-
-  @override
-  String get calcExportImage => 'Image';
-
-  @override
-  String calcPersonalFinancingWithRate(String rate) {
-    return 'Personal Financing ($rate%)';
-  }
-
-  @override
-  String calcLeasingFinancingWithRate(String rate) {
-    return 'Leasing Financing ($rate%)';
-  }
-
-  @override
-  String calcRealEstateFinancingWithRate(String rate) {
-    return 'Real Estate Financing ($rate%)';
-  }
-
-  @override
-  String calcAvailablePersonalWithRate(String rate) {
-    return 'Available Personal ($rate%)';
-  }
-
-  @override
-  String calcAvailableRealEstateWithRate(String rate) {
-    return 'Available Real Estate ($rate%)';
-  }
-
-  @override
-  String get calcBankFeesAiContext => 'SAMA Bank Fees';
-
-  @override
-  String get calcClientAndFinancingData => 'بيانات العميل والتمويل';
-
-  @override
-  String get calcClientInfo => 'معلومات العميل';
-
-  @override
-  String get calcCustomerSegment => 'شريحة العميل';
-
-  @override
-  String get calcCarPrice => 'سعر السيارة (ريال)';
-
-  @override
-  String get calcLeasingDurationMonths => 'مدة التمويل (شهر)';
-
-  @override
-  String get calcProfitRateCost => 'هامش الربح / كلفة الآجل (%)';
-
-  @override
-  String get calcAdminFeesInput => 'الرسوم الإدارية (ريال)';
-
-  @override
-  String get calcPlateFees => 'رسوم اللوحات (ريال)';
-
-  @override
-  String get calcPaymentsSection => 'الدفعات — نسبة % أو مبلغ من سعر السيارة';
-
-  @override
-  String get calcDownPaymentLabel => 'الدفعة الأولى';
-
-  @override
-  String get calcLastPaymentLabel => 'الدفعة الأخيرة';
-
-  @override
-  String get calcInsuranceLabel => 'التأمين';
-
-  @override
-  String get calcCurrentObligations => 'الالتزامات الحالية';
-
-  @override
-  String get calcPersonalFinancingInst => 'قسط تمويل شخصي';
-
-  @override
-  String get calcOtherObligationsLabel => 'التزامات أخرى';
-
-  @override
-  String get calcRealEstateInst => 'قسط تمويل عقاري';
-
-  @override
-  String get calcByCarPrice => 'احتساب بناء على سعر السيارة';
-
-  @override
-  String get calcMaxCarPrice => 'أقصى سعر للسيارة';
-
-  @override
-  String get calcEnterSalaryAndPrice => 'أدخل الراتب وسعر السيارة';
-
-  @override
-  String get calcObligationsExceedLimit =>
-      'الالتزامات تستهلك كامل نسبة الاستقطاع';
-
-  @override
-  String get calcSamaBankSystem => 'نظام الاعتماد البنكي (SAMA)';
-
-  @override
-  String get calcFinancingSuccess => 'تم احتساب التمويل بنجاح';
-
-  @override
-  String get calcMaxAvailableFinancing => 'أقصى تمويل متاح للعميل';
-
-  @override
-  String get calcAmountLabel => 'المبلغ';
-
-  @override
-  String get calcMandatoryDownPayment => 'الدفعة الأولى الإلزامية';
-
-  @override
-  String get calcTranslateToCalcQuestion =>
-      'هل تريد ترجمة الاحتساب على الآلة ؟';
-
-  @override
-  String get calcCostOfTermBankProfit => 'كلفة الآجل (ربح البنك)';
-
-  @override
-  String get calcTotalRepayment => 'إجمالي السداد';
-
-  @override
-  String calcDeductionActual(String percent) {
-    return 'الاستقطاع: $percent%';
-  }
-
-  @override
-  String calcDeductionLimitLabel(String percent) {
-    return 'الحد: $percent%';
-  }
-
-  @override
-  String get calcApprovedSama => 'مقبول — الطلب ضمن شروط ساما';
-
-  @override
-  String get calcRejectedDeduction => 'مرفوض — تجاوز نسبة الاستقطاع';
-
-  @override
-  String get calcRequiredDownPaymentTitle =>
-      'لإقرار الطلب — ارفع الدفعة الأولى بمبلغ';
-
-  @override
-  String calcRequiredDownPaymentSubtitle(String percent) {
-    return 'أي ما يعادل $percent% من سعر السيارة';
-  }
-
-  @override
-  String get calcCompareTitle => 'مقارنة مدد التمويل';
-
-  @override
-  String get calcCompareDuration => 'المدة';
-
-  @override
-  String get calcCompareCost => 'كلفة الآجل';
-
-  @override
-  String get calcCompareTotal => 'الإجمالي';
-
-  @override
-  String get calcCompareScheduleBtn => 'مقارنة';
-
-  @override
-  String get calcCompareDesc => 'قارن 12 / 24 / 36 / 48 / 60 شهر';
-
-  @override
-  String calcLastPaymentIncludes(String amount) {
-    return '* يشمل الدفعة الأخيرة $amount ر.س';
-  }
-
-  @override
-  String get calcPercentMode => 'نسبة %';
-
-  @override
-  String get calcAmountMode => 'مبلغ';
-
-  @override
-  String get calcRetirementAgeLabel => 'سن التقاعد: ';
-
-  @override
-  String get calcAvailablePeriodLabel => ' | المدة المتاحة: ';
-
-  @override
-  String get calcYearSuffix => ' سنة';
-
-  @override
-  String get calcNoSupport => 'لا يوجد';
-
-  @override
-  String calcDurationYearsMonths(int years, int months) {
-    return '$years سنة ($months شهر)';
-  }
-
-  @override
-  String calcInstallmentDuringMonths(int months) {
-    return 'القسط خلال فترة التمويل الشخصي ($months شهر)';
-  }
-
-  @override
-  String calcInstallmentAfterMonths(int months) {
-    return 'القسط بعد انتهاء التمويل الشخصي ($months شهر)';
-  }
-
-  @override
-  String get calcFixedLoanSection => 'المبلغ المحدد';
-
-  @override
-  String get calcMonthSuffix => ' شهر';
-
-  @override
-  String calcNMonths(int count) {
-    return '$count شهر';
-  }
-
-  @override
-  String calcNYearsFormatted(int count) {
-    return '$count سنة';
-  }
-
-  @override
-  String get calcSarSuffix => ' ر.س';
-
-  @override
-  String get calcPerMonthSuffix => ' ر.س / شهر';
-
-  @override
-  String get comingSoonTitle => 'Coming Soon';
-
-  @override
-  String get comingSoonMessage => 'This feature will be available soon';
-
-  @override
-  String get ok => 'OK';
-
-  @override
-  String get developerName => 'Abdullah Almalki';
-
-  @override
-  String get developerRole =>
-      'Financial services leader with over 19 years of banking experience, harnessing AI and technology to advance banking services';
-
-  @override
-  String get developerEmail => 'Abdullahalmalki@nesab.sa';
-
-  @override
-  String get developerWebsite => 'www.Nesab.sa';
-
-  @override
-  String get aboutAppName => 'Nesab';
-
-  @override
-  String get aboutAppTagline => 'Smart Financing Solutions';
-
-  @override
-  String get aboutAppFullDescription =>
-      'Nesab is a comprehensive Islamic financial products platform that combines numerical analysis and practical guidance to empower users in understanding every financial detail before making commitments. Browse and compare diverse financing solutions and choose the most suitable for your needs.';
-
-  @override
-  String get aboutAppFeatureCalculator =>
-      'Financing calculators with instant results';
-
-  @override
-  String get aboutAppFeaturePlanning =>
-      'Financial planning and estimation tools';
-
-  @override
-  String get aboutAppFeatureGuidance =>
-      'Educational guidance for financial stability';
-
-  @override
-  String get aboutAppFeatureSharia => 'Sharia-compliant financing options';
-
-  @override
-  String get aboutAppWebsite => 'www.nesab.sa';
-
-  @override
-  String get currentPassword => 'Current Password';
-
-  @override
-  String get newPassword => 'New Password';
-
-  @override
-  String get confirmNewPassword => 'Confirm New Password';
-
-  @override
-  String get passwordChanged => 'Password changed successfully';
-
-  @override
-  String get passwordsDoNotMatch => 'Passwords do not match';
-
-  @override
-  String get passwordTooShort => 'Password must be at least 6 characters';
-
-  @override
-  String get signatureUploaded => 'Signature uploaded successfully';
-
-  @override
-  String get signatureUploadFailed => 'Failed to upload signature';
-
-  @override
-  String get pickImage => 'Pick Image';
-
-  @override
-  String get uploading => 'Uploading...';
-
-  @override
-  String get camera => 'Camera';
-
-  @override
-  String get deleteSignature => 'Delete Signature';
-
-  @override
-  String get signatureName => 'Name';
-
-  @override
-  String get signatureNameHint => 'Enter your name';
-
-  @override
-  String get signatureNumber => 'Phone Number';
-
-  @override
-  String get signatureNumberHint => 'Enter your phone number';
+  String get delete => 'Delete';
 }

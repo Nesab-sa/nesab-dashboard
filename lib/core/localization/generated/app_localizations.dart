@@ -272,10 +272,10 @@ abstract class AppLocalizations {
   /// **'نسبة الأرباح'**
   String get profitRate;
 
-  /// Features section title
+  /// Section title for product features list
   ///
   /// In ar, this message translates to:
-  /// **'المزايا'**
+  /// **'المميزات'**
   String get features;
 
   /// Section title for product description
@@ -625,30 +625,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'هل أنت متأكد من رغبتك في تسجيل الخروج؟'**
   String get logoutConfirmMessage;
-
-  /// Delete account menu item label
-  ///
-  /// In ar, this message translates to:
-  /// **'حذف الحساب'**
-  String get deleteAccount;
-
-  /// Title of the delete account confirmation dialog
-  ///
-  /// In ar, this message translates to:
-  /// **'حذف الحساب'**
-  String get deleteAccountTitle;
-
-  /// Confirmation message in the delete account dialog
-  ///
-  /// In ar, this message translates to:
-  /// **'سيتم حذف حسابك وجميع بياناتك نهائياً ولا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من المتابعة؟'**
-  String get deleteAccountMessage;
-
-  /// Destructive confirm button label in the delete account dialog
-  ///
-  /// In ar, this message translates to:
-  /// **'حذف نهائي'**
-  String get deleteAccountConfirm;
 
   /// Cancel button label used in dialogs
   ///
@@ -1039,6 +1015,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أدخل اسمك'**
   String get displayNameHint;
+
+  /// Label for auth provider column
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدخول'**
+  String get authProviderLabel;
+
+  /// Label for role column
+  ///
+  /// In ar, this message translates to:
+  /// **'الدور'**
+  String get roleLabel;
+
+  /// Label for created at column
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الإنشاء'**
+  String get createdAtLabel;
+
+  /// Label for last login column
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر دخول'**
+  String get lastLoginLabel;
 
   /// Divider text between form and social buttons
   ///
@@ -1568,47 +1568,305 @@ abstract class AppLocalizations {
   /// **'حساب صافي الراتب بعد الاستقطاعات'**
   String get subToolsDeductionsDesc;
 
-  /// Success message after profile update
+  /// No description provided for @adminLoginTitle.
   ///
   /// In ar, this message translates to:
-  /// **'تم تحديث البيانات بنجاح'**
-  String get profileUpdated;
+  /// **'لوحة تحكم المشرف'**
+  String get adminLoginTitle;
 
-  /// Save changes button label
+  /// No description provided for @adminLoginSubtitle.
   ///
   /// In ar, this message translates to:
-  /// **'حفظ التغييرات'**
-  String get saveChanges;
+  /// **'سجّل الدخول لإدارة اللوحة'**
+  String get adminLoginSubtitle;
 
-  /// No description provided for @profileWebsite.
+  /// No description provided for @usersTitle.
   ///
   /// In ar, this message translates to:
-  /// **'موقع الويب'**
-  String get profileWebsite;
+  /// **'المستخدمون'**
+  String get usersTitle;
 
-  /// No description provided for @profileUploadSignature.
+  /// No description provided for @toolsTitle.
   ///
   /// In ar, this message translates to:
-  /// **'ارفع توقيعك'**
-  String get profileUploadSignature;
+  /// **'الأدوات'**
+  String get toolsTitle;
 
-  /// No description provided for @authProviderGoogle.
+  /// No description provided for @dashboardTitle.
   ///
   /// In ar, this message translates to:
-  /// **'حساب Google'**
-  String get authProviderGoogle;
+  /// **'لوحة التحكم'**
+  String get dashboardTitle;
 
-  /// No description provided for @authProviderApple.
+  /// No description provided for @pageOf.
   ///
   /// In ar, this message translates to:
-  /// **'حساب Apple'**
-  String get authProviderApple;
+  /// **'صفحة {current} من {total}'**
+  String pageOf(int current, int total);
 
-  /// No description provided for @authProviderEmail.
+  /// No description provided for @rowsPerPage.
   ///
   /// In ar, this message translates to:
-  /// **'حساب البريد'**
-  String get authProviderEmail;
+  /// **'صفوف لكل صفحة'**
+  String get rowsPerPage;
+
+  /// No description provided for @search.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث'**
+  String get search;
+
+  /// No description provided for @managersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المديرون'**
+  String get managersTitle;
+
+  /// No description provided for @managersSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض وإدارة مديري اللوحة.'**
+  String get managersSubtitle;
+
+  /// No description provided for @managersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد مديرون بعد. انقر \"إضافة مدير\" لإنشاء واحد.'**
+  String get managersEmpty;
+
+  /// No description provided for @addManagerButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مدير'**
+  String get addManagerButton;
+
+  /// No description provided for @createAdminsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء مدير'**
+  String get createAdminsTitle;
+
+  /// No description provided for @createAdminsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مدير جديد بالبريد الإلكتروني وكلمة المرور والدور.'**
+  String get createAdminsSubtitle;
+
+  /// No description provided for @createAdminButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء مدير'**
+  String get createAdminButton;
+
+  /// No description provided for @createAdminSuccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء المدير بنجاح.'**
+  String get createAdminSuccess;
+
+  /// No description provided for @deleteManagerButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get deleteManagerButton;
+
+  /// No description provided for @deleteManagerConfirmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف المدير'**
+  String get deleteManagerConfirmTitle;
+
+  /// No description provided for @deleteManagerConfirmMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل أنت متأكد من حذف {name}؟ سيتم إزالة صلاحيات الدخول.'**
+  String deleteManagerConfirmMessage(String name);
+
+  /// No description provided for @deleteManagerSuccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف المدير بنجاح.'**
+  String get deleteManagerSuccess;
+
+  /// No description provided for @deleteManagerError.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل في حذف المدير.'**
+  String get deleteManagerError;
+
+  /// No description provided for @roleAdmin.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسؤول'**
+  String get roleAdmin;
+
+  /// No description provided for @roleUser.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستخدم'**
+  String get roleUser;
+
+  /// No description provided for @categoriesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفئات'**
+  String get categoriesTitle;
+
+  /// No description provided for @categoriesSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الفئات والفئات الفرعية.'**
+  String get categoriesSubtitle;
+
+  /// No description provided for @addCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة فئة'**
+  String get addCategory;
+
+  /// No description provided for @addSubCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة فئة فرعية'**
+  String get addSubCategory;
+
+  /// No description provided for @categoryArabicName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم بالعربية'**
+  String get categoryArabicName;
+
+  /// No description provided for @categoryEnglishName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم بالإنجليزية'**
+  String get categoryEnglishName;
+
+  /// No description provided for @categoryImage.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة'**
+  String get categoryImage;
+
+  /// No description provided for @pickImage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر من الجهاز'**
+  String get pickImage;
+
+  /// No description provided for @categoryImageRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة مطلوبة'**
+  String get categoryImageRequired;
+
+  /// No description provided for @categorySaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ الفئة'**
+  String get categorySaved;
+
+  /// No description provided for @categoryTitleSize.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم العنوان'**
+  String get categoryTitleSize;
+
+  /// No description provided for @categoryImageWidth.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الصورة (0–1)'**
+  String get categoryImageWidth;
+
+  /// No description provided for @categoryImageHeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'ارتفاع الصورة (0–1)'**
+  String get categoryImageHeight;
+
+  /// No description provided for @categoryOpacity.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشفافية (0–1)'**
+  String get categoryOpacity;
+
+  /// No description provided for @categoryCalculatorType.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحاسبة / الأداة'**
+  String get categoryCalculatorType;
+
+  /// No description provided for @categoryCalculatorTypeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الحاسبة أو الأداة'**
+  String get categoryCalculatorTypeHint;
+
+  /// No description provided for @extractionFailureLogsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجلات فشل الاستخراج'**
+  String get extractionFailureLogsTitle;
+
+  /// No description provided for @extractionFailureLogsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفحات المنتجات التي لم يُعرض فيها زر الإضافة للسلة.'**
+  String get extractionFailureLogsSubtitle;
+
+  /// No description provided for @extractionFailureLogsUrl.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرابط'**
+  String get extractionFailureLogsUrl;
+
+  /// No description provided for @extractionFailureLogsMarketplace.
+  ///
+  /// In ar, this message translates to:
+  /// **'السوق'**
+  String get extractionFailureLogsMarketplace;
+
+  /// No description provided for @extractionFailureLogsTitleFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get extractionFailureLogsTitleFound;
+
+  /// No description provided for @extractionFailureLogsPriceFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get extractionFailureLogsPriceFound;
+
+  /// No description provided for @extractionFailureLogsColorFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللون'**
+  String get extractionFailureLogsColorFound;
+
+  /// No description provided for @extractionFailureLogsSizeFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'المقاس'**
+  String get extractionFailureLogsSizeFound;
+
+  /// No description provided for @extractionFailureLogsCreatedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ'**
+  String get extractionFailureLogsCreatedAt;
+
+  /// No description provided for @extractionFailureLogsYes.
+  ///
+  /// In ar, this message translates to:
+  /// **'نعم'**
+  String get extractionFailureLogsYes;
+
+  /// No description provided for @extractionFailureLogsNo.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا'**
+  String get extractionFailureLogsNo;
 
   /// No description provided for @calculatorsTitle.
   ///
@@ -2642,2039 +2900,89 @@ abstract class AppLocalizations {
   /// **'تحويل إلى ميلادي'**
   String get calcConvertToGregorian;
 
-  /// No description provided for @aiChatGreeting.
+  /// No description provided for @aiSettings.
   ///
   /// In ar, this message translates to:
-  /// **'اسألني عن النتيجة'**
-  String get aiChatGreeting;
+  /// **'إعدادات الذكاء الاصطناعي'**
+  String get aiSettings;
 
-  /// Subtitle for the age calculator page
+  /// No description provided for @aiSettingsSubtitle.
   ///
   /// In ar, this message translates to:
-  /// **'حاسبة العمر الميلادي والهجري'**
-  String get calcAgeSubtitle;
+  /// **'إدارة مفتاح Claude AI للمساعد الذكي.'**
+  String get aiSettingsSubtitle;
 
-  /// Label for birth date picker in age calculator
+  /// No description provided for @aiApiKeyLabel.
   ///
   /// In ar, this message translates to:
-  /// **'تاريخ الميلاد (ميلادي)'**
-  String get calcAgeInputBirthDate;
+  /// **'مفتاح Claude API'**
+  String get aiApiKeyLabel;
 
-  /// Label for today date picker in age calculator
+  /// No description provided for @aiApiKeyHint.
   ///
   /// In ar, this message translates to:
-  /// **'تاريخ اليوم'**
-  String get calcAgeInputTodayDate;
+  /// **'أدخل مفتاح Claude API (sk-ant-...)'**
+  String get aiApiKeyHint;
 
-  /// Calculate button label in age calculator
+  /// No description provided for @aiApiKeyNotConfigured.
   ///
   /// In ar, this message translates to:
-  /// **'احسب العمر'**
-  String get calcAgeCalculateButton;
+  /// **'لم يتم تهيئة مفتاح API بعد.'**
+  String get aiApiKeyNotConfigured;
 
-  /// Result section title in age calculator
+  /// No description provided for @aiApiKeySaved.
   ///
   /// In ar, this message translates to:
-  /// **'النتيجة'**
-  String get calcAgeResultTitle;
+  /// **'تم حفظ مفتاح API بنجاح.'**
+  String get aiApiKeySaved;
 
-  /// Full age display format
+  /// No description provided for @aiApiKeyDeleted.
   ///
   /// In ar, this message translates to:
-  /// **'{years} سنة و {months} شهر و {days} يوم'**
-  String calcAgeResultYearsMonthsDays(int years, int months, int days);
+  /// **'تم حذف مفتاح API بنجاح.'**
+  String get aiApiKeyDeleted;
 
-  /// Age in total months
+  /// No description provided for @aiApiKeyDeleteConfirmTitle.
   ///
   /// In ar, this message translates to:
-  /// **'{count} شهر'**
-  String calcAgeResultTotalMonths(int count);
+  /// **'حذف مفتاح API'**
+  String get aiApiKeyDeleteConfirmTitle;
 
-  /// Age in total days
+  /// No description provided for @aiApiKeyDeleteConfirmMessage.
   ///
   /// In ar, this message translates to:
-  /// **'{count} يوم'**
-  String calcAgeResultTotalDays(int count);
+  /// **'هل أنت متأكد من حذف مفتاح API؟ ستتوقف ميزة الدردشة الذكية عن العمل.'**
+  String get aiApiKeyDeleteConfirmMessage;
 
-  /// Approximate Hijri age
+  /// No description provided for @aiApiKeyInvalid.
   ///
   /// In ar, this message translates to:
-  /// **'~{years} سنة هجرية'**
-  String calcAgeResultHijriApprox(int years);
+  /// **'يجب أن يبدأ مفتاح API بـ sk-ant-'**
+  String get aiApiKeyInvalid;
 
-  /// Label for approximate Hijri age result
+  /// No description provided for @aiApiKeyRequired.
   ///
   /// In ar, this message translates to:
-  /// **'العمر الهجري (تقريبي)'**
-  String get calcAgeResultHijriLabel;
+  /// **'مفتاح API مطلوب'**
+  String get aiApiKeyRequired;
 
-  /// Label for age in months result
+  /// No description provided for @save.
   ///
   /// In ar, this message translates to:
-  /// **'العمر بالشهور'**
-  String get calcAgeResultAgeInMonths;
+  /// **'حفظ'**
+  String get save;
 
-  /// Label for age in days result
+  /// No description provided for @update.
   ///
   /// In ar, this message translates to:
-  /// **'العمر بالأيام'**
-  String get calcAgeResultAgeInDays;
+  /// **'تحديث'**
+  String get update;
 
-  /// Label for age in years result
+  /// No description provided for @delete.
   ///
   /// In ar, this message translates to:
-  /// **'العمر بالسنوات'**
-  String get calcAgeResultAgeInYears;
-
-  /// Button to go back to input form from results
-  ///
-  /// In ar, this message translates to:
-  /// **'العودة للبيانات'**
-  String get calcBackToInput;
-
-  /// Prompt to enter salary
-  ///
-  /// In ar, this message translates to:
-  /// **'أدخل الراتب'**
-  String get calcEnterSalary;
-
-  /// Calculate now button label
-  ///
-  /// In ar, this message translates to:
-  /// **'احسب الآن'**
-  String get calcCalculateNow;
-
-  /// Prompt to calculate before viewing results
-  ///
-  /// In ar, this message translates to:
-  /// **'احسب أولاً'**
-  String get calcCalculateFirst;
-
-  /// Title for installment schedule section
-  ///
-  /// In ar, this message translates to:
-  /// **'جدول الأقساط'**
-  String get calcScheduleTitle;
-
-  /// Description for installment schedule
-  ///
-  /// In ar, this message translates to:
-  /// **'عرض التفاصيل الشهرية الكاملة'**
-  String get calcScheduleDesc;
-
-  /// Button to show schedule
-  ///
-  /// In ar, this message translates to:
-  /// **'عرض'**
-  String get calcScheduleShow;
-
-  /// Month column header in schedule table
-  ///
-  /// In ar, this message translates to:
-  /// **'الشهر'**
-  String get calcScheduleMonth;
-
-  /// Payment column header in schedule table
-  ///
-  /// In ar, this message translates to:
-  /// **'القسط'**
-  String get calcSchedulePayment;
-
-  /// Total paid column header in schedule table
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي مدفوع'**
-  String get calcScheduleTotalPaid;
-
-  /// Client data section title
-  ///
-  /// In ar, this message translates to:
-  /// **'بيانات العميل'**
-  String get calcClientData;
-
-  /// Employment status label
-  ///
-  /// In ar, this message translates to:
-  /// **'الوضع الوظيفي'**
-  String get calcEmploymentStatus;
-
-  /// Employed status option
-  ///
-  /// In ar, this message translates to:
-  /// **'موظف'**
-  String get calcEmployed;
-
-  /// Retired status option
-  ///
-  /// In ar, this message translates to:
-  /// **'متقاعد'**
-  String get calcRetired;
-
-  /// Mortgage label
-  ///
-  /// In ar, this message translates to:
-  /// **'تمويل عقاري'**
-  String get calcMortgage;
-
-  /// No mortgage option
-  ///
-  /// In ar, this message translates to:
-  /// **'لا يوجد'**
-  String get calcMortgageNone;
-
-  /// Has mortgage option
-  ///
-  /// In ar, this message translates to:
-  /// **'نعم يوجد'**
-  String get calcMortgageHas;
-
-  /// Birth year label
-  ///
-  /// In ar, this message translates to:
-  /// **'سنة الميلاد'**
-  String get calcBirthYear;
-
-  /// Birth month label
-  ///
-  /// In ar, this message translates to:
-  /// **'شهر الميلاد'**
-  String get calcBirthMonth;
-
-  /// Retirement age label
-  ///
-  /// In ar, this message translates to:
-  /// **'سن التقاعد (سنة)'**
-  String get calcRetirementAge;
-
-  /// Age in months label
-  ///
-  /// In ar, this message translates to:
-  /// **'العمر بالشهور'**
-  String get calcAgeInMonths;
-
-  /// Available period label
-  ///
-  /// In ar, this message translates to:
-  /// **'المدة المتاحة'**
-  String get calcAvailablePeriod;
-
-  /// Time eligibility label
-  ///
-  /// In ar, this message translates to:
-  /// **'الأهلية الزمنية'**
-  String get calcTimeEligibility;
-
-  /// Eligible for financing status
-  ///
-  /// In ar, this message translates to:
-  /// **'مؤهل للتمويل'**
-  String get calcEligible;
-
-  /// Not eligible status (less than 60 months)
-  ///
-  /// In ar, this message translates to:
-  /// **'غير مؤهل (أقل من 60 شهر)'**
-  String get calcNotEligible;
-
-  /// Client salary label
-  ///
-  /// In ar, this message translates to:
-  /// **'راتب العميل (ريال)'**
-  String get calcSalaryLabel;
-
-  /// Profit rate percentage label
-  ///
-  /// In ar, this message translates to:
-  /// **'هامش الربح (%)'**
-  String get calcProfitRateLabel;
-
-  /// Financing duration in months label
-  ///
-  /// In ar, this message translates to:
-  /// **'مدة التمويل (شهر)'**
-  String get calcDurationLabel;
-
-  /// Total Ahli credit card limits label
-  ///
-  /// In ar, this message translates to:
-  /// **'مجموع حدود بطاقات الأهلي'**
-  String get calcAhliCardsLabel;
-
-  /// Total other banks credit card limits label
-  ///
-  /// In ar, this message translates to:
-  /// **'مجموع حدود بطاقات البنوك الأخرى'**
-  String get calcOtherCardsLabel;
-
-  /// Monthly installment label
-  ///
-  /// In ar, this message translates to:
-  /// **'القسط الشهري'**
-  String get calcMonthlyInstallment;
-
-  /// Deduction ratio label
-  ///
-  /// In ar, this message translates to:
-  /// **'نسبة الاستقطاع'**
-  String get calcDeductionRatio;
-
-  /// Total financing label
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي التمويل'**
-  String get calcTotalFinancing;
-
-  /// Approval amount label
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ الموافقة'**
-  String get calcApprovalAmount;
-
-  /// Bank profit label
-  ///
-  /// In ar, this message translates to:
-  /// **'ربح البنك'**
-  String get calcBankProfit;
-
-  /// Admin fees label with rate and cap
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم الإدارية (0.5% | أقصى 2,500)'**
-  String get calcAdminFeesLabel;
-
-  /// VAT 15% label
-  ///
-  /// In ar, this message translates to:
-  /// **'الضريبة (15%)'**
-  String get calcVatLabel;
-
-  /// Total fees label
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي الرسوم'**
-  String get calcTotalFeesLabel;
-
-  /// Net financing amount label
-  ///
-  /// In ar, this message translates to:
-  /// **'صافي مبلغ التمويل'**
-  String get calcNetFinancing;
-
-  /// Approved success message
-  ///
-  /// In ar, this message translates to:
-  /// **'مقبول — تم الاحتساب بنجاح'**
-  String get calcApprovedSuccess;
-
-  /// Rejected due to insufficient time remaining
-  ///
-  /// In ar, this message translates to:
-  /// **'غير مؤهل — المدة المتبقية أقل من 60 شهر'**
-  String get calcRejectedTime;
-
-  /// Review data prompt
-  ///
-  /// In ar, this message translates to:
-  /// **'راجع البيانات'**
-  String get calcReviewData;
-
-  /// Not yet calculated message
-  ///
-  /// In ar, this message translates to:
-  /// **'لم يتم الحساب بعد'**
-  String get calcNotCalculatedYet;
-
-  /// Prompt to enter data and press calculate
-  ///
-  /// In ar, this message translates to:
-  /// **'أدخل البيانات واضغط «احسب»'**
-  String get calcEnterDataAndCalculate;
-
-  /// Subtitle for personal finance plus calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة التمويل الشخصي بلص'**
-  String get calcPersonalFinanceSubtitle;
-
-  /// Subtitle for quick personal finance calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة التمويل الشخصي المختصر'**
-  String get calcPersonalQuickSubtitle;
-
-  /// Military type label
-  ///
-  /// In ar, this message translates to:
-  /// **'نوع العسكري'**
-  String get calcMilitaryType;
-
-  /// Military rank label
-  ///
-  /// In ar, this message translates to:
-  /// **'الرتبة العسكرية'**
-  String get calcMilitaryRank;
-
-  /// Military type: pilot
-  ///
-  /// In ar, this message translates to:
-  /// **'طيار'**
-  String get calcMilTypePilot;
-
-  /// Military type: non-pilot
-  ///
-  /// In ar, this message translates to:
-  /// **'غير طيار'**
-  String get calcMilTypeNonPilot;
-
-  /// Military type: enlisted
-  ///
-  /// In ar, this message translates to:
-  /// **'أفراد'**
-  String get calcMilTypeEnlisted;
-
-  /// Financing data section title
-  ///
-  /// In ar, this message translates to:
-  /// **'بيانات التمويل'**
-  String get calcFinancingData;
-
-  /// Deduction section title
-  ///
-  /// In ar, this message translates to:
-  /// **'نسبة الاستقطاع'**
-  String get calcDeductionSection;
-
-  /// Financing amounts section title
-  ///
-  /// In ar, this message translates to:
-  /// **'مبالغ التمويل'**
-  String get calcAmountsSection;
-
-  /// Fees and tax section title
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم والضريبة'**
-  String get calcFeesSection;
-
-  /// Net section title
-  ///
-  /// In ar, this message translates to:
-  /// **'الصافي'**
-  String get calcNetSection;
-
-  /// Applied deduction ratio label
-  ///
-  /// In ar, this message translates to:
-  /// **'نسبة الاستقطاع المطبقة'**
-  String get calcAppliedDeduction;
-
-  /// Total financing multiplied by months
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي التمويل ({months} x القسط)'**
-  String calcTotalFinancingMultiplied(int months);
-
-  /// Net financing after all fees
-  ///
-  /// In ar, this message translates to:
-  /// **'صافي التمويل (بعد كل الرسوم)'**
-  String get calcNetAfterFees;
-
-  /// Eligible both time-wise and financially
-  ///
-  /// In ar, this message translates to:
-  /// **'مقبول — مؤهل زمنياً ومالياً'**
-  String get calcEligibleFinancially;
-
-  /// Subtitle for debt purchase calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة تمويل شراء مديونية'**
-  String get calcDebtPurchaseSubtitle;
-
-  /// Debt amount at other bank label
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ المديونية في البنك الآخر (ريال)'**
-  String get calcDebtAmount;
-
-  /// Debt at other bank section title
-  ///
-  /// In ar, this message translates to:
-  /// **'المديونية في البنك الآخر'**
-  String get calcDebtSection;
-
-  /// Debt at other bank label
-  ///
-  /// In ar, this message translates to:
-  /// **'المديونية في البنك الآخر'**
-  String get calcDebtAtOtherBank;
-
-  /// Net amount after deducting debt
-  ///
-  /// In ar, this message translates to:
-  /// **'صافي المبلغ بعد خصم المديونية'**
-  String get calcNetAfterDebt;
-
-  /// Warning when debt exceeds net financing
-  ///
-  /// In ar, this message translates to:
-  /// **'المديونية تتجاوز صافي التمويل'**
-  String get calcDebtExceedsNet;
-
-  /// Subtitle for real estate calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة التمويل العقاري (2 في 1)'**
-  String get calcRealEstateSubtitle;
-
-  /// Subtitle for real estate plus calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة التمويل العقاري بلص (2 في 1)'**
-  String get calcRealEstatePlusSubtitle;
-
-  /// Financial information section title
-  ///
-  /// In ar, this message translates to:
-  /// **'المعلومات المالية'**
-  String get calcFinancialInfo;
-
-  /// Mortgage duration in years label
-  ///
-  /// In ar, this message translates to:
-  /// **'مدة التمويل العقاري (سنة)'**
-  String get calcMortgageYears;
-
-  /// Personal loan installment label
-  ///
-  /// In ar, this message translates to:
-  /// **'قسط التمويل الشخصي (ريال)'**
-  String get calcPersonalInstallment;
-
-  /// Remaining personal loan installments in months
-  ///
-  /// In ar, this message translates to:
-  /// **'عدد الأقساط المتبقية من التمويل الشخصي (شهر)'**
-  String get calcRemainingMonths;
-
-  /// Additional options section title
-  ///
-  /// In ar, this message translates to:
-  /// **'خيارات إضافية'**
-  String get calcAdditionalOptions;
-
-  /// Housing support label
-  ///
-  /// In ar, this message translates to:
-  /// **'الدعم السكني'**
-  String get calcHousingSupport;
-
-  /// Etizaz program (Ministry of Defense)
-  ///
-  /// In ar, this message translates to:
-  /// **'اعتزاز (وزارة الدفاع)'**
-  String get calcEtizaz;
-
-  /// Fixed real estate loan amount hint
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ تمويل عقاري محدد (اتركه 0 للحساب التلقائي)'**
-  String get calcFixedLoan;
-
-  /// 2-in-1 program title
-  ///
-  /// In ar, this message translates to:
-  /// **'برنامج 2 في 1'**
-  String get calcTwoInOneProgram;
-
-  /// Real estate loan amount in 2-in-1 program
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ التمويل العقاري (2 في 1)'**
-  String get calcLoanAmount2in1;
-
-  /// Installment during personal loan period
-  ///
-  /// In ar, this message translates to:
-  /// **'القسط خلال فترة التمويل الشخصي'**
-  String get calcInstallmentDuring;
-
-  /// Installment after personal loan ends
-  ///
-  /// In ar, this message translates to:
-  /// **'القسط بعد انتهاء التمويل الشخصي'**
-  String get calcInstallmentAfter;
-
-  /// Total with housing support and Etizaz
-  ///
-  /// In ar, this message translates to:
-  /// **'الإجمالي مع الدعم والاعتزاز'**
-  String get calcTotalWithSupport;
-
-  /// Admin and appraisal fees
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم الإدارية والتقييم'**
-  String get calcAdminAndAppraisal;
-
-  /// Fixed loan amount label
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ التمويل المحدد'**
-  String get calcFixedLoanAmount;
-
-  /// Total profits label
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي الأرباح'**
-  String get calcTotalProfits;
-
-  /// Grand total label
-  ///
-  /// In ar, this message translates to:
-  /// **'الإجمالي الكلي'**
-  String get calcGrandTotal;
-
-  /// Calculation success message
-  ///
-  /// In ar, this message translates to:
-  /// **'تم الاحتساب بنجاح'**
-  String get calcCalculatedSuccessfully;
-
-  /// Workplace label
-  ///
-  /// In ar, this message translates to:
-  /// **'جهة العمل'**
-  String get calcWorkplace;
-
-  /// Rank label
-  ///
-  /// In ar, this message translates to:
-  /// **'الرتبة'**
-  String get calcRankLabel;
-
-  /// Civilian workplace option
-  ///
-  /// In ar, this message translates to:
-  /// **'مدني'**
-  String get calcCivilian;
-
-  /// Military enlisted option
-  ///
-  /// In ar, this message translates to:
-  /// **'عسكري أفراد'**
-  String get calcMilitaryEnlisted;
-
-  /// Officers non-pilot option
-  ///
-  /// In ar, this message translates to:
-  /// **'ضباط غير طيارين'**
-  String get calcOfficersNonPilot;
-
-  /// Officers pilot option
-  ///
-  /// In ar, this message translates to:
-  /// **'ضباط طيارين'**
-  String get calcOfficersPilot;
-
-  /// Personal information section title
-  ///
-  /// In ar, this message translates to:
-  /// **'المعلومات الشخصية'**
-  String get calcPersonalInfo;
-
-  /// Maximum duration hint
-  ///
-  /// In ar, this message translates to:
-  /// **'الحد الأقصى للمدة: {years} سنة'**
-  String calcMaxYearsHint(int years);
-
-  /// Exceeded retirement age message
-  ///
-  /// In ar, this message translates to:
-  /// **'تجاوز سن التقاعد'**
-  String get calcExceededRetirement;
-
-  /// Duration data section title
-  ///
-  /// In ar, this message translates to:
-  /// **'بيانات المدة'**
-  String get calcDurationData;
-
-  /// Available duration for client
-  ///
-  /// In ar, this message translates to:
-  /// **'المدة المتاحة للعميل'**
-  String get calcAvailableForClient;
-
-  /// Approved financing duration
-  ///
-  /// In ar, this message translates to:
-  /// **'مدة التمويل المعتمدة'**
-  String get calcApprovedDuration;
-
-  /// Allowed deduction ratio
-  ///
-  /// In ar, this message translates to:
-  /// **'نسبة الاستقطاع المسموحة'**
-  String get calcAllowedDeduction;
-
-  /// Remaining personal financing period
-  ///
-  /// In ar, this message translates to:
-  /// **'فترة التمويل الشخصي المتبقية'**
-  String get calcPersonalPeriod;
-
-  /// Months after personal loan ends
-  ///
-  /// In ar, this message translates to:
-  /// **'الأشهر بعد انتهاء الشخصي'**
-  String get calcMonthsAfterPersonal;
-
-  /// Total with support section title
-  ///
-  /// In ar, this message translates to:
-  /// **'الإجمالي مع الدعم'**
-  String get calcSupportSection;
-
-  /// Eligible within retirement age message
-  ///
-  /// In ar, this message translates to:
-  /// **'مؤهل -- المدة ضمن سن التقاعد'**
-  String get calcEligibleWithinRetirement;
-
-  /// Adjustment required with available years
-  ///
-  /// In ar, this message translates to:
-  /// **'تعديل مطلوب -- المدة المتاحة {years} سنة فقط'**
-  String calcAdjustmentRequired(int years);
-
-  /// Phase column header in schedule
-  ///
-  /// In ar, this message translates to:
-  /// **'المرحلة'**
-  String get calcSchedulePhase;
-
-  /// Phase: with personal loan
-  ///
-  /// In ar, this message translates to:
-  /// **'مع الشخصي'**
-  String get calcPhaseWithPersonal;
-
-  /// Phase: after personal loan
-  ///
-  /// In ar, this message translates to:
-  /// **'بعد الشخصي'**
-  String get calcPhaseAfterPersonal;
-
-  /// Detailed installment schedule title
-  ///
-  /// In ar, this message translates to:
-  /// **'جدول الأقساط التفصيلي'**
-  String get calcDetailedSchedule;
-
-  /// Description of schedule phases
-  ///
-  /// In ar, this message translates to:
-  /// **'قسط فترة التمويل الشخصي + قسط ما بعده'**
-  String get calcSchedulePhaseDesc;
-
-  /// Subtitle for bank fees comparison page
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم البنكية — مقارنة السابقة والمحدثة'**
-  String get calcBankFeesSubtitle;
-
-  /// Bank fees note about SAMA guidelines
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم وفق دليل تعرفة خدمات المؤسسات المالية الصادر من ساما — الأسعار غير شاملة ضريبة القيمة المضافة (VAT 15%) إلا إذا نُص عليها'**
-  String get calcBankFeesNote;
-
-  /// Admin fees for financing title
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم الإدارية للتمويل'**
-  String get calcAdminFeesTitle;
-
-  /// Financing admin fees label
-  ///
-  /// In ar, this message translates to:
-  /// **'رسوم التمويل الإدارية'**
-  String get calcFinancingAdminFees;
-
-  /// Previous value column header
-  ///
-  /// In ar, this message translates to:
-  /// **'السابق'**
-  String get calcPreviousValue;
-
-  /// Updated value column header
-  ///
-  /// In ar, this message translates to:
-  /// **'المحدّث'**
-  String get calcUpdatedValue;
-
-  /// Basic banking services section
-  ///
-  /// In ar, this message translates to:
-  /// **'الخدمات البنكية الأساسية'**
-  String get calcBasicServices;
-
-  /// Financial transfers section
-  ///
-  /// In ar, this message translates to:
-  /// **'الحوالات المالية'**
-  String get calcTransfers;
-
-  /// Official documents section
-  ///
-  /// In ar, this message translates to:
-  /// **'الوثائق الرسمية'**
-  String get calcOfficialDocs;
-
-  /// Service column header
-  ///
-  /// In ar, this message translates to:
-  /// **'الخدمة'**
-  String get calcServiceColumn;
-
-  /// Electronic channel column header
-  ///
-  /// In ar, this message translates to:
-  /// **'إلكتروني'**
-  String get calcElectronicColumn;
-
-  /// Branch channel column header
-  ///
-  /// In ar, this message translates to:
-  /// **'الفرع'**
-  String get calcBranchColumn;
-
-  /// Free of charge label
-  ///
-  /// In ar, this message translates to:
-  /// **'مجاناً'**
-  String get calcFree;
-
-  /// Mada card label
-  ///
-  /// In ar, this message translates to:
-  /// **'بطاقة مدى'**
-  String get calcMadaCard;
-
-  /// Bank fees disclaimer with important notes
-  ///
-  /// In ar, this message translates to:
-  /// **'تنبيهات مهمة:\n• جميع الرسوم أعلاه غير شاملة ضريبة القيمة المضافة 15%\n• هذا الملف للاسترشاد فقط — يرجى التحقق من موقع ساما الرسمي (sama.gov.sa)\n• تسري التعليمات خلال 60 يوماً من تاريخ نشرها'**
-  String get calcBankFeesDisclaimer;
-
-  /// Subtitle for date converter page
-  ///
-  /// In ar, this message translates to:
-  /// **'تحويل التاريخ ميلادي وهجري'**
-  String get calcDateConverterSubtitle;
-
-  /// Conversion result title
-  ///
-  /// In ar, this message translates to:
-  /// **'نتيجة التحويل'**
-  String get calcConversionResult;
-
-  /// Gregorian to Hijri conversion direction
-  ///
-  /// In ar, this message translates to:
-  /// **'ميلادي ← هجري'**
-  String get calcGregorianToHijri;
-
-  /// Hijri to Gregorian conversion direction
-  ///
-  /// In ar, this message translates to:
-  /// **'هجري ← ميلادي'**
-  String get calcHijriToGregorian;
-
-  /// Gregorian date label
-  ///
-  /// In ar, this message translates to:
-  /// **'التاريخ الميلادي'**
-  String get calcGregorianDate;
-
-  /// Hijri day label
-  ///
-  /// In ar, this message translates to:
-  /// **'اليوم'**
-  String get calcHijriDay;
-
-  /// Hijri month label
-  ///
-  /// In ar, this message translates to:
-  /// **'الشهر'**
-  String get calcHijriMonth;
-
-  /// Hijri year label
-  ///
-  /// In ar, this message translates to:
-  /// **'السنة الهجرية'**
-  String get calcHijriYear;
-
-  /// Convert button label
-  ///
-  /// In ar, this message translates to:
-  /// **'تحويل'**
-  String get calcConvertButton;
-
-  /// Subtitle for Khayrat calculator page
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة خيرات — الودائع والاستثمار'**
-  String get calcKhayratSubtitle;
-
-  /// Investment data section title
-  ///
-  /// In ar, this message translates to:
-  /// **'بيانات الاستثمار'**
-  String get calcInvestmentData;
-
-  /// Amount and period section title
-  ///
-  /// In ar, this message translates to:
-  /// **'المبلغ والفترة'**
-  String get calcAmountAndPeriod;
-
-  /// Investment amount label with minimum
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ الاستثمار (ريال) — الحد الأدنى 100,000'**
-  String get calcInvestmentAmount;
-
-  /// Minimum deposit hint
-  ///
-  /// In ar, this message translates to:
-  /// **'الحد الأدنى 100,000 ريال'**
-  String get calcMinDeposit;
-
-  /// Investment period label
-  ///
-  /// In ar, this message translates to:
-  /// **'فترة الاستثمار'**
-  String get calcInvestmentPeriod;
-
-  /// Calculate profits button label
-  ///
-  /// In ar, this message translates to:
-  /// **'احسب الأرباح'**
-  String get calcCalculateProfits;
-
-  /// Profit margin label
-  ///
-  /// In ar, this message translates to:
-  /// **'هامش الربح'**
-  String get calcProfitMargin;
-
-  /// Profits label
-  ///
-  /// In ar, this message translates to:
-  /// **'الأرباح'**
-  String get calcProfits;
-
-  /// New amount after profit
-  ///
-  /// In ar, this message translates to:
-  /// **'المبلغ الجديد'**
-  String get calcNewAmount;
-
-  /// Amount meets requirements message
-  ///
-  /// In ar, this message translates to:
-  /// **'المبلغ مستوفٍ للشروط'**
-  String get calcAmountCompliant;
-
-  /// Subtitle for POS financing calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة تمويل نقاط البيع'**
-  String get calcPosSubtitle;
-
-  /// Entity information section title
-  ///
-  /// In ar, this message translates to:
-  /// **'معلومات المنشأة'**
-  String get calcEntityInfo;
-
-  /// Entity type label
-  ///
-  /// In ar, this message translates to:
-  /// **'نوع المنشأة'**
-  String get calcEntityType;
-
-  /// Entity activity label
-  ///
-  /// In ar, this message translates to:
-  /// **'نشاط المنشأة'**
-  String get calcEntityActivity;
-
-  /// Entity age label
-  ///
-  /// In ar, this message translates to:
-  /// **'عمر المنشأة'**
-  String get calcEntityAge;
-
-  /// POS operating period label
-  ///
-  /// In ar, this message translates to:
-  /// **'فترة تشغيل نقاط البيع'**
-  String get calcPosOperatingPeriod;
-
-  /// Average annual sales label
-  ///
-  /// In ar, this message translates to:
-  /// **'متوسط المبيعات السنوية (ريال)'**
-  String get calcAnnualSales;
-
-  /// Average monthly POS sales label
-  ///
-  /// In ar, this message translates to:
-  /// **'متوسط مبيعات نقاط البيع الشهرية (ريال)'**
-  String get calcMonthlyPosSales;
-
-  /// Monthly POS operations count
-  ///
-  /// In ar, this message translates to:
-  /// **'عدد عمليات نقاط البيع شهريا'**
-  String get calcPosOperationsCount;
-
-  /// Financing details section title
-  ///
-  /// In ar, this message translates to:
-  /// **'تفاصيل التمويل'**
-  String get calcFinancingDetails;
-
-  /// Financing term in months
-  ///
-  /// In ar, this message translates to:
-  /// **'مدة التمويل (شهر)'**
-  String get calcTermMonths;
-
-  /// Financing amount (average x 6)
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ التمويل (المتوسط × 6)'**
-  String get calcFinancingAmount;
-
-  /// Profit rate label
-  ///
-  /// In ar, this message translates to:
-  /// **'نسبة الربح'**
-  String get calcProfitRate;
-
-  /// Total profit label
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي الربح'**
-  String get calcTotalProfit;
-
-  /// Total label
-  ///
-  /// In ar, this message translates to:
-  /// **'الإجمالي'**
-  String get calcTotal;
-
-  /// POS admin fees with rate and tax
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم الإدارية (5% بحد 2,500 + ضريبة 15%)'**
-  String get calcAdminFeesPos;
-
-  /// Entity eligible message
-  ///
-  /// In ar, this message translates to:
-  /// **'مقبولة — المنشأة مؤهلة'**
-  String get calcEntityEligible;
-
-  /// Entity rejected due to insufficient age
-  ///
-  /// In ar, this message translates to:
-  /// **'مرفوضة — عمر المنشأة أو نقاط البيع غير كاف'**
-  String get calcEntityRejectedAge;
-
-  /// Entity rejected due to insufficient sales
-  ///
-  /// In ar, this message translates to:
-  /// **'مرفوضة — المبيعات أقل من 400,000 ريال'**
-  String get calcEntityRejectedSales;
-
-  /// Average monthly sales label
-  ///
-  /// In ar, this message translates to:
-  /// **'متوسط المبيعات الشهرية'**
-  String get calcMonthlySales;
-
-  /// Rejected status label
-  ///
-  /// In ar, this message translates to:
-  /// **'مرفوض'**
-  String get calcRejected;
-
-  /// Subtitle for protection and savings calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'برنامج الحماية والادخار - الدفعة الواحدة'**
-  String get calcProtectionSubtitle;
-
-  /// Program data section title
-  ///
-  /// In ar, this message translates to:
-  /// **'بيانات البرنامج'**
-  String get calcProgramData;
-
-  /// Subscription and duration section
-  ///
-  /// In ar, this message translates to:
-  /// **'الاشتراك والمدة'**
-  String get calcSubscriptionAndDuration;
-
-  /// Subscription amount label
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ الاشتراك (ريال)'**
-  String get calcSubscriptionAmount;
-
-  /// Program duration in years
-  ///
-  /// In ar, this message translates to:
-  /// **'مدة البرنامج (سنوات)'**
-  String get calcProgramDuration;
-
-  /// Investment strategy label
-  ///
-  /// In ar, this message translates to:
-  /// **'استراتيجية الاستثمار'**
-  String get calcInvestmentStrategy;
-
-  /// Age at contract signing
-  ///
-  /// In ar, this message translates to:
-  /// **'العمر عند التعاقد'**
-  String get calcAgeAtContract;
-
-  /// Cash value after N years
-  ///
-  /// In ar, this message translates to:
-  /// **'القيمة النقدية بعد {years} سنوات'**
-  String calcCashValueAfter(int years);
-
-  /// Redemption value label
-  ///
-  /// In ar, this message translates to:
-  /// **'قيمة الاسترداد'**
-  String get calcRedemptionValue;
-
-  /// Death benefit label
-  ///
-  /// In ar, this message translates to:
-  /// **'منفعة الوفاة'**
-  String get calcDeathBenefit;
-
-  /// Insurance coverage label
-  ///
-  /// In ar, this message translates to:
-  /// **'التغطية التأمينية'**
-  String get calcInsuranceCoverage;
-
-  /// Total investment income label
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي دخل الاستثمار'**
-  String get calcTotalInvestmentIncome;
-
-  /// Year column in projection table
-  ///
-  /// In ar, this message translates to:
-  /// **'السنة'**
-  String get calcProjectionYear;
-
-  /// Cash value column in projection table
-  ///
-  /// In ar, this message translates to:
-  /// **'القيمة النقدية'**
-  String get calcProjectionCashValue;
-
-  /// Death benefit column in projection table
-  ///
-  /// In ar, this message translates to:
-  /// **'منفعة الوفاة'**
-  String get calcProjectionDeathBenefit;
-
-  /// Admin fees column in projection table
-  ///
-  /// In ar, this message translates to:
-  /// **'رسوم الإدارة'**
-  String get calcProjectionAdminFees;
-
-  /// Subtitle for deduction ratio calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'احتساب نسب الاستقطاع'**
-  String get calcDeductionRatioSubtitle;
-
-  /// Subtitle for available deduction calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'الاستقطاع المتاح حسب المنتجات'**
-  String get calcDeductionAvailSubtitle;
-
-  /// Deduction ratio mode tab label
-  ///
-  /// In ar, this message translates to:
-  /// **'📊 نسبة الاستقطاع'**
-  String get calcDeductionRatioMode;
-
-  /// Available deduction mode tab label
-  ///
-  /// In ar, this message translates to:
-  /// **'✅ الاستقطاع المتاح'**
-  String get calcDeductionAvailMode;
-
-  /// Total salary label
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي الراتب (ريال)'**
-  String get calcTotalSalary;
-
-  /// Job status label
-  ///
-  /// In ar, this message translates to:
-  /// **'الحالة الوظيفية'**
-  String get calcJobStatus;
-
-  /// Personal financing installment label
-  ///
-  /// In ar, this message translates to:
-  /// **'قسط التمويل الشخصي (ريال)'**
-  String get calcPersonalInstLabel;
-
-  /// Leasing financing installment label
-  ///
-  /// In ar, this message translates to:
-  /// **'قسط التمويل التأجيري (ريال)'**
-  String get calcLeasingInstLabel;
-
-  /// Real estate financing installment label
-  ///
-  /// In ar, this message translates to:
-  /// **'قسط التمويل العقاري (ريال)'**
-  String get calcRealEstateInstLabel;
-
-  /// Other obligations label
-  ///
-  /// In ar, this message translates to:
-  /// **'التزامات أخرى (ريال)'**
-  String get calcOtherObligations;
-
-  /// Calculate deduction button label
-  ///
-  /// In ar, this message translates to:
-  /// **'احتساب'**
-  String get calcCalculateDeduction;
-
-  /// Salary label in results
-  ///
-  /// In ar, this message translates to:
-  /// **'الراتب'**
-  String get calcSalaryAmount;
-
-  /// Personal financing label in results
-  ///
-  /// In ar, this message translates to:
-  /// **'التمويل الشخصي'**
-  String get calcPersonalFinancing;
-
-  /// Leasing financing label in results
-  ///
-  /// In ar, this message translates to:
-  /// **'التمويل التأجيري'**
-  String get calcLeasingFinancing;
-
-  /// Real estate financing label in results
-  ///
-  /// In ar, this message translates to:
-  /// **'التمويل العقاري'**
-  String get calcRealEstateFinancing;
-
-  /// Total current obligations label
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي الالتزامات الحالية'**
-  String get calcTotalObligations;
-
-  /// Current deduction ratio label
-  ///
-  /// In ar, this message translates to:
-  /// **'نسبة الاستقطاع الحالية'**
-  String get calcCurrentDeduction;
-
-  /// Available for personal financing
-  ///
-  /// In ar, this message translates to:
-  /// **'المتاح للتمويل الشخصي'**
-  String get calcAvailablePersonal;
-
-  /// Available for leasing financing (45%)
-  ///
-  /// In ar, this message translates to:
-  /// **'المتاح للتمويل التأجيري (45%)'**
-  String get calcAvailableLeasing;
-
-  /// Available for real estate financing
-  ///
-  /// In ar, this message translates to:
-  /// **'المتاح للتمويل العقاري'**
-  String get calcAvailableRealEstate;
-
-  /// January month name
-  ///
-  /// In ar, this message translates to:
-  /// **'يناير'**
-  String get monthJan;
-
-  /// February month name
-  ///
-  /// In ar, this message translates to:
-  /// **'فبراير'**
-  String get monthFeb;
-
-  /// March month name
-  ///
-  /// In ar, this message translates to:
-  /// **'مارس'**
-  String get monthMar;
-
-  /// April month name
-  ///
-  /// In ar, this message translates to:
-  /// **'أبريل'**
-  String get monthApr;
-
-  /// May month name
-  ///
-  /// In ar, this message translates to:
-  /// **'مايو'**
-  String get monthMay;
-
-  /// June month name
-  ///
-  /// In ar, this message translates to:
-  /// **'يونيو'**
-  String get monthJun;
-
-  /// July month name
-  ///
-  /// In ar, this message translates to:
-  /// **'يوليو'**
-  String get monthJul;
-
-  /// August month name
-  ///
-  /// In ar, this message translates to:
-  /// **'أغسطس'**
-  String get monthAug;
-
-  /// September month name
-  ///
-  /// In ar, this message translates to:
-  /// **'سبتمبر'**
-  String get monthSep;
-
-  /// October month name
-  ///
-  /// In ar, this message translates to:
-  /// **'أكتوبر'**
-  String get monthOct;
-
-  /// November month name
-  ///
-  /// In ar, this message translates to:
-  /// **'نوفمبر'**
-  String get monthNov;
-
-  /// December month name
-  ///
-  /// In ar, this message translates to:
-  /// **'ديسمبر'**
-  String get monthDec;
-
-  /// Subtitle for leasing calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة التمويل التأجيري'**
-  String get calcLeasingSubtitle;
-
-  /// Subtitle for leasing micro calculator
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبة التمويل التأجيري - مايكرو'**
-  String get calcLeasingMicroSubtitle;
-
-  /// All periods table title for Khairat
-  ///
-  /// In ar, this message translates to:
-  /// **'جدول جميع الفترات'**
-  String get calcAllPeriodsTable;
-
-  /// Period column header
-  ///
-  /// In ar, this message translates to:
-  /// **'الفترة'**
-  String get calcPeriodColumn;
-
-  /// Days column header
-  ///
-  /// In ar, this message translates to:
-  /// **'الأيام'**
-  String get calcDaysColumn;
-
-  /// Profit margin column header
-  ///
-  /// In ar, this message translates to:
-  /// **'هامش الربح'**
-  String get calcProfitMarginColumn;
-
-  /// Profits column header
-  ///
-  /// In ar, this message translates to:
-  /// **'الأرباح'**
-  String get calcProfitsColumn;
-
-  /// New amount column header
-  ///
-  /// In ar, this message translates to:
-  /// **'المبلغ الجديد'**
-  String get calcNewAmountColumn;
-
-  /// N years label
-  ///
-  /// In ar, this message translates to:
-  /// **'{count} سنوات'**
-  String calcNYears(int count);
-
-  /// Profit rate percentage input label
-  ///
-  /// In ar, this message translates to:
-  /// **'هامش الربح (%)'**
-  String get calcProfitRatePercent;
-
-  /// Entity data section title
-  ///
-  /// In ar, this message translates to:
-  /// **'بيانات المنشأة'**
-  String get calcEntityData;
-
-  /// Prompt to enter data and calculate
-  ///
-  /// In ar, this message translates to:
-  /// **'أدخل البيانات واضغط احسب'**
-  String get calcEnterDataPrompt;
-
-  /// Title for deduction ratio section
-  ///
-  /// In ar, this message translates to:
-  /// **'احتساب نسب الاستقطاع'**
-  String get calcDeductionRatioTitle;
-
-  /// Title for available deduction section
-  ///
-  /// In ar, this message translates to:
-  /// **'الاستقطاع المتاح'**
-  String get calcDeductionAvailTitle;
-
-  /// Period with days count
-  ///
-  /// In ar, this message translates to:
-  /// **'{period} ({days} يوم)'**
-  String calcPeriodDays(String period, int days);
-
-  /// Investment amount label (result)
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ الاستثمار'**
-  String get calcInvestmentAmountLabel;
-
-  /// Date converter page header title
-  ///
-  /// In ar, this message translates to:
-  /// **'تحويل التاريخ'**
-  String get calcDateConverterTitle;
-
-  /// PDF export button label
-  ///
-  /// In ar, this message translates to:
-  /// **'PDF'**
-  String get calcExportPdf;
-
-  /// Image export button label
-  ///
-  /// In ar, this message translates to:
-  /// **'صورة'**
-  String get calcExportImage;
-
-  /// Personal financing with percentage
-  ///
-  /// In ar, this message translates to:
-  /// **'التمويل الشخصي ({rate}%)'**
-  String calcPersonalFinancingWithRate(String rate);
-
-  /// Leasing financing with percentage
-  ///
-  /// In ar, this message translates to:
-  /// **'التمويل التأجيري ({rate}%)'**
-  String calcLeasingFinancingWithRate(String rate);
-
-  /// Real estate financing with percentage
-  ///
-  /// In ar, this message translates to:
-  /// **'التمويل العقاري ({rate}%)'**
-  String calcRealEstateFinancingWithRate(String rate);
-
-  /// Available personal financing with rate
-  ///
-  /// In ar, this message translates to:
-  /// **'المتاح للتمويل الشخصي ({rate}%)'**
-  String calcAvailablePersonalWithRate(String rate);
-
-  /// Available real estate financing with rate
-  ///
-  /// In ar, this message translates to:
-  /// **'المتاح للتمويل العقاري ({rate}%)'**
-  String calcAvailableRealEstateWithRate(String rate);
-
-  /// AI context for bank fees page
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم البنكية ساما'**
-  String get calcBankFeesAiContext;
-
-  /// Section header for client and financing data
-  ///
-  /// In ar, this message translates to:
-  /// **'بيانات العميل والتمويل'**
-  String get calcClientAndFinancingData;
-
-  /// Section header for client info
-  ///
-  /// In ar, this message translates to:
-  /// **'معلومات العميل'**
-  String get calcClientInfo;
-
-  /// Label for customer segment dropdown
-  ///
-  /// In ar, this message translates to:
-  /// **'شريحة العميل'**
-  String get calcCustomerSegment;
-
-  /// Label for car price input
-  ///
-  /// In ar, this message translates to:
-  /// **'سعر السيارة (ريال)'**
-  String get calcCarPrice;
-
-  /// Label for leasing duration in months
-  ///
-  /// In ar, this message translates to:
-  /// **'مدة التمويل (شهر)'**
-  String get calcLeasingDurationMonths;
-
-  /// Label for profit rate / cost of term
-  ///
-  /// In ar, this message translates to:
-  /// **'هامش الربح / كلفة الآجل (%)'**
-  String get calcProfitRateCost;
-
-  /// Label for admin fees input
-  ///
-  /// In ar, this message translates to:
-  /// **'الرسوم الإدارية (ريال)'**
-  String get calcAdminFeesInput;
-
-  /// Label for plate fees input
-  ///
-  /// In ar, this message translates to:
-  /// **'رسوم اللوحات (ريال)'**
-  String get calcPlateFees;
-
-  /// Section header for payments
-  ///
-  /// In ar, this message translates to:
-  /// **'الدفعات — نسبة % أو مبلغ من سعر السيارة'**
-  String get calcPaymentsSection;
-
-  /// Label for down payment
-  ///
-  /// In ar, this message translates to:
-  /// **'الدفعة الأولى'**
-  String get calcDownPaymentLabel;
-
-  /// Label for last payment
-  ///
-  /// In ar, this message translates to:
-  /// **'الدفعة الأخيرة'**
-  String get calcLastPaymentLabel;
-
-  /// Label for insurance
-  ///
-  /// In ar, this message translates to:
-  /// **'التأمين'**
-  String get calcInsuranceLabel;
-
-  /// Section header for current obligations
-  ///
-  /// In ar, this message translates to:
-  /// **'الالتزامات الحالية'**
-  String get calcCurrentObligations;
-
-  /// Label for personal financing installment
-  ///
-  /// In ar, this message translates to:
-  /// **'قسط تمويل شخصي'**
-  String get calcPersonalFinancingInst;
-
-  /// Label for other obligations
-  ///
-  /// In ar, this message translates to:
-  /// **'التزامات أخرى'**
-  String get calcOtherObligationsLabel;
-
-  /// Label for real estate installment
-  ///
-  /// In ar, this message translates to:
-  /// **'قسط تمويل عقاري'**
-  String get calcRealEstateInst;
-
-  /// Button label for calc by car price
-  ///
-  /// In ar, this message translates to:
-  /// **'احتساب بناء على سعر السيارة'**
-  String get calcByCarPrice;
-
-  /// Button label for max car price
-  ///
-  /// In ar, this message translates to:
-  /// **'أقصى سعر للسيارة'**
-  String get calcMaxCarPrice;
-
-  /// Snackbar message for missing salary and car price
-  ///
-  /// In ar, this message translates to:
-  /// **'أدخل الراتب وسعر السيارة'**
-  String get calcEnterSalaryAndPrice;
-
-  /// Snackbar message when obligations exceed limit
-  ///
-  /// In ar, this message translates to:
-  /// **'الالتزامات تستهلك كامل نسبة الاستقطاع'**
-  String get calcObligationsExceedLimit;
-
-  /// Title for SAMA bank system dialog
-  ///
-  /// In ar, this message translates to:
-  /// **'نظام الاعتماد البنكي (SAMA)'**
-  String get calcSamaBankSystem;
-
-  /// Dialog title after successful financing calc
-  ///
-  /// In ar, this message translates to:
-  /// **'تم احتساب التمويل بنجاح'**
-  String get calcFinancingSuccess;
-
-  /// Dialog title for max available financing
-  ///
-  /// In ar, this message translates to:
-  /// **'أقصى تمويل متاح للعميل'**
-  String get calcMaxAvailableFinancing;
-
-  /// Label for amount
-  ///
-  /// In ar, this message translates to:
-  /// **'المبلغ'**
-  String get calcAmountLabel;
-
-  /// Label for mandatory down payment
-  ///
-  /// In ar, this message translates to:
-  /// **'الدفعة الأولى الإلزامية'**
-  String get calcMandatoryDownPayment;
-
-  /// Confirmation dialog question
-  ///
-  /// In ar, this message translates to:
-  /// **'هل تريد ترجمة الاحتساب على الآلة ؟'**
-  String get calcTranslateToCalcQuestion;
-
-  /// Result label for cost of term / bank profit
-  ///
-  /// In ar, this message translates to:
-  /// **'كلفة الآجل (ربح البنك)'**
-  String get calcCostOfTermBankProfit;
-
-  /// Result label for total repayment
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي السداد'**
-  String get calcTotalRepayment;
-
-  /// Deduction bar actual percentage
-  ///
-  /// In ar, this message translates to:
-  /// **'الاستقطاع: {percent}%'**
-  String calcDeductionActual(String percent);
-
-  /// Deduction bar limit percentage
-  ///
-  /// In ar, this message translates to:
-  /// **'الحد: {percent}%'**
-  String calcDeductionLimitLabel(String percent);
-
-  /// Approved badge text for SAMA
-  ///
-  /// In ar, this message translates to:
-  /// **'مقبول — الطلب ضمن شروط ساما'**
-  String get calcApprovedSama;
-
-  /// Rejected badge text for deduction exceeded
-  ///
-  /// In ar, this message translates to:
-  /// **'مرفوض — تجاوز نسبة الاستقطاع'**
-  String get calcRejectedDeduction;
-
-  /// Title for required down payment box
-  ///
-  /// In ar, this message translates to:
-  /// **'لإقرار الطلب — ارفع الدفعة الأولى بمبلغ'**
-  String get calcRequiredDownPaymentTitle;
-
-  /// Subtitle for required down payment
-  ///
-  /// In ar, this message translates to:
-  /// **'أي ما يعادل {percent}% من سعر السيارة'**
-  String calcRequiredDownPaymentSubtitle(String percent);
-
-  /// Title for loan comparison modal
-  ///
-  /// In ar, this message translates to:
-  /// **'مقارنة مدد التمويل'**
-  String get calcCompareTitle;
-
-  /// Column header for duration
-  ///
-  /// In ar, this message translates to:
-  /// **'المدة'**
-  String get calcCompareDuration;
-
-  /// Column header for cost
-  ///
-  /// In ar, this message translates to:
-  /// **'كلفة الآجل'**
-  String get calcCompareCost;
-
-  /// Column header for total
-  ///
-  /// In ar, this message translates to:
-  /// **'الإجمالي'**
-  String get calcCompareTotal;
-
-  /// Button label for compare
-  ///
-  /// In ar, this message translates to:
-  /// **'مقارنة'**
-  String get calcCompareScheduleBtn;
-
-  /// Description for duration comparison
-  ///
-  /// In ar, this message translates to:
-  /// **'قارن 12 / 24 / 36 / 48 / 60 شهر'**
-  String get calcCompareDesc;
-
-  /// Note about last payment inclusion
-  ///
-  /// In ar, this message translates to:
-  /// **'* يشمل الدفعة الأخيرة {amount} ر.س'**
-  String calcLastPaymentIncludes(String amount);
-
-  /// Label for percentage mode
-  ///
-  /// In ar, this message translates to:
-  /// **'نسبة %'**
-  String get calcPercentMode;
-
-  /// Label for amount mode
-  ///
-  /// In ar, this message translates to:
-  /// **'مبلغ'**
-  String get calcAmountMode;
-
-  /// Retirement age label
-  ///
-  /// In ar, this message translates to:
-  /// **'سن التقاعد: '**
-  String get calcRetirementAgeLabel;
-
-  /// Available period label
-  ///
-  /// In ar, this message translates to:
-  /// **' | المدة المتاحة: '**
-  String get calcAvailablePeriodLabel;
-
-  /// Year suffix text
-  ///
-  /// In ar, this message translates to:
-  /// **' سنة'**
-  String get calcYearSuffix;
-
-  /// Text for no support/no etizaz
-  ///
-  /// In ar, this message translates to:
-  /// **'لا يوجد'**
-  String get calcNoSupport;
-
-  /// Duration formatted as years and months
-  ///
-  /// In ar, this message translates to:
-  /// **'{years} سنة ({months} شهر)'**
-  String calcDurationYearsMonths(int years, int months);
-
-  /// Installment label during personal loan period
-  ///
-  /// In ar, this message translates to:
-  /// **'القسط خلال فترة التمويل الشخصي ({months} شهر)'**
-  String calcInstallmentDuringMonths(int months);
-
-  /// Installment label after personal loan period
-  ///
-  /// In ar, this message translates to:
-  /// **'القسط بعد انتهاء التمويل الشخصي ({months} شهر)'**
-  String calcInstallmentAfterMonths(int months);
-
-  /// Section header for fixed loan
-  ///
-  /// In ar, this message translates to:
-  /// **'المبلغ المحدد'**
-  String get calcFixedLoanSection;
-
-  /// Month suffix text
-  ///
-  /// In ar, this message translates to:
-  /// **' شهر'**
-  String get calcMonthSuffix;
-
-  /// N months formatted
-  ///
-  /// In ar, this message translates to:
-  /// **'{count} شهر'**
-  String calcNMonths(int count);
-
-  /// N years formatted
-  ///
-  /// In ar, this message translates to:
-  /// **'{count} سنة'**
-  String calcNYearsFormatted(int count);
-
-  /// SAR currency suffix
-  ///
-  /// In ar, this message translates to:
-  /// **' ر.س'**
-  String get calcSarSuffix;
-
-  /// SAR per month suffix
-  ///
-  /// In ar, this message translates to:
-  /// **' ر.س / شهر'**
-  String get calcPerMonthSuffix;
-
-  /// Coming soon dialog title
-  ///
-  /// In ar, this message translates to:
-  /// **'قريباً'**
-  String get comingSoonTitle;
-
-  /// Coming soon dialog message
-  ///
-  /// In ar, this message translates to:
-  /// **'هذه الخدمة ستكون متاحة قريباً'**
-  String get comingSoonMessage;
-
-  /// OK button label
-  ///
-  /// In ar, this message translates to:
-  /// **'حسناً'**
-  String get ok;
-
-  /// Developer full name
-  ///
-  /// In ar, this message translates to:
-  /// **'عبدالله المالكي'**
-  String get developerName;
-
-  /// Developer role/title
-  ///
-  /// In ar, this message translates to:
-  /// **'قائد في الخدمات المالية بخبرة مصرفية تتجاوز 19 عاماً، ومبتكر يسخّر الذكاء الاصطناعي والتقنية لتطوير الخدمات المصرفية'**
-  String get developerRole;
-
-  /// Developer email address
-  ///
-  /// In ar, this message translates to:
-  /// **'Abdullahalmalki@nesab.sa'**
-  String get developerEmail;
-
-  /// Developer website display text
-  ///
-  /// In ar, this message translates to:
-  /// **'www.Nesab.sa'**
-  String get developerWebsite;
-
-  /// App name in about dialog
-  ///
-  /// In ar, this message translates to:
-  /// **'نِسَب'**
-  String get aboutAppName;
-
-  /// App tagline in about dialog
-  ///
-  /// In ar, this message translates to:
-  /// **'حلول تمويلية ذكية'**
-  String get aboutAppTagline;
-
-  /// Full app description in about dialog
-  ///
-  /// In ar, this message translates to:
-  /// **'نِسَب هو منصة متكاملة للمنتجات المالية الإسلامية تجمع بين التحليل الرقمي والإرشاد العملي لتمكين المستخدمين من فهم كل تفصيلة مالية قبل اتخاذ القرارات. استعرض وقارن الحلول التمويلية المتنوعة واختر الأنسب لاحتياجاتك.'**
-  String get aboutAppFullDescription;
-
-  /// App feature: financing calculators
-  ///
-  /// In ar, this message translates to:
-  /// **'حاسبات تمويلية بنتائج فورية'**
-  String get aboutAppFeatureCalculator;
-
-  /// App feature: financial planning
-  ///
-  /// In ar, this message translates to:
-  /// **'أدوات التخطيط والتقدير المالي'**
-  String get aboutAppFeaturePlanning;
-
-  /// App feature: educational guidance
-  ///
-  /// In ar, this message translates to:
-  /// **'إرشادات تعليمية لتحقيق الاستقرار المالي'**
-  String get aboutAppFeatureGuidance;
-
-  /// App feature: sharia compliant
-  ///
-  /// In ar, this message translates to:
-  /// **'خيارات تمويل متوافقة مع الشريعة الإسلامية'**
-  String get aboutAppFeatureSharia;
-
-  /// App website display text
-  ///
-  /// In ar, this message translates to:
-  /// **'www.nesab.sa'**
-  String get aboutAppWebsite;
-
-  /// Label for current password field
-  ///
-  /// In ar, this message translates to:
-  /// **'كلمة المرور الحالية'**
-  String get currentPassword;
-
-  /// Label for new password field
-  ///
-  /// In ar, this message translates to:
-  /// **'كلمة المرور الجديدة'**
-  String get newPassword;
-
-  /// Label for confirm new password field
-  ///
-  /// In ar, this message translates to:
-  /// **'تأكيد كلمة المرور الجديدة'**
-  String get confirmNewPassword;
-
-  /// Success message after password change
-  ///
-  /// In ar, this message translates to:
-  /// **'تم تغيير كلمة المرور بنجاح'**
-  String get passwordChanged;
-
-  /// Error when new password and confirmation do not match
-  ///
-  /// In ar, this message translates to:
-  /// **'كلمات المرور غير متطابقة'**
-  String get passwordsDoNotMatch;
-
-  /// Error when password is too short
-  ///
-  /// In ar, this message translates to:
-  /// **'كلمة المرور يجب أن تكون 6 أحرف على الأقل'**
-  String get passwordTooShort;
-
-  /// Success message after signature upload
-  ///
-  /// In ar, this message translates to:
-  /// **'تم رفع التوقيع بنجاح'**
-  String get signatureUploaded;
-
-  /// Error message when signature upload fails
-  ///
-  /// In ar, this message translates to:
-  /// **'فشل رفع التوقيع'**
-  String get signatureUploadFailed;
-
-  /// Button label for picking an image
-  ///
-  /// In ar, this message translates to:
-  /// **'اختر صورة'**
-  String get pickImage;
-
-  /// Label shown during upload
-  ///
-  /// In ar, this message translates to:
-  /// **'جاري الرفع...'**
-  String get uploading;
-
-  /// Button label for taking a photo with camera
-  ///
-  /// In ar, this message translates to:
-  /// **'الكاميرا'**
-  String get camera;
-
-  /// Button label for deleting a saved signature
-  ///
-  /// In ar, this message translates to:
-  /// **'حذف التوقيع'**
-  String get deleteSignature;
-
-  /// Label for signature name field
-  ///
-  /// In ar, this message translates to:
-  /// **'الاسم'**
-  String get signatureName;
-
-  /// Hint text for signature name field
-  ///
-  /// In ar, this message translates to:
-  /// **'أدخل اسمك'**
-  String get signatureNameHint;
-
-  /// Label for signature phone number field
-  ///
-  /// In ar, this message translates to:
-  /// **'رقم الجوال'**
-  String get signatureNumber;
-
-  /// Hint text for signature phone number field
-  ///
-  /// In ar, this message translates to:
-  /// **'أدخل رقم جوالك'**
-  String get signatureNumberHint;
+  /// **'حذف'**
+  String get delete;
 }
 
 class _AppLocalizationsDelegate

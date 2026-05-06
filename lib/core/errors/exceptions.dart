@@ -2,9 +2,6 @@ sealed class AppException implements Exception {
   const AppException({required this.message});
 
   final String message;
-
-  @override
-  String toString() => message;
 }
 
 final class ServerException extends AppException {
@@ -20,10 +17,7 @@ final class GeneralException extends AppException {
 }
 
 final class AuthException extends AppException {
-  const AuthException({
-    required super.message,
-    required this.code,
-  });
+  const AuthException({required super.message, required this.code});
 
   final String code;
 }

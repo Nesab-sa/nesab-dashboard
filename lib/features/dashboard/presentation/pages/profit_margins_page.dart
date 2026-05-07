@@ -551,6 +551,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     }
   }
 
+<<<<<<< Updated upstream
   static const _bankAliases = <String, String>{
     'البنك السعودي': 'البنك الأهلي السعودي',
     'البنك الأهلي التجاري': 'البنك الأهلي السعودي',
@@ -560,6 +561,21 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
       _bankAliases[name.trim()] ?? name.trim();
 
   // Transform Grok's 'banks' format to '_RateRow' format for display
+=======
+  static const _aiKeyMap = <String, String>{
+    'personal_new': 'personalBasic',
+    'personal_top_up': 'personalSpecial',
+    'debt_purchase': 'personalSpecial',
+    'subsidized_ready': 'realEstateSupportedProgram',
+    'subsidized_offplan': 'realEstateSupportedProgram',
+    'subsidized_self_build': 'realEstateSupportedMinistry',
+    'subsidized_mortgage': 'realEstateSupportedMinistry',
+    'regular_real_estate': 'realEstateCommercial',
+    'leasing_5y': 'leasingVehicles',
+    'leasing_50_50': 'leasingVehicles',
+  };
+
+>>>>>>> Stashed changes
   List<_RateRow> _transformBanksToRates(List<dynamic> banksData) {
     final rows = <_RateRow>[];
     var counter = 0;
@@ -570,7 +586,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
           final bankMap = banksData[bankIdx] as Map<String, dynamic>;
           final bankName = _normalizeBankName(bankMap['bankName']?.toString() ?? '');
           final products = bankMap['products'] as Map<String, dynamic>? ?? {};
-          final product = products[s.key] as Map<String, dynamic>?;
+          final aiKey = _aiKeyMap[s.key] ?? s.key;
+          final product = products[aiKey] as Map<String, dynamic>?;
 
           double? minMargin;
           double? maxMargin;
@@ -1082,8 +1099,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                 size: 16, color: _neonColor),
         label: Text(
           _triggering
-              ? 'جارٍ الاستعلام من Grok… (محاولة $_grokAttempt/3)'
-              : 'تحديث عبر Grok الآن',
+              ? 'جارٍ الاستعلام من OpenAI… (محاولة $_grokAttempt/3)'
+              : 'تحديث عبر OpenAI الآن',
           style: const TextStyle(
               color: _neonColor,
               fontSize: 14,

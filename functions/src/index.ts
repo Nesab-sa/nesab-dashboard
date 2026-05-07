@@ -27,7 +27,8 @@ async function getSecret(secretName: string): Promise<string> {
   const [version] = await secretClient.accessSecretVersion({ name });
   const payload = version.payload?.data;
   if (!payload) throw new Error(`Secret ${secretName} is empty`);
-  return typeof payload === "string" ? payload : Buffer.from(payload).toString("utf8");
+  const raw = typeof payload === "string" ? payload : Buffer.from(payload).toString("utf8");
+  return raw.trim();
 }
 
 function httpsPost(options: https.RequestOptions, body: string): Promise<string> {
@@ -63,7 +64,7 @@ interface AiChatData {
 }
 
 interface AiConfig {
-  provider: "grok";
+  provider: "grok" | "openai";
   model: string;
   systemPrompt: string;
   enabled: boolean;
@@ -137,8 +138,8 @@ export const createAdmin = functions.region("us-central1").https.onCall(
   }
 );
 
-/** AI Chat Proxy - Grok AI (xAI) */
-export const aiChatProxy = functions.region("us-central1").https.onCall(
+/** AI Chat Proxy - supports OpenAI and Grok AI (xAI) */
+export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY", "OPENAI_API_KEY"] }).https.onCall(
   async (data: AiChatData, context: functions.https.CallableContext) => {
     if (!context.auth) {
       throw new functions.https.HttpsError("unauthenticated", "يجب تسجيل الدخول.");
@@ -220,10 +221,13 @@ export const aiChatProxy = functions.region("us-central1").https.onCall(
     });
 
     try {
-      const apiKey = await getSecret("XAI_API_KEY");
+      const isOpenAI = aiConfig.provider === "openai";
+      const apiKey = isOpenAI
+        ? await getSecret("OPENAI_API_KEY")
+        : await getSecret("XAI_API_KEY");
 
       const options: https.RequestOptions = {
-        hostname: "api.x.ai",
+        hostname: isOpenAI ? "api.openai.com" : "api.x.ai",
         path: "/v1/chat/completions",
         method: "POST",
         headers: {
@@ -352,64 +356,21 @@ export const deleteManager = functions.region("us-central1").https.onCall(
 
 // ─── Profit Margins Scheduled Update (daily 10:00 AM KSA = 07:00 UTC) ────────
 
-const SAUDI_BANKS = [
-  "بنك الراجحي", "البنك الأهلي السعودي", "مصرف الإنماء", "بنك الرياض",
-  "بنك الجزيرة", "بنك ساب", "البنك السعودي الفرنسي", "البنك العربي الوطني",
-  "بنك البلاد", "بنك الاستثمار السعودي", "البنك الخليجي الدولي",
-];
-
-// ─── المنتجات الثمانية مع المعرّفات والأسماء ────────────────────────────────
-
-const PRODUCT_KEYS = [
-  { key: "personalBasic",               label: "تمويل شخصي عادي" },
-  { key: "personalSpecial",             label: "تمويل شخصي مخصص" },
-  { key: "realEstateSupportedProgram",  label: "تمويل عقاري مدعوم – برنامج سكني" },
-  { key: "realEstateSupportedMinistry", label: "تمويل عقاري مدعوم – وزارة الإسكان" },
-  { key: "realEstateCommercial",        label: "تمويل عقاري اعتيادي – تجاري" },
-  { key: "realEstateResident",          label: "تمويل عقاري اعتيادي – مقيم" },
-  { key: "leasingVehicles",             label: "تمويل تأجيري – سيارات" },
-  { key: "leasingEquipment",            label: "تمويل تأجيري – معدات" },
-];
-
 // ─── Prompt لجلب هوامش الربح عبر الذكاء الاصطناعي ────────────────────────────
 
-const PROFIT_MARGIN_PROMPT = `أنت محلل مالي متخصص في السوق السعودي.
-ابحث عن هوامش الربح الحالية للبنوك السعودية التالية لثمانية منتجات تمويلية.
-البنوك: ${SAUDI_BANKS.join("، ")}.
+const BANK_IDS = "rajhi,snb,inma,riyadh,jazira,saab,fransi,anb,bilad,sibc,gib";
 
-المنتجات المطلوبة (8 منتجات):
-${PRODUCT_KEYS.map((p, i) => (i + 1) + ". " + p.key + " (" + p.label + ")").join("\n")}
-
-أرجع الإجابة بتنسيق JSON فقط بهذا الشكل بالضبط (بدون أي نص خارج JSON):
-{
-  "banks": [
-    {
-      "bankId": "rajhi",
-      "bankName": "بنك الراجحي",
-      "products": {
-        "personalBasic":               { "min": 3.99, "max": 5.50, "available": true },
-        "personalSpecial":             { "min": 3.75, "max": 5.00, "available": true },
-        "realEstateSupportedProgram":  { "min": 3.50, "max": 4.75, "available": true },
-        "realEstateSupportedMinistry": { "min": 2.50, "max": 3.50, "available": true },
-        "realEstateCommercial":        { "min": 4.00, "max": 5.50, "available": true },
-        "realEstateResident":          { "min": 3.75, "max": 5.00, "available": true },
-        "leasingVehicles":             { "min": 4.00, "max": 6.00, "available": true },
-        "leasingEquipment":            { "min": 4.50, "max": 6.50, "available": true }
-      }
-    }
-  ],
-  "summary": "ملخص قصير عن أبرز التغييرات في هوامش الربح"
-}
-
-معرّفات البنوك بالترتيب: rajhi, snb, inma, riyadh, jazira, saab, fransi, anb, bilad, sibc, gib.
-إذا لم يقدم بنك منتجاً معيناً، ضع available: false وقيم min/max = 0.
-استخدم أحدث المعلومات المتاحة. لا تُضف أي نص خارج JSON.`;
+const PROFIT_MARGIN_PROMPT = `Return JSON only. Saudi bank profit margins for 11 banks and 8 products.
+Banks: ${BANK_IDS}.
+Products: personalBasic,personalSpecial,realEstateSupportedProgram,realEstateSupportedMinistry,realEstateCommercial,realEstateResident,leasingVehicles,leasingEquipment.
+Format: {"banks":[{"bankId":"rajhi","bankName":"بنك الراجحي","products":{"personalBasic":{"min":3.99,"max":5.5,"available":true}}}],"summary":"brief summary"}
+If product unavailable: available:false,min:0,max:0. Use latest data.`;
 
 // ─── Scheduled: تحديث هوامش الربح يومياً 10:00 صباحاً بتوقيت الرياض (07:00 UTC) ──
 
 export const updateProfitMargins = functions
   .region("us-central1")
-  .runWith({ secrets: ["XAI_API_KEY"] })
+  .runWith({ secrets: ["OPENAI_API_KEY"], timeoutSeconds: 540 })
   .pubsub.schedule("30 6 * * *")
   .timeZone("UTC")
   .onRun(async () => {
@@ -417,24 +378,28 @@ export const updateProfitMargins = functions
 
     let apiKey: string;
     try {
-      apiKey = await getSecret("XAI_API_KEY");
+      apiKey = await getSecret("OPENAI_API_KEY");
     } catch (e) {
-      functions.logger.error("updateProfitMargins: XAI_API_KEY is not set", e);
+      functions.logger.error("updateProfitMargins: OPENAI_API_KEY is not set", e);
       return;
     }
 
     const requestBody = JSON.stringify({
-      model: "grok-4.20-reasoning",
-      input: PROFIT_MARGIN_PROMPT,
+      model: "gpt-4o",
+      messages: [
+        { role: "user", content: PROFIT_MARGIN_PROMPT },
+      ],
+      max_tokens: 4096,
+      temperature: 0.2,
     });
 
     const options: https.RequestOptions = {
-      hostname: "api.x.ai",
-      path: "/v1/responses",
+      hostname: "api.openai.com",
+      path: "/v1/chat/completions",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${apiKey.trim()}`,
         "Content-Length": Buffer.byteLength(requestBody),
       },
     };
@@ -447,20 +412,23 @@ export const updateProfitMargins = functions
       return;
     }
 
+    functions.logger.info("updateProfitMargins: raw response", { rawResponse });
+
     let parsed: Record<string, unknown>;
     try {
       const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
-      const output = apiResponse.output as Array<{ type: string; content: Array<{ type: string; text: string }> }>;
-      const content = output?.[0]?.content?.[0]?.text ?? "";
+      const choices = apiResponse.choices as Array<{ message: { content: string } }>;
+      const content = choices?.[0]?.message?.content ?? "";
+      functions.logger.info("updateProfitMargins: extracted content", { content: content.substring(0, 500) });
 
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
-        functions.logger.error("updateProfitMargins: no JSON found in response", content);
+        functions.logger.error("updateProfitMargins: no JSON found in response", { content });
         return;
       }
       parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
     } catch (e) {
-      functions.logger.error("updateProfitMargins: JSON parse failed", e);
+      functions.logger.error("updateProfitMargins: JSON parse failed", { rawResponse: rawResponse.substring(0, 1000), error: e });
       return;
     }
 
@@ -469,7 +437,7 @@ export const updateProfitMargins = functions
         banks: parsed.banks ?? [],
         aiSummary: parsed.summary ?? "",
         lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
-        updatedBy: "grok-scheduled",
+        updatedBy: "openai-scheduled",
       }, { merge: true });
       functions.logger.info("updateProfitMargins: Firestore updated successfully");
     } catch (e) {
@@ -477,7 +445,7 @@ export const updateProfitMargins = functions
     }
   });
 
-export const triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY"] }).https.onCall(
+export const triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["OPENAI_API_KEY"], timeoutSeconds: 540 }).https.onCall(
   async (_data: unknown, context: functions.https.CallableContext) => {
     if (!context.auth) {
       throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
@@ -492,23 +460,25 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").runWit
 
     let apiKey: string;
     try {
-      apiKey = await getSecret("XAI_API_KEY");
+      apiKey = await getSecret("OPENAI_API_KEY");
     } catch (e) {
-      throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
+      throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح OpenAI.");
     }
 
     const requestBody = JSON.stringify({
-      model: "grok-4.20-reasoning",
-      input: PROFIT_MARGIN_PROMPT,
+      model: "gpt-4o",
+      messages: [{ role: "user", content: PROFIT_MARGIN_PROMPT }],
+      max_tokens: 4096,
+      temperature: 0.2,
     });
 
     const options: https.RequestOptions = {
-      hostname: "api.x.ai",
-      path: "/v1/responses",
+      hostname: "api.openai.com",
+      path: "/v1/chat/completions",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${apiKey.trim()}`,
         "Content-Length": Buffer.byteLength(requestBody),
       },
     };
@@ -522,19 +492,24 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").runWit
       throw new functions.https.HttpsError("internal", `فشل الاتصال بـ Grok API: ${errMsg}`);
     }
 
+    functions.logger.info("triggerProfitMarginsUpdate: raw response", { rawResponse });
+
     let parsed: Record<string, unknown>;
     try {
       const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
-      const output = apiResponse.output as Array<{ type: string; content: Array<{ type: string; text: string }> }>;
-      const content = output?.[0]?.content?.[0]?.text ?? "";
+      const choices = apiResponse.choices as Array<{ message: { content: string } }>;
+      const content = choices?.[0]?.message?.content ?? "";
+      functions.logger.info("triggerProfitMarginsUpdate: extracted content", { content: content.substring(0, 500) });
+
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
-        throw new functions.https.HttpsError("internal", "لم يُرجع Grok بيانات JSON صالحة.");
+        throw new functions.https.HttpsError("internal", "لم يُرجع OpenAI بيانات JSON صالحة.");
       }
       parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
     } catch (e) {
       if (e instanceof functions.https.HttpsError) throw e;
-      throw new functions.https.HttpsError("internal", "فشل تحليل رد Grok.");
+      functions.logger.error("triggerProfitMarginsUpdate: parse failed", { rawResponse: rawResponse.substring(0, 1000), error: e });
+      throw new functions.https.HttpsError("internal", "فشل تحليل رد OpenAI.");
     }
 
     try {
@@ -542,7 +517,7 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").runWit
         banks: parsed.banks ?? [],
         aiSummary: parsed.summary ?? "",
         lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
-        updatedBy: "grok-manual",
+        updatedBy: "openai-manual",
       }, { merge: true });
     } catch (e) {
       throw new functions.https.HttpsError("internal", "فشل حفظ البيانات في Firestore.");

@@ -351,66 +351,110 @@ export const deleteManager = functions.region("us-central1").https.onCall(
   }
 );
 
-// ─── Profit Margins Scheduled Update (daily 10:00 AM KSA = 07:00 UTC) ────────
+// ─── Profit Margins — Banks & Sections ───────────────────────────────────────
 
-const SAUDI_BANKS = [
-  "بنك الراجحي", "البنك الأهلي السعودي", "مصرف الإنماء", "بنك الرياض",
-  "بنك الجزيرة", "بنك ساب", "البنك السعودي الفرنسي", "البنك العربي الوطني",
-  "بنك البلاد", "بنك الاستثمار السعودي", "البنك الخليجي الدولي",
+const BANK_DEFS = [
+  { id: "rajhi",  name: "بنك الراجحي" },
+  { id: "snb",    name: "البنك الأهلي السعودي" },
+  { id: "inma",   name: "بنك الإنماء" },
+  { id: "riyadh", name: "بنك الرياض" },
+  { id: "jazira", name: "بنك الجزيرة" },
+  { id: "saab",   name: "البنك السعودي البريطاني" },
+  { id: "fransi", name: "البنك السعودي الفرنسي" },
+  { id: "anb",    name: "البنك العربي الوطني" },
+  { id: "bilad",  name: "بنك البلاد" },
+  { id: "sibc",   name: "البنك السعودي للاستثمار" },
+  { id: "gib",    name: "بنك الخليج الدولي" },
 ];
 
-// ─── المنتجات الثمانية مع المعرّفات والأسماء ────────────────────────────────
-
-const PRODUCT_KEYS = [
-  { key: "personalBasic",               label: "تمويل شخصي عادي" },
-  { key: "personalSpecial",             label: "تمويل شخصي مخصص" },
-  { key: "realEstateSupportedProgram",  label: "تمويل عقاري مدعوم – برنامج سكني" },
-  { key: "realEstateSupportedMinistry", label: "تمويل عقاري مدعوم – وزارة الإسكان" },
-  { key: "realEstateCommercial",        label: "تمويل عقاري اعتيادي – تجاري" },
-  { key: "realEstateResident",          label: "تمويل عقاري اعتيادي – مقيم" },
-  { key: "leasingVehicles",             label: "تمويل تأجيري – سيارات" },
-  { key: "leasingEquipment",            label: "تمويل تأجيري – معدات" },
+const SECTION_KEYS = [
+  "personal_new", "personal_top_up", "debt_purchase",
+  "subsidized_ready", "subsidized_offplan", "subsidized_self_build",
+  "subsidized_mortgage", "regular_real_estate",
+  "leasing_5y", "leasing_50_50",
 ];
 
-// ─── Prompt لجلب هوامش الربح عبر الذكاء الاصطناعي ────────────────────────────
+const PROFIT_MARGIN_PROMPT = `أنت محلل مالي متخصص في السوق السعودي المصرفي.
+ابحث عن هوامش الربح الفعلية الحالية لـ 11 بنكاً سعودياً، وأرجع JSON فقط بدون أي نص خارجه.
 
-const PROFIT_MARGIN_PROMPT = `أنت محلل مالي متخصص في السوق السعودي.
-ابحث عن هوامش الربح الحالية للبنوك السعودية التالية لثمانية منتجات تمويلية.
-البنوك: ${SAUDI_BANKS.join("، ")}.
-
-المنتجات المطلوبة (8 منتجات):
-${PRODUCT_KEYS.map((p, i) => (i + 1) + ". " + p.key + " (" + p.label + ")").join("\n")}
-
-أرجع الإجابة بتنسيق JSON فقط بهذا الشكل بالضبط (بدون أي نص خارج JSON):
+الهيكل المطلوب بالضبط:
 {
   "banks": [
     {
       "bankId": "rajhi",
       "bankName": "بنك الراجحي",
       "products": {
-        "personalBasic":               { "min": 3.99, "max": 5.50, "available": true },
-        "personalSpecial":             { "min": 3.75, "max": 5.00, "available": true },
-        "realEstateSupportedProgram":  { "min": 3.50, "max": 4.75, "available": true },
-        "realEstateSupportedMinistry": { "min": 2.50, "max": 3.50, "available": true },
-        "realEstateCommercial":        { "min": 4.00, "max": 5.50, "available": true },
-        "realEstateResident":          { "min": 3.75, "max": 5.00, "available": true },
-        "leasingVehicles":             { "min": 4.00, "max": 6.00, "available": true },
-        "leasingEquipment":            { "min": 4.50, "max": 6.50, "available": true }
+        "leasingEquipment":            { "available": true, "min": 4.50, "max": 6.50 },
+        "leasingVehicles":             { "available": true, "min": 4.00, "max": 6.00 },
+        "personalBasic":               { "available": true, "min": 3.99, "max": 5.50 },
+        "personalSpecial":             { "available": true, "min": 3.75, "max": 5.00 },
+        "realEstateCommercial":        { "available": true, "min": 4.00, "max": 5.50 },
+        "realEstateResident":          { "available": true, "min": 3.75, "max": 5.00 },
+        "realEstateSupportedMinistry": { "available": true, "min": 2.50, "max": 3.50 },
+        "realEstateSupportedProgram":  { "available": true, "min": 3.50, "max": 4.75 }
       }
     }
   ],
-  "summary": "ملخص قصير عن أبرز التغييرات في هوامش الربح"
+  "rates": [
+    { "id": "r_0", "bankName": "بنك الراجحي", "sectionKey": "personal_new", "margin": "3.99%", "sortOrder": 1 }
+  ],
+  "summary": "ملخص موجز بالعربية عن هوامش الربح الحالية"
 }
 
-معرّفات البنوك بالترتيب: rajhi, snb, inma, riyadh, jazira, saab, fransi, anb, bilad, sibc, gib.
-إذا لم يقدم بنك منتجاً معيناً، ضع available: false وقيم min/max = 0.
-استخدم أحدث المعلومات المتاحة. لا تُضف أي نص خارج JSON.`;
+البنوك الـ 11 بالترتيب:
+${BANK_DEFS.map((b, i) => `${i + 1}. ${b.id} → ${b.name}`).join("\n")}
+
+للـ rates — 110 عنصراً (11 بنك × 10 أقسام):
+${SECTION_KEYS.map((s, i) => `r_${i * 11}..r_${i * 11 + 10}: ${s} (sortOrder 1..11)`).join("\n")}
+
+في كل قسم، البنوك بنفس الترتيب أعلاه (sortOrder 1=الراجحي، 2=الأهلي، ...، 11=الخليج الدولي).
+margin في rates: نص "X.XX%" مثل "4.50%".
+min/max في banks: أرقام بخانتين مثل 4.50.
+إذا لم يقدم بنك منتجاً: available=false, min=0.00, max=0.00, margin="0.00%".
+استخدم أحدث المعلومات المتاحة للسوق السعودي. لا تُضف أي نص خارج JSON.`;
+
+// ─── Shared: call OpenAI gpt-4o and return parsed profit margins ──────────────
+
+async function fetchProfitMarginsFromOpenAI(apiKey: string): Promise<Record<string, unknown>> {
+  const requestBody = JSON.stringify({
+    model: "gpt-4o",
+    messages: [{ role: "user", content: PROFIT_MARGIN_PROMPT }],
+    temperature: 0.2,
+    max_tokens: 16000,
+  });
+
+  const options: https.RequestOptions = {
+    hostname: "api.openai.com",
+    path: "/v1/chat/completions",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Length": Buffer.byteLength(requestBody),
+    },
+  };
+
+  const rawResponse = await httpsPost(options, requestBody);
+  const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
+  const content =
+    (apiResponse.choices as Array<{ message: { content: string } }>)?.[0]?.message?.content ?? "";
+
+  const cleaned = content
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+
+  const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error("لم يُرجع النموذج JSON صالحاً");
+
+  return JSON.parse(jsonMatch[0]) as Record<string, unknown>;
+}
 
 // ─── Scheduled: تحديث هوامش الربح يومياً 10:00 صباحاً بتوقيت الرياض (07:00 UTC) ──
 
 export const updateProfitMargins = functions
   .region("us-central1")
-  .runWith({ secrets: ["XAI_API_KEY"] })
+  .runWith({ secrets: ["OPENAI_API_KEY"], timeoutSeconds: 540 })
   .pubsub.schedule("30 6 * * *")
   .timeZone("UTC")
   .onRun(async () => {
@@ -418,68 +462,39 @@ export const updateProfitMargins = functions
 
     let apiKey: string;
     try {
-      apiKey = await getSecret("XAI_API_KEY");
+      apiKey = await getSecret("OPENAI_API_KEY");
     } catch (e) {
-      functions.logger.error("updateProfitMargins: XAI_API_KEY is not set", e);
-      return;
-    }
-
-    const requestBody = JSON.stringify({
-      model: "grok-4.20-reasoning",
-      input: PROFIT_MARGIN_PROMPT,
-    });
-
-    const options: https.RequestOptions = {
-      hostname: "api.x.ai",
-      path: "/v1/responses",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Length": Buffer.byteLength(requestBody),
-      },
-    };
-
-    let rawResponse: string;
-    try {
-      rawResponse = await httpsPost(options, requestBody);
-    } catch (e) {
-      functions.logger.error("updateProfitMargins: API call failed", e);
+      functions.logger.error("updateProfitMargins: OPENAI_API_KEY not available", e);
       return;
     }
 
     let parsed: Record<string, unknown>;
     try {
-      const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
-      const output = apiResponse.output as Array<{ type: string; content: Array<{ type: string; text: string }> }>;
-      const content = output?.[0]?.content?.[0]?.text ?? "";
-
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        functions.logger.error("updateProfitMargins: no JSON found in response", content);
-        return;
-      }
-      parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
+      parsed = await fetchProfitMarginsFromOpenAI(apiKey);
     } catch (e) {
-      functions.logger.error("updateProfitMargins: JSON parse failed", e);
+      functions.logger.error("updateProfitMargins: OpenAI call or parse failed", e);
       return;
     }
 
     try {
       await firestore.doc("bank_rates/profit_margins").set({
         banks: parsed.banks ?? [],
+        rates: parsed.rates ?? [],
         aiSummary: parsed.summary ?? "",
         lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
-        updatedBy: "grok-scheduled",
-      }, { merge: true });
+        updatedBy: "openai",
+        notes: "",
+      });
       functions.logger.info("updateProfitMargins: Firestore updated successfully");
     } catch (e) {
       functions.logger.error("updateProfitMargins: Firestore write failed", e);
     }
   });
 
-export const triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY"] }).https.onCall(
-  async (_data: unknown, context: functions.https.CallableContext) => {
+export const triggerProfitMarginsUpdate = functions
+  .region("us-central1")
+  .runWith({ secrets: ["OPENAI_API_KEY"], timeoutSeconds: 540 })
+  .https.onCall(async (_data: unknown, context: functions.https.CallableContext) => {
     if (!context.auth) {
       throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
     }
@@ -493,65 +508,35 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").runWit
 
     let apiKey: string;
     try {
-      apiKey = await getSecret("XAI_API_KEY");
+      apiKey = await getSecret("OPENAI_API_KEY");
     } catch (e) {
-      throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
-    }
-
-    const requestBody = JSON.stringify({
-      model: "grok-4.20-reasoning",
-      input: PROFIT_MARGIN_PROMPT,
-    });
-
-    const options: https.RequestOptions = {
-      hostname: "api.x.ai",
-      path: "/v1/responses",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Length": Buffer.byteLength(requestBody),
-      },
-    };
-
-    let rawResponse: string;
-    try {
-      rawResponse = await httpsPost(options, requestBody);
-    } catch (e) {
-      const errMsg = e instanceof Error ? e.message : String(e);
-      functions.logger.error("triggerProfitMarginsUpdate: Grok API call failed", { error: errMsg });
-      throw new functions.https.HttpsError("internal", `فشل الاتصال بـ Grok API: ${errMsg}`);
+      throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح OpenAI.");
     }
 
     let parsed: Record<string, unknown>;
     try {
-      const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
-      const output = apiResponse.output as Array<{ type: string; content: Array<{ type: string; text: string }> }>;
-      const content = output?.[0]?.content?.[0]?.text ?? "";
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new functions.https.HttpsError("internal", "لم يُرجع Grok بيانات JSON صالحة.");
-      }
-      parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
+      parsed = await fetchProfitMarginsFromOpenAI(apiKey);
     } catch (e) {
-      if (e instanceof functions.https.HttpsError) throw e;
-      throw new functions.https.HttpsError("internal", "فشل تحليل رد Grok.");
+      const errMsg = e instanceof Error ? e.message : String(e);
+      functions.logger.error("triggerProfitMarginsUpdate: OpenAI call failed", { error: errMsg });
+      throw new functions.https.HttpsError("internal", `فشل الاتصال بـ OpenAI: ${errMsg}`);
     }
 
     try {
       await firestore.doc("bank_rates/profit_margins").set({
         banks: parsed.banks ?? [],
+        rates: parsed.rates ?? [],
         aiSummary: parsed.summary ?? "",
         lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
-        updatedBy: "grok-manual",
-      }, { merge: true });
+        updatedBy: "openai",
+        notes: "",
+      });
     } catch (e) {
       throw new functions.https.HttpsError("internal", "فشل حفظ البيانات في Firestore.");
     }
 
     return { success: true, summary: parsed.summary ?? "" };
-  }
-);
+  });
 
 // ─── Auto-create Firestore user doc on Auth signup ────────────────────────────
 export const onUserCreated = functions

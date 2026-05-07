@@ -551,7 +551,6 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     }
   }
 
-<<<<<<< Updated upstream
   static const _bankAliases = <String, String>{
     'البنك السعودي': 'البنك الأهلي السعودي',
     'البنك الأهلي التجاري': 'البنك الأهلي السعودي',
@@ -560,8 +559,6 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
   static String _normalizeBankName(String name) =>
       _bankAliases[name.trim()] ?? name.trim();
 
-  // Transform Grok's 'banks' format to '_RateRow' format for display
-=======
   static const _aiKeyMap = <String, String>{
     'personal_new': 'personalBasic',
     'personal_top_up': 'personalSpecial',
@@ -574,8 +571,6 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     'leasing_5y': 'leasingVehicles',
     'leasing_50_50': 'leasingVehicles',
   };
-
->>>>>>> Stashed changes
   List<_RateRow> _transformBanksToRates(List<dynamic> banksData) {
     final rows = <_RateRow>[];
     var counter = 0;

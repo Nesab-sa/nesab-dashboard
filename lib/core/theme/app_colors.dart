@@ -113,7 +113,7 @@ abstract class AppColors {
 
   // ── Dashboard Theme (Dark – Unified Reporting Style) ─────────────────
 
-  static const Color dashboardBg = Color(0xFF1A1A1A);
+  static const Color dashboardBg = Color(0xFF090A0F);
   static const Color dashboardCard = Color(0xFF2C2F48);
   static const Color dashboardCardHeader = Color(0xFF23263E);
   static const Color dashboardTextPrimary = Color(0xFFFFFFFF);

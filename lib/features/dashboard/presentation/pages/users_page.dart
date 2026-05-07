@@ -214,9 +214,10 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   _Provider _provider(Map<String, dynamic> d) {
-    final raw = (d['provider'] ?? d['signInProvider'] ?? d['providerId'] ?? '')
-        .toString()
-        .toLowerCase();
+    final raw =
+        (d['authProvider'] ?? d['provider'] ?? d['signInProvider'] ?? d['providerId'] ?? '')
+            .toString()
+            .toLowerCase();
     if (raw.contains('google')) return _Provider.google;
     if (raw.contains('apple')) return _Provider.apple;
     if (raw.contains('password') || raw.contains('email')) return _Provider.email;

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
+import '../../data/models/profit_margin_model.dart';
 
 // ── Theme Colors (matches HTML design) ───────────────────────────────
 const _bgColor      = Color(0xFF090A0F);
@@ -20,23 +21,33 @@ class _RateRow {
   final String id;
   final String sectionKey;
   final String bankName;
-  final double? margin;
+  final double? minMargin;
+  final double? maxMargin;
   final int sortOrder;
 
   const _RateRow({
     required this.id,
     required this.sectionKey,
     required this.bankName,
-    this.margin,
+    this.minMargin,
+    this.maxMargin,
     required this.sortOrder,
   });
 
-  _RateRow copyWith({String? bankName, double? margin, bool clearMargin = false}) =>
+  bool get hasMargin => minMargin != null && maxMargin != null;
+
+  _RateRow copyWith({
+    String? bankName,
+    double? minMargin,
+    double? maxMargin,
+    bool clearMargin = false,
+  }) =>
       _RateRow(
         id: id,
         sectionKey: sectionKey,
         bankName: bankName ?? this.bankName,
-        margin: clearMargin ? null : (margin ?? this.margin),
+        minMargin: clearMargin ? null : (minMargin ?? this.minMargin),
+        maxMargin: clearMargin ? null : (maxMargin ?? this.maxMargin),
         sortOrder: sortOrder,
       );
 
@@ -44,17 +55,23 @@ class _RateRow {
         'id': id,
         'sectionKey': sectionKey,
         'bankName': bankName,
-        'margin': margin,
+        'minMargin': minMargin,
+        'maxMargin': maxMargin,
         'sortOrder': sortOrder,
       };
 
-  factory _RateRow.fromMap(Map<String, dynamic> d) => _RateRow(
-        id: d['id']?.toString() ?? '',
-        sectionKey: d['sectionKey']?.toString() ?? '',
-        bankName: d['bankName']?.toString() ?? '',
-        margin: (d['margin'] as num?)?.toDouble(),
-        sortOrder: (d['sortOrder'] as num?)?.toInt() ?? 99,
-      );
+  factory _RateRow.fromMap(Map<String, dynamic> d) {
+    // backward-compat: old format stored single 'margin'
+    final legacy = (d['margin'] as num?)?.toDouble();
+    return _RateRow(
+      id: d['id']?.toString() ?? '',
+      sectionKey: d['sectionKey']?.toString() ?? '',
+      bankName: d['bankName']?.toString() ?? '',
+      minMargin: (d['minMargin'] as num?)?.toDouble() ?? legacy,
+      maxMargin: (d['maxMargin'] as num?)?.toDouble() ?? legacy,
+      sortOrder: (d['sortOrder'] as num?)?.toInt() ?? 99,
+    );
+  }
 }
 
 // ── Section / Group Definitions ───────────────────────────────────────
@@ -72,42 +89,27 @@ class _GroupDef {
 
 const _groups = <_GroupDef>[
   _GroupDef('التمويل الشخصي', [
-    _SectionDef('personal_new',    'تمويل شخصي جديد'),
-    _SectionDef('personal_top_up', 'تمويل شخصي تكميلي'),
-    _SectionDef('debt_purchase',   'شراء مديونية'),
+    _SectionDef('personalBasic',   'تمويل شخصي عادي'),
+    _SectionDef('personalSpecial', 'تمويل شخصي مخصص'),
   ]),
   _GroupDef('التمويل العقاري المدعوم', [
-    _SectionDef('subsidized_ready',      'شراء وحدة سكنية جاهزة'),
-    _SectionDef('subsidized_offplan',    'شراء على الخارطة'),
-    _SectionDef('subsidized_self_build', 'البناء الذاتي'),
-    _SectionDef('subsidized_mortgage',   'رهن عقار'),
+    _SectionDef('realEstateSupportedProgram',  'تمويل عقاري مدعوم – برنامج سكني'),
+    _SectionDef('realEstateSupportedMinistry', 'تمويل عقاري مدعوم – وزارة الإسكان'),
   ]),
   _GroupDef('التمويل العقاري الاعتيادي', [
-    _SectionDef('regular_real_estate', 'التمويل العقاري الاعتيادي'),
+    _SectionDef('realEstateCommercial', 'تمويل عقاري اعتيادي – تجاري'),
+    _SectionDef('realEstateResident',   'تمويل عقاري اعتيادي – مقيم'),
   ]),
   _GroupDef('التمويل التأجيري', [
-    _SectionDef('leasing_5y',    'نظام 5 سنوات'),
-    _SectionDef('leasing_50_50', 'نظام 50/50'),
+    _SectionDef('leasingVehicles',  'تمويل تأجيري – سيارات'),
+    _SectionDef('leasingEquipment', 'تمويل تأجيري – معدات'),
   ]),
-];
-
-const _defaultBanks = [
-  'البنك الأهلي السعودي',
-  'مصرف الراجحي',
-  'بنك الرياض',
-  'البنك السعودي الأول (ساب)',
-  'البنك السعودي الفرنسي',
-  'البنك العربي الوطني',
-  'مصرف الإنماء',
-  'بنك البلاد',
-  'بنك الجزيرة',
-  'البنك السعودي للاستثمار',
-  'بنك الإمارات دبي الوطني',
 ];
 
 // ── Inline Editable Cell ──────────────────────────────────────────────
 class _EditableCell extends StatefulWidget {
   final String value;
+  final String? displayValue;
   final bool isNumber;
   final Color textColor;
   final void Function(String) onSave;
@@ -115,6 +117,7 @@ class _EditableCell extends StatefulWidget {
   const _EditableCell({
     required this.value,
     required this.onSave,
+    this.displayValue,
     this.isNumber = false,
     this.textColor = Colors.white,
   });
@@ -197,9 +200,9 @@ class _EditableCellState extends State<_EditableCell> {
           color: Colors.transparent,
         ),
         child: Text(
-          widget.value.isEmpty ? '—' : widget.value,
+          (widget.displayValue ?? widget.value).isEmpty ? '—' : (widget.displayValue ?? widget.value),
           style: TextStyle(
-            color: widget.value.isEmpty ? _muteColor : widget.textColor,
+            color: (widget.displayValue ?? widget.value).isEmpty ? _muteColor : widget.textColor,
             fontSize: 13,
           ),
           textAlign: widget.isNumber ? TextAlign.left : TextAlign.right,
@@ -216,7 +219,7 @@ class _SectionTable extends StatefulWidget {
   final String label;
   final List<_RateRow> rows;
   final void Function(String id, String bankName) onUpdateBank;
-  final void Function(String id, double? margin) onUpdateMargin;
+  final void Function(String id, double? min, double? max) onUpdateMargin;
   final void Function(String sectionKey) onAddBank;
   final void Function(String id) onDelete;
 
@@ -238,16 +241,16 @@ class _SectionTableState extends State<_SectionTable> {
   bool _open = false;
 
   ({String? minId, String? maxId}) _colorIds() {
-    final withVal = widget.rows.where((r) => r.margin != null).toList();
+    final withVal = widget.rows.where((r) => r.hasMargin).toList();
     if (withVal.isEmpty) return (minId: null, maxId: null);
     _RateRow mn = withVal[0], mx = withVal[0];
     for (final r in withVal) {
-      if (r.margin! < mn.margin!) mn = r;
-      if (r.margin! > mx.margin!) mx = r;
+      if (r.minMargin! < mn.minMargin!) mn = r;
+      if (r.minMargin! > mx.minMargin!) mx = r;
     }
     return (
       minId: mn.id,
-      maxId: mn.margin == mx.margin ? null : mx.id,
+      maxId: mn.minMargin == mx.minMargin ? null : mx.id,
     );
   }
 
@@ -331,8 +334,16 @@ class _SectionTableState extends State<_SectionTable> {
                         fontWeight: FontWeight.w600)),
               ),
               Expanded(
-                flex: 3,
-                child: Text('هامش الربح %',
+                flex: 2,
+                child: Text('الأدنى %',
+                    style: TextStyle(
+                        color: _muteColor,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600)),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text('الأقصى %',
                     style: TextStyle(
                         color: _muteColor,
                         fontSize: 11,
@@ -366,18 +377,41 @@ class _SectionTableState extends State<_SectionTable> {
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8, vertical: 4),
                     child: _EditableCell(
-                      value: r.margin == null ? '' : r.margin!.toString(),
+                      value: r.minMargin == null ? '' : r.minMargin!.toStringAsFixed(2),
+                      displayValue: r.minMargin == null ? '' : '${r.minMargin!.toStringAsFixed(2)}%',
                       isNumber: true,
                       textColor: valueColor,
                       onSave: (v) {
                         final parsed = double.tryParse(v.trim());
                         widget.onUpdateMargin(
-                            r.id, v.trim().isEmpty ? null : parsed);
+                            r.id,
+                            v.trim().isEmpty ? null : parsed,
+                            r.maxMargin);
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 4),
+                    child: _EditableCell(
+                      value: r.maxMargin == null ? '' : r.maxMargin!.toStringAsFixed(2),
+                      displayValue: r.maxMargin == null ? '' : '${r.maxMargin!.toStringAsFixed(2)}%',
+                      isNumber: true,
+                      textColor: valueColor,
+                      onSave: (v) {
+                        final parsed = double.tryParse(v.trim());
+                        widget.onUpdateMargin(
+                            r.id,
+                            r.minMargin,
+                            v.trim().isEmpty ? null : parsed);
                       },
                     ),
                   ),
@@ -457,17 +491,23 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     super.dispose();
   }
 
-  // ── Build default rates ───────────────────────────────────────────
+  // ── Build default rates from model's rich data ────────────────────
   List<_RateRow> _buildDefault() {
+    final config = ProfitMarginsConfig.defaultConfig();
     final rows = <_RateRow>[];
     var counter = 0;
     for (final g in _groups) {
       for (final s in g.sections) {
-        for (var i = 0; i < _defaultBanks.length; i++) {
+        for (var i = 0; i < config.banks.length; i++) {
+          final bank = config.banks[i];
+          final pm = bank.products[s.key];
+          final available = pm?.available ?? false;
           rows.add(_RateRow(
             id: 'r_${counter++}',
             sectionKey: s.key,
-            bankName: _defaultBanks[i],
+            bankName: bank.bankName,
+            minMargin: available ? pm?.min : null,
+            maxMargin: available ? pm?.max : null,
             sortOrder: i + 1,
           ));
         }
@@ -511,28 +551,34 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     }
   }
 
+  static const _bankAliases = <String, String>{
+    'البنك السعودي': 'البنك الأهلي السعودي',
+    'البنك الأهلي التجاري': 'البنك الأهلي السعودي',
+  };
+
+  static String _normalizeBankName(String name) =>
+      _bankAliases[name.trim()] ?? name.trim();
+
   // Transform Grok's 'banks' format to '_RateRow' format for display
   List<_RateRow> _transformBanksToRates(List<dynamic> banksData) {
     final rows = <_RateRow>[];
     var counter = 0;
 
-    // Iterate through sections (8 products) and banks
     for (final g in _groups) {
       for (final s in g.sections) {
         for (var bankIdx = 0; bankIdx < banksData.length; bankIdx++) {
           final bankMap = banksData[bankIdx] as Map<String, dynamic>;
-          final bankName = bankMap['bankName']?.toString() ?? '';
+          final bankName = _normalizeBankName(bankMap['bankName']?.toString() ?? '');
           final products = bankMap['products'] as Map<String, dynamic>? ?? {};
           final product = products[s.key] as Map<String, dynamic>?;
 
-          // Use average of min/max, or null if product not available
-          double? margin;
+          double? minMargin;
+          double? maxMargin;
           if (product != null) {
-            final minVal = (product['min'] as num?)?.toDouble();
-            final maxVal = (product['max'] as num?)?.toDouble();
             final available = product['available'] as bool? ?? false;
-            if (available && minVal != null && maxVal != null) {
-              margin = (minVal + maxVal) / 2;
+            if (available) {
+              minMargin = (product['min'] as num?)?.toDouble();
+              maxMargin = (product['max'] as num?)?.toDouble();
             }
           }
 
@@ -540,7 +586,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
             id: 'r_${counter++}',
             sectionKey: s.key,
             bankName: bankName,
-            margin: margin,
+            minMargin: minMargin,
+            maxMargin: maxMargin,
             sortOrder: bankIdx + 1,
           ));
         }
@@ -580,9 +627,9 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
         };
       }
       banksMap[bankName]!['products'][row.sectionKey] = {
-        'min': row.margin,
-        'max': row.margin,
-        'available': row.margin != null,
+        'min': row.minMargin,
+        'max': row.maxMargin,
+        'available': row.hasMargin,
       };
     }
 
@@ -719,13 +766,12 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     });
   }
 
-  void _updateMargin(String id, double? margin) {
+  void _updateMargin(String id, double? min, double? max) {
     setState(() {
       _rates = _rates.map((r) {
         if (r.id != id) return r;
-        return margin == null
-            ? r.copyWith(clearMargin: true)
-            : r.copyWith(margin: margin);
+        if (min == null && max == null) return r.copyWith(clearMargin: true);
+        return r.copyWith(minMargin: min, maxMargin: max);
       }).toList();
     });
   }

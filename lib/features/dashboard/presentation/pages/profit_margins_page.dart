@@ -108,6 +108,7 @@ const _defaultBanks = [
 // ── Inline Editable Cell ──────────────────────────────────────────────
 class _EditableCell extends StatefulWidget {
   final String value;
+  final String? displayValue;
   final bool isNumber;
   final Color textColor;
   final void Function(String) onSave;
@@ -115,6 +116,7 @@ class _EditableCell extends StatefulWidget {
   const _EditableCell({
     required this.value,
     required this.onSave,
+    this.displayValue,
     this.isNumber = false,
     this.textColor = Colors.white,
   });
@@ -197,9 +199,9 @@ class _EditableCellState extends State<_EditableCell> {
           color: Colors.transparent,
         ),
         child: Text(
-          widget.value.isEmpty ? '—' : widget.value,
+          (widget.displayValue ?? widget.value).isEmpty ? '—' : (widget.displayValue ?? widget.value),
           style: TextStyle(
-            color: widget.value.isEmpty ? _muteColor : widget.textColor,
+            color: (widget.displayValue ?? widget.value).isEmpty ? _muteColor : widget.textColor,
             fontSize: 13,
           ),
           textAlign: widget.isNumber ? TextAlign.left : TextAlign.right,
@@ -371,7 +373,8 @@ class _SectionTableState extends State<_SectionTable> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8, vertical: 4),
                     child: _EditableCell(
-                      value: r.margin == null ? '' : r.margin!.toString(),
+                      value: r.margin == null ? '' : r.margin!.toStringAsFixed(2),
+                      displayValue: r.margin == null ? '' : '${r.margin!.toStringAsFixed(2)}%',
                       isNumber: true,
                       textColor: valueColor,
                       onSave: (v) {
@@ -511,6 +514,14 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     }
   }
 
+  static const _bankAliases = <String, String>{
+    'البنك السعودي': 'البنك الأهلي السعودي',
+    'البنك الأهلي التجاري': 'البنك الأهلي السعودي',
+  };
+
+  static String _normalizeBankName(String name) =>
+      _bankAliases[name.trim()] ?? name.trim();
+
   // Transform Grok's 'banks' format to '_RateRow' format for display
   List<_RateRow> _transformBanksToRates(List<dynamic> banksData) {
     final rows = <_RateRow>[];
@@ -521,7 +532,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
       for (final s in g.sections) {
         for (var bankIdx = 0; bankIdx < banksData.length; bankIdx++) {
           final bankMap = banksData[bankIdx] as Map<String, dynamic>;
-          final bankName = bankMap['bankName']?.toString() ?? '';
+          final bankName = _normalizeBankName(bankMap['bankName']?.toString() ?? '');
           final products = bankMap['products'] as Map<String, dynamic>? ?? {};
           final product = products[s.key] as Map<String, dynamic>?;
 

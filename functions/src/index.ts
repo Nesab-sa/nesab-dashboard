@@ -27,7 +27,8 @@ async function getSecret(secretName: string): Promise<string> {
   const [version] = await secretClient.accessSecretVersion({ name });
   const payload = version.payload?.data;
   if (!payload) throw new Error(`Secret ${secretName} is empty`);
-  return typeof payload === "string" ? payload : Buffer.from(payload).toString("utf8");
+  const raw = typeof payload === "string" ? payload : Buffer.from(payload).toString("utf8");
+  return raw.trim();
 }
 
 function httpsPost(options: https.RequestOptions, body: string): Promise<string> {

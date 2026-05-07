@@ -50,7 +50,8 @@ async function getSecret(secretName) {
     const payload = version.payload?.data;
     if (!payload)
         throw new Error(`Secret ${secretName} is empty`);
-    return typeof payload === "string" ? payload : Buffer.from(payload).toString("utf8");
+    const raw = typeof payload === "string" ? payload : Buffer.from(payload).toString("utf8");
+    return raw.trim();
 }
 function httpsPost(options, body) {
     return new Promise((resolve, reject) => {
@@ -233,7 +234,45 @@ exports.aiChatProxy = functions.region("us-central1").https.onCall(async (data, 
             throw new functions.https.HttpsError("internal", parsed.error.message ?? "خطأ من مزود الذكاء الاصطناعي.");
         }
         const reply = parsed.choices?.[0]?.message?.content ?? "";
-        return { reply, provider: aiConfig.provider, model: aiConfig.model };
+        // Save conversation to Firestore
+        const conversationId = typeof data?.conversationId === "string" && data.conversationId
+            ? data.conversationId
+            : firestore.collection("ai_conversations").doc().id;
+        const source = typeof data?.source === "string" ? data.source : "app";
+        const userId = context.auth.uid;
+        const newMessages = [
+            ...history.filter((m) => m.role !== "system"),
+            { role: "user", content: message },
+            { role: "assistant", content: reply },
+        ];
+        try {
+            const convRef = firestore.collection("ai_conversations").doc(conversationId);
+            const convDoc = await convRef.get();
+            if (convDoc.exists) {
+                await convRef.update({
+                    messages: newMessages,
+                    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                    messageCount: newMessages.filter((m) => m.role === "user").length,
+                    pageContext: pageContext || convDoc.data()?.pageContext || "",
+                });
+            }
+            else {
+                await convRef.set({
+                    id: conversationId,
+                    userId,
+                    source,
+                    pageContext: pageContext || "",
+                    messages: newMessages,
+                    messageCount: 1,
+                    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                });
+            }
+        }
+        catch (e) {
+            functions.logger.warn("Could not save conversation", e);
+        }
+        return { reply, provider: aiConfig.provider, model: aiConfig.model, conversationId };
     }
     catch (err) {
         if (err instanceof functions.https.HttpsError)
@@ -326,7 +365,7 @@ ${PRODUCT_KEYS.map((p, i) => (i + 1) + ". " + p.key + " (" + p.label + ")").join
 // ─── Scheduled: تحديث هوامش الربح يومياً 10:00 صباحاً بتوقيت الرياض (07:00 UTC) ──
 exports.updateProfitMargins = functions
     .region("us-central1")
-    .runWith({ secrets: ["XAI_API_KEY"], timeoutSeconds: 540, memory: "512MB" })
+    .runWith({ secrets: ["XAI_API_KEY"] })
     .pubsub.schedule("30 6 * * *")
     .timeZone("UTC")
     .onRun(async () => {
@@ -390,7 +429,7 @@ exports.updateProfitMargins = functions
         functions.logger.error("updateProfitMargins: Firestore write failed", e);
     }
 });
-exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY"], timeoutSeconds: 540, memory: "512MB" }).https.onCall(async (_data, context) => {
+exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY"] }).https.onCall(async (_data, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
     }

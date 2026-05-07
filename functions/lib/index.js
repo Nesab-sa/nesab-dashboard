@@ -326,7 +326,7 @@ ${PRODUCT_KEYS.map((p, i) => (i + 1) + ". " + p.key + " (" + p.label + ")").join
 // ─── Scheduled: تحديث هوامش الربح يومياً 10:00 صباحاً بتوقيت الرياض (07:00 UTC) ──
 exports.updateProfitMargins = functions
     .region("us-central1")
-    .runWith({ secrets: ["XAI_API_KEY"] })
+    .runWith({ secrets: ["XAI_API_KEY"], timeoutSeconds: 540, memory: "512MB" })
     .pubsub.schedule("30 6 * * *")
     .timeZone("UTC")
     .onRun(async () => {
@@ -390,7 +390,7 @@ exports.updateProfitMargins = functions
         functions.logger.error("updateProfitMargins: Firestore write failed", e);
     }
 });
-exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY"] }).https.onCall(async (_data, context) => {
+exports.triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY"], timeoutSeconds: 540, memory: "512MB" }).https.onCall(async (_data, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
     }

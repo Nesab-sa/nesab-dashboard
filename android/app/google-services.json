@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1007875215696:android:01f2532c9ebdbb4aa01c55",
+        "mobilesdk_app_id": "1:1007875215696:android:b5899b32e9caad3da01c55",
         "android_client_info": {
-          "package_name": "com.example.nesab"
+          "package_name": "com.example.nesab_dashboard"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "1007875215696-8nu7hnb3m58eaqs7havhbuqarjs43b2t.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.nesab",
-            "certificate_hash": "25178a8c4f1afc705a7c9aee4771b2c05e951af0"
-          }
-        },
         {
           "client_id": "1007875215696-svda6oktcr62fps6l8bsob07k80nrhh1.apps.googleusercontent.com",
           "client_type": 3
@@ -57,6 +49,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1007875215696-vg1n3ld94nfprqmpkmajtlc1bpbnt202.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sa.nesab.app",
+            "certificate_hash": "4e51de77be28913945d9247cd4327f9a3a57a4aa"
+          }
+        },
         {
           "client_id": "1007875215696-svda6oktcr62fps6l8bsob07k80nrhh1.apps.googleusercontent.com",
           "client_type": 3

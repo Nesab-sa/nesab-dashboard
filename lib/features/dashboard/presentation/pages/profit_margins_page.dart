@@ -436,6 +436,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
   bool _triggering = false;
   String? _error;
   DateTime? _lastUpdated;
+  int _grokAttempt = 0;
 
   List<_RateRow> _rates = [];
   final _notesCtrl = TextEditingController();
@@ -619,23 +620,93 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     }
   }
 
-  // ── Grok trigger ─────────────────────────────────────────────────
+  // ── Grok trigger with retry + timeout + error handling ───────────
   Future<void> _triggerGrok() async {
+    const maxRetries = 3;
+    const timeoutSeconds = 270;
+
     setState(() {
       _triggering = true;
       _error = null;
+      _grokAttempt = 0;
     });
-    try {
-      final callable = FirebaseFunctions.instanceFor(region: 'us-central1')
-          .httpsCallable('triggerProfitMarginsUpdate');
-      await callable.call();
-      await _load();
-    } on FirebaseFunctionsException catch (e) {
-      setState(() => _error = 'خطأ من Grok: ${e.message}');
-    } catch (e) {
-      setState(() => _error = e.toString());
-    } finally {
-      setState(() => _triggering = false);
+
+    final callable = FirebaseFunctions.instanceFor(region: 'us-central1')
+        .httpsCallable(
+      'triggerProfitMarginsUpdate',
+      options: HttpsCallableOptions(
+        timeout: const Duration(seconds: timeoutSeconds),
+      ),
+    );
+
+    for (int attempt = 1; attempt <= maxRetries; attempt++) {
+      setState(() => _grokAttempt = attempt);
+      try {
+        await callable.call({'page': 'dashboard/profit_margins'});
+        await _load();
+        setState(() => _triggering = false);
+        return; // نجح الطلب
+      } on FirebaseFunctionsException catch (e) {
+        final isDeadline  = e.code == 'deadline-exceeded';
+        final isNotFound  = e.code == 'not-found' ||
+            (e.message?.toLowerCase().contains('model not found') ?? false);
+        final isRetryable = isDeadline ||
+            e.code == 'internal' ||
+            e.code == 'unavailable';
+
+        if (isNotFound) {
+          // خطأ في اسم الموديل — لا فائدة من إعادة المحاولة
+          setState(() {
+            _error = '❌ الموديل غير موجود: ${e.message}';
+            _triggering = false;
+          });
+          return;
+        }
+
+        if (isRetryable && attempt < maxRetries) {
+          final delaySeconds = attempt * 3;
+          setState(() => _error =
+              '⚠️ محاولة $attempt فشلت (${isDeadline ? "timeout" : e.code}). '
+              'إعادة المحاولة بعد ${delaySeconds}s…');
+          await Future.delayed(Duration(seconds: delaySeconds));
+          continue;
+        }
+
+        // آخر محاولة أو خطأ غير قابل للتكرار
+        setState(() {
+          _error = _buildErrorMessage(e.code, e.message, attempt);
+          _triggering = false;
+        });
+        return;
+      } catch (e) {
+        if (attempt < maxRetries) {
+          setState(() => _error = '⚠️ محاولة $attempt فشلت. إعادة المحاولة…');
+          await Future.delayed(Duration(seconds: attempt * 3));
+          continue;
+        }
+        setState(() {
+          _error = '❌ فشل الاتصال بعد $maxRetries محاولات: $e';
+          _triggering = false;
+        });
+        return;
+      }
+    }
+    setState(() => _triggering = false);
+  }
+
+  String _buildErrorMessage(String code, String? message, int attempts) {
+    switch (code) {
+      case 'deadline-exceeded':
+        return '❌ انتهت مهلة الطلب بعد $attempts محاولات. '
+            'تحقق من Firebase Console للمزيد.';
+      case 'unauthenticated':
+        return '❌ غير مصرح: يجب تسجيل الدخول أولاً.';
+      case 'permission-denied':
+        return '❌ ليس لديك صلاحية تشغيل هذه العملية.';
+      case 'internal':
+        return '❌ خطأ داخلي: ${message ?? "راجع Firebase logs"}';
+      default:
+        return '❌ خطأ ($code): ${message ?? "غير معروف"}';
     }
   }
 
@@ -964,7 +1035,9 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
             : const Icon(Icons.auto_awesome_rounded,
                 size: 16, color: _neonColor),
         label: Text(
-          _triggering ? 'جارٍ الاستعلام من Grok…' : 'تحديث عبر Grok الآن',
+          _triggering
+              ? 'جارٍ الاستعلام من Grok… (محاولة $_grokAttempt/3)'
+              : 'تحديث عبر Grok الآن',
           style: const TextStyle(
               color: _neonColor,
               fontSize: 14,

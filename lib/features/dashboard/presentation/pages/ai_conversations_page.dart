@@ -69,12 +69,26 @@ class _Conversation {
   }
 }
 
+// ── Markdown cleaner — strips common Grok formatting ─────────────────
+String _cleanText(String raw) {
+  return raw
+      .replaceAll(RegExp(r'\*\*(.+?)\*\*', dotAll: true), r'$1')
+      .replaceAll(RegExp(r'\*(.+?)\*',     dotAll: true), r'$1')
+      .replaceAll(RegExp(r'#{1,6}\s*'),                   '')
+      .replaceAll(RegExp(r'`{1,3}'),                      '')
+      .replaceAll(RegExp(r'^\s*[-*+]\s+', multiLine: true), '• ')
+      .replaceAll(RegExp(r'^\s*\d+\.\s+', multiLine: true), '')
+      .replaceAll(RegExp(r'\n{3,}'),                      '\n\n')
+      .trim();
+}
+
 // ── Conversation Card ─────────────────────────────────────────────────
 class _ConvCard extends StatefulWidget {
   final int index;
   final _Conversation conv;
+  final VoidCallback onDelete;
 
-  const _ConvCard({required this.index, required this.conv});
+  const _ConvCard({required this.index, required this.conv, required this.onDelete});
 
   @override
   State<_ConvCard> createState() => _ConvCardState();
@@ -153,6 +167,7 @@ class _ConvCardState extends State<_ConvCard> {
                             ),
                             const SizedBox(width: 8),
                             Container(
+
                               padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                               decoration: BoxDecoration(
                                 color: sourceColor.withValues(alpha: 0.12),
@@ -189,7 +204,7 @@ class _ConvCardState extends State<_ConvCard> {
                       ],
                     ),
                   ),
-                  // Message count + toggle
+                  // Message count + actions
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -205,10 +220,28 @@ class _ConvCardState extends State<_ConvCard> {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      Icon(
-                        _open ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
-                        color: _muteColor,
-                        size: 18,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: widget.onDelete,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: _rateHigh.withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: _rateHigh.withValues(alpha: 0.2)),
+                              ),
+                              child: const Icon(Icons.delete_outline_rounded, color: _rateHigh, size: 14),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Icon(
+                            _open ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                            color: _muteColor,
+                            size: 18,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -276,7 +309,7 @@ class _ConvCardState extends State<_ConvCard> {
                 ),
               ),
               child: Text(
-                msg.content,
+                _cleanText(msg.content),
                 style: TextStyle(
                   color: isUser ? const Color(0xFFA0C0FF) : Colors.white,
                   fontSize: 12,
@@ -327,6 +360,42 @@ class _AiConversationsPageState extends State<AiConversationsPage> {
   void initState() {
     super.initState();
     _load();
+  }
+
+  Future<void> _deleteConv(String id) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          backgroundColor: _cardColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          title: const Text('حذف المحادثة', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700)),
+          content: const Text('هل أنت متأكد من حذف هذه المحادثة؟ لا يمكن التراجع.', style: TextStyle(color: _muteColor, fontSize: 13)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('إلغاء', style: TextStyle(color: _muteColor)),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('حذف', style: TextStyle(color: _rateHigh, fontWeight: FontWeight.w700)),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await _firestore.collection(_collection).doc(id).delete();
+      setState(() => _convs.removeWhere((c) => c.id == id));
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('فشل الحذف: $e'), backgroundColor: _rateHigh),
+        );
+      }
+    }
   }
 
   Future<void> _load() async {
@@ -385,6 +454,7 @@ class _AiConversationsPageState extends State<AiConversationsPage> {
                             _ConvCard(
                               index: i + 1,
                               conv: _filtered[i],
+                              onDelete: () => _deleteConv(_filtered[i].id),
                             ),
                             const SizedBox(height: 10),
                           ],

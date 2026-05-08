@@ -314,6 +314,107 @@ export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["
   }
 );
 
+/**
+ * Save Web Conversation — HTTP endpoint for chat.php to save conversations to Firestore.
+ * Called from the PHP backend (api.nesab.sa) after each AI chat exchange.
+ * Secured with a shared secret in the X-API-Key header (stored in GCP Secret Manager).
+ */
+export const saveWebConversation = functions.region("us-central1").runWith({ secrets: ["WEB_CHAT_SYNC_KEY"] }).https.onRequest(
+  async (req, res) => {
+    // CORS headers
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.set("Access-Control-Allow-Headers", "Content-Type, X-API-Key");
+
+    if (req.method === "OPTIONS") {
+      res.status(204).send("");
+      return;
+    }
+
+    if (req.method !== "POST") {
+      res.status(405).json({ error: "Method not allowed" });
+      return;
+    }
+
+    // Validate shared secret
+    const apiKey = req.headers["x-api-key"] as string || "";
+    let expectedKey = "";
+    try {
+      expectedKey = await getSecret("WEB_CHAT_SYNC_KEY");
+    } catch (e) {
+      functions.logger.error("Could not load WEB_CHAT_SYNC_KEY", e);
+      res.status(500).json({ error: "Server configuration error" });
+      return;
+    }
+
+    if (!apiKey || apiKey !== expectedKey) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    // Parse body
+    const body = req.body;
+    const userId = typeof body?.userId === "string" ? body.userId : "web_anonymous";
+    const pageContext = typeof body?.pageContext === "string" ? body.pageContext : "";
+    const userMessage = typeof body?.userMessage === "string" ? body.userMessage : "";
+    const assistantReply = typeof body?.assistantReply === "string" ? body.assistantReply : "";
+    const conversationId = typeof body?.conversationId === "string" && body.conversationId
+      ? body.conversationId
+      : firestore.collection("ai_conversations").doc().id;
+    const calcUsed = typeof body?.calcUsed === "string" ? body.calcUsed : "";
+    const source = typeof body?.source === "string" && body.source ? body.source : "web";
+
+    if (!userMessage || !assistantReply) {
+      res.status(400).json({ error: "userMessage and assistantReply are required" });
+      return;
+    }
+
+    try {
+      const convRef = firestore.collection("ai_conversations").doc(conversationId);
+      const convDoc = await convRef.get();
+
+      if (convDoc.exists) {
+        // Append new messages to existing conversation
+        const existing = convDoc.data();
+        const existingMessages = Array.isArray(existing?.messages) ? existing!.messages : [];
+        const updatedMessages = [
+          ...existingMessages,
+          { role: "user", content: userMessage },
+          { role: "assistant", content: assistantReply },
+        ];
+        await convRef.update({
+          messages: updatedMessages,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          messageCount: updatedMessages.filter((m: { role: string }) => m.role === "user").length,
+          pageContext: pageContext || existing?.pageContext || "",
+          ...(calcUsed ? { lastCalcUsed: calcUsed } : {}),
+        });
+      } else {
+        // Create new conversation
+        await convRef.set({
+          id: conversationId,
+          userId,
+          source: source,
+          pageContext: pageContext || "",
+          messages: [
+            { role: "user", content: userMessage },
+            { role: "assistant", content: assistantReply },
+          ],
+          messageCount: 1,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          ...(calcUsed ? { lastCalcUsed: calcUsed } : {}),
+        });
+      }
+
+      res.status(200).json({ success: true, conversationId });
+    } catch (e) {
+      functions.logger.error("saveWebConversation error", e);
+      res.status(500).json({ error: "Failed to save conversation" });
+    }
+  }
+);
+
 /** Delete a manager (admin only) */
 export const deleteManager = functions.region("us-central1").https.onCall(
   async (data: { uid?: string }, context: functions.https.CallableContext) => {

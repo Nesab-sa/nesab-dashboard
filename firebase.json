@@ -5,12 +5,19 @@
     "public": "build/web",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   },
-  "functions": [{
-    "source": "functions",
-    "codebase": "default",
-    "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "*.local"],
-    "predeploy": ["cd \"$RESOURCE_DIR\" && node ./node_modules/typescript/bin/tsc"]
-  }],
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "*.local"],
+      "predeploy": ["cd \"$RESOURCE_DIR\" && node ./node_modules/typescript/bin/tsc"]
+    },
+    {
+      "source": "functions-chat",
+      "codebase": "chat",
+      "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "*.local"]
+    }
+  ],
   "flutter": {
     "platforms": {
       "android": {

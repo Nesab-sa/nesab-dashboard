@@ -1,0 +1,11 @@
+{
+  "name": "nesab-chat-functions",
+  "description": "Nesab AI Chat — xAI Grok Cloud Function (separate codebase)",
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^5.0.0",
+    "node-fetch": "^2.7.0"
+  }
+}

@@ -64,3 +64,8 @@ Thumbs.db
 
 # Netlify
 .netlify/
+
+# Next.js
+.next/
+node_modules/
+next-env.d.ts

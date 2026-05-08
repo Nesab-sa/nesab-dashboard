@@ -69,11 +69,15 @@ class _Conversation {
   }
 }
 
-// ── Detect corrupted text (stored as ? due to encoding bug) ──────────
+// ── Detect corrupted text (stored as ?/�/◆ due to encoding bug) ──────
 bool _isCorrupted(String text) {
   if (text.isEmpty) return false;
-  final withoutSpaces = text.replaceAll(RegExp(r'[\s?؟]'), '');
-  return withoutSpaces.isEmpty;
+  final stripped = text.replaceAll(RegExp(r'[\s?؟\u{FFFD}\u{25C6}\u{25C7}\u{FFFE}\u{FFFF}]', unicode: true), '');
+  if (stripped.isEmpty) return true;
+  final total = text.replaceAll(RegExp(r'\s'), '').length;
+  if (total == 0) return false;
+  final badChars = RegExp(r'[?\u{FFFD}\u{25C6}\u{25C7}]', unicode: true).allMatches(text).length;
+  return badChars / total > 0.5;
 }
 
 // ── Markdown cleaner — strips common Grok formatting ─────────────────

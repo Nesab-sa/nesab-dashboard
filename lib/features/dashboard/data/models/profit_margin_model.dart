@@ -175,7 +175,7 @@ final _defaultBanks = <BankProfitMargin>[
   ),
   BankProfitMargin(
     bankId: 'inma',
-    bankName: 'مصرف الإنماء',
+    bankName: 'بنك الإنماء',
     products: {
       'personalBasic': _p(3.95, 5.60),
       'personalSpecial': _p(3.70, 5.10),
@@ -217,7 +217,7 @@ final _defaultBanks = <BankProfitMargin>[
   ),
   BankProfitMargin(
     bankId: 'saab',
-    bankName: 'بنك ساب',
+    bankName: 'البنك السعودي البريطاني',
     products: {
       'personalBasic': _p(4.10, 5.90),
       'personalSpecial': _p(3.85, 5.35),
@@ -273,7 +273,7 @@ final _defaultBanks = <BankProfitMargin>[
   ),
   BankProfitMargin(
     bankId: 'sibc',
-    bankName: 'بنك الاستثمار السعودي',
+    bankName: 'البنك السعودي للاستثمار',
     products: {
       'personalBasic': _p(4.35, 6.15),
       'personalSpecial': _na,
@@ -287,7 +287,7 @@ final _defaultBanks = <BankProfitMargin>[
   ),
   BankProfitMargin(
     bankId: 'gib',
-    bankName: 'البنك الخليجي الدولي',
+    bankName: 'بنك الخليج الدولي',
     products: {
       'personalBasic': _p(4.40, 6.20),
       'personalSpecial': _na,

@@ -146,63 +146,70 @@ class _AiChatWidgetState extends State<AiChatWidget> {
                   // Messages
                   Container(
                     constraints: const BoxConstraints(maxHeight: 220),
-                    child: ListView.builder(
-                      controller: _scrollCtrl,
-                      padding: const EdgeInsets.all(10),
-                      shrinkWrap: true,
-                      itemCount: _messages.length + (_isLoading ? 1 : 0),
-                      itemBuilder: (context, i) {
-                        if (i == _messages.length) {
-                          return const Padding(
-                            padding: EdgeInsets.only(bottom: 7),
-                            child: Text(
-                              'المستشار البنكي: ...',
-                              style: TextStyle(
-                                color: AppColors.calcNeon,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: ListView.builder(
+                        controller: _scrollCtrl,
+                        padding: const EdgeInsets.all(10),
+                        shrinkWrap: true,
+                        itemCount: _messages.length + (_isLoading ? 1 : 0),
+                        itemBuilder: (context, i) {
+                          if (i == _messages.length) {
+                            return const Padding(
+                              padding: EdgeInsets.only(bottom: 7),
+                              child: Text(
+                                'المستشار البنكي: ...',
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  color: AppColors.calcNeon,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                        final msg = _messages[i];
-                        if (msg.isUser) {
+                            );
+                          }
+                          final msg = _messages[i];
+                          if (msg.isUser) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 7),
+                              child: Text(
+                                'أنت: ${msg.text}',
+                                textDirection: TextDirection.rtl,
+                                textAlign: TextAlign.right,
+                                style: const TextStyle(
+                                  color: Color(0xFFA0C0FF),
+                                  fontSize: 12,
+                                ),
+                              ),
+                            );
+                          }
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 7),
-                            child: Text(
-                              'أنت: ${msg.text}',
-                              style: const TextStyle(
-                                color: Color(0xFFA0C0FF),
-                                fontSize: 12,
+                            child: RichText(
+                              textDirection: TextDirection.rtl,
+                              text: TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    text: 'المستشار البنكي: ',
+                                    style: TextStyle(
+                                      color: AppColors.calcNeon,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: msg.text,
+                                    style: const TextStyle(
+                                      color: AppColors.calcText,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 7),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                const TextSpan(
-                                  text: 'المستشار البنكي: ',
-                                  style: TextStyle(
-                                    color: AppColors.calcNeon,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: msg.text,
-                                  style: const TextStyle(
-                                    color: AppColors.calcText,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                        },
+                      ),
                     ),
                   ),
                   // Input

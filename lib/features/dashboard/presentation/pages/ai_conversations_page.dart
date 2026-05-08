@@ -72,13 +72,13 @@ class _Conversation {
 // ── Markdown cleaner — strips common Grok formatting ─────────────────
 String _cleanText(String raw) {
   return raw
-      .replaceAll(RegExp(r'\*\*(.+?)\*\*', dotAll: true), r'$1')
-      .replaceAll(RegExp(r'\*(.+?)\*',     dotAll: true), r'$1')
-      .replaceAll(RegExp(r'#{1,6}\s*'),                   '')
-      .replaceAll(RegExp(r'`{1,3}'),                      '')
-      .replaceAll(RegExp(r'^\s*[-*+]\s+', multiLine: true), '• ')
-      .replaceAll(RegExp(r'^\s*\d+\.\s+', multiLine: true), '')
-      .replaceAll(RegExp(r'\n{3,}'),                      '\n\n')
+      .replaceAllMapped(RegExp(r'\*\*(.+?)\*\*', dotAll: true), (m) => m.group(1) ?? '')
+      .replaceAllMapped(RegExp(r'\*(.+?)\*',     dotAll: true), (m) => m.group(1) ?? '')
+      .replaceAll(RegExp(r'#{1,6}\s*(?=[^\s])'),              '')
+      .replaceAll(RegExp(r'`{1,3}'),                          '')
+      .replaceAll(RegExp(r'^\s*[-*+]\s+', multiLine: true),   '• ')
+      .replaceAll(RegExp(r'^\s*\d+\.\s+', multiLine: true),   '')
+      .replaceAll(RegExp(r'\n{3,}'),                          '\n\n')
       .trim();
 }
 

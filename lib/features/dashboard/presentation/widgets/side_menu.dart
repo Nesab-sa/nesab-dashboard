@@ -13,10 +13,12 @@ class SideMenu extends StatelessWidget {
     super.key,
     required this.expanded,
     required this.selectedSection,
+    this.aiConvBadge = 0,
   });
 
   final bool expanded;
   final ValueNotifier<DashboardSection> selectedSection;
+  final int aiConvBadge;
 
   static const double expandedWidth = 260;
   static const double collapsedWidth = 74;
@@ -108,6 +110,7 @@ class SideMenu extends StatelessWidget {
                   section: DashboardSection.aiConversations,
                   expanded: expanded,
                   selectedSection: selectedSection,
+                  badge: aiConvBadge > 0 ? aiConvBadge : null,
                 ),
 Divider(height: 1, color: borderColor),
               ],

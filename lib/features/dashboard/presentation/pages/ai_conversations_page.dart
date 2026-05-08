@@ -69,8 +69,16 @@ class _Conversation {
   }
 }
 
+// ── Detect corrupted text (stored as ? due to encoding bug) ──────────
+bool _isCorrupted(String text) {
+  if (text.isEmpty) return false;
+  final withoutSpaces = text.replaceAll(RegExp(r'[\s?؟]'), '');
+  return withoutSpaces.isEmpty;
+}
+
 // ── Markdown cleaner — strips common Grok formatting ─────────────────
 String _cleanText(String raw) {
+  if (_isCorrupted(raw)) return '⚠ رسالة تالفة — خطأ ترميز سابق';
   return raw
       .replaceAllMapped(RegExp(r'\*\*(.+?)\*\*', dotAll: true), (m) => m.group(1) ?? '')
       .replaceAllMapped(RegExp(r'\*(.+?)\*',     dotAll: true), (m) => m.group(1) ?? '')

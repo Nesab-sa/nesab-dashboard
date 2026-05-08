@@ -34,9 +34,10 @@ async function getSecret(secretName: string): Promise<string> {
 function httpsPost(options: https.RequestOptions, body: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const req = https.request(options, (res) => {
-      let data = "";
-      res.on("data", (chunk) => (data += chunk));
+      const chunks: Buffer[] = [];
+      res.on("data", (chunk: Buffer) => chunks.push(chunk));
       res.on("end", () => {
+        const data = Buffer.concat(chunks).toString("utf8");
         if (res.statusCode && res.statusCode >= 400) {
           reject(new Error(`HTTP ${res.statusCode}: ${data}`));
         } else {

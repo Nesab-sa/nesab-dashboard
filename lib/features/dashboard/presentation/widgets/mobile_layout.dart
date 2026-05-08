@@ -14,10 +14,12 @@ class MobileLayout extends StatelessWidget {
     super.key,
     required this.child,
     required this.selectedSection,
+    this.aiConvBadge = 0,
   });
 
   final Widget child;
   final ValueNotifier<DashboardSection> selectedSection;
+  final int aiConvBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +132,7 @@ class MobileLayout extends StatelessWidget {
                           section: DashboardSection.aiConversations,
                           selectedSection: selectedSection,
                           textColor: textColor,
+                          badge: aiConvBadge > 0 ? aiConvBadge : null,
                         ),
                         Divider(height: 1, color: dividerColor),
                         MobileLogoutButton(textColor: textColor),
@@ -168,6 +171,7 @@ class MobileNavItem extends StatelessWidget {
     required this.section,
     required this.selectedSection,
     required this.textColor,
+    this.badge,
   });
 
   final IconData icon;
@@ -176,11 +180,35 @@ class MobileNavItem extends StatelessWidget {
   final DashboardSection section;
   final ValueNotifier<DashboardSection> selectedSection;
   final Color textColor;
+  final int? badge;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: FaIcon(icon, size: 18, color: textColor),
+      leading: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          FaIcon(icon, size: 18, color: textColor),
+          if (badge != null)
+            Positioned(
+              top: -6,
+              right: -8,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: const BoxDecoration(
+                  color: AppColors.error,
+                  shape: BoxShape.circle,
+                ),
+                constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                child: Text(
+                  '$badge',
+                  style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+        ],
+      ),
       title: Text(
         label,
         style: TextStyle(color: textColor),

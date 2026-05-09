@@ -70,6 +70,15 @@ class _DashboardShellState extends State<DashboardShell> {
     setState(() => _unreadConvCount = 0);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_lastViewedKey, now.millisecondsSinceEpoch);
+    // إعادة تأسيس الاشتراك بالوقت الجديد حتى لا تُحتسب المحادثات المقروءة
+    _convSub?.cancel();
+    _convSub = FirebaseFirestore.instance
+        .collection('ai_conversations')
+        .where('createdAt', isGreaterThan: Timestamp.fromDate(now))
+        .snapshots()
+        .listen((snap) {
+      if (mounted) setState(() => _unreadConvCount = snap.docs.length);
+    });
   }
 
   @override

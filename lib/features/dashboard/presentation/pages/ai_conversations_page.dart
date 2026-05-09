@@ -123,143 +123,153 @@ class _ConvCardState extends State<_ConvCard> {
     final sourceColor = isApp ? _rateLow : _neonColor;
     final sourceLabel = isApp ? 'App' : 'Web';
 
-    return GestureDetector(
-      onTap: () => setState(() => _open = !_open),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color: _cardColor,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: _open ? _neonColor.withValues(alpha: 0.5) : _borderColor,
-          ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        color: _cardColor,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: _open ? _neonColor.withValues(alpha: 0.5) : _borderColor,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── Card Header ───────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  // Number badge
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: _neonColor.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: _neonColor.withValues(alpha: 0.3)),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '${widget.index}',
-                      style: const TextStyle(
-                        color: _neonColor,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  // Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── Card Header ───────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                // Number badge + Info — قابل للنقر لفتح/إغلاق
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => _open = !_open),
+                    behavior: HitTestBehavior.opaque,
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'محادثة #${widget.index}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: _neonColor.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: _neonColor.withValues(alpha: 0.3)),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${widget.index}',
+                            style: const TextStyle(
+                              color: _neonColor,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 15,
                             ),
-                            const SizedBox(width: 8),
-                            Container(
-
-                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: sourceColor.withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: sourceColor.withValues(alpha: 0.35)),
-                              ),
-                              child: Text(
-                                sourceLabel,
-                                style: TextStyle(
-                                  color: sourceColor,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                        const SizedBox(height: 4),
-                        if (date != null)
-                          Text(
-                            '${_fmtDate(date)}  ${_fmtTime(date)}',
-                            style: const TextStyle(color: _muteColor, fontSize: 11),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'محادثة #${widget.index}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: sourceColor.withValues(alpha: 0.12),
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(color: sourceColor.withValues(alpha: 0.35)),
+                                    ),
+                                    child: Text(
+                                      sourceLabel,
+                                      style: TextStyle(
+                                        color: sourceColor,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              if (date != null)
+                                Text(
+                                  '${_fmtDate(date)}  ${_fmtTime(date)}',
+                                  style: const TextStyle(color: _muteColor, fontSize: 11),
+                                ),
+                              if (conv.pageContext.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 2),
+                                  child: Text(
+                                    conv.pageContext,
+                                    style: const TextStyle(color: _muteColor, fontSize: 10),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                            ],
                           ),
-                        if (conv.pageContext.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 2),
-                            child: Text(
-                              conv.pageContext,
-                              style: const TextStyle(color: _muteColor, fontSize: 10),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
+                        ),
                       ],
                     ),
                   ),
-                  // Message count + actions
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: _goldColor.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          '${conv.messageCount} رسائل',
-                          style: const TextStyle(color: _goldColor, fontSize: 10, fontWeight: FontWeight.w600),
-                        ),
+                ),
+                // Message count + actions — معزولة عن نقر الفتح/الإغلاق
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: _goldColor.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                      const SizedBox(height: 6),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GestureDetector(
-                            onTap: widget.onDelete,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: _rateHigh.withValues(alpha: 0.08),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: _rateHigh.withValues(alpha: 0.2)),
-                              ),
-                              child: const Icon(Icons.delete_outline_rounded, color: _rateHigh, size: 14),
+                      child: Text(
+                        '${conv.messageCount} رسائل',
+                        style: const TextStyle(color: _goldColor, fontSize: 10, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: widget.onDelete,
+                          behavior: HitTestBehavior.opaque,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: _rateHigh.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: _rateHigh.withValues(alpha: 0.2)),
                             ),
+                            child: const Icon(Icons.delete_outline_rounded, color: _rateHigh, size: 14),
                           ),
-                          const SizedBox(width: 6),
-                          Icon(
+                        ),
+                        const SizedBox(width: 6),
+                        GestureDetector(
+                          onTap: () => setState(() => _open = !_open),
+                          child: Icon(
                             _open ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
                             color: _muteColor,
                             size: 18,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
+          ),
             // ── Messages Panel ────────────────────────────────────
             if (_open) ...[
               const Divider(height: 1, color: _borderColor),
@@ -282,7 +292,6 @@ class _ConvCardState extends State<_ConvCard> {
             ],
           ],
         ),
-      ),
     );
   }
 

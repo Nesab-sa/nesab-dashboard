@@ -17,13 +17,14 @@ class DecisionBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = approved ? AppColors.calcGreen : AppColors.calcRed;
+    final color = approved ? Colors.green[700]! : Colors.red[700]!;
+    final bgColor = approved ? Colors.green[50]! : Colors.red[50]!;
     return Container(
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(13),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: bgColor,
         border: Border.all(color: color),
         borderRadius: BorderRadius.circular(11),
       ),

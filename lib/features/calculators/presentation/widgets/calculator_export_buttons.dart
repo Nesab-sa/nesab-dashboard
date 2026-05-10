@@ -45,8 +45,8 @@ class CalculatorExportButtons extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFDC2626), Color(0xFFB91C1C)],
+                  gradient: LinearGradient(
+                    colors: [Colors.red[600]!, Colors.red[700]!],
                   ),
                   borderRadius: BorderRadius.circular(9),
                 ),
@@ -69,8 +69,8 @@ class CalculatorExportButtons extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.calcNeon2, AppColors.calcNeon],
+                  gradient: LinearGradient(
+                    colors: [Colors.blue[600]!, Colors.blue[400]!],
                   ),
                   borderRadius: BorderRadius.circular(9),
                 ),

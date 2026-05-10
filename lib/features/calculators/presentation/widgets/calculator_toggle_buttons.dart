@@ -22,7 +22,7 @@ class CalculatorToggleButtons extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: AppColors.calcBorder2),
+        border: Border.all(color: Colors.grey[300]!),
       ),
       clipBehavior: Clip.antiAlias,
       child: Row(
@@ -34,13 +34,13 @@ class CalculatorToggleButtons extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 5),
-                color: active ? AppColors.calcNeon2 : AppColors.calcInput,
+                color: active ? Colors.blue[600] : Colors.grey[100],
                 child: Text(
                   labels[i],
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: active ? FontWeight.w700 : FontWeight.w400,
-                    color: active ? Colors.white : AppColors.calcMuted,
+                    color: active ? Colors.white : Colors.grey[600],
                     fontFamily: 'Cairo',
                   ),
                 ),

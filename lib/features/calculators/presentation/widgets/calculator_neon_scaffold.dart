@@ -26,7 +26,7 @@ class CalculatorNeonScaffold extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(
-        color: AppColors.calcBg,
+        color: Colors.white,
         child: Stack(
           children: [
             // Gradient overlay
@@ -38,7 +38,7 @@ class CalculatorNeonScaffold extends StatelessWidget {
                       center: const Alignment(0.4, -1),
                       radius: 1.2,
                       colors: [
-                        AppColors.calcNeon2.withValues(alpha: 0.12),
+                        Colors.transparent,
                         Colors.transparent,
                       ],
                     ),
@@ -96,8 +96,8 @@ class CalculatorNeonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: isResult ? AppColors.calcCard2 : AppColors.calcCard,
-        border: Border.all(color: AppColors.calcBorder),
+        color: Colors.white,
+        border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(14),
       ),
       padding: const EdgeInsets.all(20),
@@ -128,8 +128,8 @@ class CalculatorNeonButton extends StatelessWidget {
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppColors.calcNeon2, AppColors.calcNeon],
+          gradient: LinearGradient(
+            colors: [Colors.blue[600]!, Colors.blue[400]!],
           ),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -165,19 +165,19 @@ class CalculatorBackButton extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
         decoration: BoxDecoration(
-          color: AppColors.calcNeon2.withValues(alpha: 0.15),
-          border: Border.all(color: AppColors.calcBorder2),
+          color: Colors.blue[50],
+          border: Border.all(color: Colors.blue[300]!),
           borderRadius: BorderRadius.circular(9),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('←', style: TextStyle(color: AppColors.calcNeon, fontSize: 14)),
+            Text('←', style: TextStyle(color: Colors.blue[700], fontSize: 14)),
             const SizedBox(width: 7),
             Text(
               label,
-              style: const TextStyle(
-                color: AppColors.calcNeon,
+              style: TextStyle(
+                color: Colors.blue[700],
                 fontSize: 14,
               ),
             ),

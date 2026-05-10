@@ -18,8 +18,8 @@ class ResultSectionHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(bottom: 12),
       margin: const EdgeInsets.only(bottom: 14),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.calcBorder)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
       ),
       child: Row(
         children: [
@@ -29,10 +29,10 @@ class ResultSectionHeader extends StatelessWidget {
           ],
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: AppColors.calcNeon,
+              color: Colors.grey[800],
             ),
           ),
         ],

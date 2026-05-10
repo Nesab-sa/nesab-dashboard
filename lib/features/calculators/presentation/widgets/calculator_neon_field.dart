@@ -35,9 +35,9 @@ class CalculatorNeonField extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: AppColors.calcMuted,
+              color: Colors.grey[700],
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -48,26 +48,26 @@ class CalculatorNeonField extends StatelessWidget {
             readOnly: readOnly,
             onTap: onTap,
             onChanged: onChanged,
-            style: const TextStyle(color: AppColors.calcText, fontSize: 14),
+            style: TextStyle(color: Colors.grey[900], fontSize: 14),
             decoration: InputDecoration(
               hintText: placeholder,
-              hintStyle: const TextStyle(color: AppColors.calcMuted, fontSize: 14),
+              hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
               suffixText: suffixText,
-              suffixStyle: const TextStyle(color: AppColors.calcMuted, fontSize: 12),
+              suffixStyle: TextStyle(color: Colors.grey[500], fontSize: 12),
               filled: true,
-              fillColor: AppColors.calcInput,
+              fillColor: Colors.grey[50],
               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.calcBorder2),
+                borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.calcBorder2),
+                borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.calcNeon2),
+                borderSide: BorderSide(color: Colors.grey[400]!),
               ),
             ),
           ),

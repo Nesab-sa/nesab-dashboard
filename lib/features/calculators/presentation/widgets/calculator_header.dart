@@ -17,13 +17,9 @@ class CalculatorHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.calcHeaderTop, AppColors.calcBg],
-        ),
-        border: Border(bottom: BorderSide(color: AppColors.calcBorder2)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       child: LayoutBuilder(
@@ -43,22 +39,17 @@ class CalculatorHeader extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ShaderMask(
-                        shaderCallback: (b) => const LinearGradient(
-                          colors: [AppColors.calcNeon, AppColors.calcNeon2],
-                        ).createShader(b),
-                        child: const Text(
-                          'نسب',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                          ),
+                      Text(
+                        'نسب',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.grey[800],
                         ),
                       ),
                       Text(
                         subtitle,
-                        style: const TextStyle(fontSize: 12, color: AppColors.calcMuted),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                     ],
                   ),
@@ -67,21 +58,21 @@ class CalculatorHeader extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text(
+                  Text(
                     'www.Nesab.sa',
-                    style: TextStyle(fontSize: 12, color: AppColors.calcNeon),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[700]),
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 3),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     decoration: BoxDecoration(
-                      color: AppColors.calcNeon.withValues(alpha: 0.08),
-                      border: Border.all(color: AppColors.calcNeon.withValues(alpha: 0.2)),
+                      color: Colors.grey[100],
+                      border: Border.all(color: Colors.grey[300]!),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       'آخر تحديث: $updateDate',
-                      style: const TextStyle(fontSize: 11, color: AppColors.calcNeon),
+                      style: TextStyle(fontSize: 11, color: Colors.grey[700]),
                     ),
                   ),
                 ],

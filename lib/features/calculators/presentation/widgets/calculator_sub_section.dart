@@ -20,8 +20,8 @@ class CalculatorSubSection extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.calcCard2,
-        border: Border.all(color: AppColors.calcBorder),
+        color: Colors.grey[50],
+        border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -30,15 +30,15 @@ class CalculatorSubSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(bottom: 10),
             margin: const EdgeInsets.only(bottom: 12),
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: AppColors.calcBorder)),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
             ),
             child: Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: AppColors.calcNeon,
+                color: Colors.grey[800],
               ),
             ),
           ),

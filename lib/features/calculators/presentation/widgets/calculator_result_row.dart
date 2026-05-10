@@ -26,21 +26,21 @@ class CalculatorResultRow extends StatelessWidget {
 
     switch (highlight) {
       case ResultHighlight.neon:
-        borderColor = AppColors.calcNeon;
-        bgColor = AppColors.calcNeon.withValues(alpha: 0.04);
-        valueColor = AppColors.calcNeon;
+        borderColor = Colors.blue[400]!;
+        bgColor = Colors.blue[50]!;
+        valueColor = Colors.blue[700]!;
       case ResultHighlight.gold:
-        borderColor = AppColors.calcGold;
-        bgColor = AppColors.calcGold.withValues(alpha: 0.04);
-        valueColor = AppColors.calcGold;
+        borderColor = Colors.amber[600]!;
+        bgColor = Colors.amber[50]!;
+        valueColor = Colors.amber[900]!;
       case ResultHighlight.green:
-        borderColor = AppColors.calcGreen;
-        bgColor = AppColors.calcGreen.withValues(alpha: 0.04);
-        valueColor = AppColors.calcGreen;
+        borderColor = Colors.green[600]!;
+        bgColor = Colors.green[50]!;
+        valueColor = Colors.green[700]!;
       case ResultHighlight.none:
-        borderColor = AppColors.calcBorder;
-        bgColor = AppColors.calcCard;
-        valueColor = AppColors.calcText;
+        borderColor = Colors.grey[300]!;
+        bgColor = Colors.grey[50]!;
+        valueColor = Colors.grey[900]!;
     }
 
     return Container(
@@ -57,7 +57,7 @@ class CalculatorResultRow extends StatelessWidget {
           Flexible(
             child: Text(
               label,
-              style: const TextStyle(fontSize: 12, color: AppColors.calcMuted),
+              style: TextStyle(fontSize: 12, color: Colors.grey[700]),
             ),
           ),
           Text(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -16,6 +18,33 @@ enum _View { none, all, newOnly }
 class _UsersPageState extends State<UsersPage> {
   _View _view = _View.none;
   bool _syncing = false;
+  int _webLogins = 0;
+  int _webVisits = 0;
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _statsSub;
+
+  @override
+  void initState() {
+    super.initState();
+    _statsSub = FirebaseFirestore.instance
+        .collection('stats')
+        .doc('web')
+        .snapshots()
+        .listen((snap) {
+      if (mounted) {
+        final data = snap.data();
+        setState(() {
+          _webLogins = (data?['loginCount'] as num?)?.toInt() ?? 0;
+          _webVisits = (data?['visitCount'] as num?)?.toInt() ?? 0;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _statsSub?.cancel();
+    super.dispose();
+  }
 
   Future<void> _syncFromAuth() async {
     setState(() => _syncing = true);
@@ -129,6 +158,30 @@ class _UsersPageState extends State<UsersPage> {
                         selected: _view == _View.newOnly,
                         onTap: () => setState(() => _view =
                             _view == _View.newOnly ? _View.none : _View.newOnly),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _CountCard(
+                        label: 'Web',
+                        count: _webLogins,
+                        color: Colors.teal,
+                        selected: false,
+                        onTap: () {},
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _CountCard(
+                        label: 'زيارات الويب',
+                        count: _webVisits,
+                        color: Colors.deepOrange,
+                        selected: false,
+                        onTap: () {},
                       ),
                     ),
                   ],

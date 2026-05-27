@@ -267,7 +267,7 @@ class _MorphingSubCategoryCard extends StatelessWidget {
         final calcType = category.calculatorType;
         final calcUrl = category.calculatorLink;
 
-        if (calcType != null && calcUrl != null && calcUrl.isNotEmpty) {
+        if (calcUrl != null && calcUrl.isNotEmpty) {
           Navigator.of(context).push(
             MaterialPageRoute<void>(
               builder: (_) => CalculatorWebViewPage(url: calcUrl, title: label),

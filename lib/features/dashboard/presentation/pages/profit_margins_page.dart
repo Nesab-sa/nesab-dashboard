@@ -193,6 +193,10 @@ List<_BankRate> _generateInitialData() {
 }
 
 // ── Transform Firestore data to _BankRate list ───────────────────────
+// يدعم 3 تنسيقات للبيانات حتى لا تختفي النسب عند اختلاف مصدر الكتابة:
+//   (1) تنسيق Grok الحالي:   bank['products']['personalBasic']
+//   (2) تنسيق مسطّح حديث:     bank['personalBasic']
+//   (3) تنسيق قديم (legacy):  bank['personal'] / bank['realEstate'] / bank['leasing']
 List<_BankRate> _transformFirestoreToRates(List<dynamic> banksData) {
   final rates = <_BankRate>[];
   for (final catEntry in _subSections.entries) {
@@ -200,17 +204,18 @@ List<_BankRate> _transformFirestoreToRates(List<dynamic> banksData) {
     for (final sub in catEntry.value) {
       final fsKey = _sectionToFirestoreKey[category]?[sub] ?? '';
       for (final bankRaw in banksData) {
-        final bankMap = bankRaw as Map<String, dynamic>;
+        if (bankRaw is! Map) continue;
+        final bankMap = Map<String, dynamic>.from(bankRaw);
         final rawName = bankMap['bankName']?.toString() ?? '';
         final bankName = _normalizeBankName(rawName);
-        final products = bankMap['products'] as Map<String, dynamic>? ?? {};
-        final product = products[fsKey] as Map<String, dynamic>?;
+
+        final product = _readProduct(bankMap, fsKey);
 
         String margin = '—';
-        if (product != null && (product['available'] as bool? ?? false)) {
+        if (product != null && product['available'] != false) {
           final min = (product['min'] as num?)?.toDouble();
           final max = (product['max'] as num?)?.toDouble();
-          if (min != null && max != null) {
+          if (min != null && max != null && (min > 0 || max > 0)) {
             margin = min == max
                 ? '${min.toStringAsFixed(2)}%'
                 : '${min.toStringAsFixed(2)}-${max.toStringAsFixed(2)}%';
@@ -235,6 +240,40 @@ List<_BankRate> _transformFirestoreToRates(List<dynamic> banksData) {
   return rates;
 }
 
+/// قراءة منتج واحد من بيانات بنك بأي من التنسيقات الثلاثة المدعومة.
+/// يستخدم الـ cast الآمن `Map.from` لأن الخرائط المتداخلة من Firestore
+/// تأتي على الأجهزة الأصلية كـ `Map<Object?, Object?>` لا كـ `Map<String, dynamic>`.
+Map<String, dynamic>? _readProduct(Map<String, dynamic> bankMap, String fsKey) {
+  if (fsKey.isEmpty) return null;
+
+  // (1) تنسيق Grok الحالي: products wrapper
+  final prods = bankMap['products'];
+  if (prods is Map) {
+    final p = prods[fsKey];
+    if (p is Map) return Map<String, dynamic>.from(p);
+  }
+
+  // (2) تنسيق مسطّح حديث: المفتاح المفصّل على مستوى البنك مباشرة
+  final flat = bankMap[fsKey];
+  if (flat is Map) return Map<String, dynamic>.from(flat);
+
+  // (3) تنسيق قديم: personal / realEstate / leasing على مستوى البنك
+  final legacyKey = _legacyKeyFor(fsKey);
+  if (legacyKey != null) {
+    final lv = bankMap[legacyKey];
+    if (lv is Map) return Map<String, dynamic>.from(lv);
+  }
+
+  return null;
+}
+
+String? _legacyKeyFor(String fsKey) {
+  if (fsKey.startsWith('personal')) return 'personal';
+  if (fsKey.startsWith('realEstate')) return 'realEstate';
+  if (fsKey.startsWith('leasing')) return 'leasing';
+  return null;
+}
+
 // ── Save rates back to Firestore ─────────────────────────────────────
 List<Map<String, dynamic>> _ratesToFirestoreBanks(List<_BankRate> rates) {
   final banksMap = <String, Map<String, dynamic>>{};
@@ -248,14 +287,17 @@ List<Map<String, dynamic>> _ratesToFirestoreBanks(List<_BankRate> rates) {
       };
     }
     final fsKey = _sectionToFirestoreKey[r.productCategory]?[r.productSub];
-    if (fsKey != null && r.profitMargin != '—') {
+    final products = banksMap[r.bankName]!['products'] as Map<String, dynamic>;
+    // أقسام فرعية متعددة قد تتشارك نفس fsKey (مثل تكميلي + شراء مديونية)؛
+    // نحتفظ بأول قيمة صالحة حتى لا يطغى قسم على آخر ويُمحى الهامش.
+    if (fsKey != null && r.profitMargin != '—' && !products.containsKey(fsKey)) {
       final margin = _parseMargin(r.profitMargin);
       final parts = r.profitMargin.replaceAll('%', '').split('-');
       final min = double.tryParse(parts.first.trim()) ?? margin;
       final max = parts.length > 1
           ? (double.tryParse(parts.last.trim()) ?? min)
           : min;
-      (banksMap[r.bankName]!['products'] as Map<String, dynamic>)[fsKey] = {
+      products[fsKey] = {
         'min': min,
         'max': max,
         'available': true,
@@ -317,8 +359,9 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
       final doc = await _firestore.doc(_docPath).get();
       if (doc.exists) {
         final data = doc.data()!;
-        if (data['banks'] != null) {
-          _rates = _transformFirestoreToRates(data['banks'] as List<dynamic>);
+        final banks = data['banks'];
+        if (banks is List && banks.isNotEmpty) {
+          _rates = _transformFirestoreToRates(banks);
         } else {
           _rates = _generateInitialData();
         }
@@ -396,7 +439,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
       try {
         await callable.call({'page': 'dashboard/profit_margins'});
         await _loadFromFirestore();
-        _showToast('تم التحديث | دقة 95% | المصدر: Grok + البنوك الرسمية');
+        _showToast('تم التحديث | مؤشر تمثيلي | المصدر: Grok + البنوك الرسمية');
         setState(() => _updating = false);
         return;
       } on FirebaseFunctionsException catch (e) {
@@ -588,12 +631,11 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                   height: 1.4,
                 ),
                 children: [
-                  TextSpan(text: 'قارن هوامش الربح بدقة '),
+                  TextSpan(text: 'قارن هوامش الربح التمثيلية عبر '),
                   TextSpan(
-                    text: '95%',
+                    text: 'Grok',
                     style: TextStyle(color: _goldAccent),
                   ),
-                  TextSpan(text: ' عبر Grok'),
                 ],
               ),
             ),
@@ -652,7 +694,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
               const Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
-                  'تقريبي – اضغط تحديث للدقة 95%',
+                  'مؤشر تمثيلي – اضغط تحديث لأحدث البيانات',
                   style: TextStyle(color: _textMuted, fontSize: 11),
                 ),
               ),
@@ -923,8 +965,8 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
                 children: [
                   Text(
                     _lastUpdated != null
-                        ? 'دقة 95% | ${_formatDateTime(_lastUpdated!)}'
-                        : 'تقريبي – اضغط تحديث للدقة 95%',
+                        ? 'مؤشر تمثيلي | ${_formatDateTime(_lastUpdated!)}'
+                        : 'مؤشر تمثيلي – اضغط تحديث لأحدث البيانات',
                     style: const TextStyle(color: _textMuted, fontSize: 11),
                   ),
                   const SizedBox(width: 10),
@@ -1714,7 +1756,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
   Widget _buildStatsCards() {
     const stats = [
       {'val': '11', 'label': 'بنك سعودي', 'isGold': false},
-      {'val': '95%', 'label': 'دقة البيانات', 'isGold': true},
+      {'val': 'تمثيلي', 'label': 'مؤشر إرشادي', 'isGold': true},
       {'val': '4', 'label': 'فئات تمويلية', 'isGold': false},
       {'val': 'فوري', 'label': 'تحديث عبر Grok', 'isGold': true},
     ];
@@ -1792,7 +1834,7 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
           ),
           const SizedBox(height: 10),
           const Text(
-            'البيانات محدثة عبر Grok بدقة عالية من مصادر رسمية (SAMA + مواقع البنوك).\nتحقق دائماً قبل التقديم. للاستشارة الشخصية أدخل بياناتك أعلاه.',
+            'مؤشرات تمثيلية محدّثة عبر Grok من مصادر رسمية (SAMA + مواقع البنوك). الأرقام إرشادية وقد تختلف حسب المبلغ والمدة — تحقق دائماً من البنك قبل التقديم.',
             style: TextStyle(color: _textMuted, fontSize: 11, height: 1.6),
             textAlign: TextAlign.center,
           ),

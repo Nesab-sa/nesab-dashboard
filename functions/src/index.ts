@@ -51,6 +51,89 @@ function httpsPost(options: https.RequestOptions, body: string): Promise<string>
   });
 }
 
+function httpsGet(url: string, maxRedirects = 5): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const parsed = new URL(url);
+    const opts: https.RequestOptions = {
+      hostname: parsed.hostname,
+      path: parsed.pathname + parsed.search,
+      method: "GET",
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "ar,en;q=0.9",
+      },
+      timeout: 15000,
+    };
+    const req = https.request(opts, (res) => {
+      if (res.statusCode && [301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location && maxRedirects > 0) {
+        const loc = res.headers.location;
+        const next = loc.startsWith("http") ? loc : `https://${parsed.hostname}${loc}`;
+        res.resume();
+        resolve(httpsGet(next, maxRedirects - 1));
+        return;
+      }
+      const chunks: Buffer[] = [];
+      res.on("data", (chunk: Buffer) => chunks.push(chunk));
+      res.on("end", () => {
+        const raw = Buffer.concat(chunks).toString("utf8");
+        if (res.statusCode && res.statusCode >= 400) reject(new Error(`HTTP ${res.statusCode}`));
+        else resolve(raw);
+      });
+    });
+    req.on("timeout", () => { req.destroy(); reject(new Error("Timeout")); });
+    req.on("error", reject);
+    req.end();
+  });
+}
+
+function stripHtml(html: string): string {
+  return html
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+    .replace(/<nav[^>]*>[\s\S]*?<\/nav>/gi, "")
+    .replace(/<footer[^>]*>[\s\S]*?<\/footer>/gi, "")
+    .replace(/<header[^>]*>[\s\S]*?<\/header>/gi, "")
+    .replace(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, "\"")
+    .replace(/&#?\w+;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractFinancialContent(text: string, maxLen = 7000): string {
+  if (text.length <= maxLen) return text;
+
+  const rateRe = /\d+\.\d+\s*%|%\s*\d+\.\d+/g;
+  let m;
+  const pos: number[] = [];
+  while ((m = rateRe.exec(text)) !== null) {
+    const val = parseFloat(m[0].replace(/[% ]/g, ""));
+    if (val >= 1 && val <= 15) pos.push(m.index);
+  }
+  if (pos.length === 0) return text.substring(0, maxLen);
+
+  const W = 400;
+  const wins = pos.map((p) => ({ s: Math.max(0, p - W), e: Math.min(text.length, p + W) }));
+  const merged = [{ ...wins[0] }];
+  for (let i = 1; i < wins.length; i++) {
+    const last = merged[merged.length - 1];
+    if (wins[i].s <= last.e) last.e = Math.max(last.e, wins[i].e);
+    else merged.push({ ...wins[i] });
+  }
+  let result = "";
+  for (const w of merged) {
+    if (result.length >= maxLen) break;
+    result += text.substring(w.s, w.e) + " [...] ";
+  }
+  return result.substring(0, maxLen);
+}
+
 interface ChatMessage {
   role: "user" | "assistant" | "system";
   content: string;
@@ -159,7 +242,7 @@ export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["
     // Load AI config from Firestore
     let aiConfig: AiConfig = {
       provider: "grok",
-      model: "grok-4.1-fast",
+      model: "grok-4.3",
       systemPrompt: "Your default system prompt here.",
       enabled: true,
     };
@@ -456,23 +539,329 @@ export const deleteManager = functions.region("us-central1").https.onCall(
   }
 );
 
-// ─── Profit Margins Scheduled Update (daily 10:00 AM KSA = 07:00 UTC) ────────
+// ─── Profit Margins: Official Bank Pricing Pages ──────────────────────────────
 
-// ─── Prompt لجلب هوامش الربح عبر الذكاء الاصطناعي ────────────────────────────
+const BANK_PRICING_PAGES: Record<string, { urls: string[]; bankName: string }> = {
+  rajhi: { urls: [
+    "https://www.alrajhibank.com.sa/ar/Personal/Financing-and-Savings-products-for-individuals",
+    "https://www.alrajhibank.com.sa/en/Personal/Financing-and-Savings-products-for-individuals",
+  ], bankName: "مصرف الراجحي" },
+  snb: { urls: [
+    "https://www.alahli.com/ar/pages/personal-banking/finance/finance-and-saving-pricing-personal-finance",
+    "https://www.alahli.com/ar/pages/personal-banking/finance/finance-and-saving-pricing",
+  ], bankName: "البنك الأهلي السعودي" },
+  inma: { urls: [
+    "https://alinma.com/Prices-Finance-and-Products",
+  ], bankName: "مصرف الإنماء" },
+  riyadh: { urls: [
+    "https://www.riyadbank.com/ar/information/special-pages/arp-disclosure",
+    "https://www.riyadbank.com/information/special-pages/arp-disclosure",
+  ], bankName: "بنك الرياض" },
+  saab: { urls: [
+    "https://www.sab.com/ar/personal/prices-of-financing-and-savings-products/",
+    "https://www.sab.com/en/personal/prices-of-financing-and-savings-products/",
+  ], bankName: "البنك السعودي الأول (ساب)" },
+  fransi: { urls: [
+    "https://bsf.sa/english/interest-rate-of-finance-and-savings-products",
+  ], bankName: "البنك السعودي الفرنسي" },
+  anb: { urls: [
+    "https://anb.com.sa/web/anb/annual-profit-rate",
+  ], bankName: "البنك العربي الوطني" },
+  saib: { urls: [
+    "https://www.saib.com.sa/en/prices-financing-and-savings-products",
+  ], bankName: "البنك السعودي للاستثمار" },
+  bilad: { urls: [
+    "https://www.bankalbilad.com/en/personal/financing",
+  ], bankName: "بنك البلاد" },
+  jazira: { urls: [
+    "https://www.baj.com.sa/en-us/Personal/Finance/PersonalFinance",
+  ], bankName: "بنك الجزيرة" },
+  enbd: { urls: [
+    "https://www.emiratesnbd.com.sa/en/personal-banking/loans",
+  ], bankName: "بنك الإمارات دبي الوطني" },
+};
 
-const BANK_IDS = "rajhi,snb,inma,riyadh,jazira,saab,fransi,anb,bilad,sibc,gib";
+interface BankPageResult { bankId: string; bankName: string; text: string; ok: boolean }
 
-const PROFIT_MARGIN_PROMPT = `Return JSON only. Saudi bank profit margins for 11 banks and 8 products.
-Banks: ${BANK_IDS}.
-Products: personalBasic,personalSpecial,realEstateSupportedProgram,realEstateSupportedMinistry,realEstateCommercial,realEstateResident,leasingVehicles,leasingEquipment.
-Format: {"banks":[{"bankId":"rajhi","bankName":"بنك الراجحي","products":{"personalBasic":{"min":3.99,"max":5.5,"available":true}}}],"summary":"brief summary"}
-If product unavailable: available:false,min:0,max:0. Use latest data.`;
+async function fetchBestPage(urls: string[]): Promise<string> {
+  for (const url of urls) {
+    try {
+      const html = await httpsGet(url);
+      const raw = stripHtml(html);
+      const hasRates = /\d+\.\d+\s*%|%\s*\d+\.\d+/.test(raw);
+      if (raw.length >= 200 && hasRates) return extractFinancialContent(raw);
+    } catch { /* try next URL */ }
+  }
+  throw new Error("No URL returned usable content");
+}
 
-// ─── Scheduled: تحديث هوامش الربح يومياً 10:00 صباحاً بتوقيت الرياض (07:00 UTC) ──
+async function fetchBankPricingPages(): Promise<BankPageResult[]> {
+  const entries = Object.entries(BANK_PRICING_PAGES);
+  const settled = await Promise.allSettled(
+    entries.map(async ([bankId, { urls, bankName }]): Promise<BankPageResult> => {
+      try {
+        const text = await fetchBestPage(urls);
+        return { bankId, bankName, text, ok: true };
+      } catch {
+        return { bankId, bankName, text: "", ok: false };
+      }
+    }),
+  );
+  return settled.map((s) =>
+    s.status === "fulfilled" ? s.value : { bankId: "", bankName: "", text: "", ok: false },
+  );
+}
+
+function buildExtractionPrompt(pages: BankPageResult[]): string {
+  let body = "";
+  const failed: string[] = [];
+  for (const p of pages) {
+    if (p.ok) {
+      body += `\n\n========== ${p.bankName} (${p.bankId}) ==========\n${p.text}\n`;
+    } else {
+      failed.push(`${p.bankName} (${p.bankId})`);
+    }
+  }
+
+  return `أنت خبير استخراج بيانات مالية للبنوك السعودية.
+
+المهمة: استخرج هامش الربح / معدل النسبة السنوي (APR) من صفحات أسعار البنوك الرسمية أدناه.
+
+قواعد صارمة:
+1. استخرج فقط الأرقام الرسمية الثابتة الموجودة صراحةً في النصوص.
+2. احذف أي عروض ترويجية أو خصومات مؤقتة — احتفظ فقط بالأسعار الرسمية.
+3. لا تخترع أو تخمّن أي نسبة. إذا لم تجد المنتج: available:false, min:0, max:0.
+4. "min" = أقل نسبة رسمية (أفضل حالة: أطول مدة، تحويل راتب، مبلغ كبير).
+5. "max" = أعلى نسبة رسمية (أسوأ حالة: أقصر مدة، بدون تحويل راتب، مبلغ صغير).
+6. هامش الربح / معدل النسبة السنوي يشمل الرسوم الإدارية.
+
+المنتجات المطلوبة لكل بنك:
+
+تمويل شخصي:
+  - personalBasic: تمويل شخصي جديد (مع المدة والشروط)
+  - personalSpecial: تمويل شخصي تكميلي أو شراء مديونية (مع المدة والشروط)
+
+تمويل عقاري مدعوم:
+  - realEstateSupportedProgram: عقاري مدعوم — جاهز أو شراء على الخارطة
+  - realEstateSupportedMinistry: عقاري مدعوم — بناء ذاتي أو رهن عقار
+
+تمويل عقاري اعتيادي:
+  - realEstateCommercial: تمويل عقاري اعتيادي (غير مدعوم)
+
+تمويل تأجيري:
+  - leasingVehicles: تأجيري — سيارات بنظام قسط شهري أو نظام 50/50
+${failed.length > 0 ? `\nبنوك بدون بيانات (لم يتم جلب صفحتها — ضع جميع منتجاتها available:false):\n${failed.join("\n")}\n` : ""}
+=== صفحات البنوك الرسمية ===
+${body}
+
+أرجع JSON فقط — بدون markdown أو شرح. الشكل المطلوب:
+{"banks":[{"bankId":"rajhi","bankName":"مصرف الراجحي","products":{"personalBasic":{"min":5.47,"max":5.67,"available":true},"personalSpecial":{"min":0,"max":0,"available":false},"realEstateSupportedProgram":{"min":3.25,"max":4.50,"available":true},"realEstateSupportedMinistry":{"min":2.80,"max":3.90,"available":true},"realEstateCommercial":{"min":4.00,"max":5.50,"available":true},"leasingVehicles":{"min":5.80,"max":7.00,"available":true}}}],"summary":"تم الاستخراج من صفحات البنوك الرسمية"}`;
+}
+
+// ─── أنواع مساعدة لهوامش الربح ────────────────────────────────────────
+interface ProductRate { min?: number; max?: number; available?: boolean }
+interface BankRecord { bankId?: string; bankName?: string; products?: Record<string, ProductRate> }
+
+// استخراج النص النهائي من بنية Responses API (دفاعي — يدعم أكثر من شكل)
+function extractResponsesText(resp: Record<string, unknown>): string {
+  // (1) حقل output_text المختصر
+  if (typeof resp.output_text === "string" && resp.output_text.trim()) {
+    return resp.output_text;
+  }
+  // (2) المرور على output[] واستخراج نص الرسالة
+  const output = resp.output;
+  if (Array.isArray(output)) {
+    let text = "";
+    for (const item of output) {
+      const content = (item as Record<string, unknown>)?.content;
+      if (Array.isArray(content)) {
+        for (const c of content) {
+          const t = (c as Record<string, unknown>)?.text;
+          if (typeof t === "string") text += t;
+        }
+      }
+    }
+    if (text.trim()) return text;
+  }
+  // (3) توافق احتياطي مع شكل chat completions
+  const choices = resp.choices as Array<{ message?: { content?: string } }> | undefined;
+  const fallback = choices?.[0]?.message?.content;
+  return typeof fallback === "string" ? fallback : "";
+}
+
+function parseBanksJson(content: string): { banks: unknown[]; summary: string } {
+  const jsonMatch = content.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error("No JSON found in Grok response");
+  const parsed = JSON.parse(jsonMatch[0]) as { banks: unknown[]; summary: string };
+  if (!Array.isArray(parsed.banks) || parsed.banks.length === 0) {
+    throw new Error("Grok returned empty banks array");
+  }
+  return parsed;
+}
+
+// هل يحتوي الناتج على أي نسبة صالحة فعلاً؟ (لتقرير الرجوع للاحتياطي)
+function hasUsableData(banks: unknown[]): boolean {
+  return banks.some((b) => {
+    const products = (b as BankRecord)?.products ?? {};
+    return Object.values(products).some(
+      (p) => p?.available === true && ((p.min ?? 0) > 0 || (p.max ?? 0) > 0),
+    );
+  });
+}
+
+// دمج آمن: لا يمحو نسبة صحيحة قديمة ببيانات جديدة فارغة (available:false / 0)
+function mergeBanks(existing: unknown, incoming: unknown[]): unknown[] {
+  const existingArr: BankRecord[] = Array.isArray(existing) ? (existing as BankRecord[]) : [];
+  const byId = new Map<string, BankRecord>();
+  for (const b of existingArr) {
+    if (b?.bankId) byId.set(b.bankId, b);
+  }
+
+  const usedIds = new Set<string>();
+  const result: BankRecord[] = incoming.map((inc) => {
+    const incBank = inc as BankRecord;
+    const id = incBank?.bankId;
+    if (!id) return incBank;
+    usedIds.add(id);
+    const old = byId.get(id);
+    if (!old) return incBank;
+
+    const merged: Record<string, ProductRate> = { ...(old.products ?? {}) };
+    for (const [key, prod] of Object.entries(incBank.products ?? {})) {
+      const hasValue = prod?.available === true && ((prod.min ?? 0) > 0 || (prod.max ?? 0) > 0);
+      if (hasValue) merged[key] = prod; // قيمة جديدة صالحة فقط تُحدّث
+    }
+    return { bankId: id, bankName: incBank.bankName ?? old.bankName, products: merged };
+  });
+
+  // احتفظ بأي بنوك قديمة لم ترد في النتيجة الجديدة
+  for (const [id, old] of byId) {
+    if (!usedIds.has(id)) result.push(old);
+  }
+  return result;
+}
+
+// ─── المصدر الأساسي: بحث Grok المباشر عبر web_search (Responses API) ────
+function buildLiveSearchPrompt(): string {
+  const bankLines = Object.entries(BANK_PRICING_PAGES)
+    .map(([id, b]) => `- ${id} (${b.bankName}): ${b.urls[0]}`)
+    .join("\n");
+
+  return `أنت خبير استخراج بيانات مالية للبنوك السعودية. ابحث الآن في الإنترنت داخل الصفحات الرسمية للبنوك أدناه واستخرج هامش الربح / معدل النسبة السنوي (APR) لكل منتج.
+
+البنوك وصفحاتها الرسمية:
+${bankLines}
+
+قواعد صارمة:
+1. ابحث في المواقع الرسمية للبنوك أعلاه فقط (ومصادر رسمية مثل SAMA).
+2. استخرج "معدل النسبة السنوي التمثيلي المعلَن" (Representative APR) الأبرز قانونياً على صفحة المنتج. وإن لم يُعلن البنك معدلاً تمثيلياً واحداً صريحاً، فخذ نطاق الأرقام الرسمية المعروضة فعلياً على الصفحة (أدنى وأعلى نسبة معلنة). تجاهل أمثلة الحاسبة التفاعلية المتغيرة لحظياً حسب المبلغ والمدة، وتجاهل العروض الترويجية المؤقتة.
+3. "min" = المعدل التمثيلي الأدنى المعلَن (أفضل حالة: تحويل راتب + أطول مدة). "max" = المعدل التمثيلي الأعلى المعلَن. وإن أعلن البنك رقماً واحداً فقط (مثل "يبدأ من X%") فاجعل min وmax كلاهما = X.
+4. اعتمد الأرقام الرسمية المعلَنة فقط لا الأمثلة العشوائية؛ يجب أن تكون النتيجة قابلة للتكرار (نفس الأرقام عند إعادة البحث).
+5. لا تخترع أو تخمّن. إذا لم تجد رقماً رسمياً صريحاً للمنتج: available:false, min:0, max:0.
+6. معدل النسبة السنوي يشمل الرسوم الإدارية.
+
+المنتجات المطلوبة لكل بنك:
+- personalBasic: تمويل شخصي جديد
+- personalSpecial: تمويل شخصي تكميلي أو شراء مديونية
+- realEstateSupportedProgram: عقاري مدعوم (جاهز / على الخارطة)
+- realEstateSupportedMinistry: عقاري مدعوم (بناء ذاتي / رهن عقار)
+- realEstateCommercial: عقاري اعتيادي غير مدعوم
+- leasingVehicles: تأجيري سيارات
+
+أرجع JSON فقط بلا markdown أو شرح، بهذا الشكل:
+{"banks":[{"bankId":"rajhi","bankName":"مصرف الراجحي","products":{"personalBasic":{"min":5.47,"max":5.67,"available":true},"personalSpecial":{"min":0,"max":0,"available":false},"realEstateSupportedProgram":{"min":3.25,"max":4.50,"available":true},"realEstateSupportedMinistry":{"min":2.80,"max":3.90,"available":true},"realEstateCommercial":{"min":4.00,"max":5.50,"available":true},"leasingVehicles":{"min":5.80,"max":7.00,"available":true}}}],"summary":"ملخص قصير بالعربية"}
+
+استخدم معرّفات البنوك التالية فقط: ${Object.keys(BANK_PRICING_PAGES).join(", ")}.`;
+}
+
+async function fetchViaWebSearch(apiKey: string): Promise<{ banks: unknown[]; summary: string }> {
+  const prompt = buildLiveSearchPrompt();
+  const reqBody = JSON.stringify({
+    model: "grok-4.3",
+    input: [{ role: "user", content: prompt }],
+    tools: [{ type: "web_search" }],
+    max_output_tokens: 8192,
+  });
+
+  const opts: https.RequestOptions = {
+    hostname: "api.x.ai",
+    path: "/v1/responses",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey.trim()}`,
+      "Content-Length": Buffer.byteLength(reqBody),
+    },
+  };
+
+  const raw = await httpsPost(opts, reqBody);
+  const resp = JSON.parse(raw) as Record<string, unknown>;
+  const content = extractResponsesText(resp);
+  functions.logger.info("profitMargins: web_search response preview", { content: content.substring(0, 600) });
+  if (!content.trim()) throw new Error("Empty response from Grok web_search");
+  return parseBanksJson(content);
+}
+
+// ─── الاحتياطي: جلب الصفحات يدوياً ثم استخراج عبر chat completions ──────
+async function fetchViaScraping(apiKey: string): Promise<{ banks: unknown[]; summary: string }> {
+  functions.logger.info("profitMargins: fetching official bank pricing pages…");
+  const pages = await fetchBankPricingPages();
+  const okCount = pages.filter((p) => p.ok).length;
+  const failedNames = pages.filter((p) => !p.ok).map((p) => p.bankName);
+  functions.logger.info(`profitMargins: ${okCount}/${pages.length} pages fetched`, { failed: failedNames });
+
+  if (okCount === 0) {
+    throw new Error("All bank page fetches failed — aborting to avoid saving empty data");
+  }
+
+  const prompt = buildExtractionPrompt(pages);
+  functions.logger.info("profitMargins: prompt built", { chars: prompt.length });
+
+  const reqBody = JSON.stringify({
+    model: "grok-4.3",
+    messages: [{ role: "user", content: prompt }],
+    max_tokens: 4096,
+    temperature: 0.1,
+  });
+
+  const opts: https.RequestOptions = {
+    hostname: "api.x.ai",
+    path: "/v1/chat/completions",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey.trim()}`,
+      "Content-Length": Buffer.byteLength(reqBody),
+    },
+  };
+
+  const raw = await httpsPost(opts, reqBody);
+  const resp = JSON.parse(raw) as Record<string, unknown>;
+  const content = extractResponsesText(resp);
+  functions.logger.info("profitMargins: scraping response preview", { content: content.substring(0, 600) });
+  return parseBanksJson(content);
+}
+
+// ─── المنسّق: web_search أساسي، ثم scraping عند فشله أو خلوّه من النسب ──
+async function executeProfitMarginsUpdate(apiKey: string): Promise<{ banks: unknown[]; summary: string }> {
+  try {
+    const viaSearch = await fetchViaWebSearch(apiKey);
+    if (hasUsableData(viaSearch.banks)) {
+      functions.logger.info("profitMargins: using Grok web_search result", { count: viaSearch.banks.length });
+      return viaSearch;
+    }
+    functions.logger.warn("profitMargins: web_search returned no usable rates, falling back to scraping");
+  } catch (e) {
+    functions.logger.warn("profitMargins: web_search failed, falling back to scraping", e);
+  }
+  return fetchViaScraping(apiKey);
+}
+
+// ─── Scheduled: تحديث هوامش الربح يومياً (07:00 UTC = 10:00 AM KSA) ──────────
 
 export const updateProfitMargins = functions
   .region("us-central1")
-  .runWith({ secrets: ["OPENAI_API_KEY"], timeoutSeconds: 540 })
+  .runWith({ secrets: ["XAI_API_KEY"], timeoutSeconds: 540 })
   .pubsub.schedule("30 6 * * *")
   .timeZone("UTC")
   .onRun(async () => {
@@ -480,74 +869,31 @@ export const updateProfitMargins = functions
 
     let apiKey: string;
     try {
-      apiKey = await getSecret("OPENAI_API_KEY");
+      apiKey = await getSecret("XAI_API_KEY");
     } catch (e) {
-      functions.logger.error("updateProfitMargins: OPENAI_API_KEY is not set", e);
-      return;
-    }
-
-    const requestBody = JSON.stringify({
-      model: "gpt-4o",
-      messages: [
-        { role: "user", content: PROFIT_MARGIN_PROMPT },
-      ],
-      max_tokens: 4096,
-      temperature: 0.2,
-    });
-
-    const options: https.RequestOptions = {
-      hostname: "api.openai.com",
-      path: "/v1/chat/completions",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey.trim()}`,
-        "Content-Length": Buffer.byteLength(requestBody),
-      },
-    };
-
-    let rawResponse: string;
-    try {
-      rawResponse = await httpsPost(options, requestBody);
-    } catch (e) {
-      functions.logger.error("updateProfitMargins: API call failed", e);
-      return;
-    }
-
-    functions.logger.info("updateProfitMargins: raw response", { rawResponse });
-
-    let parsed: Record<string, unknown>;
-    try {
-      const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
-      const choices = apiResponse.choices as Array<{ message: { content: string } }>;
-      const content = choices?.[0]?.message?.content ?? "";
-      functions.logger.info("updateProfitMargins: extracted content", { content: content.substring(0, 500) });
-
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        functions.logger.error("updateProfitMargins: no JSON found in response", { content });
-        return;
-      }
-      parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
-    } catch (e) {
-      functions.logger.error("updateProfitMargins: JSON parse failed", { rawResponse: rawResponse.substring(0, 1000), error: e });
+      functions.logger.error("updateProfitMargins: XAI_API_KEY is not set", e);
       return;
     }
 
     try {
+      const result = await executeProfitMarginsUpdate(apiKey);
+      const currentSnap = await firestore.doc("bank_rates/profit_margins").get();
+      const mergedBanks = mergeBanks(currentSnap.data()?.banks, result.banks);
       await firestore.doc("bank_rates/profit_margins").set({
-        banks: parsed.banks ?? [],
-        aiSummary: parsed.summary ?? "",
+        banks: mergedBanks,
+        aiSummary: result.summary,
         lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
-        updatedBy: "openai-scheduled",
+        updatedBy: "grok-scheduled",
       }, { merge: true });
       functions.logger.info("updateProfitMargins: Firestore updated successfully");
     } catch (e) {
-      functions.logger.error("updateProfitMargins: Firestore write failed", e);
+      functions.logger.error("updateProfitMargins: update failed", e);
     }
   });
 
-export const triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["OPENAI_API_KEY"], timeoutSeconds: 540 }).https.onCall(
+// ─── Manual trigger from dashboard ────────────────────────────────────────────
+
+export const triggerProfitMarginsUpdate = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY"], timeoutSeconds: 540 }).https.onCall(
   async (_data: unknown, context: functions.https.CallableContext) => {
     if (!context.auth) {
       throw new functions.https.HttpsError("unauthenticated", "You must be signed in.");
@@ -562,70 +908,27 @@ export const triggerProfitMarginsUpdate = functions.region("us-central1").runWit
 
     let apiKey: string;
     try {
-      apiKey = await getSecret("OPENAI_API_KEY");
+      apiKey = await getSecret("XAI_API_KEY");
     } catch (e) {
-      throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح OpenAI.");
+      throw new functions.https.HttpsError("internal", "فشل الحصول على مفتاح Grok.");
     }
 
-    const requestBody = JSON.stringify({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: PROFIT_MARGIN_PROMPT }],
-      max_tokens: 4096,
-      temperature: 0.2,
-    });
-
-    const options: https.RequestOptions = {
-      hostname: "api.openai.com",
-      path: "/v1/chat/completions",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey.trim()}`,
-        "Content-Length": Buffer.byteLength(requestBody),
-      },
-    };
-
-    let rawResponse: string;
     try {
-      rawResponse = await httpsPost(options, requestBody);
+      const result = await executeProfitMarginsUpdate(apiKey);
+      const currentSnap = await firestore.doc("bank_rates/profit_margins").get();
+      const mergedBanks = mergeBanks(currentSnap.data()?.banks, result.banks);
+      await firestore.doc("bank_rates/profit_margins").set({
+        banks: mergedBanks,
+        aiSummary: result.summary,
+        lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+        updatedBy: "grok-manual",
+      }, { merge: true });
+      return { success: true, summary: result.summary };
     } catch (e) {
       const errMsg = e instanceof Error ? e.message : String(e);
-      functions.logger.error("triggerProfitMarginsUpdate: Grok API call failed", { error: errMsg });
-      throw new functions.https.HttpsError("internal", `فشل الاتصال بـ Grok API: ${errMsg}`);
+      functions.logger.error("triggerProfitMarginsUpdate: failed", { error: errMsg });
+      throw new functions.https.HttpsError("internal", `فشل التحديث: ${errMsg}`);
     }
-
-    functions.logger.info("triggerProfitMarginsUpdate: raw response", { rawResponse });
-
-    let parsed: Record<string, unknown>;
-    try {
-      const apiResponse = JSON.parse(rawResponse) as Record<string, unknown>;
-      const choices = apiResponse.choices as Array<{ message: { content: string } }>;
-      const content = choices?.[0]?.message?.content ?? "";
-      functions.logger.info("triggerProfitMarginsUpdate: extracted content", { content: content.substring(0, 500) });
-
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new functions.https.HttpsError("internal", "لم يُرجع OpenAI بيانات JSON صالحة.");
-      }
-      parsed = JSON.parse(jsonMatch[0]) as Record<string, unknown>;
-    } catch (e) {
-      if (e instanceof functions.https.HttpsError) throw e;
-      functions.logger.error("triggerProfitMarginsUpdate: parse failed", { rawResponse: rawResponse.substring(0, 1000), error: e });
-      throw new functions.https.HttpsError("internal", "فشل تحليل رد OpenAI.");
-    }
-
-    try {
-      await firestore.doc("bank_rates/profit_margins").set({
-        banks: parsed.banks ?? [],
-        aiSummary: parsed.summary ?? "",
-        lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
-        updatedBy: "openai-manual",
-      }, { merge: true });
-    } catch (e) {
-      throw new functions.https.HttpsError("internal", "فشل حفظ البيانات في Firestore.");
-    }
-
-    return { success: true, summary: parsed.summary ?? "" };
   }
 );
 

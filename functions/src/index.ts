@@ -699,16 +699,6 @@ function parseBanksJson(content: string): { banks: unknown[]; summary: string } 
   return parsed;
 }
 
-// هل يحتوي الناتج على أي نسبة صالحة فعلاً؟ (لتقرير الرجوع للاحتياطي)
-function hasUsableData(banks: unknown[]): boolean {
-  return banks.some((b) => {
-    const products = (b as BankRecord)?.products ?? {};
-    return Object.values(products).some(
-      (p) => p?.available === true && ((p.min ?? 0) > 0 || (p.max ?? 0) > 0),
-    );
-  });
-}
-
 // دمج آمن: لا يمحو نسبة صحيحة قديمة ببيانات جديدة فارغة (available:false / 0)
 function mergeBanks(existing: unknown, incoming: unknown[]): unknown[] {
   const existingArr: BankRecord[] = Array.isArray(existing) ? (existing as BankRecord[]) : [];
@@ -741,68 +731,7 @@ function mergeBanks(existing: unknown, incoming: unknown[]): unknown[] {
   return result;
 }
 
-// ─── المصدر الأساسي: بحث Grok المباشر عبر web_search (Responses API) ────
-function buildLiveSearchPrompt(): string {
-  const bankLines = Object.entries(BANK_PRICING_PAGES)
-    .map(([id, b]) => `- ${id} (${b.bankName}): ${b.urls[0]}`)
-    .join("\n");
-
-  return `أنت خبير استخراج بيانات مالية للبنوك السعودية. ابحث الآن في الإنترنت داخل الصفحات الرسمية للبنوك أدناه واستخرج هامش الربح / معدل النسبة السنوي (APR) لكل منتج.
-
-البنوك وصفحاتها الرسمية:
-${bankLines}
-
-قواعد صارمة:
-1. ابحث في المواقع الرسمية للبنوك أعلاه فقط (ومصادر رسمية مثل SAMA).
-2. استخرج "معدل النسبة السنوي التمثيلي المعلَن" (Representative APR) الأبرز قانونياً على صفحة المنتج. وإن لم يُعلن البنك معدلاً تمثيلياً واحداً صريحاً، فخذ نطاق الأرقام الرسمية المعروضة فعلياً على الصفحة (أدنى وأعلى نسبة معلنة). تجاهل أمثلة الحاسبة التفاعلية المتغيرة لحظياً حسب المبلغ والمدة، وتجاهل العروض الترويجية المؤقتة.
-3. "min" = المعدل التمثيلي الأدنى المعلَن (أفضل حالة: تحويل راتب + أطول مدة). "max" = المعدل التمثيلي الأعلى المعلَن. وإن أعلن البنك رقماً واحداً فقط (مثل "يبدأ من X%") فاجعل min وmax كلاهما = X.
-4. اعتمد الأرقام الرسمية المعلَنة فقط لا الأمثلة العشوائية؛ يجب أن تكون النتيجة قابلة للتكرار (نفس الأرقام عند إعادة البحث).
-5. لا تخترع أو تخمّن. إذا لم تجد رقماً رسمياً صريحاً للمنتج: available:false, min:0, max:0.
-6. معدل النسبة السنوي يشمل الرسوم الإدارية.
-
-المنتجات المطلوبة لكل بنك:
-- personalBasic: تمويل شخصي جديد
-- personalSpecial: تمويل شخصي تكميلي أو شراء مديونية
-- realEstateSupportedProgram: عقاري مدعوم (جاهز / على الخارطة)
-- realEstateSupportedMinistry: عقاري مدعوم (بناء ذاتي / رهن عقار)
-- realEstateCommercial: عقاري اعتيادي غير مدعوم
-- leasingVehicles: تأجيري سيارات
-
-أرجع JSON فقط بلا markdown أو شرح، بهذا الشكل:
-{"banks":[{"bankId":"rajhi","bankName":"مصرف الراجحي","products":{"personalBasic":{"min":5.47,"max":5.67,"available":true},"personalSpecial":{"min":0,"max":0,"available":false},"realEstateSupportedProgram":{"min":3.25,"max":4.50,"available":true},"realEstateSupportedMinistry":{"min":2.80,"max":3.90,"available":true},"realEstateCommercial":{"min":4.00,"max":5.50,"available":true},"leasingVehicles":{"min":5.80,"max":7.00,"available":true}}}],"summary":"ملخص قصير بالعربية"}
-
-استخدم معرّفات البنوك التالية فقط: ${Object.keys(BANK_PRICING_PAGES).join(", ")}.`;
-}
-
-async function fetchViaWebSearch(apiKey: string): Promise<{ banks: unknown[]; summary: string }> {
-  const prompt = buildLiveSearchPrompt();
-  const reqBody = JSON.stringify({
-    model: "grok-4.3",
-    input: [{ role: "user", content: prompt }],
-    tools: [{ type: "web_search" }],
-    max_output_tokens: 8192,
-  });
-
-  const opts: https.RequestOptions = {
-    hostname: "api.x.ai",
-    path: "/v1/responses",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey.trim()}`,
-      "Content-Length": Buffer.byteLength(reqBody),
-    },
-  };
-
-  const raw = await httpsPost(opts, reqBody);
-  const resp = JSON.parse(raw) as Record<string, unknown>;
-  const content = extractResponsesText(resp);
-  functions.logger.info("profitMargins: web_search response preview", { content: content.substring(0, 600) });
-  if (!content.trim()) throw new Error("Empty response from Grok web_search");
-  return parseBanksJson(content);
-}
-
-// ─── الاحتياطي: جلب الصفحات يدوياً ثم استخراج عبر chat completions ──────
+// ─── جلب الصفحات الرسمية يدوياً ثم استخراج عبر Grok (chat completions) ──────
 async function fetchViaScraping(apiKey: string): Promise<{ banks: unknown[]; summary: string }> {
   functions.logger.info("profitMargins: fetching official bank pricing pages…");
   const pages = await fetchBankPricingPages();
@@ -842,18 +771,11 @@ async function fetchViaScraping(apiKey: string): Promise<{ banks: unknown[]; sum
   return parseBanksJson(content);
 }
 
-// ─── المنسّق: web_search أساسي، ثم scraping عند فشله أو خلوّه من النسب ──
+// ─── المنسّق: scraping مباشرةً (المصدر الحيّ الموثوق) ──────────────────
+// أُزيلت محاولة web_search (Responses API) ودوالها: أثبت اختبارٌ فعليّ متكرّر أنها
+// غير حتمية وتُرجع أرقاماً متذبذبة غير موثوقة (أحياناً من تغريدات)، وتهدر 15-35 ثانية
+// قبل السقوط للاحتياطي. scraping يقرأ نصّ صفحة البنك الرسمية الثابت فنتيجته متّسقة.
 async function executeProfitMarginsUpdate(apiKey: string): Promise<{ banks: unknown[]; summary: string }> {
-  try {
-    const viaSearch = await fetchViaWebSearch(apiKey);
-    if (hasUsableData(viaSearch.banks)) {
-      functions.logger.info("profitMargins: using Grok web_search result", { count: viaSearch.banks.length });
-      return viaSearch;
-    }
-    functions.logger.warn("profitMargins: web_search returned no usable rates, falling back to scraping");
-  } catch (e) {
-    functions.logger.warn("profitMargins: web_search failed, falling back to scraping", e);
-  }
   return fetchViaScraping(apiKey);
 }
 

@@ -128,6 +128,7 @@ const _bankAliases = <String, String>{
   'البنك السعودي': 'البنك الأهلي السعودي',
   'البنك الأهلي التجاري': 'البنك الأهلي السعودي',
   'بنك ساب': 'البنك السعودي الأول (ساب)',
+  'البنك السعودي الأول': 'البنك السعودي الأول (ساب)',
   'البنك السعودي البريطاني': 'البنك السعودي الأول (ساب)',
   'بنك الاستثمار السعودي': 'البنك السعودي للاستثمار',
   'البنك الخليجي الدولي': 'بنك الإمارات دبي الوطني',
@@ -136,8 +137,41 @@ const _bankAliases = <String, String>{
   'بنك الراجحي': 'مصرف الراجحي',
 };
 
+// معرّف البنك الثابت (من Cloud Function) → الاسم القانوني في _banks.
+// نعتمد على المعرّف لا الاسم لأن Grok قد يُعيد اسماً منحرفاً (مثل حذف "(ساب)").
+const _bankIdToName = <String, String>{
+  'rajhi': 'مصرف الراجحي',
+  'snb': 'البنك الأهلي السعودي',
+  'inma': 'مصرف الإنماء',
+  'riyadh': 'بنك الرياض',
+  'saab': 'البنك السعودي الأول (ساب)',
+  'fransi': 'البنك السعودي الفرنسي',
+  'anb': 'البنك العربي الوطني',
+  'saib': 'البنك السعودي للاستثمار',
+  'bilad': 'بنك البلاد',
+  'jazira': 'بنك الجزيرة',
+  'enbd': 'بنك الإمارات دبي الوطني',
+};
+
 String _normalizeBankName(String name) =>
     _bankAliases[name.trim()] ?? name.trim();
+
+// ── المؤشر التمثيلي الافتراضي ─────────────────────────────────────────
+// يُبنى مرة واحدة من _generateInitialData ويُفهرس بـ: اسم البنك ← 'الفئة|القسم'.
+// يُستخدم لملء أي منتج لا يوفّر له Grok رقماً حيّاً صالحاً، فلا تظهر "—" أبداً.
+const _representativeSource = 'مؤشر تمثيلي';
+Map<String, Map<String, String>>? _fallbackMarginsCache;
+Map<String, Map<String, String>> _fallbackMargins() {
+  final cached = _fallbackMarginsCache;
+  if (cached != null) return cached;
+  final map = <String, Map<String, String>>{};
+  for (final r in _generateInitialData()) {
+    (map[r.bankName] ??= <String, String>{})[
+        '${r.productCategory}|${r.productSub}'] = r.profitMargin;
+  }
+  _fallbackMarginsCache = map;
+  return map;
+}
 
 double _parseMargin(String m) {
   final cleaned = m.replaceAll('%', '').split('-').first.trim();
@@ -206,12 +240,16 @@ List<_BankRate> _transformFirestoreToRates(List<dynamic> banksData) {
       for (final bankRaw in banksData) {
         if (bankRaw is! Map) continue;
         final bankMap = Map<String, dynamic>.from(bankRaw);
+        // الاسم القانوني عبر المعرّف الثابت أولاً، ثم تطبيع الاسم كحلٍّ احتياطي.
+        final bankId = bankMap['bankId']?.toString() ?? '';
         final rawName = bankMap['bankName']?.toString() ?? '';
-        final bankName = _normalizeBankName(rawName);
+        final bankName =
+            _bankIdToName[bankId] ?? _normalizeBankName(rawName);
 
         final product = _readProduct(bankMap, fsKey);
 
         String margin = '—';
+        bool isLive = false;
         if (product != null && product['available'] != false) {
           final min = (product['min'] as num?)?.toDouble();
           final max = (product['max'] as num?)?.toDouble();
@@ -219,7 +257,13 @@ List<_BankRate> _transformFirestoreToRates(List<dynamic> banksData) {
             margin = min == max
                 ? '${min.toStringAsFixed(2)}%'
                 : '${min.toStringAsFixed(2)}-${max.toStringAsFixed(2)}%';
+            isLive = true;
           }
+        }
+
+        // لا نترك فراغاً: عند غياب رقم حيّ صالح نعرض المؤشر التمثيلي الافتراضي.
+        if (!isLive) {
+          margin = _fallbackMargins()[bankName]?['$category|$sub'] ?? margin;
         }
 
         String tenor = 'حتى 5 سنوات';
@@ -232,7 +276,7 @@ List<_BankRate> _transformFirestoreToRates(List<dynamic> banksData) {
           profitMargin: margin,
           tenor: tenor,
           conditions: 'تحويل راتب مطلوب',
-          source: 'Grok + official',
+          source: isLive ? 'Grok + official' : _representativeSource,
         ));
       }
     }
@@ -277,20 +321,28 @@ String? _legacyKeyFor(String fsKey) {
 // ── Save rates back to Firestore ─────────────────────────────────────
 List<Map<String, dynamic>> _ratesToFirestoreBanks(List<_BankRate> rates) {
   final banksMap = <String, Map<String, dynamic>>{};
+  // عكس _bankIdToName: الاسم القانوني → المعرّف الإنجليزي الثابت،
+  // حتى يتطابق المعرّف مع ما تكتبه Cloud Function فلا تتكرّر البنوك في mergeBanks.
+  final nameToId = {for (final e in _bankIdToName.entries) e.value: e.key};
 
   for (final r in rates) {
     if (!banksMap.containsKey(r.bankName)) {
       banksMap[r.bankName] = {
-        'bankId': r.bankName.toLowerCase().replaceAll(' ', '_'),
+        'bankId': nameToId[r.bankName] ??
+            r.bankName.toLowerCase().replaceAll(' ', '_'),
         'bankName': r.bankName,
         'products': <String, dynamic>{},
       };
     }
     final fsKey = _sectionToFirestoreKey[r.productCategory]?[r.productSub];
     final products = banksMap[r.bankName]!['products'] as Map<String, dynamic>;
-    // أقسام فرعية متعددة قد تتشارك نفس fsKey (مثل تكميلي + شراء مديونية)؛
+    // نحفظ القيم الحيّة الصالحة فقط — لا المؤشر التمثيلي — حتى لا تتلوّث البيانات.
+    // وأقسام فرعية متعددة قد تتشارك نفس fsKey (تكميلي + شراء مديونية)؛
     // نحتفظ بأول قيمة صالحة حتى لا يطغى قسم على آخر ويُمحى الهامش.
-    if (fsKey != null && r.profitMargin != '—' && !products.containsKey(fsKey)) {
+    if (fsKey != null &&
+        r.profitMargin != '—' &&
+        r.source != _representativeSource &&
+        !products.containsKey(fsKey)) {
       final margin = _parseMargin(r.profitMargin);
       final parts = r.profitMargin.replaceAll('%', '').split('-');
       final min = double.tryParse(parts.first.trim()) ?? margin;
@@ -1149,6 +1201,9 @@ class _ProfitMarginsPageState extends State<ProfitMarginsPage> {
     } else if (source == 'SAMA') {
       bg = const Color(0x263B82F6);
       fg = const Color(0xFF60A5FA);
+    } else if (source == _representativeSource) {
+      bg = const Color(0x269333EA);
+      fg = const Color(0xFFC084FC);
     } else {
       bg = const Color(0x26374151);
       fg = _textMuted;

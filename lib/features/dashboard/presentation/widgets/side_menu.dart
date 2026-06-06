@@ -105,6 +105,13 @@ class SideMenu extends StatelessWidget {
                   selectedSection: selectedSection,
                 ),
                 NavItem(
+                  icon: FontAwesomeIcons.scaleBalanced,
+                  label: 'مقارنة هوامش الربح',
+                  section: DashboardSection.profitMarginsCompare,
+                  expanded: expanded,
+                  selectedSection: selectedSection,
+                ),
+                NavItem(
                   icon: FontAwesomeIcons.bell,
                   label: 'رسائل الإشعار',
                   section: DashboardSection.notifications,

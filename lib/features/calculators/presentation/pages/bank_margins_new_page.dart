@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:nesab_dashboard/features/dashboard/data/models/profit_margin_model.dart';
 
 // ── Saudi Theme Colors (matching profit_margins_page) ───────────────
 const _bgColor = Color(0xFF0F1219);
@@ -66,9 +67,61 @@ const _productLabels = <String, String>{
 };
 
 const _bankOrder = [
-  'sab', 'alrajhi', 'snb', 'riyad', 'bsf', 'anb',
-  'alinma', 'albilad', 'aljazira', 'saib', 'enbd',
+  'rajhi', 'snb', 'inma', 'riyadh', 'saab', 'fransi',
+  'anb', 'bilad', 'jazira', 'saib', 'enbd',
 ];
+
+// الاسم القانوني لكل بنك حسب المعرّف الثابت (نفس مرجع الصفحة الأصلية + Cloud Function).
+// نعرض دائماً كل الـ11 بنكاً بهذا المرجع حتى لا يختفي بنك ولا يتكرّر.
+const _bankIdToNameAr = <String, String>{
+  'rajhi': 'مصرف الراجحي',
+  'snb': 'البنك الأهلي السعودي',
+  'inma': 'مصرف الإنماء',
+  'riyadh': 'بنك الرياض',
+  'saab': 'البنك السعودي الأول (ساب)',
+  'fransi': 'البنك السعودي الفرنسي',
+  'anb': 'البنك العربي الوطني',
+  'bilad': 'بنك البلاد',
+  'jazira': 'بنك الجزيرة',
+  'saib': 'البنك السعودي للاستثمار',
+  'enbd': 'بنك الإمارات دبي الوطني',
+};
+
+// معرّفات البيانات الافتراضية (نموذج profit_margin_model) → المعرّف القانوني.
+// تختلف تسمية بنكين فقط، فنوحّدهما حتى يُستخدما كمؤشر تمثيلي للبنك الصحيح.
+const _modelIdToCanonical = <String, String>{
+  'sibc': 'saib',
+  'gib': 'enbd',
+};
+
+// ── Mapping: Cloud Function product keys → new page product types ───
+const _cfKeyToProductTypes = <String, List<String>>{
+  'personalBasic': ['personal_new'],
+  'personalSpecial': ['personal_topup', 'personal_buyout'],
+  'realEstateSupportedProgram': [
+    'realestate_subsidized_ready',
+    'realestate_subsidized_offplan',
+  ],
+  'realEstateSupportedMinistry': [
+    'realestate_subsidized_construction',
+    'realestate_subsidized_mortgage',
+  ],
+  'realEstateCommercial': ['realestate_standard'],
+  'leasingVehicles': ['lease_5yr', 'lease_5050'],
+};
+
+const _productTerms = <String, String>{
+  'personal_new': 'حتى 5 سنوات',
+  'personal_topup': 'حتى 5 سنوات',
+  'personal_buyout': 'حتى 5 سنوات',
+  'realestate_subsidized_ready': 'حتى 25 سنة',
+  'realestate_subsidized_offplan': 'حتى 25 سنة',
+  'realestate_subsidized_construction': 'حتى 25 سنة',
+  'realestate_subsidized_mortgage': 'حتى 25 سنة',
+  'realestate_standard': 'حتى 25 سنة',
+  'lease_5yr': 'حتى 5 سنوات',
+  'lease_5050': 'حتى 5 سنوات',
+};
 
 // ── Data Models ─────────────────────────────────────────────────────
 class _BankMarginRow {
@@ -94,12 +147,10 @@ class _BankMarginRow {
 class _MetaInfo {
   const _MetaInfo({
     this.lastUpdatedAt,
-    this.nextUpdateDue,
     this.sourceNote,
   });
 
   final DateTime? lastUpdatedAt;
-  final DateTime? nextUpdateDue;
   final String? sourceNote;
 }
 
@@ -141,6 +192,9 @@ class _BankMarginsNewPageState extends State<BankMarginsNewPage> {
   }
 
   // ── Load from Firestore ───────────────────────────────────────────
+  // يقرأ من bank_rates/profit_margins (نفس المصدر الذي تُحدّثه Cloud Function).
+  // يضمن: (1) ظهور كل الـ11 بنكاً مرة واحدة فقط لكل منتج (لا تكرار، لا اختفاء).
+  //        (2) قيمة حيّة عند توفّرها، وإلا مؤشر تمثيلي حتى لا يبقى أي بنك فارغاً.
   Future<void> _load() async {
     setState(() {
       _loading = true;
@@ -148,38 +202,102 @@ class _BankMarginsNewPageState extends State<BankMarginsNewPage> {
     });
     try {
       final db = FirebaseFirestore.instance;
-      final metaFuture = db.collection('scraper_meta').doc('last_run').get();
-      final colFuture = db.collection('bank_margins').get();
-      final results = await Future.wait([metaFuture, colFuture]);
+      final doc = await db.doc('bank_rates/profit_margins').get();
 
-      final metaSnap = results[0] as DocumentSnapshot<Map<String, dynamic>>;
-      final colSnap = results[1] as QuerySnapshot<Map<String, dynamic>>;
-
-      final rows = colSnap.docs.map((d) {
-        final data = d.data();
-        final rate = data['profit_margin_rate'];
-        return _BankMarginRow(
-          bankKey: (data['bank_key'] as String?) ?? '',
-          bankNameAr:
-              (data['bank_name_ar'] as String?) ?? (data['bank_key'] as String?) ?? '',
-          productType: (data['product_type'] as String?) ?? '',
-          profitMarginRate: rate != null ? (rate as num).toDouble() : null,
-          marginType: data['margin_type'] as String?,
-          term: data['term'] as String?,
-          confidence: (data['confidence'] as String?) ?? 'UNAVAILABLE',
-        );
-      }).toList();
-
+      // (أ) فهرسة البيانات الحيّة حسب المعرّف القانوني — آخر إدخال يفوز فيزول التكرار.
+      final liveByBank = <String, Map<String, dynamic>>{};
       _MetaInfo meta = const _MetaInfo();
-      if (metaSnap.exists) {
-        final md = metaSnap.data()!;
-        final lu = md['last_updated_at'];
-        final nu = md['next_update_due'];
+
+      if (doc.exists) {
+        final data = doc.data()!;
+        final banks = data['banks'];
+        if (banks is List) {
+          for (final bankRaw in banks) {
+            if (bankRaw is! Map) continue;
+            final bankMap = Map<String, dynamic>.from(bankRaw);
+            final rawId = (bankMap['bankId'] as String?) ?? '';
+            final bankId = _modelIdToCanonical[rawId] ?? rawId;
+            if (bankId.isEmpty) continue;
+            final products = bankMap['products'];
+            if (products is Map) {
+              liveByBank[bankId] = Map<String, dynamic>.from(products);
+            }
+          }
+        }
+        final ts = data['lastUpdated'];
+        final summary = data['aiSummary'] as String?;
         meta = _MetaInfo(
-          lastUpdatedAt: lu is Timestamp ? lu.toDate() : null,
-          nextUpdateDue: nu is Timestamp ? nu.toDate() : null,
-          sourceNote: md['source_note'] as String?,
+          lastUpdatedAt: ts is Timestamp ? ts.toDate() : null,
+          sourceNote: summary,
         );
+      }
+
+      // (ب) مؤشر تمثيلي افتراضي من نموذج البيانات (مصدر مشترك مع الصفحة الأصلية).
+      final fallbackByBank = <String, Map<String, double>>{};
+      for (final b in ProfitMarginsConfig.defaultConfig().banks) {
+        final canon = _modelIdToCanonical[b.bankId] ?? b.bankId;
+        final m = <String, double>{};
+        b.products.forEach((key, pm) {
+          if (pm.available && (pm.min > 0 || pm.max > 0)) {
+            m[key] = pm.min > 0 && pm.max > 0
+                ? (pm.min + pm.max) / 2
+                : (pm.min > 0 ? pm.min : pm.max);
+          }
+        });
+        fallbackByBank[canon] = m;
+      }
+
+      // (ج) بناء صف لكل (بنك × منتج) عبر القائمة القانونية الثابتة.
+      final rows = <_BankMarginRow>[];
+      for (final bankId in _bankOrder) {
+        final nameAr = _bankIdToNameAr[bankId] ?? bankId;
+        final liveProducts = liveByBank[bankId];
+        final fb = fallbackByBank[bankId];
+
+        for (final entry in _cfKeyToProductTypes.entries) {
+          final cfKey = entry.key;
+          final targetTypes = entry.value;
+
+          // القيمة الحيّة (إن وُجدت وصالحة)
+          double? liveRate;
+          final p = liveProducts?[cfKey];
+          if (p is Map) {
+            final prodMap = Map<String, dynamic>.from(p);
+            final available = prodMap['available'] as bool? ?? false;
+            final min = (prodMap['min'] as num?)?.toDouble() ?? 0;
+            final max = (prodMap['max'] as num?)?.toDouble() ?? 0;
+            if (available && (min > 0 || max > 0)) {
+              liveRate =
+                  min > 0 && max > 0 ? (min + max) / 2 : (min > 0 ? min : max);
+            }
+          }
+          final fbRate = fb?[cfKey];
+
+          for (final productType in targetTypes) {
+            double? rate;
+            String confidence;
+            if (liveRate != null) {
+              rate = liveRate;
+              confidence = 'HIGH';
+            } else if (fbRate != null) {
+              rate = fbRate;
+              confidence = 'MEDIUM';
+            } else {
+              rate = null;
+              confidence = 'UNAVAILABLE';
+            }
+
+            rows.add(_BankMarginRow(
+              bankKey: bankId,
+              bankNameAr: nameAr,
+              productType: productType,
+              profitMarginRate: rate,
+              marginType: null,
+              term: _productTerms[productType],
+              confidence: confidence,
+            ));
+          }
+        }
       }
 
       if (mounted) {

@@ -160,6 +160,7 @@ class _HubGrid extends StatelessWidget {
       CalculatorType.dateConverter => l10n.calcDateConverterDesc,
       CalculatorType.deductions => l10n.calcDeductionsDesc,
       CalculatorType.bankFees => l10n.calcBankFeesDesc,
+      CalculatorType.bankMarginsNew => l10n.calcBankMarginsNewDesc,
     };
   }
 
@@ -234,6 +235,11 @@ class _HubGrid extends StatelessWidget {
         type: CalculatorType.bankFees,
         icon: FontAwesomeIcons.buildingColumns,
         color: AppColors.categoryRealEstateLight,
+      ),
+      _CalcConfig(
+        type: CalculatorType.bankMarginsNew,
+        icon: FontAwesomeIcons.chartLine,
+        color: AppColors.categoryPersonalFinance,
       ),
     ];
   }

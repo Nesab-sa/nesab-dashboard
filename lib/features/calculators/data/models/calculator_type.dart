@@ -35,7 +35,12 @@ enum CalculatorType {
   ageCalculator('age_calculator', 'Age Calculator', 'حاسبة العمر'),
   dateConverter('date_converter', 'Date Converter', 'تحويل التاريخ'),
   deductions('deductions', 'Deductions Calculator', 'حاسبة الاستقطاعات'),
-  bankFees('bank_fees', 'Bank Fees', 'الرسوم البنكية');
+  bankFees('bank_fees', 'Bank Fees', 'الرسوم البنكية'),
+  bankMarginsNew(
+    'bank_margins_new',
+    'Bank Profit Margins (New)',
+    'هوامش الربح الجديدة',
+  );
 
   const CalculatorType(this.value, this.englishName, this.arabicName);
 

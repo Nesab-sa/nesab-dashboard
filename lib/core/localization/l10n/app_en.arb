@@ -394,6 +394,8 @@
   "calcDeductionsDesc": "View salary deduction breakdown",
   "calcBankFees": "Bank Fees",
   "calcBankFeesDesc": "SAMA banking fee comparison and guide",
+  "calcBankMarginsNew": "Bank Profit Margins (New)",
+  "calcBankMarginsNewDesc": "Saudi bank profit margins from official disclosure pages",
 
   "calcInputSalary": "Monthly Salary (SAR)",
   "calcInputEmploymentType": "Employment Type",

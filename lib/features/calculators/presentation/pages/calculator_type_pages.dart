@@ -15,6 +15,7 @@ import 'protection_savings_page.dart';
 import 'real_estate_page.dart';
 import 'real_estate_plus_page.dart';
 import 'bank_fees_page.dart';
+import 'bank_margins_new_page.dart';
 
 /// Returns the calculator page [Widget] for this [CalculatorType].
 extension CalculatorTypePages on CalculatorType {
@@ -33,5 +34,6 @@ extension CalculatorTypePages on CalculatorType {
         CalculatorType.dateConverter => const DateConverterPage(),
         CalculatorType.deductions => const DeductionCalculatorPage(),
         CalculatorType.bankFees => const BankFeesPage(),
+        CalculatorType.bankMarginsNew => const BankMarginsNewPage(),
       };
 }

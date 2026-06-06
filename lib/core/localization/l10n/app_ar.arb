@@ -1053,6 +1053,8 @@
   "calcDeductionsDesc": "عرض تفصيل الاستقطاعات من الراتب",
   "calcBankFees": "الرسوم البنكية",
   "calcBankFeesDesc": "مقارنة الرسوم البنكية وفق تعليمات ساما",
+  "calcBankMarginsNew": "هوامش الربح الجديدة",
+  "calcBankMarginsNewDesc": "هوامش ربح البنوك السعودية من صفحات الإفصاح الرسمية",
 
   "calcInputSalary": "الراتب الشهري (ريال)",
   "calcInputEmploymentType": "الوضع الوظيفي",

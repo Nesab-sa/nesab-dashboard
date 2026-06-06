@@ -9,6 +9,7 @@ import 'package:nesab_dashboard/features/dashboard/presentation/pages/ai_convers
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/ai_settings_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/app_pages_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/notifications_page.dart';
+import 'package:nesab_dashboard/features/calculators/presentation/pages/bank_margins_new_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/profit_margins_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/categories_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/managers_page.dart';
@@ -98,6 +99,7 @@ class _DashboardShellState extends State<DashboardShell> {
       DashboardSection.appPages => const AppPagesPage(),
       DashboardSection.aiSettings => const AiSettingsPage(),
       DashboardSection.profitMargins => const ProfitMarginsPage(),
+      DashboardSection.profitMarginsNew => const BankMarginsNewPage(),
       DashboardSection.notifications => const NotificationsPage(),
       DashboardSection.aiConversations => const AiConversationsPage(),
     };

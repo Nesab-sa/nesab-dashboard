@@ -1048,6 +1048,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calcBankFeesDesc => 'SAMA banking fee comparison and guide';
 
   @override
+  String get calcBankMarginsNew => 'Bank Profit Margins (New)';
+
+  @override
+  String get calcBankMarginsNewDesc =>
+      'Saudi bank profit margins from official disclosure pages';
+
+  @override
   String get calcInputSalary => 'Monthly Salary (SAR)';
 
   @override

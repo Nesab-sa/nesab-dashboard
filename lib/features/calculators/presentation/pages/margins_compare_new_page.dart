@@ -339,16 +339,6 @@ class _MarginsComparePageState extends State<MarginsComparePage> {
     return rows;
   }
 
-  List<String> get _products {
-    final list = <String>[];
-    for (final catEntry in _subSections.entries) {
-      for (final sub in catEntry.value) {
-        list.add('${catEntry.key} — $sub');
-      }
-    }
-    return list;
-  }
-
   String _fmtDate(DateTime d) {
     const months = [
       'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
@@ -412,7 +402,6 @@ class _MarginsComparePageState extends State<MarginsComparePage> {
             const SizedBox(height: AppDimensions.spacingMd),
             _FilterBar(
               banks: _banks,
-              products: _products,
               selectedBank: _filterBank,
               selectedProduct: _filterProduct,
               conflictOnly: _conflictOnly,
@@ -445,7 +434,10 @@ class _MarginsComparePageState extends State<MarginsComparePage> {
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.screenPaddingHorizontal),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: _CompareTable(rows: rows),
+        child: _CompareTable(
+          rows: rows,
+          highlightMinMax: _filterBank == null && _filterProduct != null,
+        ),
       ),
     );
   }
@@ -619,7 +611,6 @@ class _SumCard extends StatelessWidget {
 class _FilterBar extends StatelessWidget {
   const _FilterBar({
     required this.banks,
-    required this.products,
     required this.selectedBank,
     required this.selectedProduct,
     required this.conflictOnly,
@@ -629,7 +620,6 @@ class _FilterBar extends StatelessWidget {
   });
 
   final List<String> banks;
-  final List<String> products;
   final String? selectedBank;
   final String? selectedProduct;
   final bool conflictOnly;
@@ -647,11 +637,8 @@ class _FilterBar extends StatelessWidget {
         labelOf: (b) => b,
         onChanged: onBankChanged,
       ),
-      _FilterDropdown(
-        hint: 'الكل — المنتجات',
+      _ProductFilterPopup(
         value: selectedProduct,
-        items: products,
-        labelOf: (p) => p,
         onChanged: onProductChanged,
       ),
       GestureDetector(
@@ -739,16 +726,248 @@ class _FilterDropdown extends StatelessWidget {
   }
 }
 
+class _ProductFilterPopup extends StatefulWidget {
+  const _ProductFilterPopup({
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String? value;
+  final ValueChanged<String?> onChanged;
+
+  @override
+  State<_ProductFilterPopup> createState() => _ProductFilterPopupState();
+}
+
+class _ProductFilterPopupState extends State<_ProductFilterPopup> {
+  final _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+  bool _isOpen = false;
+
+  void _togglePopup() {
+    if (_isOpen) {
+      _closePopup();
+    } else {
+      _openPopup();
+    }
+  }
+
+  void _openPopup() {
+    _overlayEntry = _createOverlay();
+    Overlay.of(context).insert(_overlayEntry!);
+    setState(() => _isOpen = true);
+  }
+
+  void _closePopup() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    setState(() => _isOpen = false);
+  }
+
+  void _select(String? val) {
+    widget.onChanged(val);
+    _closePopup();
+  }
+
+  @override
+  void dispose() {
+    _overlayEntry?.remove();
+    super.dispose();
+  }
+
+  OverlayEntry _createOverlay() {
+    final renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+
+    return OverlayEntry(
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Stack(
+          children: [
+            GestureDetector(
+              onTap: _closePopup,
+              behavior: HitTestBehavior.opaque,
+              child: const SizedBox.expand(),
+            ),
+            CompositedTransformFollower(
+              link: _layerLink,
+              targetAnchor: Alignment.bottomRight,
+              followerAnchor: Alignment.topRight,
+              offset: const Offset(0, 4),
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: 320,
+                  constraints: const BoxConstraints(maxHeight: 420),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1a1d2e),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.calcBorder2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.4),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _popupItem(
+                            label: 'الكل — المنتجات',
+                            isSelected: widget.value == null,
+                            isMuted: true,
+                            onTap: () => _select(null),
+                          ),
+                          ..._subSections.entries.expand((catEntry) {
+                            final category = catEntry.key;
+                            return [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                                child: Text(
+                                  category,
+                                  style: AppTextStyles.labelSmall.copyWith(
+                                    color: AppColors.calcNeon,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                              ...catEntry.value.map((sub) {
+                                final productLabel = '$category — $sub';
+                                return _popupItem(
+                                  label: sub,
+                                  isSelected: widget.value == productLabel,
+                                  onTap: () => _select(productLabel),
+                                );
+                              }),
+                            ];
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _popupItem({
+    required String label,
+    required bool isSelected,
+    bool isMuted = false,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        color: isSelected ? AppColors.calcNeon2.withValues(alpha: 0.12) : Colors.transparent,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: isMuted
+                      ? AppColors.calcMuted
+                      : isSelected
+                          ? AppColors.calcNeon
+                          : AppColors.calcText,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
+                ),
+              ),
+            ),
+            if (isSelected)
+              const Icon(Icons.check_rounded, color: AppColors.calcNeon, size: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String get _displayText {
+    if (widget.value == null) return 'الكل — المنتجات';
+    final parts = widget.value!.split(' — ');
+    if (parts.length == 2) return parts[1];
+    return widget.value!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: GestureDetector(
+        onTap: _togglePopup,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: widget.value != null
+                ? AppColors.calcNeon2.withValues(alpha: 0.10)
+                : AppColors.calcCard,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: widget.value != null
+                  ? AppColors.calcNeon2.withValues(alpha: 0.4)
+                  : AppColors.calcBorder2,
+            ),
+          ),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            Text(
+              _displayText,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: widget.value != null ? AppColors.calcNeon : AppColors.calcMuted,
+                fontWeight: widget.value != null ? FontWeight.w700 : FontWeight.normal,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Icon(
+              _isOpen ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+              color: AppColors.calcMuted,
+              size: 18,
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
 // ── Comparison Table ──────────────────────────────────────────────────────────
 
 class _CompareTable extends StatelessWidget {
-  const _CompareTable({required this.rows});
+  const _CompareTable({required this.rows, this.highlightMinMax = false});
   final List<_CompareRow> rows;
+  final bool highlightMinMax;
+
+  double? _effectiveRate(_CompareRow r) => r.grokRate ?? r.representativeRate;
 
   @override
   Widget build(BuildContext context) {
     final headerStyle = AppTextStyles.labelSmall.copyWith(color: AppColors.calcMuted, fontWeight: FontWeight.w700);
     const headerDecor = BoxDecoration(color: Color(0x145D5FEF));
+
+    int minIdx = -1, maxIdx = -1;
+    if (highlightMinMax) {
+      double? minVal, maxVal;
+      for (var i = 0; i < rows.length; i++) {
+        final rate = _effectiveRate(rows[i]);
+        if (rate == null) continue;
+        if (minVal == null || rate < minVal) { minVal = rate; minIdx = i; }
+        if (maxVal == null || rate > maxVal) { maxVal = rate; maxIdx = i; }
+      }
+      if (minIdx == maxIdx) { minIdx = -1; maxIdx = -1; }
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -760,7 +979,7 @@ class _CompareTable extends StatelessWidget {
         child: Table(
           columnWidths: const {
             0: IntrinsicColumnWidth(),
-            1: FlexColumnWidth(2),
+            1: FixedColumnWidth(180),
             2: IntrinsicColumnWidth(),
             3: IntrinsicColumnWidth(),
             4: IntrinsicColumnWidth(),
@@ -782,18 +1001,36 @@ class _CompareTable extends StatelessWidget {
               final i = entry.key;
               final r = entry.value;
               final isLast = i == rows.length - 1;
+              final isMin = i == minIdx;
+              final isMax = i == maxIdx;
+
+              Color? bgColor;
+              Border? rowBorder;
+
+              if (isMin) {
+                bgColor = AppColors.calcGreen.withValues(alpha: 0.08);
+                rowBorder = Border.all(color: AppColors.calcGreen.withValues(alpha: 0.6), width: 1.5);
+              } else if (isMax) {
+                bgColor = AppColors.calcRed.withValues(alpha: 0.08);
+                rowBorder = Border.all(color: AppColors.calcRed.withValues(alpha: 0.6), width: 1.5);
+              }
+
               return TableRow(
                 decoration: BoxDecoration(
-                  color: i.isOdd ? AppColors.calcCard.withValues(alpha: 0.4) : Colors.transparent,
-                  border: isLast
+                  color: bgColor ?? (i.isOdd ? AppColors.calcCard.withValues(alpha: 0.4) : Colors.transparent),
+                  border: rowBorder ?? (isLast
                       ? null
-                      : Border(bottom: BorderSide(color: AppColors.calcBorder, width: 0.5)),
+                      : Border(bottom: BorderSide(color: AppColors.calcBorder, width: 0.5))),
                 ),
                 children: [
-                  _DataCell(r.bankName,    bold: true),
+                  _BankCell(
+                    name: r.bankName,
+                    badge: isMin ? 'أقل هامش' : isMax ? 'أعلى هامش' : null,
+                    badgeColor: isMin ? AppColors.calcGreen : isMax ? AppColors.calcRed : null,
+                  ),
                   _DataCell(r.productLabel),
-                  _RateCell(r.grokRate,           color: const Color(0xFFa5b4fc)),
-                  _RateCell(r.representativeRate,  color: AppColors.calcGold),
+                  _RateCell(r.grokRate, color: const Color(0xFFa5b4fc)),
+                  _RateCell(r.representativeRate, color: AppColors.calcGold),
                   _DiffCell(r.diff),
                   _VerdictCell(r.verdict),
                 ],
@@ -815,6 +1052,50 @@ class _HeaderCell extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Text(text, style: style),
+      );
+}
+
+class _BankCell extends StatelessWidget {
+  const _BankCell({required this.name, this.badge, this.badgeColor});
+  final String name;
+  final String? badge;
+  final Color? badgeColor;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              name,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.calcText,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            if (badge != null) ...[
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: badgeColor!.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: badgeColor!.withValues(alpha: 0.5)),
+                ),
+                child: Text(
+                  badge!,
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: badgeColor,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
       );
 }
 

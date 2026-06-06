@@ -1032,6 +1032,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get calcBankFeesDesc => 'مقارنة الرسوم البنكية وفق تعليمات ساما';
 
   @override
+  String get calcBankMarginsNew => 'هوامش الربح الجديدة';
+
+  @override
+  String get calcBankMarginsNewDesc =>
+      'هوامش ربح البنوك السعودية من صفحات الإفصاح الرسمية';
+
+  @override
   String get calcInputSalary => 'الراتب الشهري (ريال)';
 
   @override

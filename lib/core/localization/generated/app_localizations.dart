@@ -2096,6 +2096,18 @@ abstract class AppLocalizations {
   /// **'مقارنة الرسوم البنكية وفق تعليمات ساما'**
   String get calcBankFeesDesc;
 
+  /// No description provided for @calcBankMarginsNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'هوامش الربح الجديدة'**
+  String get calcBankMarginsNew;
+
+  /// No description provided for @calcBankMarginsNewDesc.
+  ///
+  /// In ar, this message translates to:
+  /// **'هوامش ربح البنوك السعودية من صفحات الإفصاح الرسمية'**
+  String get calcBankMarginsNewDesc;
+
   /// No description provided for @calcInputSalary.
   ///
   /// In ar, this message translates to:

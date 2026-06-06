@@ -4,13 +4,17 @@ import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
 import 'package:nesab_dashboard/core/theme/app_text_styles.dart';
 
+// ملاحظة: هذه الصفحة تقرأ من نفس مصدر صفحة "هوامش الربح" المربوطة مع Grok،
+// أي المستند bank_rates/profit_margins. تقارن قيمة Grok الحيّة لكل منتج
+// مقابل المؤشر التمثيلي الافتراضي، وتُصدر حكماً تلقائياً على حجم الفرق.
+
 // ── Verdict ───────────────────────────────────────────────────────────────────
 
 enum _Verdict { match, slight, conflict, single }
 
-_Verdict _computeVerdict(double? grok, double? official) {
-  if (grok == null || official == null) return _Verdict.single;
-  final diff = (grok - official).abs();
+_Verdict _computeVerdict(double? grok, double? representative) {
+  if (grok == null || representative == null) return _Verdict.single;
+  final diff = (grok - representative).abs();
   if (diff < 0.5) return _Verdict.match;
   if (diff < 1.5) return _Verdict.slight;
   return _Verdict.conflict;
@@ -32,63 +36,178 @@ extension _VerdictExt on _Verdict {
       };
 }
 
-// ── Data models ───────────────────────────────────────────────────────────────
+// ── Constants (ported from profit_margins_page.dart) ──────────────────────────
+
+const _banks = [
+  'البنك الأهلي السعودي',
+  'مصرف الراجحي',
+  'بنك الرياض',
+  'البنك السعودي الأول (ساب)',
+  'البنك السعودي الفرنسي',
+  'البنك العربي الوطني',
+  'مصرف الإنماء',
+  'بنك البلاد',
+  'بنك الجزيرة',
+  'البنك السعودي للاستثمار',
+  'بنك الإمارات دبي الوطني',
+];
+
+const _subSections = <String, List<String>>{
+  'تمويل شخصي': ['جديد', 'تكميلي', 'شراء مديونية'],
+  'عقاري مدعوم': ['جاهز', 'على الخارطة', 'بناء ذاتي', 'رهن عقار'],
+  'عقاري اعتيادي': ['عقاري اعتيادي'],
+  'تأجيري': ['نظام 5 سنوات', 'نظام 50/50'],
+};
+
+const _sectionToFirestoreKey = <String, Map<String, String>>{
+  'تمويل شخصي': {
+    'جديد': 'personalBasic',
+    'تكميلي': 'personalSpecial',
+    'شراء مديونية': 'personalSpecial',
+  },
+  'عقاري مدعوم': {
+    'جاهز': 'realEstateSupportedProgram',
+    'على الخارطة': 'realEstateSupportedProgram',
+    'بناء ذاتي': 'realEstateSupportedMinistry',
+    'رهن عقار': 'realEstateSupportedMinistry',
+  },
+  'عقاري اعتيادي': {
+    'عقاري اعتيادي': 'realEstateCommercial',
+  },
+  'تأجيري': {
+    'نظام 5 سنوات': 'leasingVehicles',
+    'نظام 50/50': 'leasingVehicles',
+  },
+};
+
+const _bankAliases = <String, String>{
+  'البنك السعودي': 'البنك الأهلي السعودي',
+  'البنك الأهلي التجاري': 'البنك الأهلي السعودي',
+  'بنك ساب': 'البنك السعودي الأول (ساب)',
+  'البنك السعودي الأول': 'البنك السعودي الأول (ساب)',
+  'البنك السعودي البريطاني': 'البنك السعودي الأول (ساب)',
+  'بنك الاستثمار السعودي': 'البنك السعودي للاستثمار',
+  'البنك الخليجي الدولي': 'بنك الإمارات دبي الوطني',
+  'بنك الإنماء': 'مصرف الإنماء',
+  'بنك الراجحي': 'مصرف الراجحي',
+};
+
+const _bankIdToName = <String, String>{
+  'rajhi': 'مصرف الراجحي',
+  'snb': 'البنك الأهلي السعودي',
+  'inma': 'مصرف الإنماء',
+  'riyadh': 'بنك الرياض',
+  'saab': 'البنك السعودي الأول (ساب)',
+  'fransi': 'البنك السعودي الفرنسي',
+  'anb': 'البنك العربي الوطني',
+  'saib': 'البنك السعودي للاستثمار',
+  'bilad': 'بنك البلاد',
+  'jazira': 'بنك الجزيرة',
+  'enbd': 'بنك الإمارات دبي الوطني',
+};
+
+String _normalizeBankName(String name) =>
+    _bankAliases[name.trim()] ?? name.trim();
+
+double _parseMargin(String m) {
+  final cleaned = m.replaceAll('%', '').split('-').first.trim();
+  return double.tryParse(cleaned) ?? 0;
+}
+
+// المؤشر التمثيلي الافتراضي: bankName → 'الفئة|القسم' → النسبة.
+Map<String, Map<String, double>>? _representativeCache;
+Map<String, Map<String, double>> _representativeMargins() {
+  final cached = _representativeCache;
+  if (cached != null) return cached;
+
+  final map = <String, Map<String, double>>{};
+  void put(String bank, String cat, String sub, String pct) {
+    (map[bank] ??= <String, double>{})['$cat|$sub'] = _parseMargin(pct);
+  }
+
+  const personalNew  = ['5.35%','4.85%','5.15%','4.95%','5.45%','5.25%','4.75%','5.55%','5.65%','5.80%','5.10%'];
+  const personalComp = ['5.75%','5.25%','5.50%','5.35%','5.85%','5.60%','5.15%','5.95%','6.10%','6.25%','5.45%'];
+  const personalDebt = ['5.95%','5.45%','5.70%','5.55%','6.05%','5.80%','5.35%','6.15%','6.30%','6.45%','5.65%'];
+  const sr  = ['3.25%','2.89%','3.15%','3.05%','3.35%','3.20%','2.95%','3.45%','3.55%','3.65%','3.10%'];
+  const so  = ['3.10%','2.75%','3.00%','2.90%','3.20%','3.05%','2.80%','3.30%','3.40%','3.50%','2.95%'];
+  const ss  = ['3.35%','2.99%','3.25%','3.15%','3.45%','3.30%','3.05%','3.55%','3.65%','3.75%','3.20%'];
+  const sm  = ['3.50%','3.15%','3.40%','3.30%','3.60%','3.45%','3.20%','3.70%','3.80%','3.90%','3.35%'];
+  const rm  = ['4.25%','3.85%','4.15%','3.95%','4.35%','4.20%','3.90%','4.45%','4.55%','4.75%','4.10%'];
+  const l5  = ['6.25%','5.85%','6.15%','5.95%','6.45%','6.20%','5.80%','6.55%','6.75%','6.90%','6.10%'];
+  const l50 = ['6.75%','6.35%','6.65%','6.45%','6.95%','6.70%','6.30%','7.05%','7.25%','7.40%','6.60%'];
+
+  for (var i = 0; i < _banks.length; i++) {
+    final b = _banks[i];
+    put(b, 'تمويل شخصي', 'جديد', personalNew[i]);
+    put(b, 'تمويل شخصي', 'تكميلي', personalComp[i]);
+    put(b, 'تمويل شخصي', 'شراء مديونية', personalDebt[i]);
+    put(b, 'عقاري مدعوم', 'جاهز', sr[i]);
+    put(b, 'عقاري مدعوم', 'على الخارطة', so[i]);
+    put(b, 'عقاري مدعوم', 'بناء ذاتي', ss[i]);
+    put(b, 'عقاري مدعوم', 'رهن عقار', sm[i]);
+    put(b, 'عقاري اعتيادي', 'عقاري اعتيادي', rm[i]);
+    put(b, 'تأجيري', 'نظام 5 سنوات', l5[i]);
+    put(b, 'تأجيري', 'نظام 50/50', l50[i]);
+  }
+
+  _representativeCache = map;
+  return map;
+}
+
+/// قراءة منتج واحد من بيانات بنك بأي من التنسيقات الثلاثة المدعومة.
+Map<String, dynamic>? _readProduct(Map<String, dynamic> bankMap, String fsKey) {
+  if (fsKey.isEmpty) return null;
+
+  final prods = bankMap['products'];
+  if (prods is Map) {
+    final p = prods[fsKey];
+    if (p is Map) return Map<String, dynamic>.from(p);
+  }
+
+  final flat = bankMap[fsKey];
+  if (flat is Map) return Map<String, dynamic>.from(flat);
+
+  final legacyKey = _legacyKeyFor(fsKey);
+  if (legacyKey != null) {
+    final lv = bankMap[legacyKey];
+    if (lv is Map) return Map<String, dynamic>.from(lv);
+  }
+
+  return null;
+}
+
+String? _legacyKeyFor(String fsKey) {
+  if (fsKey.startsWith('personal')) return 'personal';
+  if (fsKey.startsWith('realEstate')) return 'realEstate';
+  if (fsKey.startsWith('leasing')) return 'leasing';
+  return null;
+}
+
+// ── Data model ────────────────────────────────────────────────────────────────
 
 class _CompareRow {
   const _CompareRow({
-    required this.bankKey,
-    required this.bankNameAr,
-    required this.productType,
+    required this.bankName,
+    required this.category,
+    required this.sub,
     this.grokRate,
-    this.officialRate,
+    this.representativeRate,
     required this.verdict,
   });
 
-  final String bankKey;
-  final String bankNameAr;
-  final String productType;
+  final String bankName;
+  final String category;
+  final String sub;
   final double? grokRate;
-  final double? officialRate;
+  final double? representativeRate;
   final _Verdict verdict;
 
-  double? get diff => (grokRate != null && officialRate != null)
-      ? (grokRate! - officialRate!).abs()
+  String get productLabel => '$category — $sub';
+
+  double? get diff => (grokRate != null && representativeRate != null)
+      ? (grokRate! - representativeRate!).abs()
       : null;
 }
-
-class _MetaInfo {
-  const _MetaInfo({this.lastUpdatedAt, this.nextUpdateDue, this.sourceNote});
-  final DateTime? lastUpdatedAt;
-  final DateTime? nextUpdateDue;
-  final String? sourceNote;
-}
-
-// ── Constants ─────────────────────────────────────────────────────────────────
-
-const _productLabels = <String, String>{
-  'personal_new':                       'التمويل الشخصي',
-  'personal_topup':                     'زيادة تمويل شخصي',
-  'personal_buyout':                    'شراء مديونية',
-  'realestate_subsidized_ready':        'عقاري مدعوم — جاهز',
-  'realestate_subsidized_offplan':      'عقاري مدعوم — على الخارطة',
-  'realestate_subsidized_construction': 'عقاري مدعوم — بناء ذاتي',
-  'realestate_subsidized_mortgage':     'عقاري مدعوم — رهن عقار',
-  'realestate_standard':                'عقاري اعتيادي',
-  'lease_5yr':                          'تأجيري — نظام 5 سنوات',
-  'lease_5050':                         'تأجيري — نظام 50/50',
-};
-
-const _bankOrder = [
-  'sab', 'alrajhi', 'snb', 'riyad', 'bsf', 'anb',
-  'alinma', 'albilad', 'aljazira', 'saib', 'enbd',
-];
-
-const _productOrder = [
-  'personal_new', 'personal_topup', 'personal_buyout',
-  'realestate_subsidized_ready', 'realestate_subsidized_offplan',
-  'realestate_subsidized_construction', 'realestate_subsidized_mortgage',
-  'realestate_standard', 'lease_5yr', 'lease_5050',
-];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -100,11 +219,13 @@ class MarginsComparePage extends StatefulWidget {
 }
 
 class _MarginsComparePageState extends State<MarginsComparePage> {
+  static const _docPath = 'bank_rates/profit_margins';
+
   bool _loading = true;
   String? _error;
   List<_CompareRow> _allRows = [];
-  _MetaInfo _meta = const _MetaInfo();
-  bool _grokEmpty = false;
+  DateTime? _lastUpdated;
+  bool _noLiveData = false;
 
   String? _filterBank;
   String? _filterProduct;
@@ -122,96 +243,72 @@ class _MarginsComparePageState extends State<MarginsComparePage> {
       _error = null;
     });
     try {
-      final db = FirebaseFirestore.instance;
-      final results = await Future.wait([
-        db.collection('scraper_meta').doc('last_run').get(),
-        db.collection('bank_margins').get(),
-        db.collection('grok_margins').get(),
-      ]);
+      final doc = await FirebaseFirestore.instance.doc(_docPath).get();
 
-      final metaSnap     = results[0] as DocumentSnapshot<Map<String, dynamic>>;
-      final officialSnap = results[1] as QuerySnapshot<Map<String, dynamic>>;
-      final grokSnap     = results[2] as QuerySnapshot<Map<String, dynamic>>;
-
-      _MetaInfo meta = const _MetaInfo();
-      if (metaSnap.exists) {
-        final md = metaSnap.data()!;
-        final lu = md['last_updated_at'];
-        final nu = md['next_update_due'];
-        meta = _MetaInfo(
-          lastUpdatedAt: lu is Timestamp ? lu.toDate() : null,
-          nextUpdateDue: nu is Timestamp ? nu.toDate() : null,
-          sourceNote: md['source_note'] as String?,
-        );
+      List<dynamic> banksData = const [];
+      DateTime? lastUpdated;
+      if (doc.exists) {
+        final data = doc.data()!;
+        final banks = data['banks'];
+        if (banks is List) banksData = banks;
+        final ts = data['lastUpdated'];
+        if (ts is Timestamp) lastUpdated = ts.toDate();
       }
 
-      final officialMap = <String, Map<String, dynamic>>{};
-      for (final d in officialSnap.docs) {
-        final data = d.data();
-        final k = '${data['bank_name_ar'] ?? ''}__${data['product_type'] ?? ''}';
-        officialMap[k] = data;
+      // فهرسة بيانات البنوك حسب الاسم القانوني.
+      final byBank = <String, Map<String, dynamic>>{};
+      for (final raw in banksData) {
+        if (raw is! Map) continue;
+        final bankMap = Map<String, dynamic>.from(raw);
+        final bankId = bankMap['bankId']?.toString() ?? '';
+        final rawName = bankMap['bankName']?.toString() ?? '';
+        final name = _bankIdToName[bankId] ?? _normalizeBankName(rawName);
+        byBank[name] = bankMap;
       }
 
-      final grokMap = <String, Map<String, dynamic>>{};
-      for (final d in grokSnap.docs) {
-        final data = d.data();
-        final k = '${data['bank_name_ar'] ?? ''}__${data['product_type'] ?? ''}';
-        grokMap[k] = data;
-      }
-
-      final allKeys = {...officialMap.keys, ...grokMap.keys};
+      final rep = _representativeMargins();
       final rows = <_CompareRow>[];
+      var liveCount = 0;
 
-      for (final k in allKeys) {
-        final o = officialMap[k];
-        final g = grokMap[k];
+      for (final catEntry in _subSections.entries) {
+        final category = catEntry.key;
+        for (final sub in catEntry.value) {
+          final fsKey = _sectionToFirestoreKey[category]?[sub] ?? '';
+          for (final bank in _banks) {
+            // قيمة Grok الحيّة: منتصف نطاق min-max عند توفّره فقط.
+            double? grokRate;
+            final bankMap = byBank[bank];
+            if (bankMap != null) {
+              final product = _readProduct(bankMap, fsKey);
+              if (product != null && product['available'] != false) {
+                final min = (product['min'] as num?)?.toDouble();
+                final max = (product['max'] as num?)?.toDouble();
+                if (min != null && max != null && (min > 0 || max > 0)) {
+                  grokRate = (min + max) / 2;
+                  liveCount++;
+                }
+              }
+            }
 
-        final bankKey     = (o?['bank_key'] as String?) ?? '';
-        final bankNameAr  = (o?['bank_name_ar'] as String?) ??
-                            (g?['bank_name_ar'] as String?) ?? '';
-        final productType = (o?['product_type'] as String?) ??
-                            (g?['product_type'] as String?) ?? '';
+            final representativeRate = rep[bank]?['$category|$sub'];
 
-        double? officialRate;
-        if (o != null) {
-          final conf = (o['confidence'] as String?) ?? 'UNAVAILABLE';
-          final r    = o['profit_margin_rate'];
-          if (conf != 'UNAVAILABLE' && r != null) {
-            officialRate = (r as num).toDouble();
+            rows.add(_CompareRow(
+              bankName: bank,
+              category: category,
+              sub: sub,
+              grokRate: grokRate,
+              representativeRate: representativeRate,
+              verdict: _computeVerdict(grokRate, representativeRate),
+            ));
           }
         }
-
-        double? grokRate;
-        if (g != null) {
-          final r = g['rate'];
-          if (r != null) grokRate = (r as num).toDouble();
-        }
-
-        rows.add(_CompareRow(
-          bankKey: bankKey,
-          bankNameAr: bankNameAr,
-          productType: productType,
-          grokRate: grokRate,
-          officialRate: officialRate,
-          verdict: _computeVerdict(grokRate, officialRate),
-        ));
       }
-
-      rows.sort((a, b) {
-        final ai = _bankOrder.indexOf(a.bankKey);
-        final bi = _bankOrder.indexOf(b.bankKey);
-        final bc = (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
-        if (bc != 0) return bc;
-        final pi = _productOrder.indexOf(a.productType);
-        final qi = _productOrder.indexOf(b.productType);
-        return (pi < 0 ? 999 : pi) - (qi < 0 ? 999 : qi);
-      });
 
       if (mounted) {
         setState(() {
           _allRows = rows;
-          _meta = meta;
-          _grokEmpty = grokSnap.docs.isEmpty;
+          _lastUpdated = lastUpdated;
+          _noLiveData = liveCount == 0;
           _filterBank = null;
           _filterProduct = null;
           _conflictOnly = false;
@@ -230,30 +327,35 @@ class _MarginsComparePageState extends State<MarginsComparePage> {
 
   List<_CompareRow> get _filteredRows {
     var rows = _allRows;
-    if (_filterBank != null)    rows = rows.where((r) => r.bankNameAr  == _filterBank).toList();
-    if (_filterProduct != null) rows = rows.where((r) => r.productType == _filterProduct).toList();
-    if (_conflictOnly)          rows = rows.where((r) => r.verdict     == _Verdict.conflict).toList();
+    if (_filterBank != null) {
+      rows = rows.where((r) => r.bankName == _filterBank).toList();
+    }
+    if (_filterProduct != null) {
+      rows = rows.where((r) => r.productLabel == _filterProduct).toList();
+    }
+    if (_conflictOnly) {
+      rows = rows.where((r) => r.verdict == _Verdict.conflict).toList();
+    }
     return rows;
   }
 
-  List<String> get _banks => _allRows
-      .map((r) => r.bankNameAr)
-      .where((b) => b.isNotEmpty)
-      .toSet()
-      .toList()
-    ..sort();
-
   List<String> get _products {
-    final list = _allRows
-        .map((r) => r.productType)
-        .where((p) => p.isNotEmpty)
-        .toSet()
-        .toList();
-    list.sort((a, b) {
-      final ai = _productOrder.indexOf(a), bi = _productOrder.indexOf(b);
-      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
-    });
+    final list = <String>[];
+    for (final catEntry in _subSections.entries) {
+      for (final sub in catEntry.value) {
+        list.add('${catEntry.key} — $sub');
+      }
+    }
     return list;
+  }
+
+  String _fmtDate(DateTime d) {
+    const months = [
+      'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
+    ];
+    String p(int n) => n.toString().padLeft(2, '0');
+    return '${p(d.day)} ${months[d.month - 1]} ${d.year}  ${p(d.hour)}:${p(d.minute)}';
   }
 
   @override
@@ -300,10 +402,10 @@ class _MarginsComparePageState extends State<MarginsComparePage> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             _PageTitle(),
             const SizedBox(height: AppDimensions.spacingMd),
-            _MetaCard(meta: _meta, onRefresh: _load),
-            if (_grokEmpty) ...[
+            _MetaCard(lastUpdated: _lastUpdated, fmt: _fmtDate, onRefresh: _load),
+            if (_noLiveData) ...[
               const SizedBox(height: AppDimensions.spacingMd),
-              _GrokFallbackBanner(),
+              _NoLiveBanner(),
             ],
             const SizedBox(height: AppDimensions.spacingMd),
             _SummaryCards(rows: _allRows),
@@ -372,7 +474,7 @@ class _PageTitle extends StatelessWidget {
       Padding(
         padding: const EdgeInsetsDirectional.only(start: 12),
         child: Text(
-          'مقارنة بين بيانات Grok والمصادر الرسمية',
+          'قيمة Grok الحيّة مقابل المؤشر التمثيلي',
           style: AppTextStyles.bodySmall.copyWith(color: AppColors.calcMuted),
         ),
       ),
@@ -383,38 +485,13 @@ class _PageTitle extends StatelessWidget {
 // ── Meta Card ─────────────────────────────────────────────────────────────────
 
 class _MetaCard extends StatelessWidget {
-  const _MetaCard({required this.meta, required this.onRefresh});
-  final _MetaInfo meta;
+  const _MetaCard({required this.lastUpdated, required this.fmt, required this.onRefresh});
+  final DateTime? lastUpdated;
+  final String Function(DateTime) fmt;
   final VoidCallback onRefresh;
-
-  String _fmt(DateTime d) {
-    const months = [
-      'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
-    ];
-    String p(int n) => n.toString().padLeft(2, '0');
-    return '${p(d.day)} ${months[d.month - 1]} ${d.year}  ${p(d.hour)}:${p(d.minute)}';
-  }
 
   @override
   Widget build(BuildContext context) {
-    final lu = meta.lastUpdatedAt;
-    final nu = meta.nextUpdateDue;
-    final now = DateTime.now();
-    String countdownText = 'موعد التحديث غير محدّد';
-    Color countdownColor = AppColors.calcMuted;
-    bool isOverdue = false;
-    if (nu != null) {
-      final days = nu.difference(now).inDays;
-      if (days > 0) {
-        countdownText = 'التحديث القادم خلال $days يوم';
-        countdownColor = AppColors.calcGreen;
-      } else {
-        countdownText = 'تجاوز موعد التحديث بـ ${days.abs()} يوم';
-        countdownColor = AppColors.warning;
-        isOverdue = true;
-      }
-    }
     return Container(
       padding: const EdgeInsets.all(AppDimensions.spacingMd),
       decoration: BoxDecoration(
@@ -422,41 +499,15 @@ class _MetaCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
         border: Border.all(color: AppColors.calcBorder2),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('آخر تحديث للمصادر الرسمية', style: AppTextStyles.labelSmall.copyWith(color: AppColors.calcMuted)),
-            const SizedBox(height: 2),
-            Text(
-              lu != null ? _fmt(lu) : '—',
-              style: AppTextStyles.labelMedium.copyWith(color: AppColors.calcText, fontWeight: FontWeight.w700),
-            ),
-          ])),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: isOverdue
-                  ? AppColors.warning.withValues(alpha: 0.14)
-                  : AppColors.calcGreen.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(
-                color: isOverdue
-                    ? AppColors.warning.withValues(alpha: 0.45)
-                    : AppColors.calcGreen.withValues(alpha: 0.4),
-              ),
-            ),
-            child: Text(
-              isOverdue ? 'يُنصح بالتحديث' : 'البيانات حديثة',
-              style: AppTextStyles.labelSmall.copyWith(
-                color: isOverdue ? AppColors.warning : AppColors.calcGreen,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
+      child: Row(children: [
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('آخر تحديث لبيانات Grok', style: AppTextStyles.labelSmall.copyWith(color: AppColors.calcMuted)),
+          const SizedBox(height: 2),
+          Text(
+            lastUpdated != null ? fmt(lastUpdated!) : 'مؤشر تمثيلي — لم يُحدّث بعد',
+            style: AppTextStyles.labelMedium.copyWith(color: AppColors.calcText, fontWeight: FontWeight.w700),
           ),
-        ]),
-        const SizedBox(height: AppDimensions.spacingSm),
-        Text(countdownText, style: AppTextStyles.bodySmall.copyWith(color: countdownColor, fontWeight: FontWeight.w700)),
-        const SizedBox(height: AppDimensions.spacingSm),
+        ])),
         GestureDetector(
           onTap: onRefresh,
           child: Container(
@@ -469,7 +520,7 @@ class _MetaCard extends StatelessWidget {
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               const Icon(Icons.refresh_rounded, size: 15, color: AppColors.calcNeon),
               const SizedBox(width: 6),
-              Text('تحديث البيانات', style: AppTextStyles.bodySmall.copyWith(color: AppColors.calcNeon, fontWeight: FontWeight.w700)),
+              Text('تحديث', style: AppTextStyles.bodySmall.copyWith(color: AppColors.calcNeon, fontWeight: FontWeight.w700)),
             ]),
           ),
         ),
@@ -478,9 +529,9 @@ class _MetaCard extends StatelessWidget {
   }
 }
 
-// ── Grok Fallback Banner ──────────────────────────────────────────────────────
+// ── No Live Data Banner ───────────────────────────────────────────────────────
 
-class _GrokFallbackBanner extends StatelessWidget {
+class _NoLiveBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -495,7 +546,7 @@ class _GrokFallbackBanner extends StatelessWidget {
         const SizedBox(width: AppDimensions.spacingSm),
         Expanded(
           child: Text(
-            'بيانات Grok غير متوفرة بعد — ستظهر المقارنة الكاملة بعد أول تشغيل لـ Grok. البيانات الرسمية معروضة مع حكم ⚪ مصدر واحد.',
+            'لا توجد قيم Grok حيّة بعد — افتح صفحة «هوامش الربح» واضغط «تحديث البيانات الآن»، ثم عُد إلى هنا. تظهر حالياً المؤشرات التمثيلية مع حكم ⚪ مصدر واحد.',
             style: AppTextStyles.bodySmall.copyWith(color: AppColors.warning, height: 1.5),
           ),
         ),
@@ -600,7 +651,7 @@ class _FilterBar extends StatelessWidget {
         hint: 'الكل — المنتجات',
         value: selectedProduct,
         items: products,
-        labelOf: (p) => _productLabels[p] ?? p,
+        labelOf: (p) => p,
         onChanged: onProductChanged,
       ),
       GestureDetector(
@@ -719,12 +770,12 @@ class _CompareTable extends StatelessWidget {
             TableRow(
               decoration: headerDecor,
               children: [
-                _HeaderCell('البنك',           style: headerStyle),
-                _HeaderCell('المنتج',          style: headerStyle),
-                _HeaderCell('نسبة Grok',       style: headerStyle),
-                _HeaderCell('الموقع الرسمي',   style: headerStyle),
-                _HeaderCell('الفرق',           style: headerStyle),
-                _HeaderCell('الحكم',           style: headerStyle),
+                _HeaderCell('البنك',          style: headerStyle),
+                _HeaderCell('المنتج',         style: headerStyle),
+                _HeaderCell('نسبة Grok',      style: headerStyle),
+                _HeaderCell('مؤشر تمثيلي',    style: headerStyle),
+                _HeaderCell('الفرق',          style: headerStyle),
+                _HeaderCell('الحكم',          style: headerStyle),
               ],
             ),
             ...rows.asMap().entries.map((entry) {
@@ -739,10 +790,10 @@ class _CompareTable extends StatelessWidget {
                       : Border(bottom: BorderSide(color: AppColors.calcBorder, width: 0.5)),
                 ),
                 children: [
-                  _DataCell(r.bankNameAr,                              bold: true),
-                  _DataCell(_productLabels[r.productType] ?? r.productType),
-                  _RateCell(r.grokRate,    color: const Color(0xFFa5b4fc)),
-                  _RateCell(r.officialRate, color: AppColors.calcGold),
+                  _DataCell(r.bankName,    bold: true),
+                  _DataCell(r.productLabel),
+                  _RateCell(r.grokRate,           color: const Color(0xFFa5b4fc)),
+                  _RateCell(r.representativeRate,  color: AppColors.calcGold),
                   _DiffCell(r.diff),
                   _VerdictCell(r.verdict),
                 ],

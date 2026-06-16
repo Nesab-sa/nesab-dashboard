@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:nesab_dashboard/features/dashboard/data/models/profit_margin_model.dart';
 
@@ -167,6 +168,7 @@ class BankMarginsNewPage extends StatefulWidget {
 class _BankMarginsNewPageState extends State<BankMarginsNewPage> {
   bool _loading = true;
   bool _refreshing = false;
+  bool _cloudUpdating = false;
   String? _error;
   List<_BankMarginRow> _rows = [];
   _MetaInfo _meta = const _MetaInfo();
@@ -323,6 +325,24 @@ class _BankMarginsNewPageState extends State<BankMarginsNewPage> {
     if (mounted) {
       setState(() => _refreshing = false);
       if (_error == null) _showToast('تم تحديث البيانات بنجاح');
+    }
+  }
+
+  Future<void> _triggerCloudUpdate() async {
+    setState(() => _cloudUpdating = true);
+    try {
+      final callable = FirebaseFunctions.instanceFor(region: 'us-central1')
+          .httpsCallable('triggerProfitMarginsUpdate',
+              options: HttpsCallableOptions(timeout: const Duration(minutes: 9)));
+      await callable.call();
+      await _load();
+      if (mounted) _showToast('تم تحديث البيانات من المصادر الرسمية بنجاح');
+    } catch (e) {
+      if (mounted) {
+        _showToast('فشل التحديث: ${e.toString().replaceAll('Exception: ', '')}');
+      }
+    } finally {
+      if (mounted) setState(() => _cloudUpdating = false);
     }
   }
 
@@ -517,21 +537,41 @@ class _BankMarginsNewPageState extends State<BankMarginsNewPage> {
               style: TextStyle(color: _textMuted, fontSize: 13),
               textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: _rateLow.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: _rateLow.withValues(alpha: 0.2)),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.schedule_rounded, color: _rateLow, size: 14),
+                  SizedBox(width: 6),
+                  Text('تحديث تلقائي — بداية كل شهر ميلادي',
+                      style: TextStyle(color: _rateLow, fontSize: 11)),
+                ],
+              ),
+            ),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: _refreshing ? null : _refreshData,
-                icon: _refreshing
+                onPressed: (_cloudUpdating || _refreshing) ? null : _triggerCloudUpdate,
+                icon: _cloudUpdating
                     ? const SizedBox(
                         width: 18,
                         height: 18,
                         child: CircularProgressIndicator(
                             strokeWidth: 2, color: Colors.white),
                       )
-                    : const Icon(Icons.refresh_rounded, size: 20),
+                    : const Icon(Icons.cloud_sync_rounded, size: 20),
                 label: Text(
-                  _refreshing ? 'جاري التحديث...' : 'تحديث البيانات',
+                  _cloudUpdating
+                      ? 'جارٍ جلب البيانات من البنوك...'
+                      : 'تحديث البيانات الآن',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 14),
                 ),
@@ -545,7 +585,16 @@ class _BankMarginsNewPageState extends State<BankMarginsNewPage> {
                 ),
               ),
             ),
-            if (_meta.lastUpdatedAt != null) ...[
+            if (_cloudUpdating)
+              const Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  'يتم جلب البيانات من صفحات البنوك الرسمية — قد يستغرق دقيقة',
+                  style: TextStyle(color: _amberText, fontSize: 11),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            if (_meta.lastUpdatedAt != null && !_cloudUpdating) ...[
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -560,11 +609,11 @@ class _BankMarginsNewPageState extends State<BankMarginsNewPage> {
                 ],
               ),
             ],
-            if (_meta.lastUpdatedAt == null)
+            if (_meta.lastUpdatedAt == null && !_cloudUpdating)
               const Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
-                  'اضغط تحديث لتحميل أحدث البيانات',
+                  'اضغط "تحديث البيانات الآن" لجلب أحدث البيانات',
                   style: TextStyle(color: _textMuted, fontSize: 11),
                 ),
               ),
@@ -1274,18 +1323,18 @@ class _BankMarginsNewPageState extends State<BankMarginsNewPage> {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton.icon(
-        onPressed: _refreshing ? null : _refreshData,
-        icon: _refreshing
+        onPressed: (_cloudUpdating || _refreshing) ? null : _triggerCloudUpdate,
+        icon: _cloudUpdating
             ? const SizedBox(
                 width: 16,
                 height: 16,
                 child: CircularProgressIndicator(
                     strokeWidth: 2, color: _greenPrimary),
               )
-            : const Icon(Icons.auto_awesome_rounded,
+            : const Icon(Icons.cloud_sync_rounded,
                 size: 16, color: _greenPrimary),
         label: Text(
-          _refreshing ? 'جارٍ التحديث...' : 'إعادة تحميل البيانات',
+          _cloudUpdating ? 'جارٍ جلب البيانات...' : 'تحديث البيانات الآن',
           style: const TextStyle(
             color: _greenPrimary,
             fontSize: 14,

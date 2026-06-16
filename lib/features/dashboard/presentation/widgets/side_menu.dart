@@ -247,7 +247,7 @@ class NavItem extends StatelessWidget {
     this.badge,
   });
 
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final DashboardSection section;
   final bool expanded;
@@ -284,7 +284,7 @@ class NavItemContent extends StatelessWidget {
     this.badge,
   });
 
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final bool isActive;
   final bool expanded;
@@ -349,7 +349,7 @@ class NavItemIcon extends StatelessWidget {
     this.badge,
   });
 
-  final IconData icon;
+  final FaIconData icon;
   final bool isActive;
   final Color activeColor;
   final Color secondaryColor;

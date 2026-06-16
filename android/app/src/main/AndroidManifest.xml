@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- مطلوبة ليتمكّن WebView من تحميل الداشبورد من الرابط الرسمي -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="nesab_dashboard"
         android:name="${applicationName}"

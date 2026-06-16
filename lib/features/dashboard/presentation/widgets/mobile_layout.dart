@@ -174,7 +174,7 @@ class MobileNavItem extends StatelessWidget {
     this.badge,
   });
 
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final DashboardSection currentSection;
   final DashboardSection section;

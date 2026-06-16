@@ -1,7 +1,10 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("com.google.gms.google-services")
+    // ملاحظة: أُزيلت إضافة google-services عمدًا لأن تطبيق الداشبورد على الجوال
+    // غلاف WebView لا يستخدم Firebase، وكانت الإضافة تفشل بسبب أن
+    // google-services.json مسجّل للحزمة sa.nesab.app (التطبيق الرسمي) وليس
+    // com.example.nesab_dashboard. الإزالة تتجنّب التصادم مع التطبيق الرسمي.
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }

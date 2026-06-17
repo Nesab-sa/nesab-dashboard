@@ -118,6 +118,22 @@ class MobileLayout extends StatelessWidget {
                           textColor: textColor,
                         ),
                         MobileNavItem(
+                          icon: FontAwesomeIcons.chartBar,
+                          label: 'هوامش الربح الجديدة',
+                          currentSection: current,
+                          section: DashboardSection.profitMarginsNew,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
+                          icon: FontAwesomeIcons.scaleBalanced,
+                          label: 'مقارنة هوامش الربح',
+                          currentSection: current,
+                          section: DashboardSection.profitMarginsCompare,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
                           icon: FontAwesomeIcons.bell,
                           label: 'رسائل الإشعار',
                           currentSection: current,

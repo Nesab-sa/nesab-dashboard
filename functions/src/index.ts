@@ -222,6 +222,53 @@ export const createAdmin = functions.region("us-central1").https.onCall(
   }
 );
 
+/** مفتاح منتج Grok → مسمّى عربي، لبناء ملخص هوامش الربح المُحقَن للمساعد. */
+const MARGIN_PRODUCT_LABELS: Record<string, string> = {
+  personalBasic: "تمويل شخصي",
+  personalSpecial: "تمويل شخصي خاص (زيادة/شراء مديونية)",
+  realEstateSupportedProgram: "عقاري مدعوم (برنامج)",
+  realEstateSupportedMinistry: "عقاري مدعوم (وزارة/بناء)",
+  realEstateCommercial: "عقاري اعتيادي",
+  leasingVehicles: "تأجيري مركبات",
+};
+
+/**
+ * يبني سياقاً نصيّاً غنيّاً لهوامش الربح من الحقل المهيكل `banks`
+ * (النِّسب الحيّة لكل بنك × منتج). يعود بنصّ فارغ إن لم تتوفّر بيانات صالحة،
+ * فيسقط المتصل عندئذٍ إلى aiSummary.
+ */
+function buildMarginsContext(marginsData: Record<string, unknown>): string {
+  const banks = marginsData?.banks;
+  if (!Array.isArray(banks)) return "";
+  const lines: string[] = [];
+  for (const bank of banks) {
+    if (!bank || typeof bank !== "object") continue;
+    const b = bank as Record<string, unknown>;
+    const bankName = typeof b.bankName === "string" ? b.bankName : "";
+    const products = b.products;
+    if (!bankName || !products || typeof products !== "object") continue;
+    const parts: string[] = [];
+    for (const [key, label] of Object.entries(MARGIN_PRODUCT_LABELS)) {
+      const p = (products as Record<string, unknown>)[key];
+      if (!p || typeof p !== "object") continue;
+      const pm = p as Record<string, unknown>;
+      if (pm.available === false) continue;
+      const min = typeof pm.min === "number" ? pm.min : null;
+      const max = typeof pm.max === "number" ? pm.max : null;
+      if ((min === null || min <= 0) && (max === null || max <= 0)) continue;
+      let range: string;
+      if (min && min > 0 && max && max > 0) {
+        range = min === max ? `${min}%` : `${min}%–${max}%`;
+      } else {
+        range = `${min && min > 0 ? min : max}%`;
+      }
+      parts.push(`${label} ${range}`);
+    }
+    if (parts.length) lines.push(`• ${bankName}: ${parts.join(" · ")}`);
+  }
+  return lines.join("\n");
+}
+
 /** AI Chat Proxy - supports OpenAI and Grok AI (xAI) */
 export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY", "OPENAI_API_KEY"] }).https.onCall(
   async (data: AiChatData, context: functions.https.CallableContext) => {
@@ -275,9 +322,16 @@ export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["
         const marginsDoc = await firestore.doc("bank_rates/profit_margins").get();
         if (marginsDoc.exists) {
           const marginsData = marginsDoc.data() as Record<string, unknown>;
-          const summary = marginsData?.aiSummary as string | undefined;
-          if (summary) {
-            enrichedSystemPrompt += `\n\nملخص هوامش الربح الحالية:\n${summary}`;
+          // يُفضّل السياق المهيكل من `banks`؛ وإلا يسقط إلى aiSummary النصّي.
+          const structured = buildMarginsContext(marginsData);
+          const summary = typeof marginsData?.aiSummary === "string" ? marginsData.aiSummary : "";
+          const marginText = structured || summary;
+          if (marginText) {
+            const ts = marginsData?.lastUpdated as admin.firestore.Timestamp | undefined;
+            const dateStr = ts && typeof ts.toDate === "function"
+              ? ts.toDate().toISOString().slice(0, 10)
+              : "";
+            enrichedSystemPrompt += `\n\nهوامش الربح الحالية للبنوك (نسب سنوية تقريبية${dateStr ? `، محدّثة ${dateStr}` : ""}):\n${marginText}\n(مؤشرات تمثيلية للاسترشاد وقد تختلف حسب المبلغ والمدة — تحقق من البنك.)`;
           }
         }
       } catch (e) {
@@ -779,12 +833,12 @@ async function executeProfitMarginsUpdate(apiKey: string): Promise<{ banks: unkn
   return fetchViaScraping(apiKey);
 }
 
-// ─── Scheduled: تحديث هوامش الربح يومياً (07:00 UTC = 10:00 AM KSA) ──────────
+// ─── Scheduled: تحديث هوامش الربح شهرياً — أول يوم من كل شهر (07:00 UTC = 10:00 AM KSA) ──
 
 export const updateProfitMargins = functions
   .region("us-central1")
   .runWith({ secrets: ["XAI_API_KEY"], timeoutSeconds: 540 })
-  .pubsub.schedule("30 6 * * *")
+  .pubsub.schedule("0 7 1 * *")
   .timeZone("UTC")
   .onRun(async () => {
     functions.logger.info("updateProfitMargins: starting daily run");

@@ -172,39 +172,53 @@ class _AiChatWidgetState extends State<AiChatWidget> {
                           if (msg.isUser) {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 7),
-                              child: Text(
-                                'أنت: ${msg.text}',
-                                textDirection: TextDirection.rtl,
-                                textAlign: TextAlign.right,
-                                style: const TextStyle(
-                                  color: Color(0xFFA0C0FF),
-                                  fontSize: 12,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Color(0xFFFFD700), width: 1.2),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  'أنت: ${msg.text}',
+                                  textDirection: TextDirection.rtl,
+                                  textAlign: TextAlign.right,
+                                  style: const TextStyle(
+                                    color: Color(0xFFA0C0FF),
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
                             );
                           }
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 7),
-                            child: RichText(
-                              textDirection: TextDirection.rtl,
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'المستشار البنكي: ',
-                                    style: TextStyle(
-                                      color: AppColors.calcNeon,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 12,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Color(0xFF4CAF50), width: 1.2),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: RichText(
+                                textDirection: TextDirection.rtl,
+                                text: TextSpan(
+                                  children: [
+                                    const TextSpan(
+                                      text: 'المستشار البنكي: ',
+                                      style: TextStyle(
+                                        color: AppColors.calcNeon,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                  TextSpan(
-                                    text: msg.text,
-                                    style: const TextStyle(
-                                      color: AppColors.calcText,
-                                      fontSize: 12,
+                                    TextSpan(
+                                      text: msg.text,
+                                      style: const TextStyle(
+                                        color: AppColors.calcText,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );

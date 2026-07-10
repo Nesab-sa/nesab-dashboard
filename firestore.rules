@@ -86,17 +86,19 @@ service cloud.firestore {
     }
 
     // ── إحصاءات التطبيق: نشاط المستخدمين وعدّادات زيارات الصفحات ──────
-    // تُكتب من داخل التطبيق عند فتح صفحة منتج (مستخدم مسجّل)،
-    // وتُقرأ في الداشبورد لعرض «الإحصائية».
-    // product_activity: مستند لكل مستخدم يحمل آخر فتح (lastOpenAt).
-    match /product_activity/{userId} {
+    // تُكتب من صفحات المنتجات (HTML) داخل التطبيق، وهي صفحات عامة بلا
+    // مصادقة — لذا الكتابة مسموحة لكن مقيّدة بأسماء الحقول فقط (نفس نمط
+    // stats/web أعلاه)، والقراءة محصورة بالداشبورد (مستخدم مسجّل).
+    // product_activity: مستند لكل زائر يحمل آخر فتح (lastOpenAt).
+    match /product_activity/{visitorId} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.resource.data.keys().hasOnly(['lastOpenAt']);
     }
     // product_stats: عدّاد زيارات لكل صفحة/منتج.
     match /product_stats/{pageId} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null;
+      allow write: if request.resource.data.keys()
+                     .hasOnly(['views', 'nameAr', 'nameEn', 'lastOpenAt']);
     }
   }
 }

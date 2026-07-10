@@ -16,6 +16,7 @@ import 'package:nesab_dashboard/features/dashboard/presentation/pages/categories
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/managers_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/tools_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/users_page.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/analytics_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/dashboard_section.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/dashboard_section_provider.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/mobile_layout.dart';
@@ -94,6 +95,7 @@ class _DashboardShellState extends State<DashboardShell> {
   Widget _buildContent(DashboardSection section) {
     return switch (section) {
       DashboardSection.users => const UsersPage(),
+      DashboardSection.analytics => const AnalyticsPage(),
       DashboardSection.createAdmins => const ManagersPage(),
       DashboardSection.categories => const CategoriesPage(),
       DashboardSection.tools => const ToolsPage(),

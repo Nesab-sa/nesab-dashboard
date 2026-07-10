@@ -56,6 +56,13 @@ class SideMenu extends StatelessWidget {
                   selectedSection: selectedSection,
                 ),
                 NavItem(
+                  icon: FontAwesomeIcons.chartPie,
+                  label: 'الإحصائية',
+                  section: DashboardSection.analytics,
+                  expanded: expanded,
+                  selectedSection: selectedSection,
+                ),
+                NavItem(
                   icon: FontAwesomeIcons.userPlus,
                   label: context.l10n.managersTitle,
                   section: DashboardSection.createAdmins,

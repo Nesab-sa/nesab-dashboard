@@ -13,7 +13,7 @@ class UsersPage extends StatefulWidget {
 
 enum _Provider { google, apple, email, unknown }
 
-enum _View { none, all, newOnly, activeDaily, activeMonthly, activeYearly }
+enum _View { none, all, newOnly }
 
 class _UsersPageState extends State<UsersPage> {
   _View _view = _View.none;
@@ -115,28 +115,12 @@ class _UsersPageState extends State<UsersPage> {
             return c != null && c.isAfter(cutoff);
           }).toList();
 
-          // المستخدمون النشطون: من سجّل آخر دخول ضمن النافذة الزمنية.
-          // يُحسب من حقل lastLogin (يُحدَّث في كل تسجيل دخول).
-          final now = DateTime.now();
-          final dailyDocs = _activeWithin(allDocs, now, const Duration(days: 1));
-          final monthlyDocs =
-              _activeWithin(allDocs, now, const Duration(days: 30));
-          final yearlyDocs =
-              _activeWithin(allDocs, now, const Duration(days: 365));
-
           final List<QueryDocumentSnapshot<Map<String, dynamic>>> displayed =
               switch (_view) {
             _View.all => allDocs,
             _View.newOnly => newDocs,
-            _View.activeDaily => dailyDocs,
-            _View.activeMonthly => monthlyDocs,
-            _View.activeYearly => yearlyDocs,
             _View.none => const [],
           };
-          // في عروض النشاط نعرض وقت آخر دخول بدل وقت الإنشاء.
-          final showLastLogin = _view == _View.activeDaily ||
-              _view == _View.activeMonthly ||
-              _view == _View.activeYearly;
 
           int google = 0, apple = 0, email = 0;
           for (final d in allDocs) {
@@ -203,62 +187,6 @@ class _UsersPageState extends State<UsersPage> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                const Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 8, right: 4),
-                    child: Text(
-                      'المستخدمون النشطون',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _CountCard(
-                        label: 'نشط يومياً',
-                        count: dailyDocs.length,
-                        color: Colors.indigo,
-                        selected: _view == _View.activeDaily,
-                        onTap: () => setState(() => _view =
-                            _view == _View.activeDaily
-                                ? _View.none
-                                : _View.activeDaily),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _CountCard(
-                        label: 'نشط شهرياً',
-                        count: monthlyDocs.length,
-                        color: Colors.purple,
-                        selected: _view == _View.activeMonthly,
-                        onTap: () => setState(() => _view =
-                            _view == _View.activeMonthly
-                                ? _View.none
-                                : _View.activeMonthly),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _CountCard(
-                        label: 'نشط سنوياً',
-                        count: yearlyDocs.length,
-                        color: Colors.brown,
-                        selected: _view == _View.activeYearly,
-                        onTap: () => setState(() => _view =
-                            _view == _View.activeYearly
-                                ? _View.none
-                                : _View.activeYearly),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
                 _ProviderStatsCard(
                   google: google,
                   apple: apple,
@@ -285,16 +213,10 @@ class _UsersPageState extends State<UsersPage> {
                                       headingRowHeight: 44,
                                       dataRowMinHeight: 44,
                                       dataRowMaxHeight: 56,
-                                      columns: [
-                                        const DataColumn(label: Text('الاسم')),
-                                        DataColumn(
-                                            label: Text(showLastLogin
-                                                ? 'وقت آخر دخول'
-                                                : 'الوقت')),
-                                        DataColumn(
-                                            label: Text(showLastLogin
-                                                ? 'تاريخ آخر دخول'
-                                                : 'التاريخ')),
+                                      columns: const [
+                                        DataColumn(label: Text('الاسم')),
+                                        DataColumn(label: Text('الوقت')),
+                                        DataColumn(label: Text('التاريخ')),
                                       ],
                                       rows: displayed.map((doc) {
                                         final d = doc.data();
@@ -302,10 +224,8 @@ class _UsersPageState extends State<UsersPage> {
                                         final name =
                                             (d['name'] ?? d['displayName'] ?? em)
                                                 .toString();
-                                        final created = _parseDateTime(
-                                            showLastLogin
-                                                ? d['lastLogin']
-                                                : d['createdAt']);
+                                        final created =
+                                            _parseDateTime(d['createdAt']);
                                         final p = _provider(d);
                                         return DataRow(cells: [
                                           DataCell(Row(
@@ -344,20 +264,6 @@ class _UsersPageState extends State<UsersPage> {
     if (v is Timestamp) return v.toDate();
     if (v is String && v.trim().isNotEmpty) return DateTime.tryParse(v);
     return null;
-  }
-
-  /// يُرجع المستخدمين الذين كان آخر تسجيل دخول لهم ضمن [window] من [now].
-  /// يعتمد على حقل lastLogin؛ ومن لا يملكه يُستبعَد من عدّ النشطين.
-  List<QueryDocumentSnapshot<Map<String, dynamic>>> _activeWithin(
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
-    DateTime now,
-    Duration window,
-  ) {
-    final cutoff = now.subtract(window);
-    return docs.where((d) {
-      final last = _parseDateTime(d.data()['lastLogin']);
-      return last != null && last.isAfter(cutoff);
-    }).toList();
   }
 
   _Provider _provider(Map<String, dynamic> d) {

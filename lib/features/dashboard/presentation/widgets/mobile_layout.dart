@@ -70,6 +70,14 @@ class MobileLayout extends StatelessWidget {
                           textColor: textColor,
                         ),
                         MobileNavItem(
+                          icon: FontAwesomeIcons.chartPie,
+                          label: 'الإحصائية',
+                          currentSection: current,
+                          section: DashboardSection.analytics,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
                           icon: FontAwesomeIcons.userPlus,
                           label: context.l10n.managersTitle,
                           currentSection: current,

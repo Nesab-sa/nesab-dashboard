@@ -126,6 +126,13 @@ class SideMenu extends StatelessWidget {
                   selectedSection: selectedSection,
                   badge: aiConvBadge > 0 ? aiConvBadge : null,
                 ),
+                NavItem(
+                  icon: FontAwesomeIcons.chartPie,
+                  label: 'الإحصائية',
+                  section: DashboardSection.analytics,
+                  expanded: expanded,
+                  selectedSection: selectedSection,
+                ),
 Divider(height: 1, color: borderColor),
               ],
             ),

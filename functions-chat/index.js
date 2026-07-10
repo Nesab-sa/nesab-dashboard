@@ -1,12 +1,12 @@
 /**
- * Nesab AI — Chat Cloud Function (xAI Grok)
+ * Nesab AI — Chat Cloud Function (OpenAI)
  * Codebase: "chat" — independent from Dashboard functions.
  *
  * Called by nesab-ai.js (WebView / browser) to get AI replies.
  * Saves every turn to Firestore collection "ai_conversations"
  * with source = "app" (Flutter) or "web" (browser).
  *
- * xAI API key is loaded from GCP Secret Manager (XAI_API_KEY).
+ * OpenAI API key is loaded from GCP Secret Manager (OPENAI_API_KEY).
  */
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -20,8 +20,8 @@ if (!admin.apps.length) {
 }
 const db = admin.firestore();
 
-const XAI_BASE_URL = "https://api.x.ai/v1";
-const XAI_MODEL = "grok-4.20-reasoning";
+const OPENAI_BASE_URL = "https://api.openai.com/v1";
+const OPENAI_MODEL = "gpt-4o-mini";
 const INPUT_MAX_LENGTH = 1500;
 const RATE_LIMIT_MAX = 30;
 
@@ -49,43 +49,43 @@ function guardInput(message) {
   return { clean: message };
 }
 
-async function xaiCall(input, temperature = 0.3) {
-  const apiKey = process.env.XAI_API_KEY;
+async function openaiCall(messages, temperature = 0.3) {
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    console.error("[Nesab Chat] XAI_API_KEY not set in Secret Manager");
+    console.error("[Nesab Chat] OPENAI_API_KEY not set in Secret Manager");
     return null;
   }
   try {
-    const res = await fetch(XAI_BASE_URL + "/responses", {
+    const res = await fetch(OPENAI_BASE_URL + "/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Authorization: "Bearer " + apiKey,
       },
-      body: JSON.stringify({ model: XAI_MODEL, input, temperature }),
+      body: JSON.stringify({ model: OPENAI_MODEL, messages, temperature }),
     });
     if (!res.ok) {
       const errText = await res.text();
-      console.error("[Nesab Chat] xAI API error:", res.status, errText);
+      console.error("[Nesab Chat] OpenAI API error:", res.status, errText);
       return null;
     }
     return await res.json();
   } catch (e) {
-    console.error("[Nesab Chat] xAI fetch error:", e);
+    console.error("[Nesab Chat] OpenAI fetch error:", e);
     return null;
   }
 }
 
 /**
  * chat — HTTP Cloud Function
- * Secret: XAI_API_KEY from GCP Secret Manager
+ * Secret: OPENAI_API_KEY from GCP Secret Manager
  */
 exports.chat = functions
   .region("us-central1")
   .runWith({
     timeoutSeconds: 60,
     memory: "256MB",
-    secrets: ["XAI_API_KEY"],
+    secrets: ["OPENAI_API_KEY"],
   })
   .https.onRequest(async (req, res) => {
     // ── CORS + UTF-8 headers ──────────────────────────────────────────────
@@ -128,23 +128,22 @@ exports.chat = functions
     const context = (data.context || "").trim();
     const history = Array.isArray(data.history) ? data.history : [];
 
-    // Build full prompt
+    // Build messages array (system + optional page context + history + user)
     let systemPrompt = SYSTEM_PROMPT + getRelevantKnowledge(context);
-    let input = systemPrompt + "\n\n";
-    if (context) input += "الصفحة الحالية للمستخدم: " + context + "\n\n";
+    if (context) systemPrompt += "\n\nالصفحة الحالية للمستخدم: " + context;
+    const messages = [{ role: "system", content: systemPrompt }];
 
     // Add history (last 8 turns)
     const recentHistory = history.slice(-8);
     for (const turn of recentHistory) {
       if (turn.role && turn.content && ["user", "assistant"].includes(turn.role)) {
-        const label = turn.role === "user" ? "المستخدم" : "نِسَب";
-        input += label + ": " + turn.content + "\n";
+        messages.push({ role: turn.role, content: String(turn.content) });
       }
     }
-    input += "المستخدم: " + message + "\nنِسَب:";
+    messages.push({ role: "user", content: message });
 
-    // xAI call
-    const response1 = await xaiCall(input);
+    // OpenAI call
+    const response1 = await openaiCall(messages);
     if (!response1) {
       return res.status(500).json({
         reply: "عذراً، حدث خطأ مؤقت في الخادم. حاول مرة أخرى.",
@@ -153,25 +152,7 @@ exports.chat = functions
     }
 
     // Extract reply
-    let finalReply = null;
-    if (response1.output_text) {
-      finalReply = response1.output_text;
-    } else if (response1.output && Array.isArray(response1.output)) {
-      for (const item of response1.output) {
-        if (item.type === "message" && item.content) {
-          for (const c of item.content) {
-            if (c.type === "output_text" || c.type === "text") {
-              finalReply = c.text;
-              break;
-            }
-          }
-        }
-        if (finalReply) break;
-      }
-    }
-    if (!finalReply && response1.choices && response1.choices[0]) {
-      finalReply = response1.choices[0].message?.content;
-    }
+    let finalReply = response1.choices?.[0]?.message?.content;
     if (!finalReply) {
       finalReply = "عذراً، لم أتمكن من معالجة طلبك. حاول مرة أخرى.";
     }

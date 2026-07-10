@@ -56,13 +56,6 @@ class SideMenu extends StatelessWidget {
                   selectedSection: selectedSection,
                 ),
                 NavItem(
-                  icon: FontAwesomeIcons.chartPie,
-                  label: 'الإحصائية',
-                  section: DashboardSection.analytics,
-                  expanded: expanded,
-                  selectedSection: selectedSection,
-                ),
-                NavItem(
                   icon: FontAwesomeIcons.userPlus,
                   label: context.l10n.managersTitle,
                   section: DashboardSection.createAdmins,
@@ -132,6 +125,13 @@ class SideMenu extends StatelessWidget {
                   expanded: expanded,
                   selectedSection: selectedSection,
                   badge: aiConvBadge > 0 ? aiConvBadge : null,
+                ),
+                NavItem(
+                  icon: FontAwesomeIcons.chartPie,
+                  label: 'الإحصائية',
+                  section: DashboardSection.analytics,
+                  expanded: expanded,
+                  selectedSection: selectedSection,
                 ),
 Divider(height: 1, color: borderColor),
               ],

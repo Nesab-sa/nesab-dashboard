@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 ///
 /// تعرض مربعين بنفس شكل مربعات صفحة المستخدمين:
 ///  1) عدد المستخدمين النشطين (يومي / شهري / سنوي) — يُحسب من مجموعة
-///     [productActivityCollection] حيث يُخزَّن آخر فتح لصفحة منتج لكل مستخدم.
-///  2) الصفحات الأكثر زيارة — يُحسب من مجموعة [productStatsCollection] حيث
-///     يُخزَّن عدّاد الزيارات لكل صفحة/منتج.
+///     [productStatsCollection] حيث يُخزَّن إجمالي الزيارات لكل صفحة/منتج.
+///  2) الصفحات الأكثر زيارة — يُحسب أيضاً من مجموعة [productStatsCollection]
+///     حيث يُخزَّن عدّاد الزيارات لكل صفحة/منتج.
 ///
 /// عند الضغط على أحد المربعين تظهر تفاصيله تحته.
 ///
@@ -161,7 +161,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           label: 'المستخدمون النشطون',
                           icon: Icons.people_alt_rounded,
                           color: Colors.indigo,
-                          count: _activityDocs.length,
+                          count: _statsDocs.fold<int>(
+                            0,
+                            (sum, doc) => sum + _views(doc.data()),
+                          ),
                           selected: _panel == _Panel.activeUsers,
                           onTap: () => setState(() => _panel =
                               _panel == _Panel.activeUsers
@@ -212,14 +215,14 @@ class _ActiveUsersPanel extends StatelessWidget {
     }
 
     final now = DateTime.now();
-    final daily = _countWithin(docs, now, const Duration(days: 1));
-    final monthly = _countWithin(docs, now, const Duration(days: 30));
-    final yearly = _countWithin(docs, now, const Duration(days: 365));
+    final daily = _sumViewsWithin(docs, now, const Duration(days: 1));
+    final monthly = _sumViewsWithin(docs, now, const Duration(days: 30));
+    final yearly = _sumViewsWithin(docs, now, const Duration(days: 365));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const _PanelTitle('كم شخص استخدم التطبيق'),
+        const _PanelTitle('عدد الزيارات'),
         Row(
           children: [
             Expanded(
@@ -239,18 +242,20 @@ class _ActiveUsersPanel extends StatelessWidget {
     );
   }
 
-  int _countWithin(
+  int _sumViewsWithin(
     List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
     DateTime now,
     Duration window,
   ) {
     final cutoff = now.subtract(window);
-    var count = 0;
+    var sum = 0;
     for (final d in docs) {
       final last = _parseDate(d.data()['lastOpenAt']);
-      if (last != null && last.isAfter(cutoff)) count++;
+      if (last != null && last.isAfter(cutoff)) {
+        sum += _views(d.data());
+      }
     }
-    return count;
+    return sum;
   }
 }
 

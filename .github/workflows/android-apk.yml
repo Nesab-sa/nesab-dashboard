@@ -1,0 +1,49 @@
+name: Build Android APK (Native)
+
+# يبني نسخة APK أصلية (Native) من lib/main.dart لتطبيق «داشبورد نِسَب»
+# ويرفع app-release.apk كـ Artifact قابل للتنزيل.
+# ملاحظات:
+# - التوقيع بمفتاح debug (كما في android/app/build.gradle.kts) — لا حاجة لأي keystore.
+# - لا علاقة له بنشر الويب (deploy.yml) ولا بالرابط الرسمي.
+# - بيئة GitHub فيها Android SDK متاح (لا حجب لـ dl.google.com).
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK (release, Native)
+        run: flutter build apk --release
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nesab-dashboard-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error

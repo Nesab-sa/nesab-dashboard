@@ -13,6 +13,7 @@ import 'package:nesab_dashboard/features/calculators/presentation/pages/bank_mar
 import 'package:nesab_dashboard/features/calculators/presentation/pages/margins_compare_new_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/profit_margins_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/categories_page.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/site_content_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/managers_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/tools_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/users_page.dart';
@@ -100,6 +101,7 @@ class _DashboardShellState extends State<DashboardShell> {
       DashboardSection.categories => const CategoriesPage(),
       DashboardSection.tools => const ToolsPage(),
       DashboardSection.appPages => const AppPagesPage(),
+      DashboardSection.siteContent => const SiteContentPage(),
       DashboardSection.aiSettings => const AiSettingsPage(),
       DashboardSection.profitMargins => const ProfitMarginsPage(),
       DashboardSection.profitMarginsNew => const BankMarginsNewPage(),

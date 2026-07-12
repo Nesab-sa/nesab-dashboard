@@ -102,6 +102,14 @@ class MobileLayout extends StatelessWidget {
                           textColor: textColor,
                         ),
                         MobileNavItem(
+                          icon: FontAwesomeIcons.globe,
+                          label: 'محتوى الموقع',
+                          currentSection: current,
+                          section: DashboardSection.siteContent,
+                          selectedSection: selectedSection,
+                          textColor: textColor,
+                        ),
+                        MobileNavItem(
                           icon: FontAwesomeIcons.robot,
                           label: 'إعدادات الذكاء الاصطناعي',
                           currentSection: current,

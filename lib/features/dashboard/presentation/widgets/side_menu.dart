@@ -84,6 +84,13 @@ class SideMenu extends StatelessWidget {
                   selectedSection: selectedSection,
                 ),
                 NavItem(
+                  icon: FontAwesomeIcons.globe,
+                  label: 'محتوى الموقع',
+                  section: DashboardSection.siteContent,
+                  expanded: expanded,
+                  selectedSection: selectedSection,
+                ),
+                NavItem(
                   icon: FontAwesomeIcons.robot,
                   label: 'إعدادات الذكاء الاصطناعي',
                   section: DashboardSection.aiSettings,

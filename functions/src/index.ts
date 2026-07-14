@@ -270,11 +270,64 @@ function buildMarginsContext(marginsData: Record<string, unknown>): string {
 }
 
 /** AI Chat Proxy - supports OpenAI and Grok AI (xAI) */
+/**
+ * حدود الاستخدام لكل مستخدم (تُضبط من الداشبورد في ai_config/settings):
+ *   rateLimits: { perUserPerHour, perUserPerDay } — صفر أو غياب = غير محدود.
+ * العدّادات في مجموعة ai_rate (وصول Admin SDK فقط — لا قاعدة قراءة للعملاء).
+ */
+async function enforceAiRateLimit(uid: string): Promise<void> {
+  const cfgDoc = await firestore.doc("ai_config/settings").get();
+  const limits = (cfgDoc.data()?.rateLimits ?? {}) as {
+    perUserPerHour?: number;
+    perUserPerDay?: number;
+  };
+  const perHour = Number(limits.perUserPerHour ?? 0) || 0;
+  const perDay = Number(limits.perUserPerDay ?? 0) || 0;
+  if (perHour <= 0 && perDay <= 0) return;
+
+  const ref = firestore.collection("ai_rate").doc(uid);
+  await firestore.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const d = snap.data() ?? {};
+    const now = Date.now();
+    const hourStart = Number(d.hourStart ?? 0);
+    const dayStart = Number(d.dayStart ?? 0);
+    let hourCount = Number(d.hourCount ?? 0);
+    let dayCount = Number(d.dayCount ?? 0);
+
+    if (now - hourStart >= 3_600_000) hourCount = 0;
+    if (now - dayStart >= 86_400_000) dayCount = 0;
+
+    if (perHour > 0 && hourCount >= perHour) {
+      throw new functions.https.HttpsError(
+        "resource-exhausted",
+        "تجاوزت الحد المسموح من رسائل المساعد الذكي هذه الساعة — حاول لاحقاً."
+      );
+    }
+    if (perDay > 0 && dayCount >= perDay) {
+      throw new functions.https.HttpsError(
+        "resource-exhausted",
+        "تجاوزت الحد اليومي لرسائل المساعد الذكي — حاول غداً."
+      );
+    }
+
+    tx.set(ref, {
+      hourStart: hourCount === 0 ? now : hourStart,
+      dayStart: dayCount === 0 ? now : dayStart,
+      hourCount: hourCount + 1,
+      dayCount: dayCount + 1,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
+  });
+}
+
 export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["XAI_API_KEY", "OPENAI_API_KEY"] }).https.onCall(
   async (data: AiChatData, context: functions.https.CallableContext) => {
     if (!context.auth) {
       throw new functions.https.HttpsError("unauthenticated", "يجب تسجيل الدخول.");
     }
+
+    await enforceAiRateLimit(context.auth.uid);
 
     const message = typeof data?.message === "string" ? data.message.trim() : "";
     if (!message) {
@@ -403,6 +456,9 @@ export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["
 
       const reply = parsed.choices?.[0]?.message?.content ?? "";
 
+      // التقاط استهلاك التوكنز من رد المزود (متوافق OpenAI/Grok)
+      const totalTokens = Number(parsed.usage?.total_tokens ?? 0) || 0;
+
       // Save conversation to Firestore
       const conversationId = typeof data?.conversationId === "string" && data.conversationId
         ? data.conversationId
@@ -425,6 +481,7 @@ export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["
             updatedAt: admin.firestore.FieldValue.serverTimestamp(),
             messageCount: newMessages.filter((m) => m.role === "user").length,
             pageContext: pageContext || convDoc.data()?.pageContext || "",
+            tokens: admin.firestore.FieldValue.increment(totalTokens),
           });
         } else {
           await convRef.set({
@@ -434,10 +491,17 @@ export const aiChatProxy = functions.region("us-central1").runWith({ secrets: ["
             pageContext: pageContext || "",
             messages: newMessages,
             messageCount: 1,
+            tokens: totalTokens,
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
             updatedAt: admin.firestore.FieldValue.serverTimestamp(),
           });
         }
+        // عدّاد إجمالي لصفحة التقارير: stats/ai (كتابة Admin SDK فقط)
+        await firestore.collection("stats").doc("ai").set({
+          totalTokens: admin.firestore.FieldValue.increment(totalTokens),
+          totalRequests: admin.firestore.FieldValue.increment(1),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        }, { merge: true });
       } catch (e) {
         functions.logger.warn("Could not save conversation", e);
       }
@@ -589,6 +653,106 @@ export const deleteManager = functions.region("us-central1").https.onCall(
       functions.logger.warn("Could not delete auth user", authErr);
     }
 
+    return { success: true };
+  }
+);
+
+// ─── تحديث مفتاح API لمزود الذكاء الاصطناعي (في Secret Manager) ───────────────
+// المفتاح لا يُخزن في Firestore إطلاقاً — إصدار جديد في السر المعتمد نفسه
+// الذي تقرؤه aiChatProxy (OPENAI_API_KEY / XAI_API_KEY).
+export const updateAiApiKey = functions.region("us-central1").https.onCall(
+  async (data: { provider?: string; apiKey?: string }, context: functions.https.CallableContext) => {
+    await verifyAdmin(context);
+
+    const provider = data?.provider === "openai" ? "openai" : data?.provider === "grok" ? "grok" : "";
+    const apiKey = typeof data?.apiKey === "string" ? data.apiKey.trim() : "";
+    if (!provider) {
+      throw new functions.https.HttpsError("invalid-argument", "provider يجب أن يكون openai أو grok.");
+    }
+    if (apiKey.length < 20) {
+      throw new functions.https.HttpsError("invalid-argument", "مفتاح API غير صالح.");
+    }
+
+    const projectId = process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT || "";
+    const secretName = provider === "openai" ? "OPENAI_API_KEY" : "XAI_API_KEY";
+    try {
+      await secretClient.addSecretVersion({
+        parent: `projects/${projectId}/secrets/${secretName}`,
+        payload: { data: Buffer.from(apiKey, "utf8") },
+      });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      throw new functions.https.HttpsError("internal", `تعذر تحديث المفتاح: ${msg}`);
+    }
+
+    functions.logger.info(`updateAiApiKey: ${secretName} rotated by=${context.auth?.uid}`);
+    return { success: true, secretName };
+  }
+);
+
+// ─── حظر/فك حظر مستخدم التطبيق (تعطيل حسابه في Auth + علامة في Firestore) ─────
+export const setUserBanned = functions.region("us-central1").https.onCall(
+  async (data: { uid?: string; banned?: boolean }, context: functions.https.CallableContext) => {
+    const callerUid = await verifyAdmin(context);
+
+    const targetUid = typeof data?.uid === "string" ? data.uid.trim() : "";
+    const banned = data?.banned === true;
+    if (!targetUid) {
+      throw new functions.https.HttpsError("invalid-argument", "uid is required.");
+    }
+    if (targetUid === callerUid) {
+      throw new functions.https.HttpsError("invalid-argument", "لا يمكنك حظر حسابك.");
+    }
+    // حماية: لا يُحظر حساب مدير من شاشة مستخدمي التطبيق
+    const managerDoc = await firestore.collection(MANAGERS_COLLECTION).doc(targetUid).get();
+    if (managerDoc.exists) {
+      throw new functions.https.HttpsError("failed-precondition", "هذا الحساب مدير — يُدار من شاشة المدراء.");
+    }
+
+    try {
+      await auth.updateUser(targetUid, { disabled: banned });
+    } catch (authErr: unknown) {
+      const msg = authErr instanceof Error ? authErr.message : String(authErr);
+      throw new functions.https.HttpsError("failed-precondition", `تعذر تحديث حساب المستخدم: ${msg}`);
+    }
+
+    await firestore.collection("users").doc(targetUid).set({
+      isBanned: banned,
+      bannedAt: banned ? admin.firestore.FieldValue.serverTimestamp() : null,
+    }, { merge: true });
+
+    functions.logger.info(`setUserBanned: ${targetUid} banned=${banned} by=${context.auth?.uid}`);
+    return { success: true, banned };
+  }
+);
+
+// ─── حذف مستخدم التطبيق نهائياً (Auth + مستند Firestore) ──────────────────────
+export const deleteAppUser = functions.region("us-central1").https.onCall(
+  async (data: { uid?: string }, context: functions.https.CallableContext) => {
+    const callerUid = await verifyAdmin(context);
+
+    const targetUid = typeof data?.uid === "string" ? data.uid.trim() : "";
+    if (!targetUid) {
+      throw new functions.https.HttpsError("invalid-argument", "uid is required.");
+    }
+    if (targetUid === callerUid) {
+      throw new functions.https.HttpsError("invalid-argument", "You cannot delete yourself.");
+    }
+    // حماية: لا يُحذف حساب مدير من شاشة مستخدمي التطبيق
+    const managerDoc = await firestore.collection(MANAGERS_COLLECTION).doc(targetUid).get();
+    if (managerDoc.exists) {
+      throw new functions.https.HttpsError("failed-precondition", "هذا الحساب مدير — يُدار من شاشة المدراء.");
+    }
+
+    try {
+      await auth.deleteUser(targetUid);
+    } catch (authErr: unknown) {
+      // الحساب قد يكون محذوفاً من Auth مسبقاً — نتابع حذف المستند
+      functions.logger.warn("deleteAppUser: could not delete auth user", authErr);
+    }
+    await firestore.collection("users").doc(targetUid).delete();
+
+    functions.logger.info(`deleteAppUser: ${targetUid} deleted by=${callerUid}`);
     return { success: true };
   }
 );
@@ -983,55 +1147,171 @@ export const syncAuthUsers = functions.region("us-central1").https.onCall(
   }
 );
 
+// ─── Notification push delivery (shared by immediate + scheduled paths) ───────
+// Targeting (from the dashboard):
+//   targetType "all"  (الافتراضي)          → كل المستخدمين
+//   targetType "user" + targetUserIds[]     → مستخدمون محددون
+//   targetType "group" + targetGroup        → مجموعة حسب مزود الدخول (google/apple/email)
+async function deliverNotificationPush(
+  data: FirebaseFirestore.DocumentData,
+  notifId: string
+): Promise<{ sent: number; failed: number }> {
+  const title = (data.title as string) ?? "";
+  const message = (data.message as string) ?? "";
+  const isMandatory = (data.isMandatory as boolean) ?? false;
+  const targetType = (data.targetType as string) ?? "all";
+
+  const tokens: string[] = [];
+  const collectToken = (doc: FirebaseFirestore.DocumentSnapshot) => {
+    const t = doc.get("fcmToken");
+    if (typeof t === "string" && t.length > 0) tokens.push(t);
+  };
+
+  if (targetType === "user") {
+    const ids = Array.isArray(data.targetUserIds)
+      ? (data.targetUserIds as string[]).filter((v) => typeof v === "string")
+      : [];
+    for (let i = 0; i < ids.length; i += 100) {
+      const refs = ids
+        .slice(i, i + 100)
+        .map((id) => firestore.collection("users").doc(id));
+      const docs = await firestore.getAll(...refs);
+      docs.forEach(collectToken);
+    }
+  } else if (targetType === "group") {
+    const group = (data.targetGroup as string) ?? "";
+    const snap = await firestore
+      .collection("users")
+      .where("provider", "==", group)
+      .get();
+    snap.forEach(collectToken);
+  } else {
+    const snap = await firestore.collection("users").get();
+    snap.forEach(collectToken);
+  }
+
+  if (tokens.length === 0) {
+    functions.logger.info(
+      `deliverNotificationPush: ${notifId} no tokens (target=${targetType})`
+    );
+    return { sent: 0, failed: 0 };
+  }
+
+  // FCM allows max 500 tokens per multicast call
+  const chunks: string[][] = [];
+  for (let i = 0; i < tokens.length; i += 500) {
+    chunks.push(tokens.slice(i, i + 500));
+  }
+
+  let totalSent = 0;
+  let totalFailed = 0;
+  for (const chunk of chunks) {
+    const res = await admin.messaging().sendEachForMulticast({
+      tokens: chunk,
+      notification: { title, body: message },
+      data: {
+        notifId,
+        isMandatory: isMandatory ? "true" : "false",
+      },
+      android: { priority: "high" },
+      apns: { payload: { aps: { sound: "default", contentAvailable: true } } },
+    });
+    totalSent += res.successCount;
+    totalFailed += res.failureCount;
+  }
+  functions.logger.info(
+    `deliverNotificationPush: ${notifId} target=${targetType} sent=${totalSent} failed=${totalFailed}`
+  );
+  return { sent: totalSent, failed: totalFailed };
+}
+
 // ─── Send FCM push when a new notification is created ─────────────────────────
+// المجدولة (pushStatus="scheduled" مع scheduledAt مستقبلي) تُتجاهل هنا
+// ويرسلها processScheduledNotifications في موعدها.
 export const sendNotificationPush = functions
   .region("us-central1")
   .firestore.document("app_notifications/{notifId}")
   .onCreate(async (snap, context) => {
     const data = snap.data();
     if (!data) return;
-
-    const title = (data.title as string) ?? "";
-    const message = (data.message as string) ?? "";
-    const isMandatory = (data.isMandatory as boolean) ?? false;
     const notifId = context.params.notifId;
 
-    // Collect FCM tokens from users collection
-    const usersSnap = await firestore.collection("users").get();
-    const tokens: string[] = [];
-    usersSnap.forEach((doc) => {
-      const t = doc.data().fcmToken;
-      if (typeof t === "string" && t.length > 0) tokens.push(t);
-    });
-
-    if (tokens.length === 0) {
-      functions.logger.info("sendNotificationPush: no tokens");
+    const scheduledAt = data.scheduledAt as admin.firestore.Timestamp | undefined;
+    if (
+      data.pushStatus === "scheduled" &&
+      scheduledAt &&
+      scheduledAt.toMillis() > Date.now()
+    ) {
+      functions.logger.info(
+        `sendNotificationPush: ${notifId} scheduled for ${scheduledAt
+          .toDate()
+          .toISOString()} — deferred`
+      );
       return;
     }
 
-    // FCM allows max 500 tokens per multicast call
-    const chunks: string[][] = [];
-    for (let i = 0; i < tokens.length; i += 500) {
-      chunks.push(tokens.slice(i, i + 500));
-    }
+    await deliverNotificationPush(data, notifId);
+    await snap.ref.set(
+      { pushStatus: "sent", sentAt: admin.firestore.FieldValue.serverTimestamp() },
+      { merge: true }
+    );
+  });
 
-    let totalSent = 0;
-    let totalFailed = 0;
-    for (const chunk of chunks) {
-      const res = await admin.messaging().sendEachForMulticast({
-        tokens: chunk,
-        notification: { title, body: message },
-        data: {
-          notifId,
-          isMandatory: isMandatory ? "true" : "false",
-        },
-        android: { priority: "high" },
-        apns: { payload: { aps: { sound: "default", contentAvailable: true } } },
+// ─── Scheduled: إرسال الإشعارات المجدولة في موعدها (كل 5 دقائق) ────────────────
+export const processScheduledNotifications = functions
+  .region("us-central1")
+  .pubsub.schedule("every 5 minutes")
+  .onRun(async () => {
+    // مجموعة المجدول صغيرة دائماً — فلترة الموعد في الكود تغني عن فهرس مركب.
+    const snap = await firestore
+      .collection("app_notifications")
+      .where("pushStatus", "==", "scheduled")
+      .get();
+    if (snap.empty) return;
+
+    const now = Date.now();
+    for (const doc of snap.docs) {
+      const data = doc.data();
+      const at = data.scheduledAt as admin.firestore.Timestamp | undefined;
+      if (!at || at.toMillis() > now) continue;
+
+      // حجز ذرّي (compare-and-set): لا نُرسل إلا إذا نجحنا في تحويل الحالة من
+      // "scheduled" إلى "sent" داخل معاملة — يمنع الإرسال المزدوج عند تداخل
+      // دورتين للمجدول.
+      let claimed = false;
+      try {
+        await firestore.runTransaction(async (tx) => {
+          const fresh = await tx.get(doc.ref);
+          if (fresh.get("pushStatus") !== "scheduled") return; // حُجز مسبقاً
+          tx.update(doc.ref, {
+            isActive: true,
+            pushStatus: "sent",
+            sentAt: admin.firestore.FieldValue.serverTimestamp(),
+          });
+          claimed = true;
+        });
+      } catch (e) {
+        functions.logger.warn(`processScheduledNotifications: claim failed ${doc.id}`, e);
+        continue;
+      }
+      if (!claimed) continue;
+
+      // بعد الحجز: طبّق عرف «إشعار نشط واحد» بإيقاف بقية النشطة.
+      const actives = await firestore
+        .collection("app_notifications")
+        .where("isActive", "==", true)
+        .get();
+      const batch = firestore.batch();
+      actives.forEach((d) => {
+        if (d.id !== doc.id) batch.update(d.ref, { isActive: false });
       });
-      totalSent += res.successCount;
-      totalFailed += res.failureCount;
+      await batch.commit();
+
+      const res = await deliverNotificationPush(data, doc.id);
+      functions.logger.info(
+        `processScheduledNotifications: ${doc.id} sent=${res.sent} failed=${res.failed}`
+      );
     }
-    functions.logger.info(`sendNotificationPush: sent=${totalSent} failed=${totalFailed}`);
   });
 
 // ─── Acknowledge notification (called from mobile app) ────────────────────────

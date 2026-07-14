@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nesab_dashboard/core/services/audit_log_service.dart';
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
 
@@ -246,6 +247,7 @@ class _SiteContentPageState extends State<SiteContentPage> {
         'updatedAt': FieldValue.serverTimestamp(),
         'updatedBy': FirebaseAuth.instance.currentUser?.email ?? 'unknown',
       }, SetOptions(merge: true));
+      await AuditLogService.log('siteContent.save', target: section.title);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -9,15 +9,21 @@ import 'package:nesab_dashboard/features/dashboard/presentation/pages/ai_convers
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/ai_settings_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/app_pages_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/notifications_page.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/packages_page.dart';
 import 'package:nesab_dashboard/features/calculators/presentation/pages/bank_margins_new_page.dart';
 import 'package:nesab_dashboard/features/calculators/presentation/pages/margins_compare_new_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/profit_margins_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/categories_page.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/display_settings_page.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/seo_settings_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/site_content_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/managers_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/tools_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/users_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/pages/analytics_page.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/app_content_page.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/audit_log_page.dart';
+import 'package:nesab_dashboard/features/dashboard/presentation/pages/reports_page.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/dashboard_section.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/dashboard_section_provider.dart';
 import 'package:nesab_dashboard/features/dashboard/presentation/widgets/mobile_layout.dart';
@@ -97,11 +103,17 @@ class _DashboardShellState extends State<DashboardShell> {
     return switch (section) {
       DashboardSection.users => const UsersPage(),
       DashboardSection.analytics => const AnalyticsPage(),
+      DashboardSection.reports => const ReportsPage(),
+      DashboardSection.auditLog => const AuditLogPage(),
       DashboardSection.createAdmins => const ManagersPage(),
       DashboardSection.categories => const CategoriesPage(),
       DashboardSection.tools => const ToolsPage(),
+      DashboardSection.packages => const PackagesPage(),
       DashboardSection.appPages => const AppPagesPage(),
+      DashboardSection.appContent => const AppContentPage(),
       DashboardSection.siteContent => const SiteContentPage(),
+      DashboardSection.displaySettings => const DisplaySettingsPage(),
+      DashboardSection.seoSettings => const SeoSettingsPage(),
       DashboardSection.aiSettings => const AiSettingsPage(),
       DashboardSection.profitMargins => const ProfitMarginsPage(),
       DashboardSection.profitMarginsNew => const BankMarginsNewPage(),

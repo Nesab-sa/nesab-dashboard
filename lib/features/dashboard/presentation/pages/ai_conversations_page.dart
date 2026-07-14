@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:nesab_dashboard/core/services/audit_log_service.dart';
 
 // ── Theme Colors (matches profit_margins_page) ────────────────────────
 const _bgColor     = Color(0xFF090A0F);
@@ -377,10 +380,129 @@ class _AiConversationsPageState extends State<AiConversationsPage> {
 
   String _filterSource = 'all';
 
+  // ── البحث النصي ──
+  final _searchCtrl = TextEditingController();
+  String _search = '';
+
+  // ── صلاحية الرؤية (role admin دائماً + canViewConversations للبقية) ──
+  bool _permChecked = false;
+  bool _allowed = false;
+  bool _isAdmin = false;
+
   @override
   void initState() {
     super.initState();
-    _load();
+    _checkPermission();
+  }
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _checkPermission() async {
+    try {
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid == null) {
+        setState(() { _permChecked = true; _allowed = false; });
+        return;
+      }
+      final doc = await _firestore.collection('managers').doc(uid).get();
+      final d = doc.data();
+      final isAdmin =
+          (d?['role']?.toString().toLowerCase() ?? '') == 'admin';
+      final allowed =
+          doc.exists && (isAdmin || d?['canViewConversations'] != false);
+      setState(() {
+        _permChecked = true;
+        _isAdmin = isAdmin;
+        _allowed = allowed;
+      });
+      if (allowed) await _load();
+    } catch (_) {
+      setState(() { _permChecked = true; _allowed = false; });
+    }
+  }
+
+  Future<void> _managePermissions() async {
+    final snap = await _firestore.collection('managers').get();
+    if (!mounted) return;
+    final managers = snap.docs;
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(builder: (ctx, setDialogState) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            backgroundColor: _cardColor,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            title: const Text('صلاحيات رؤية المحادثات',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700)),
+            content: SizedBox(
+              width: 420,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'المدراء بدور admin يرون المحادثات دائماً — تحكم بالبقية:',
+                    style: TextStyle(color: _muteColor, fontSize: 12),
+                  ),
+                  const SizedBox(height: 8),
+                  for (final m in managers)
+                    Builder(builder: (_) {
+                      final d = m.data();
+                      final name = (d['displayName'] ?? d['email'] ?? m.id)
+                          .toString();
+                      final isAdmin =
+                          (d['role']?.toString().toLowerCase() ?? '') ==
+                              'admin';
+                      final canView = d['canViewConversations'] != false;
+                      return SwitchListTile(
+                        dense: true,
+                        title: Text(name,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 13)),
+                        subtitle: isAdmin
+                            ? const Text('admin — دائم الصلاحية',
+                                style: TextStyle(
+                                    color: _goldColor, fontSize: 11))
+                            : null,
+                        value: isAdmin || canView,
+                        onChanged: isAdmin
+                            ? null
+                            : (v) async {
+                                await m.reference.set(
+                                    {'canViewConversations': v},
+                                    SetOptions(merge: true));
+                                await AuditLogService.log(
+                                    'conversations.permissions',
+                                    target: name,
+                                    details: {'canView': v});
+                                setDialogState(() {
+                                  (m.data())['canViewConversations'] = v;
+                                });
+                              },
+                      );
+                    }),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child:
+                    const Text('إغلاق', style: TextStyle(color: _muteColor)),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
   }
 
   Future<void> _deleteConv(String id) async {
@@ -438,15 +560,92 @@ class _AiConversationsPageState extends State<AiConversationsPage> {
   }
 
   List<_Conversation> get _filtered {
-    if (_filterSource == 'all') return _convs;
-    return _convs.where((c) => c.source == _filterSource).toList();
+    Iterable<_Conversation> list = _convs;
+    if (_filterSource != 'all') {
+      list = list.where((c) => c.source == _filterSource);
+    }
+    if (_search.isNotEmpty) {
+      final q = _search.toLowerCase();
+      list = list.where((c) =>
+          c.userId.toLowerCase().contains(q) ||
+          c.pageContext.toLowerCase().contains(q) ||
+          c.messages.any((m) => m.content.toLowerCase().contains(q)));
+    }
+    return list.toList();
   }
 
   int get _appCount => _convs.where((c) => c.source == 'app').length;
   int get _webCount => _convs.where((c) => c.source == 'web').length;
 
+  Widget _buildSearchField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: _cardColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: _borderColor),
+      ),
+      child: TextField(
+        controller: _searchCtrl,
+        style: const TextStyle(color: Colors.white, fontSize: 13.5),
+        decoration: InputDecoration(
+          hintText: 'بحث نصي في المحادثات (المحتوى، المستخدم، الصفحة)...',
+          hintStyle: const TextStyle(color: _muteColor, fontSize: 12.5),
+          prefixIcon: const Icon(Icons.search, color: _muteColor, size: 20),
+          suffixIcon: _search.isEmpty
+              ? null
+              : IconButton(
+                  icon: const Icon(Icons.clear, color: _muteColor, size: 18),
+                  onPressed: () {
+                    _searchCtrl.clear();
+                    setState(() => _search = '');
+                  },
+                ),
+          border: InputBorder.none,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        ),
+        onChanged: (v) => setState(() => _search = v.trim()),
+      ),
+    );
+  }
+
+  Widget _buildNoPermission() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.lock_outline_rounded, color: _muteColor, size: 52),
+          SizedBox(height: 14),
+          Text('لا تملك صلاحية عرض المحادثات',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700)),
+          SizedBox(height: 6),
+          Text('اطلب من مدير بدور admin منحك الصلاحية من هذه الصفحة.',
+              style: TextStyle(color: _muteColor, fontSize: 12.5)),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!_permChecked) {
+      return const Scaffold(
+        backgroundColor: _bgColor,
+        body: Center(child: CircularProgressIndicator(color: _neonColor)),
+      );
+    }
+    if (!_allowed) {
+      return Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: _bgColor,
+          body: _buildNoPermission(),
+        ),
+      );
+    }
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -462,6 +661,8 @@ class _AiConversationsPageState extends State<AiConversationsPage> {
                       children: [
                         _buildHeader(),
                         const SizedBox(height: 20),
+                        _buildSearchField(),
+                        const SizedBox(height: 12),
                         _buildFilterBar(),
                         const SizedBox(height: 20),
                         if (_error != null) ...[
@@ -520,6 +721,31 @@ class _AiConversationsPageState extends State<AiConversationsPage> {
             ],
           ),
         ),
+        if (_isAdmin) ...[
+          GestureDetector(
+            onTap: _managePermissions,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: _cardColor,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: _borderColor),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.admin_panel_settings_rounded,
+                      color: _goldColor, size: 16),
+                  SizedBox(width: 6),
+                  Text('الصلاحيات',
+                      style: TextStyle(color: _goldColor, fontSize: 12)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+        ],
         // Refresh button
         GestureDetector(
           onTap: _load,

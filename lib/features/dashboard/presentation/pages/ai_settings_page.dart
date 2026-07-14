@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:nesab_dashboard/core/services/audit_log_service.dart';
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
 
@@ -55,6 +57,15 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
   // ── Grok AI (profit margins scheduler) ──────────────────────────────────
   String _grokModel = 'grok-4.20-reasoning';
 
+  // ── مفاتيح API (تُكتب في Secret Manager ولا تُعرض أبداً) ────────────────
+  final _openaiKeyCtrl = TextEditingController();
+  final _grokKeyCtrl = TextEditingController();
+  String _savingKeyFor = '';
+
+  // ── حدود الاستخدام لكل مستخدم (0 = غير محدود) ───────────────────────────
+  final _perHourCtrl = TextEditingController(text: '0');
+  final _perDayCtrl = TextEditingController(text: '0');
+
   @override
   void initState() {
     super.initState();
@@ -64,6 +75,10 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
   @override
   void dispose() {
     _systemPromptController.dispose();
+    _openaiKeyCtrl.dispose();
+    _grokKeyCtrl.dispose();
+    _perHourCtrl.dispose();
+    _perDayCtrl.dispose();
     super.dispose();
   }
 
@@ -79,6 +94,11 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
           _model    = d['model']    as String? ?? 'gpt-4o-mini';
           _systemPromptController.text = d['systemPrompt'] as String? ?? '';
           _grokModel = d['grokModel'] as String? ?? 'grok-4.20-reasoning';
+          final limits = d['rateLimits'] as Map<String, dynamic>?;
+          _perHourCtrl.text =
+              '${(limits?['perUserPerHour'] as num?)?.toInt() ?? 0}';
+          _perDayCtrl.text =
+              '${(limits?['perUserPerDay'] as num?)?.toInt() ?? 0}';
           final pages = d['pages'] as Map<String, dynamic>?;
           if (pages != null) {
             for (final k in _pageEnabled.keys) {
@@ -106,8 +126,14 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
         'systemPrompt': _systemPromptController.text.trim(),
         'pages':        Map<String, dynamic>.from(_pageEnabled),
         'grokModel':    _grokModel,
+        'rateLimits': {
+          'perUserPerHour': int.tryParse(_perHourCtrl.text.trim()) ?? 0,
+          'perUserPerDay': int.tryParse(_perDayCtrl.text.trim()) ?? 0,
+        },
         'updatedAt':    FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
+      await AuditLogService.log('aiSettings.save',
+          target: 'المزود: $_provider');
       setState(() { _saved = true; });
       Future.delayed(const Duration(seconds: 3), () {
         if (mounted) setState(() { _saved = false; });
@@ -117,6 +143,71 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
     } finally {
       setState(() { _saving = false; });
     }
+  }
+
+  Future<void> _saveApiKey(String provider) async {
+    final ctrl = provider == 'openai' ? _openaiKeyCtrl : _grokKeyCtrl;
+    final key = ctrl.text.trim();
+    if (key.length < 20) {
+      setState(() => _error = 'مفتاح API غير صالح (قصير جداً)');
+      return;
+    }
+    setState(() { _savingKeyFor = provider; _error = null; });
+    try {
+      await FirebaseFunctions.instanceFor(region: 'us-central1')
+          .httpsCallable('updateAiApiKey')
+          .call({'provider': provider, 'apiKey': key});
+      ctrl.clear();
+      await AuditLogService.log('aiSettings.apiKey',
+          target: provider == 'openai' ? 'OpenAI' : 'Grok (xAI)');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'تم تحديث مفتاح ${provider == 'openai' ? 'OpenAI' : 'Grok'} في Secret Manager'),
+          backgroundColor: AppColors.success,
+        ));
+      }
+    } catch (e) {
+      setState(() => _error = 'فشل تحديث المفتاح: $e');
+    } finally {
+      if (mounted) setState(() => _savingKeyFor = '');
+    }
+  }
+
+  Widget _apiKeyField({
+    required String label,
+    required String provider,
+    required TextEditingController ctrl,
+    required Color textPrimary,
+    required Color textSecondary,
+  }) {
+    final saving = _savingKeyFor == provider;
+    return Row(children: [
+      Expanded(
+        child: TextField(
+          controller: ctrl,
+          obscureText: true,
+          style: TextStyle(color: textPrimary, fontSize: 13.5),
+          decoration: InputDecoration(
+            labelText: label,
+            hintText: 'أدخل المفتاح الجديد — لا يُعرض الحالي أبداً',
+            hintStyle: TextStyle(color: textSecondary, fontSize: 12),
+            isDense: true,
+            border: const OutlineInputBorder(),
+          ),
+        ),
+      ),
+      const SizedBox(width: AppDimensions.spacingSm),
+      FilledButton.icon(
+        onPressed: saving ? null : () => _saveApiKey(provider),
+        icon: saving
+            ? const SizedBox(
+                width: 14, height: 14,
+                child: CircularProgressIndicator(strokeWidth: 2))
+            : const Icon(Icons.key_rounded, size: 16),
+        label: const Text('تحديث'),
+      ),
+    ]);
   }
 
   @override
@@ -444,6 +535,83 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                               ],
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.spacingLg),
+
+                    // ── مفاتيح API وحدود الاستخدام ────────────────────────
+                    Container(
+                      padding: const EdgeInsets.all(AppDimensions.spacingLg),
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                        border: Border.all(color: borderColor),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(children: [
+                            Icon(Icons.vpn_key_rounded, color: AppColors.warning, size: 20),
+                            const SizedBox(width: 8),
+                            Text('مفاتيح API وحدود الاستخدام',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: textPrimary)),
+                          ]),
+                          const SizedBox(height: 4),
+                          Text(
+                            'المفاتيح تُحفظ في Google Secret Manager مباشرة — لا تُخزن في قاعدة البيانات ولا تُعرض بعد الحفظ.',
+                            style: TextStyle(fontSize: 12, color: textSecondary),
+                          ),
+                          const SizedBox(height: AppDimensions.spacingMd),
+                          _apiKeyField(
+                            label: 'مفتاح OpenAI API',
+                            provider: 'openai',
+                            ctrl: _openaiKeyCtrl,
+                            textPrimary: textPrimary,
+                            textSecondary: textSecondary,
+                          ),
+                          const SizedBox(height: AppDimensions.spacingMd),
+                          _apiKeyField(
+                            label: 'مفتاح Grok (xAI) API',
+                            provider: 'grok',
+                            ctrl: _grokKeyCtrl,
+                            textPrimary: textPrimary,
+                            textSecondary: textSecondary,
+                          ),
+                          const Divider(height: AppDimensions.spacingLg * 2),
+                          Text('حدود رسائل المساعد لكل مستخدم (0 = غير محدود):',
+                              style: TextStyle(fontSize: 13, color: textSecondary)),
+                          const SizedBox(height: AppDimensions.spacingSm),
+                          Row(children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _perHourCtrl,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(color: textPrimary, fontSize: 14),
+                                decoration: const InputDecoration(
+                                  labelText: 'في الساعة',
+                                  isDense: true,
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: AppDimensions.spacingMd),
+                            Expanded(
+                              child: TextField(
+                                controller: _perDayCtrl,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(color: textPrimary, fontSize: 14),
+                                decoration: const InputDecoration(
+                                  labelText: 'في اليوم',
+                                  isDense: true,
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ]),
+                          const SizedBox(height: 4),
+                          Text('تُحفظ الحدود مع زر «حفظ الإعدادات» وتُفرض على الخادم مباشرة.',
+                              style: TextStyle(fontSize: 11.5, color: textSecondary)),
                         ],
                       ),
                     ),

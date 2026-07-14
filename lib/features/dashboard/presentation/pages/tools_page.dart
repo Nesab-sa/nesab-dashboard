@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:nesab_dashboard/core/services/audit_log_service.dart';
 import 'package:nesab_dashboard/core/theme/app_colors.dart';
 import 'package:nesab_dashboard/core/theme/app_dimensions.dart';
 import 'package:nesab_dashboard/features/dashboard/data/models/tool_item_model.dart';
@@ -48,6 +49,8 @@ class _ToolsPageState extends State<ToolsPage> {
           order: (d['orderNumber'] as num?)?.toInt() ?? 99,
           isActive: d['isActive'] as bool? ?? true,
           isBuiltIn: true,
+          isPaid: d['isPaid'] as bool? ?? false,
+          requiredPackage: d['requiredPackage']?.toString() ?? '',
         );
       }).toList()
         ..sort((a, b) => a.order.compareTo(b.order));
@@ -85,7 +88,10 @@ class _ToolsPageState extends State<ToolsPage> {
       'calculatorType': updated.calculatorType,
       'isActive': updated.isActive,
       'orderNumber': updated.order,
+      'isPaid': updated.isPaid,
+      'requiredPackage': updated.requiredPackage,
     }, SetOptions(merge: true));
+    await AuditLogService.log('tool.save', target: updated.nameAr);
   }
 
   Future<void> _deleteTool(ToolItem tool) async {
@@ -107,6 +113,7 @@ class _ToolsPageState extends State<ToolsPage> {
         if (_selectedTool?.id == tool.id) _selectedTool = null;
       });
       await _firestore.doc('categories/${tool.id}').delete();
+      await AuditLogService.log('tool.delete', target: tool.nameAr);
     }
   }
 
@@ -397,6 +404,9 @@ class _ToolEditPanel extends StatefulWidget {
 class _ToolEditPanelState extends State<_ToolEditPanel> {
   late final TextEditingController _arCtrl, _enCtrl, _descCtrl, _linkCtrl, _typeCtrl;
   late bool _isActive;
+  late bool _isPaid;
+  late String _requiredPackage;
+  List<MapEntry<String, String>> _packages = []; // id → nameAr
   Uint8List? _newImageBytes;
   bool _saving = false;
 
@@ -409,6 +419,28 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
     _linkCtrl = TextEditingController(text: widget.tool.link);
     _typeCtrl = TextEditingController(text: widget.tool.calculatorType);
     _isActive = widget.tool.isActive;
+    _isPaid = widget.tool.isPaid;
+    _requiredPackage = widget.tool.requiredPackage;
+    _loadPackages();
+  }
+
+  Future<void> _loadPackages() async {
+    try {
+      final snap =
+          await FirebaseFirestore.instance.collection('packages').get();
+      if (!mounted) return;
+      setState(() {
+        _packages = snap.docs
+            .map((d) => MapEntry(
+                d.id, (d.data()['nameAr'] ?? d.id).toString()))
+            .toList();
+        // الباقة المحفوظة قد تكون حُذفت — نتجنب قيمة غير موجودة في القائمة
+        if (_requiredPackage.isNotEmpty &&
+            !_packages.any((p) => p.key == _requiredPackage)) {
+          _requiredPackage = '';
+        }
+      });
+    } catch (_) {/* لا باقات بعد — تبقى القائمة فارغة */}
   }
 
   @override
@@ -439,6 +471,8 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
         link: _linkCtrl.text.trim(),
         calculatorType: _typeCtrl.text.trim(),
         isActive: _isActive,
+        isPaid: _isPaid,
+        requiredPackage: _isPaid ? _requiredPackage : '',
       ));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -525,6 +559,34 @@ class _ToolEditPanelState extends State<_ToolEditPanel> {
                   activeThumbColor: AppColors.blue,
                   contentPadding: EdgeInsets.zero,
                 ),
+                SwitchListTile(
+                  title: const Text('مدفوعة — تتطلب اشتراكاً'),
+                  subtitle: const Text('تُقفل للمستخدمين بلا باقة نشطة',
+                      style: TextStyle(fontSize: 11.5)),
+                  value: _isPaid,
+                  onChanged: (v) => setState(() => _isPaid = v),
+                  activeThumbColor: AppColors.warning,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                if (_isPaid) ...[
+                  const SizedBox(height: AppDimensions.spacingSm),
+                  DropdownButtonFormField<String>(
+                    initialValue: _requiredPackage,
+                    decoration: const InputDecoration(
+                      labelText: 'الباقة المطلوبة',
+                      isDense: true,
+                      border: OutlineInputBorder(),
+                    ),
+                    items: [
+                      const DropdownMenuItem(
+                          value: '', child: Text('أي باقة نشطة')),
+                      for (final p in _packages)
+                        DropdownMenuItem(value: p.key, child: Text(p.value)),
+                    ],
+                    onChanged: (v) =>
+                        setState(() => _requiredPackage = v ?? ''),
+                  ),
+                ],
                 const SizedBox(height: AppDimensions.spacingMd),
                 FilledButton.icon(
                   onPressed: _saving ? null : _save,

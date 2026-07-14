@@ -15,6 +15,12 @@ class ToolItem {
   final int order;
   final bool isBuiltIn;
 
+  /// مدفوعة؟ تتطلب اشتراكاً نشطاً لفتحها (مرتبطة بالباقات).
+  final bool isPaid;
+
+  /// معرّف الباقة المطلوبة من مجموعة `packages` (فارغ = أي باقة نشطة).
+  final String requiredPackage;
+
   const ToolItem({
     required this.id,
     required this.nameAr,
@@ -26,6 +32,8 @@ class ToolItem {
     this.isActive = true,
     this.order = 0,
     this.isBuiltIn = false,
+    this.isPaid = false,
+    this.requiredPackage = '',
   });
 
   ToolItem copyWith({
@@ -37,6 +45,8 @@ class ToolItem {
     String? calculatorType,
     bool? isActive,
     int? order,
+    bool? isPaid,
+    String? requiredPackage,
   }) =>
       ToolItem(
         id: id,
@@ -49,6 +59,8 @@ class ToolItem {
         isActive: isActive ?? this.isActive,
         order: order ?? this.order,
         isBuiltIn: isBuiltIn,
+        isPaid: isPaid ?? this.isPaid,
+        requiredPackage: requiredPackage ?? this.requiredPackage,
       );
 
   Map<String, dynamic> toMap() => {
@@ -62,6 +74,8 @@ class ToolItem {
         'isActive': isActive,
         'order': order,
         'isBuiltIn': isBuiltIn,
+        'isPaid': isPaid,
+        'requiredPackage': requiredPackage,
       };
 
   factory ToolItem.fromMap(Map<String, dynamic> d) => ToolItem(
@@ -75,6 +89,8 @@ class ToolItem {
         isActive: d['isActive'] as bool? ?? true,
         order: d['order'] as int? ?? 99,
         isBuiltIn: d['isBuiltIn'] as bool? ?? false,
+        isPaid: d['isPaid'] as bool? ?? false,
+        requiredPackage: d['requiredPackage']?.toString() ?? '',
       );
 }
 

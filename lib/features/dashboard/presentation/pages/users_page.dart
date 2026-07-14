@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
+import 'package:nesab_dashboard/core/services/audit_log_service.dart';
+import 'package:nesab_dashboard/core/utils/file_download.dart';
+
 class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
 
@@ -18,6 +21,8 @@ enum _View { none, all, newOnly }
 class _UsersPageState extends State<UsersPage> {
   _View _view = _View.none;
   bool _syncing = false;
+  bool _exporting = false;
+  final Set<String> _busyUsers = {}; // مستخدمون تجري عليهم عملية حظر/حذف
   int _webLogins = 0;
   int _webVisits = 0;
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _statsSub;
@@ -78,6 +83,16 @@ class _UsersPageState extends State<UsersPage> {
       appBar: AppBar(
         title: const Text('المستخدمين'),
         actions: [
+          IconButton(
+            tooltip: 'تصدير CSV',
+            onPressed: _exporting ? null : _exportCsv,
+            icon: _exporting
+                ? const SizedBox(
+                    width: 18, height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.download_rounded),
+          ),
           IconButton(
             tooltip: 'مزامنة من Auth',
             onPressed: _syncing ? null : _syncFromAuth,
@@ -217,6 +232,8 @@ class _UsersPageState extends State<UsersPage> {
                                         DataColumn(label: Text('الاسم')),
                                         DataColumn(label: Text('الوقت')),
                                         DataColumn(label: Text('التاريخ')),
+                                        DataColumn(label: Text('الحالة')),
+                                        DataColumn(label: Text('إجراءات')),
                                       ],
                                       rows: displayed.map((doc) {
                                         final d = doc.data();
@@ -227,6 +244,8 @@ class _UsersPageState extends State<UsersPage> {
                                         final created =
                                             _parseDateTime(d['createdAt']);
                                         final p = _provider(d);
+                                        final banned = d['isBanned'] == true;
+                                        final busy = _busyUsers.contains(doc.id);
                                         return DataRow(cells: [
                                           DataCell(Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -243,6 +262,80 @@ class _UsersPageState extends State<UsersPage> {
                                           )),
                                           DataCell(Text(_fmtTime(created))),
                                           DataCell(Text(_fmtDate(created))),
+                                          DataCell(
+                                            banned
+                                                ? Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 3),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.red
+                                                          .withValues(alpha: .12),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    child: const Text('محظور',
+                                                        style: TextStyle(
+                                                            fontSize: 11,
+                                                            color: Colors.red,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                  )
+                                                : const Text('نشط',
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.green)),
+                                          ),
+                                          DataCell(busy
+                                              ? const SizedBox(
+                                                  width: 18,
+                                                  height: 18,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          strokeWidth: 2))
+                                              : Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    IconButton(
+                                                      tooltip: banned
+                                                          ? 'فك الحظر'
+                                                          : 'حظر',
+                                                      iconSize: 18,
+                                                      color: banned
+                                                          ? Colors.green
+                                                          : Colors.orange,
+                                                      icon: Icon(banned
+                                                          ? Icons
+                                                              .lock_open_rounded
+                                                          : Icons
+                                                              .block_rounded),
+                                                      onPressed: () =>
+                                                          _setBanned(
+                                                              doc.id,
+                                                              em.isNotEmpty
+                                                                  ? em
+                                                                  : name,
+                                                              !banned),
+                                                    ),
+                                                    IconButton(
+                                                      tooltip: 'حذف نهائي',
+                                                      iconSize: 18,
+                                                      color: Colors.red,
+                                                      icon: const Icon(Icons
+                                                          .delete_forever_rounded),
+                                                      onPressed: () =>
+                                                          _deleteUser(
+                                                              doc.id,
+                                                              em.isNotEmpty
+                                                                  ? em
+                                                                  : name),
+                                                    ),
+                                                  ],
+                                                )),
                                         ]);
                                       }).toList(),
                                     ),
@@ -258,6 +351,123 @@ class _UsersPageState extends State<UsersPage> {
         },
       ),
     );
+  }
+
+  void _snack(String text, {bool isError = false}) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+      backgroundColor: isError ? Colors.red : Colors.green,
+    ));
+  }
+
+  Future<bool> _confirm(String title, String content,
+      {String confirmLabel = 'تأكيد'}) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('إلغاء')),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(confirmLabel),
+          ),
+        ],
+      ),
+    );
+    return ok == true;
+  }
+
+  Future<void> _setBanned(String uid, String label, bool banned) async {
+    final ok = await _confirm(
+      banned ? 'حظر المستخدم' : 'فك حظر المستخدم',
+      banned
+          ? 'سيُعطَّل حساب "$label" ولن يستطيع تسجيل الدخول.\nهل تريد المتابعة؟'
+          : 'سيُعاد تفعيل حساب "$label".\nهل تريد المتابعة؟',
+      confirmLabel: banned ? 'حظر' : 'فك الحظر',
+    );
+    if (!ok) return;
+
+    setState(() => _busyUsers.add(uid));
+    try {
+      await FirebaseFunctions.instanceFor(region: 'us-central1')
+          .httpsCallable('setUserBanned')
+          .call({'uid': uid, 'banned': banned});
+      await AuditLogService.log(banned ? 'user.ban' : 'user.unban',
+          target: label, details: {'uid': uid});
+      _snack(banned ? 'تم حظر "$label"' : 'تم فك حظر "$label"');
+    } catch (e) {
+      _snack('فشلت العملية: $e', isError: true);
+    } finally {
+      if (mounted) setState(() => _busyUsers.remove(uid));
+    }
+  }
+
+  Future<void> _deleteUser(String uid, String label) async {
+    final ok = await _confirm(
+      'حذف المستخدم نهائياً',
+      'سيُحذف حساب "$label" وبياناته نهائياً ولا يمكن التراجع.\nهل تريد المتابعة؟',
+      confirmLabel: 'حذف نهائي',
+    );
+    if (!ok) return;
+
+    setState(() => _busyUsers.add(uid));
+    try {
+      await FirebaseFunctions.instanceFor(region: 'us-central1')
+          .httpsCallable('deleteAppUser')
+          .call({'uid': uid});
+      await AuditLogService.log('user.delete',
+          target: label, details: {'uid': uid});
+      _snack('تم حذف "$label" نهائياً');
+    } catch (e) {
+      _snack('فشل الحذف: $e', isError: true);
+    } finally {
+      if (mounted) setState(() => _busyUsers.remove(uid));
+    }
+  }
+
+  String _csvCell(String v) => '"${v.replaceAll('"', '""')}"';
+
+  Future<void> _exportCsv() async {
+    setState(() => _exporting = true);
+    try {
+      final snap =
+          await FirebaseFirestore.instance.collection('users').get();
+      final buffer = StringBuffer('﻿'); // BOM ليقرأ Excel العربية سليمة
+      buffer.writeln('uid,email,name,provider,createdAt,isBanned');
+      for (final doc in snap.docs) {
+        final d = doc.data();
+        final created = _parseDateTime(d['createdAt']);
+        buffer.writeln([
+          _csvCell(doc.id),
+          _csvCell((d['email'] ?? '').toString()),
+          _csvCell((d['name'] ?? d['displayName'] ?? '').toString()),
+          _csvCell((d['provider'] ?? '').toString()),
+          _csvCell(created?.toIso8601String() ?? ''),
+          _csvCell(d['isBanned'] == true ? 'yes' : 'no'),
+        ].join(','));
+      }
+      final filename =
+          'nesab-users-${DateTime.now().toIso8601String().substring(0, 10)}.csv';
+      final done = downloadTextFile(filename, buffer.toString(),
+          mime: 'text/csv;charset=utf-8');
+      if (done) {
+        await AuditLogService.log('users.export',
+            details: {'count': snap.docs.length});
+        _snack('تم تصدير ${snap.docs.length} مستخدماً إلى $filename');
+      } else {
+        _snack('التصدير متاح على نسخة الويب من الداشبورد', isError: true);
+      }
+    } catch (e) {
+      _snack('فشل التصدير: $e', isError: true);
+    } finally {
+      if (mounted) setState(() => _exporting = false);
+    }
   }
 
   DateTime? _parseDateTime(dynamic v) {

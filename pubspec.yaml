@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   flutter_bloc: ^9.0.0
+  # تنزيل ملفات (تصدير CSV) على نسخة الويب — كانت transitive بنفس النسخة
+  web: ^1.1.1
   get_it: ^9.2.0
   injectable: ^2.5.0
   freezed_annotation: ^3.1.0

@@ -122,6 +122,15 @@ service cloud.firestore {
       allow write: if request.resource.data.keys()
                      .hasOnly(['views', 'nameAr', 'nameEn', 'lastOpenAt']);
     }
+    // product_events: حدث لكل *دخول* على صفحة منتج (مستند لكل فتح) — يُستخدم
+    // لعدّ الدخولات ضمن نوافذ زمنية (يومي/شهري/سنوي). الإنشاء فقط مسموح
+    // (بلا تعديل/حذف) ومقيّد بأسماء الحقول؛ القراءة محصورة بالداشبورد.
+    match /product_events/{eventId} {
+      allow read: if request.auth != null;
+      allow create: if request.resource.data.keys()
+                      .hasOnly(['pageId', 'nameAr', 'at']);
+      allow update, delete: if false;
+    }
 
     // ════════════════════════════════════════════════════════
     // ▼▼▼  إضافات المرحلة 0 — البنية الديناميكية الجديدة  ▼▼▼

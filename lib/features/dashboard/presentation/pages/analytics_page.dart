@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 /// صفحة «الإحصائية» في الداشبورد.
 ///
 /// تعرض مربعين بنفس شكل مربعات صفحة المستخدمين:
-///  1) عدد المستخدمين النشطين (يومي / شهري / سنوي) — يُحسب من مجموعة
-///     [productStatsCollection] حيث يُخزَّن إجمالي الزيارات لكل صفحة/منتج.
-///  2) الصفحات الأكثر زيارة — يُحسب أيضاً من مجموعة [productStatsCollection]
-///     حيث يُخزَّن عدّاد الزيارات لكل صفحة/منتج.
+///  1) المستخدمون النشطون = *عدد الدخولات على الصفحات* (لا المستخدم الفريد).
+///     الإجمالي = مجموع [productStatsCollection].views، والتقسيم الزمني
+///     (يومي/شهري/سنوي) يُعدّ من [productEventsCollection] (حدث لكل دخول).
+///  2) الصفحات الأكثر زيارة — يُحسب من مجموعة [productStatsCollection] حيث
+///     يُخزَّن عدّاد الزيارات لكل صفحة/منتج.
 ///
 /// عند الضغط على أحد المربعين تظهر تفاصيله تحته.
 ///
@@ -28,34 +29,34 @@ const String productActivityCollection = 'product_activity';
 /// اسم مجموعة عدّادات زيارات الصفحات/المنتجات (مستند لكل صفحة).
 const String productStatsCollection = 'product_stats';
 
+/// اسم مجموعة أحداث فتح الصفحات: مستند لكل *دخول* لصفحة منتج مع طابع
+/// زمني ([_eventTimeField]). تُستخدم لعدّ الدخولات ضمن نوافذ زمنية
+/// (يومي/شهري/سنوي) عبر استعلامات count() دون تنزيل المستندات.
+const String productEventsCollection = 'product_events';
+
+/// اسم حقل الطابع الزمني في مستندات [productEventsCollection].
+const String _eventTimeField = 'at';
+
 enum _Panel { none, activeUsers, topPages }
 
 class _AnalyticsPageState extends State<AnalyticsPage> {
   _Panel _panel = _Panel.none;
 
-  List<QueryDocumentSnapshot<Map<String, dynamic>>> _activityDocs = const [];
   List<QueryDocumentSnapshot<Map<String, dynamic>>> _statsDocs = const [];
   DateTime? _lastUpdated;
   bool _loading = true;
   bool _refreshing = false;
 
-  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _activitySub;
+  // عدد الدخولات ضمن النوافذ الزمنية (null = قيد التحميل بعد).
+  int? _dailyEntries;
+  int? _monthlyEntries;
+  int? _yearlyEntries;
+
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _statsSub;
 
   @override
   void initState() {
     super.initState();
-    _activitySub = FirebaseFirestore.instance
-        .collection(productActivityCollection)
-        .snapshots()
-        .listen((snap) {
-      if (!mounted) return;
-      setState(() {
-        _activityDocs = snap.docs;
-        _lastUpdated = DateTime.now();
-        _loading = false;
-      });
-    });
     _statsSub = FirebaseFirestore.instance
         .collection(productStatsCollection)
         .snapshots()
@@ -67,11 +68,43 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         _loading = false;
       });
     });
+    _loadWindowCounts();
+  }
+
+  /// يعدّ الدخولات ضمن نوافذ (يوم/شهر/سنة) من [productEventsCollection]
+  /// عبر استعلامات count() التجميعية — لا تُنزَّل المستندات، فقط العدد.
+  /// أي خطأ (مثل غياب المجموعة قبل أول حدث) يُعامَل كصفر بهدوء.
+  Future<void> _loadWindowCounts() async {
+    final now = DateTime.now();
+    Future<int> countSince(Duration window) async {
+      try {
+        final snap = await FirebaseFirestore.instance
+            .collection(productEventsCollection)
+            .where(_eventTimeField,
+                isGreaterThan: Timestamp.fromDate(now.subtract(window)))
+            .count()
+            .get();
+        return snap.count ?? 0;
+      } catch (_) {
+        return 0;
+      }
+    }
+
+    final results = await Future.wait([
+      countSince(const Duration(days: 1)),
+      countSince(const Duration(days: 30)),
+      countSince(const Duration(days: 365)),
+    ]);
+    if (!mounted) return;
+    setState(() {
+      _dailyEntries = results[0];
+      _monthlyEntries = results[1];
+      _yearlyEntries = results[2];
+    });
   }
 
   @override
   void dispose() {
-    _activitySub?.cancel();
     _statsSub?.cancel();
     super.dispose();
   }
@@ -79,18 +112,13 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   Future<void> _refresh() async {
     setState(() => _refreshing = true);
     try {
-      final results = await Future.wait([
-        FirebaseFirestore.instance
-            .collection(productActivityCollection)
-            .get(const GetOptions(source: Source.server)),
-        FirebaseFirestore.instance
-            .collection(productStatsCollection)
-            .get(const GetOptions(source: Source.server)),
-      ]);
+      final stats = await FirebaseFirestore.instance
+          .collection(productStatsCollection)
+          .get(const GetOptions(source: Source.server));
+      await _loadWindowCounts();
       if (!mounted) return;
       setState(() {
-        _activityDocs = results[0].docs;
-        _statsDocs = results[1].docs;
+        _statsDocs = stats.docs;
         _lastUpdated = DateTime.now();
       });
     } catch (e) {
@@ -189,7 +217,15 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   ),
                   const SizedBox(height: 16),
                   if (_panel == _Panel.activeUsers)
-                    _ActiveUsersPanel(docs: _activityDocs),
+                    _ActiveUsersPanel(
+                      total: _statsDocs.fold<int>(
+                        0,
+                        (sum, doc) => sum + _views(doc.data()),
+                      ),
+                      daily: _dailyEntries,
+                      monthly: _monthlyEntries,
+                      yearly: _yearlyEntries,
+                    ),
                   if (_panel == _Panel.topPages)
                     _TopPagesPanel(docs: _statsDocs),
                 ],
@@ -199,30 +235,38 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   }
 }
 
-/// ── لوحة المستخدمين النشطين: يومي / شهري / سنوي (خيارات منفصلة) ──────────
+/// ── لوحة المستخدمين النشطين: عدد الدخولات على الصفحات (يومي/شهري/سنوي) ─────
+///
+/// «مستخدم نشط» هنا = *دخول* على صفحة منتج، لا مستخدم فريد. فلو فتح نفس
+/// الشخص صفحة التمويل الشخصي ٥ مرات حُسبت ٥ دخولات. [total] هو إجمالي كل
+/// الدخولات (مجموع [productStatsCollection].views)، والأرقام الزمنية تُعدّ
+/// من [productEventsCollection] (حدث لكل دخول). قيمة null تعني «قيد التحميل».
 class _ActiveUsersPanel extends StatelessWidget {
-  const _ActiveUsersPanel({required this.docs});
+  const _ActiveUsersPanel({
+    required this.total,
+    required this.daily,
+    required this.monthly,
+    required this.yearly,
+  });
 
-  final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs;
+  final int total;
+  final int? daily;
+  final int? monthly;
+  final int? yearly;
 
   @override
   Widget build(BuildContext context) {
-    if (docs.isEmpty) {
+    if (total == 0) {
       return const _EmptyBox(
-        'لا توجد بيانات نشاط بعد.\n'
+        'لا توجد دخولات مسجّلة بعد.\n'
         'ستظهر الأرقام بمجرد أن يفتح المستخدمون صفحات المنتجات داخل التطبيق.',
       );
     }
 
-    final now = DateTime.now();
-    final daily = _sumViewsWithin(docs, now, const Duration(days: 1));
-    final monthly = _sumViewsWithin(docs, now, const Duration(days: 30));
-    final yearly = _sumViewsWithin(docs, now, const Duration(days: 365));
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const _PanelTitle('عدد الزيارات'),
+        const _PanelTitle('عدد الدخولات على الصفحات'),
         Row(
           children: [
             Expanded(
@@ -238,24 +282,19 @@ class _ActiveUsersPanel extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 10),
+        Text(
+          'كل فتح لصفحة منتج داخل التطبيق يُحتسب دخولاً — حتى لو كرّره نفس '
+          'الشخص. الأرقام الزمنية تُجمَّع من لحظة تفعيل تتبّع الأحداث وتتزايد '
+          'مع كل زيارة جديدة.',
+          style: TextStyle(
+            fontSize: 12,
+            height: 1.5,
+            color: Colors.grey.shade600,
+          ),
+        ),
       ],
     );
-  }
-
-  int _sumViewsWithin(
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
-    DateTime now,
-    Duration window,
-  ) {
-    final cutoff = now.subtract(window);
-    var sum = 0;
-    for (final d in docs) {
-      final last = _parseDate(d.data()['lastOpenAt']);
-      if (last != null && last.isAfter(cutoff)) {
-        sum += _views(d.data());
-      }
-    }
-    return sum;
   }
 }
 
@@ -447,6 +486,7 @@ class _StatBox extends StatelessWidget {
 }
 
 /// بطاقة رقمية بنفس شكل بطاقات صفحة المستخدمين.
+/// [count] قد يكون null ريثما تكتمل استعلامات العدّ — يُعرض حينها «…».
 class _CountCard extends StatelessWidget {
   const _CountCard({
     required this.label,
@@ -455,7 +495,7 @@ class _CountCard extends StatelessWidget {
   });
 
   final String label;
-  final int count;
+  final int? count;
   final Color color;
 
   @override
@@ -479,7 +519,7 @@ class _CountCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '$count',
+            count == null ? '…' : '$count',
             style: TextStyle(
               color: color,
               fontWeight: FontWeight.w900,
@@ -561,12 +601,6 @@ String _name(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
 
 int _views(Map<String, dynamic> data) =>
     (data['views'] as num?)?.toInt() ?? 0;
-
-DateTime? _parseDate(dynamic v) {
-  if (v is Timestamp) return v.toDate();
-  if (v is String && v.trim().isNotEmpty) return DateTime.tryParse(v);
-  return null;
-}
 
 String _fmtDateTime(DateTime dt) {
   final y = dt.year.toString();
